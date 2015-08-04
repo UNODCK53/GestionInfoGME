@@ -1867,7 +1867,7 @@ $grafica_desempeno_punto_list->ShowMessage();
 	
 	<tr>
 	<td>Año:</td>
-		<td><select id="ano" name="ano" title="Seleccione el año de erradicación" onchange="borrar(this)" required> 
+		<td><select id="ano" name="ano" title="Seleccione el año de erradicación" onchange="borrar1(this)" required> 
 				<option value="">Seleccione uno:</option>	
 			</select></td>
 	</tr>
@@ -1948,10 +1948,11 @@ $(document).ready(function(){
 			});
 	});
 		
-		function borrar(x) {
+		function borrar1(x) {
 			id=x.id;
 			if (id=="ano" )	{
-				document.getElementById("fase").value = "";				
+				document.getElementById("fase").value = "";
+				document.getElementById("profesional").value = "";							
 			}
 		}
 		
@@ -1960,6 +1961,7 @@ $("#reporte").click(function(){
 	var fase=document.getElementById("fase").value;
 	var profesional=document.getElementById("profesional").value;
 	var dataString = 'ano='+ ano+'&fase='+ fase+'&profesional='+profesional;
+	if(ano != "" && fase !="" && profesional !="" ){
 	$.ajax({
 					type: "GET",
 					async: false,
@@ -2022,7 +2024,11 @@ $("#reporte").click(function(){
 						alert("No hay conección con la base de datos apra realizar la descarga");
 					}			
 			});
-		
+			
+	}else
+		{
+			alert("Revise que los campos esten seleccionados para generar su grafica");
+		}
 	
 });
 
