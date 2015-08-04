@@ -1,0 +1,26 @@
+p {
+  /*background-color: #dfdada;*/ 
+}
+
+/* Single-direction drop shadow */
+
+hr {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-size: 2em;
+	background-color: #dfdada;
+  	height: 2px;
+}
+
+#ewHeaderRow hr.style-four {
+	background-color: transparent;
+	margin-top: 0px;
+	margin-bottom: 0px;
+    height: 12px;
+    border: 0;
+    box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+}
+
+.ewExportOption.ewListOptionSeparator {
+	margin-top: 15px;
+} 
