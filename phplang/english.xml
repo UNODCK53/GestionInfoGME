@@ -403,7 +403,7 @@
 		<phrase id="&lt;=" value="&amp;lt;="/>
 		<phrase id="&gt;" value="&amp;gt;"/>
 		<phrase id="&gt;=" value="&amp;gt;="/>
-		<phrase id="like" value="contains"/>
+		<phrase id="like" value=""/>
 		<phrase id="not like" value="does not contain"/><!-- v11.0.3 -->
 		<phrase id="starts with" value="starts with"/>
 		<phrase id="ends with" value="ends with"/>
