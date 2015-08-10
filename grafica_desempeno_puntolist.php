@@ -1858,12 +1858,12 @@ $grafica_desempeno_punto_list->ShowMessage();
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="./Highcharts/js/modules/exporting.js"></script>
 <script src="./Highcharts/js/modules/data.js"></script>
-<script src="./Highcharts/js/modules/drilldown.js"></script>
+<script src="http://code.highcharts.com/modules/drilldown.js"></script>
 
 <table>
 	<h2>Desempeño de erradicación por Punto</h2>
-	<p>Este reporte muestra el promedio de erradicación diario por Punto. Es decir realiza la sumatoria de toda la erradicación por Punto, según filtros de año y fase, y los divide en la sumatoria de los días en que se realizó esta actividad </p><br>
-	<p>La gráfica permite visualizar la información en <strong>dos niveles diferentes al darle  Click </strong>sobre las columnas </p><p>- El primer nivel muestra el promedio de erradicación por día erradicado en cada Punto</p> <p>- El segundo nivel muestra el total de hectáreas erradicadas por Punto</p><br>
+	<p> Este reporte despliega el promedio de área erradicada diariamente en cada punto, calculando el total de hectáreas erradicadas en el punto y dividiéndolo entre el total de días en los que se realizó erradicación </p><br>
+	<p>La gráfica permite visualizar la información en <strong>dos niveles diferentes al darle  Click </strong>sobre las columnas </p><p>- -El primer nivel muestra el promedio de hectáreas erradicadas por día de erradicación en cada Punto</p> <p>- El segundo nivel muestra el total de hectáreas erradicadas para el punto de erradicación seleccionado</p><br>
 	
 	<tr>
 	<td>Año:</td>
@@ -1979,7 +1979,7 @@ $("#reporte").click(function(){
 								text: 'Desempeño de erradicación por punto'
 							},
 							subtitle: {
-								text: 'Haga click sore las barra para acceder al total de ectareas erradicadas por punto.'
+								text: 'Haga click sore las barra para acceder al total de hectáreas erradicadas por punto.'
 							},
 							xAxis: {
 								type: 'category'
@@ -1998,14 +1998,26 @@ $("#reporte").click(function(){
 									borderWidth: 0,
 									dataLabels: {
 										enabled: true,
-										format: '{point.y:.1f}'
+										format: '{point.y:.2f}'
 									}
 								}
 							},
 
 							tooltip: {
-								headerFormat: '<span style="font-size:11px"></span>',
-								pointFormat: 'Punto de erradicación:<span style="color:{point.color}">{point.name}</span> con <br><b>{point.y:.1f} </b> hectáreas erradicadas por día<br/>'
+								formatter: function() {
+									var point = this.point,
+										punto= this.point.name;
+										color=this.point.color;
+										dato=this.y;
+										
+									if (point.drilldown) {
+										s = 'Punto de erradicación:<span style="color:'+color+'">'+ punto +'</span> con un promedio de <br><b>'+dato+'</b> hectáreas erradicadas por día<br/>';
+									} else {
+										s = 'Punto de erradicación '+punto.substring(5,12)+' con un total de '+dato+' hectáreas erradicadas de '+punto.substring(33);
+									}
+									return s;
+								}
+								
 							},
 
 							series: [{
@@ -2027,7 +2039,7 @@ $("#reporte").click(function(){
 			
 	}else
 		{
-			alert("Revise que los campos esten seleccionados para generar su grafica");
+			alert("Para generar la gráfica debe seleccionar una opción en todos los campos ");
 		}
 	
 });

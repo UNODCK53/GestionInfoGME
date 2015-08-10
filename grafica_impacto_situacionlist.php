@@ -1721,7 +1721,7 @@ $("#reporte").click(function(){
 		
 	}else
 		{
-			alert("Revise que los campos esten seleccionados para generar su grafica");
+			alert("Para generar la gráfica debe seleccionar una opción en todos los campos ");
 		} 
     
 });

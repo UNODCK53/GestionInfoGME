@@ -4,7 +4,7 @@
 	include ("coneccion.php");
 	mysql_select_db($base_datos,$db);
 	
-	$sql =mysql_query("select
+	$sql =mysql_query("select*from(select
 	llave, F_Sincron,USUARIO,Cargo_gme,NOM_PE, Otro_PE,NOM_APOYO,Otro_Nom_Apoyo,Otro_CC_Apoyo,NOM_ENLACE,Otro_Nom_Enlace,Otro_CC_Enlace,NOM_PGE,Otro_Nom_PGE,Otro_CC_PGE,Departamento,Muncipio,NOM_VDA, LATITUD,GRA_LAT,MIN_LAT,SEG_LAT,GRA_LONG,MIN_LONG, SEG_LONG,FECHA_ACC,HORA_ACC,Hora_ingreso,FP_Armada,FP_Ejercito,FP_Policia,NOM_COMANDANTE,TESTI1, CC_TESTI1, CARGO_TESTI1,TESTI2, CC_TESTI2,CARGO_TESTI2,Afectados,NUM_Afectado,Nom_Afectado,CC_Afectado,Cargo_Afectado, Parte_Cuerpo,ESTADO_AFEC,EVACUADO,DESC_ACC 
 		from
 			(select
@@ -59,7 +59,7 @@
 																																			(SELECT 
 																																				_TOP_LEVEL_AURI as llave3,NO_AFEC as Afectados 
 																																					FROM 
-																																						formulario_accidentes_trabajo_v2_f2_2014_core4
+																																						formulario_accidentes_trabajo_v2_f2_2014_core5
 																																			)as ACC3 on ACC2.llave=ACC3.llave3
 																																)as ACC4
 																															left join	
@@ -141,7 +141,7 @@
 				left join
 					(select label as EVACUADO,name from `dominio` where `list name`='si_no'
 					)as dominio on ACC20.EVACUADO=dominio.name
-			)AS ACC21 on 	ACC21.llave5=ACC16.llave
+			)AS ACC21 on 	ACC21.llave5=ACC16.llave)as final ORDER by `F_Sincron` asc
 					
 ");
 	$registros = mysql_num_rows ($sql);

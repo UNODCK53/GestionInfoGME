@@ -1880,6 +1880,12 @@ console.log(vector3);
 						},
 
 						legend: {
+							 title: {
+								text: 'Hectáreas<br/>erradicadas',
+								style: {
+									fontStyle: 'italic'
+								}
+							},
 							align: 'right',
 							layout: 'vertical',
 							margin: 0,
@@ -1899,7 +1905,6 @@ console.log(vector3);
 
 						series: [{
 							name: 'Sales per employee',
-							borderWidth: 1,
 							data: vector,
 							dataLabels: {
 								enabled: true,
@@ -1918,7 +1923,7 @@ console.log(vector3);
 			return vector;
 		}else
 		{
-			alert("Revise que los campos esten seleccionados para generar su grafica");
+			alert("Para generar la gráfica debe seleccionar una opción en todos los campos ");
 		}
 });	
 	</script>
