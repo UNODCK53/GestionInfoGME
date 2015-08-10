@@ -3067,22 +3067,63 @@ fview_invlistsrch.ValidateRequired = false; // No JavaScript validation
 <?php if ($view_inv->Export == "") { ?>
 <div class="ewToolbar">
 <?php if ($view_inv->Export == "") { ?>
-<?php $Breadcrumb->Render(); ?>
-<?php } ?>
-<H2> Informe de inventario</h2><p>La siguiente tabla contiene los informes de inventario realizados desde la fase II de erradicación 2015 a la fecha</p>Si desea exportar la tabla en formato excel haga click en el siguiente icono 
-<?php if ($view_inv_list->TotalRecs > 0 && $view_inv_list->ExportOptions->Visible()) { ?>
-<?php $view_inv_list->ExportOptions->Render("body") ?>
+
+<div>
+	<div></div>
+
+	<table>
+	<tr width="100%">
+	<td width="70%"><H2> Informe de inventario</h2></td><td align="right"><?php $Breadcrumb->Render(); ?></td>
+	</tr>	
+</table>
+</div>
+
 <?php } ?>
 
-<?php if ($view_inv->Export == "") { ?>
-<?php echo $Language->SelectionForm(); ?>
-<?php } ?>
-<div class="clearfix"></div>
-</div>
-<?php } ?>
+<hr>
+<br>
+<p>La siguiente tabla contiene los informes de inventario realizados desde la fase II de erradicación 2015 a la fecha</p>
+<br>
+<hr>
+
+<table>
+	<tr>
+		<td>
+			<?php if ($view_inv_list->TotalRecs > 0 && $view_inv_list->ExportOptions->Visible()) { ?>
+			<?php $view_inv_list->ExportOptions->Render("body") ?>
+			<?php } ?>
+
+			<?php if ($view_inv->Export == "") { ?>
+		</td>
+		<td>
+			Si desea exportar la tabla en formato excel haga click en el siguiente icono 
+		</td>
+	</tr>
+</table>
+
+<hr>
+
 <?php if ($view_inv_list->SearchOptions->Visible()) { ?>
-<font color="#C0C0C0">Si desea realizar filtros en la tabla haga click en el siguiente icono  e ingrese el dato en la columna correspondiente </font><?php $view_inv_list->SearchOptions->Render("body") ?>
+<br>
+<table>
+	<tr>
+		<td>
+			<?php $view_inv_list->SearchOptions->Render("body") ?>
+			<?php } ?>
+			<?php } ?>
+		</td>
+		<td>
+			Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente
+		</td>	
+	</tr>
+</table>
+<br>
+<hr>
+<br>
+
+
 <?php } ?>
+
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
 	if ($bSelectLimit) {
@@ -3130,66 +3171,76 @@ $view_inv->RowType = EW_ROWTYPE_SEARCH;
 $view_inv->ResetAttrs();
 $view_inv_list->RenderRow();
 ?>
-<div id="xsr_1" class="ewRow">
+
+<table>
+	<tr>
+		<td>
+			<label for="x_USUARIO" class="ewSearchCaption ewLabel"><?php echo $view_inv->USUARIO->FldCaption() ?></label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_USUARIO" id="z_USUARIO" value="LIKE"></span>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<input type="text" data-field="x_USUARIO" name="x_USUARIO" id="x_USUARIO" size="35" placeholder="<?php echo ew_HtmlEncode($view_inv->USUARIO->PlaceHolder) ?>" value="<?php echo $view_inv->USUARIO->EditValue ?>"<?php echo $view_inv->USUARIO->EditAttributes() ?>>
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="x_NOM_PE" class="ewSearchCaption ewLabel">PUNTO DE ERRADICACIÓN</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_PE" id="z_NOM_PE" value="LIKE"></span>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<input type="text" data-field="x_NOM_PE" name="x_NOM_PE" id="x_NOM_PE" size="35" placeholder="<?php echo ew_HtmlEncode($view_inv->NOM_PE->PlaceHolder) ?>" value="<?php echo $view_inv->NOM_PE->EditValue ?>"<?php echo $view_inv->NOM_PE->EditAttributes() ?>>
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="x_AD1O" class="ewSearchCaption ewLabel">AÑO</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_AD1O" id="z_AD1O" value="LIKE"></span>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<input type="text" title="Últimos dos dígitos del año" data-field="x_AD1O" name="x_AD1O" id="x_AD1O" size="30" maxlength="2" placeholder="AÑO" value="<?php echo $view_inv->AD1O->EditValue ?>"<?php echo $view_inv->AD1O->EditAttributes() ?>>
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="x_FASE" class="ewSearchCaption ewLabel"><?php echo $view_inv->FASE->FldCaption() ?></label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_FASE" id="z_FASE" value="LIKE"></span>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<input type="text" data-field="x_FASE" name="x_FASE" id="x_FASE" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($view_inv->FASE->PlaceHolder) ?>" value="<?php echo $view_inv->FASE->EditValue ?>"<?php echo $view_inv->FASE->EditAttributes() ?>>
+			</span>
+		</td>
+	</tr>
+</table>
+
+
+</div>  /*Aca termina el DIV de la derecha 
+
 <?php if ($view_inv->USUARIO->Visible) { // USUARIO ?>
-	<div id="xsc_USUARIO" class="ewCell form-group">
-		<label for="x_USUARIO" class="ewSearchCaption ewLabel"><?php echo $view_inv->USUARIO->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_USUARIO" id="z_USUARIO" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_USUARIO" name="x_USUARIO" id="x_USUARIO" size="35" placeholder="<?php echo ew_HtmlEncode($view_inv->USUARIO->PlaceHolder) ?>" value="<?php echo $view_inv->USUARIO->EditValue ?>"<?php echo $view_inv->USUARIO->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_2" class="ewRow">
 <?php if ($view_inv->NOM_PE->Visible) { // NOM_PE ?>
-	<div id="xsc_NOM_PE" class="ewCell form-group">
-		<label for="x_NOM_PE" class="ewSearchCaption ewLabel"><?php echo $view_inv->NOM_PE->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_PE" id="z_NOM_PE" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_NOM_PE" name="x_NOM_PE" id="x_NOM_PE" size="35" placeholder="<?php echo ew_HtmlEncode($view_inv->NOM_PE->PlaceHolder) ?>" value="<?php echo $view_inv->NOM_PE->EditValue ?>"<?php echo $view_inv->NOM_PE->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_3" class="ewRow">
 <?php if ($view_inv->AD1O->Visible) { // AÑO ?>
-	<div id="xsc_AD1O" class="ewCell form-group">
-		<label for="x_AD1O" class="ewSearchCaption ewLabel"><?php echo $view_inv->AD1O->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_AD1O" id="z_AD1O" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_AD1O" name="x_AD1O" id="x_AD1O" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($view_inv->AD1O->PlaceHolder) ?>" value="<?php echo $view_inv->AD1O->EditValue ?>"<?php echo $view_inv->AD1O->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_4" class="ewRow">
 <?php if ($view_inv->FASE->Visible) { // FASE ?>
-	<div id="xsc_FASE" class="ewCell form-group">
-		<label for="x_FASE" class="ewSearchCaption ewLabel"><?php echo $view_inv->FASE->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_FASE" id="z_FASE" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_FASE" name="x_FASE" id="x_FASE" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($view_inv->FASE->PlaceHolder) ?>" value="<?php echo $view_inv->FASE->EditValue ?>"<?php echo $view_inv->FASE->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_5" class="ewRow">
-	<div class="ewQuickSearch input-group">
-	<input type="text" name="<?php echo EW_TABLE_BASIC_SEARCH ?>" id="<?php echo EW_TABLE_BASIC_SEARCH ?>" class="form-control" value="<?php echo ew_HtmlEncode($view_inv_list->BasicSearch->getKeyword()) ?>" placeholder="<?php echo ew_HtmlEncode($Language->Phrase("Search")) ?>">
-	<input type="hidden" name="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" id="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" value="<?php echo ew_HtmlEncode($view_inv_list->BasicSearch->getType()) ?>">
-	<div class="input-group-btn">
-		<button type="button" data-toggle="dropdown" class="btn btn-default"><span id="searchtype"><?php echo $view_inv_list->BasicSearch->getTypeNameShort() ?></span><span class="caret"></span></button>
-		<ul class="dropdown-menu pull-right" role="menu">
-			<li<?php if ($view_inv_list->BasicSearch->getType() == "") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this)"><?php echo $Language->Phrase("QuickSearchAuto") ?></a></li>
-			<li<?php if ($view_inv_list->BasicSearch->getType() == "=") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'=')"><?php echo $Language->Phrase("QuickSearchExact") ?></a></li>
-			<li<?php if ($view_inv_list->BasicSearch->getType() == "AND") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'AND')"><?php echo $Language->Phrase("QuickSearchAll") ?></a></li>
-			<li<?php if ($view_inv_list->BasicSearch->getType() == "OR") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'OR')"><?php echo $Language->Phrase("QuickSearchAny") ?></a></li>
-		</ul>
-	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-	</div>
-	</div>
-</div>
+
+<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+
+<br>
+<br>
+<hr>
+
 	</div>
 </div>
 </form>

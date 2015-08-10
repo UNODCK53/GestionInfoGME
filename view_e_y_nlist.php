@@ -2417,20 +2417,46 @@ fview_e_y_nlistsrch.ValidateRequired = false; // No JavaScript validation
 <?php if ($view_e_y_n->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-<H2> Informe de Enlace y Novedad</h2><p>La siguiente tabla contiene los informes de Enlace y Novedad realizados desde la fase II de erradicación 2015 a la fecha</p>Si desea exportar la tabla en formato excel haga click en el siguiente icono
-<?php if ($view_e_y_n_list->TotalRecs > 0 && $view_e_y_n_list->ExportOptions->Visible()) { ?>
-<?php $view_e_y_n_list->ExportOptions->Render("body") ?>
-<?php } ?>
+<H2> Informe de Enlace y Novedad</h2>
+<hr>
+<br>
+<p>La siguiente tabla contiene los informes de Enlace y Novedad realizados desde la fase II de erradicación 2015 a la fecha</p>
+<br>
+<hr>
 
+<table>
+	<tr>
+		<td><?php if ($view_e_y_n_list->TotalRecs > 0 && $view_e_y_n_list->ExportOptions->Visible()) { ?>
+		<?php $view_e_y_n_list->ExportOptions->Render("body") ?></td>
+		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono</td>	
+	</tr>
+</table>
+
+<hr>
+
+<?php } ?>
 <?php if ($view_e_y_n->Export == "") { ?>
 <?php echo $Language->SelectionForm(); ?>
 <?php } ?>
 
-<div class="clearfix"></div>
 </div>
+
+<br>
+
+<table>
+	<tr>
+		<td><?php if ($view_e_y_n_list->SearchOptions->Visible()) { ?>
+		<?php $view_e_y_n_list->SearchOptions->Render("body") ?></td>
+		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente </td>
+	</tr>
+</table>
+
+<br>
+<hr>
+<br>
+
 <?php } ?>
-<?php if ($view_e_y_n_list->SearchOptions->Visible()) { ?>
-<font color="#C0C0C0">Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente </font><?php $view_e_y_n_list->SearchOptions->Render("body") ?>
+
 <?php } ?>
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
@@ -2479,55 +2505,52 @@ $view_e_y_n->RowType = EW_ROWTYPE_SEARCH;
 $view_e_y_n->ResetAttrs();
 $view_e_y_n_list->RenderRow();
 ?>
-<div id="xsr_1" class="ewRow">
+
+<br>
+
+<table>
+	<tr>
+		<td><label for="x_USUARIO" class="ewSearchCaption ewLabel"><?php echo $view_e_y_n->USUARIO->FldCaption() ?></label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_USUARIO" id="z_USUARIO" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_USUARIO" name="x_USUARIO" id="x_USUARIO" size="35" placeholder="<?php echo ew_HtmlEncode($view_e_y_n->USUARIO->PlaceHolder) ?>" value="<?php echo $view_e_y_n->USUARIO->EditValue ?>"<?php echo $view_e_y_n->USUARIO->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_NOM_GE" class="ewSearchCaption ewLabel">NOMBRE PROFESIONAL ESPECIALIZADO</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_GE" id="z_NOM_GE" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_NOM_GE" name="x_NOM_GE" id="x_NOM_GE" size="35" placeholder="<?php echo ew_HtmlEncode($view_e_y_n->NOM_GE->PlaceHolder) ?>" value="<?php echo $view_e_y_n->NOM_GE->EditValue ?>"<?php echo $view_e_y_n->NOM_GE->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_NOM_PE" class="ewSearchCaption ewLabel">PUNTO DE ERRADICACIÓN</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_PE" id="z_NOM_PE" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_NOM_PE" name="x_NOM_PE" id="x_NOM_PE" size="35" placeholder="<?php echo ew_HtmlEncode($view_e_y_n->NOM_PE->PlaceHolder) ?>" value="<?php echo $view_e_y_n->NOM_PE->EditValue ?>"<?php echo $view_e_y_n->NOM_PE->EditAttributes() ?>>
+			</span></td>
+	</tr>
+</table>
+
+<br>
+
+<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+
 <?php if ($view_e_y_n->USUARIO->Visible) { // USUARIO ?>
-	<div id="xsc_USUARIO" class="ewCell form-group">
-		<label for="x_USUARIO" class="ewSearchCaption ewLabel"><?php echo $view_e_y_n->USUARIO->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_USUARIO" id="z_USUARIO" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_USUARIO" name="x_USUARIO" id="x_USUARIO" size="35" placeholder="<?php echo ew_HtmlEncode($view_e_y_n->USUARIO->PlaceHolder) ?>" value="<?php echo $view_e_y_n->USUARIO->EditValue ?>"<?php echo $view_e_y_n->USUARIO->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_2" class="ewRow">
 <?php if ($view_e_y_n->NOM_GE->Visible) { // NOM_GE ?>
-	<div id="xsc_NOM_GE" class="ewCell form-group">
-		<label for="x_NOM_GE" class="ewSearchCaption ewLabel"><?php echo $view_e_y_n->NOM_GE->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_GE" id="z_NOM_GE" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_NOM_GE" name="x_NOM_GE" id="x_NOM_GE" size="35" placeholder="<?php echo ew_HtmlEncode($view_e_y_n->NOM_GE->PlaceHolder) ?>" value="<?php echo $view_e_y_n->NOM_GE->EditValue ?>"<?php echo $view_e_y_n->NOM_GE->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_3" class="ewRow">
 <?php if ($view_e_y_n->NOM_PE->Visible) { // NOM_PE ?>
-	<div id="xsc_NOM_PE" class="ewCell form-group">
-		<label for="x_NOM_PE" class="ewSearchCaption ewLabel"><?php echo $view_e_y_n->NOM_PE->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_PE" id="z_NOM_PE" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_NOM_PE" name="x_NOM_PE" id="x_NOM_PE" size="35" placeholder="<?php echo ew_HtmlEncode($view_e_y_n->NOM_PE->PlaceHolder) ?>" value="<?php echo $view_e_y_n->NOM_PE->EditValue ?>"<?php echo $view_e_y_n->NOM_PE->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_4" class="ewRow">
-	<div class="ewQuickSearch input-group">
-	<input type="text" name="<?php echo EW_TABLE_BASIC_SEARCH ?>" id="<?php echo EW_TABLE_BASIC_SEARCH ?>" class="form-control" value="<?php echo ew_HtmlEncode($view_e_y_n_list->BasicSearch->getKeyword()) ?>" placeholder="<?php echo ew_HtmlEncode($Language->Phrase("Search")) ?>">
-	<input type="hidden" name="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" id="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" value="<?php echo ew_HtmlEncode($view_e_y_n_list->BasicSearch->getType()) ?>">
-	<div class="input-group-btn">
-		<button type="button" data-toggle="dropdown" class="btn btn-default"><span id="searchtype"><?php echo $view_e_y_n_list->BasicSearch->getTypeNameShort() ?></span><span class="caret"></span></button>
-		<ul class="dropdown-menu pull-right" role="menu">
-			<li<?php if ($view_e_y_n_list->BasicSearch->getType() == "") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this)"><?php echo $Language->Phrase("QuickSearchAuto") ?></a></li>
-			<li<?php if ($view_e_y_n_list->BasicSearch->getType() == "=") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'=')"><?php echo $Language->Phrase("QuickSearchExact") ?></a></li>
-			<li<?php if ($view_e_y_n_list->BasicSearch->getType() == "AND") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'AND')"><?php echo $Language->Phrase("QuickSearchAll") ?></a></li>
-			<li<?php if ($view_e_y_n_list->BasicSearch->getType() == "OR") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'OR')"><?php echo $Language->Phrase("QuickSearchAny") ?></a></li>
-		</ul>
-	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-	</div>
-	</div>
-</div>
+
+<br>
+<br>
+<hr>
+
+
 	</div>
 </div>
 </form>

@@ -3915,9 +3915,6 @@ fview_idlistsrch.ValidateRequired = false; // No JavaScript validation
 </table> 
 
 <hr>
-
-
-<div class="clearfix"></div>
 </div>
 <?php if ($view_id_list->SearchOptions->Visible()) { ?>
 <br>
@@ -4070,9 +4067,9 @@ $view_id_list->RenderRow();
 <?php } ?>
 
 <button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-<br>
-<br>
 
+<br>
+<br>
 <hr>
 
 	</div>

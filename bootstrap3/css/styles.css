@@ -24,3 +24,17 @@ hr {
 .ewExportOption.ewListOptionSeparator {
 	margin-top: 15px;
 } 
+
+.ewGrid {
+	width: 100%;
+	box-sizing: content-box;
+	display: block;
+}    
+
+.ewGrid .ewGridMiddlePanel {
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+
+
