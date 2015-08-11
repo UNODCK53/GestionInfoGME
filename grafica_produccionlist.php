@@ -1709,7 +1709,7 @@ $grafica_produccion_list->ShowMessage();
 
 
 <h2>Hectáreas erradicadas y GME activos por día</h2>
-<p>Este reporte muestra el total de hectáreas erradicadas y el número de gurpos GME activos, según filtros por año y fase. Los  Grupos GME activos hacen referencia a la sumatoria de los reportes Diarios realziados por las personas en campo</p>
+<p>Este reporte muestra el total de hectáreas erradicadas y el número de grupos GME activos, según filtros por año y fase. Los  grupos GME activos hacen referencia a la sumatoria de los reportes diarios realizados por las personas en campo</p>
 <hr>
 <h3>Generador de gráfica</h3>
 <i><strong>Nota:</strong> Seleccione una opción en todos los campos</i><br><br>
@@ -1824,7 +1824,7 @@ $grafica_produccion_list->ShowMessage();
 		var punto=document.getElementById("punto").value;
 		var dataString = 'ano=' + ano + '&fase=' + fase+ '&punto=' + punto;
 		
-		if(ano != "" && fase !=""){
+		if(ano != "" && fase !="" && punto !=""){
 			if(ano==99){	
 				var titulo="Serie histórica ";
 				var fases="2015 fase II a 2015 fase II";
@@ -1852,7 +1852,7 @@ $grafica_produccion_list->ShowMessage();
 							 },
 							 
 							title: {
-								text: "Total de hectáreas erradicadas contra GME activos por día"
+								text: "Total de hectáreas erradicadas y GME activos por día"
 							},
 							subtitle: {
 								text: titulo + fases + " .Fuente a: "+fecha
@@ -1931,8 +1931,9 @@ function myFunction() {
 
 	var ano = document.getElementById("ano").value;
 	var fase=document.getElementById("fase").value;
-		
-	if(ano != "" && fase !="" ){
+	var punto=document.getElementById("punto").value;
+
+	if(ano != "" && fase !="" && punto !=""){
 		document.getElementById("linea").innerHTML = "<hr><br>";
 	}
 	else{

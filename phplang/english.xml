@@ -5929,7 +5929,7 @@
 <field id="total_erradicado"><phrase id="fldcaption" value="Total erradicado"/>
 </field>
 </table>
-<table id="grafica_movimientos"><phrase id="tblcaption" value="Gráfica de movimientos"/>
+<table id="grafica_movimientos"><phrase id="tblcaption" value="Reporte de movimientos"/>
 <field id="punto"><phrase id="fldcaption" value="Punto"/>
 </field>
 <field id="fecha_ultimo_movimiento"><phrase id="fldcaption" value="Fecha ultimo movimiento"/>

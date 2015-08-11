@@ -1629,7 +1629,7 @@ fgrafica_movimientoslistsrch.ValidateRequired = false; // No JavaScript validati
 <?php if ($grafica_movimientos->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-<H2> Informe diario</h2>
+<H2> Informe de movimientos</h2>
 <p>La siguiente tabla contiene los informes diarios realizados desde la fase II de erradicación 2015 a la fecha</p>
 <hr>
 
