@@ -2418,10 +2418,9 @@ fview_e_y_nlistsrch.ValidateRequired = false; // No JavaScript validation
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
 <H2> Informe de Enlace y Novedad</h2>
-<hr>
-<br>
+
 <p>La siguiente tabla contiene los informes de Enlace y Novedad realizados desde la fase II de erradicación 2015 a la fecha</p>
-<br>
+
 <hr>
 
 <table>
@@ -2436,7 +2435,7 @@ fview_e_y_nlistsrch.ValidateRequired = false; // No JavaScript validation
 
 <?php } ?>
 <?php if ($view_e_y_n->Export == "") { ?>
-<?php echo $Language->SelectionForm(); ?>
+
 <?php } ?>
 
 </div>

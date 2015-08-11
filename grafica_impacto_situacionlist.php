@@ -1321,7 +1321,7 @@ fgrafica_impacto_situacionlist.ValidateRequired = false;
 <?php $grafica_impacto_situacion_list->ExportOptions->Render("body") ?>
 <?php } ?>
 <?php if ($grafica_impacto_situacion->Export == "") { ?>
-<?php echo $Language->SelectionForm(); ?>
+
 <?php } ?>
 <div class="clearfix"></div>
 </div>
@@ -1364,12 +1364,16 @@ $grafica_impacto_situacion_list->ShowMessage();
 <script src="./Highcharts/js/modules/heatmap.js"></script>
 <script src="./Highcharts/js/modules/treemap.js"></script>
 <table>
-	<h2>Situaciones especiales en zona</h2>
-	<p>Este reporte muestra el total de situaciones reportadas en zona agrupadas según categorías de Administrativo GME, Administrativo Fuerza Pública, Seguridad y Novedades, según filtros de año y fase </p><br>
+	<h2>Situaciones especiales en zona</h2>	
+	<p>Este reporte muestra el total de situaciones reportadas en zona agrupadas según categorías de Administrativo GME, Administrativo Fuerza Pública, Seguridad y Novedades, según filtros de año y fase </p
+	>
+	<hr>
+	<h3>Generador de gráfica</h3>
 	<p>El reporte se divide en dos gráficas. La primera es para las situaiones reportadas en los días donde hubo erradicación de cultivos ilícitos y la segunda para los días en que no hubo erradicación</p><br>
 
 	<tr>
 		<td>Año:</td>
+		<td width="5%"></td>
 		<td><select id="ano" name="ano" title="Seleccione el año de erradicación" onchange="borrar(this)" required> 
 				<option value="">Seleccione uno:</option>
 				
@@ -1377,6 +1381,7 @@ $grafica_impacto_situacion_list->ShowMessage();
 	</tr>
 	<tr>
 		<td>Fase:</td>
+		<td width="5%"></td>
 		<td><select id="fase" name="fase" title="Seleccione la fase de erradicacón" required> 
 				<option value="">Seleccione una:</option>
 				
@@ -1384,6 +1389,7 @@ $grafica_impacto_situacion_list->ShowMessage();
 	</tr>
 	<tr>
 		<td>Punto de erradicación:</td>
+		<td width="5%"></td>
 		<td><select id="punto" name="punto" title="Seleccione la fase de erradicación" required> 
 				<option value="">Seleccione uno:</option>
 				
@@ -1391,17 +1397,43 @@ $grafica_impacto_situacion_list->ShowMessage();
 	</tr>
 	<tr>
 		<td>Profesional:</td>
+		<td width="5%"></td>
 		<td><select id="profesional" name="profesional" title="Seleccione un profesional" required> 
 				<option value="">Seleccione uno:</option>
 		</select></td>
 	</tr>
-	<tr>
-		<td><input type="button" value="Generar gráfica" title="Click para generar la gráfica" id="reporte" ></td>
-	</tr>
 </table>
+
+
+<br>
+<button class="btn btn-primary ewButton" name="btnsubmit" id="reporte" type="submit"> Generar gráfica </button>
+<br>
+<br>
+<hr>
 
 </div>
 <div id="container" style="height: 400px; min-width: 310px"></div>
+
+<div id="linea"></div>
+<script>
+document.getElementById("reporte").onclick = function() {myFunction()};
+
+function myFunction() {
+
+	var ano = document.getElementById("ano").value;
+	var fase=document.getElementById("fase").value;
+	var punto = document.getElementById("punto").value;
+	var profesional=document.getElementById("profesional").value;
+	
+	if(ano != "" && fase !="" && profesional !="" && punto !="" ){
+		document.getElementById("linea").innerHTML = "<hr><br>";
+	}
+	else{
+		pass;
+	}    
+}
+</script>
+
 <div id="container2" style="height: 400px; min-width: 310px"></div>
 <script>
 $(document).ready(function(){

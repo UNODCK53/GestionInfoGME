@@ -1629,19 +1629,39 @@ fgrafica_movimientoslistsrch.ValidateRequired = false; // No JavaScript validati
 <?php if ($grafica_movimientos->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-<H2> Informe diario</h2><p>La siguiente tabla contiene los informes diarios realizados desde la fase II de erradicación 2015 a la fecha</p>Si desea exportar la tabla en formato excel haga click en el siguiente icono 
-<?php if ($grafica_movimientos_list->TotalRecs > 0 && $grafica_movimientos_list->ExportOptions->Visible()) { ?>
-<?php $grafica_movimientos_list->ExportOptions->Render("body") ?>
+<H2> Informe diario</h2>
+<p>La siguiente tabla contiene los informes diarios realizados desde la fase II de erradicación 2015 a la fecha</p>
+<hr>
+
+<table>
+	<tr>
+		<td><?php if ($grafica_movimientos_list->TotalRecs > 0 && $grafica_movimientos_list->ExportOptions->Visible()) { ?>
+			<?php $grafica_movimientos_list->ExportOptions->Render("body") ?></td>
+		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono </td>
+	</tr>
+</table>
+
+<hr>
 <?php } ?>
 
 <?php if ($grafica_movimientos->Export == "") { ?>
-<?php echo $Language->SelectionForm(); ?>
+
 <?php } ?>
 <div class="clearfix"></div>
 </div>
+<br>
+<table>
+	<tr>
+		<td><?php if ($grafica_movimientos_list->SearchOptions->Visible()) { ?>
+			<?php $grafica_movimientos_list->SearchOptions->Render("body") ?></td>
+		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente</td>
+	</tr>
+</table>
+<br>
+<hr>
+<br>
 <?php } ?>
-<?php if ($grafica_movimientos_list->SearchOptions->Visible()) { ?>
-<font color="#C0C0C0">Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente </font><?php $grafica_movimientos_list->SearchOptions->Render("body") ?>
+
 <?php } ?>
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
@@ -1690,10 +1710,12 @@ $grafica_movimientos->RowType = EW_ROWTYPE_SEARCH;
 $grafica_movimientos->ResetAttrs();
 $grafica_movimientos_list->RenderRow();
 ?>
+
+
 <div id="xsr_1" class="ewRow">
 <?php if ($grafica_movimientos->Punto->Visible) { // Punto ?>
 	<div id="xsc_Punto" class="ewCell form-group">
-		<label for="x_Punto" class="ewSearchCaption ewLabel"><?php echo $grafica_movimientos->Punto->FldCaption() ?></label>
+		<label for="x_Punto" class="ewSearchCaption ewLabel">PUNTO DE ERRADICACIÓN</label>
 		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span>
 		<span class="ewSearchField">
 <input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($grafica_movimientos->Punto->PlaceHolder) ?>" value="<?php echo $grafica_movimientos->Punto->EditValue ?>"<?php echo $grafica_movimientos->Punto->EditAttributes() ?>>
@@ -1704,6 +1726,8 @@ $grafica_movimientos_list->RenderRow();
 <div id="xsr_2" class="ewRow">
 	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
 </div>
+
+<hr>
 	</div>
 </div>
 </form>

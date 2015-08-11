@@ -1758,7 +1758,7 @@ fgrafica_retiro_personallistsrch.ValidateRequired = false; // No JavaScript vali
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
 <?php if ($grafica_retiro_personal->Export == "") { ?>
-<?php echo $Language->SelectionForm(); ?>
+
 <?php } ?>
 <div class="clearfix"></div>
 </div>
@@ -1768,34 +1768,68 @@ fgrafica_retiro_personallistsrch.ValidateRequired = false; // No JavaScript vali
 <script src="./Highcharts/js/modules/exporting.js"></script>
 <script src="./Highcharts/js/modules/heatmap.js"></script>
 
+<h2>Retiro de personal</h2>
+<p>Este reporte muestra el número de personas y el motivo de evacuación, según filtro de año y fase </p>
+<hr>
+<h3>Generador de gráfica</h3>
+<i><strong>Nota:</strong> Seleccione una opción en todos los campos</i><br><br>
 <table>
-	<h2>Retiro de personal</h2>
-	<p>Este reporte muestra el número de personas y el motivo de evacuación, según filtro de año y fase </p><br>
+	
 	<tr>
 	<td>Año:</td>
+	<td width="5%"></td>
 		<td><select id="ano" name="ano" title="Seleccione el año de erradicación" onchange="borrar(this)" required> 
 				<option value="">Seleccione uno:</option>	
 			</select></td>
 	</tr>
 	<tr>
 		<td>Fase:</td>
+		<td width="5%"></td>
 		<td><select id="fase" name="fase" title="Seleccione la fase de erradicacón" required> 
 				<option value="">Seleccione una:</option>
 		</select></td>
 	</tr>
 	<tr>
 		<td>Profesional:</td>
+		<td width="5%"></td>
 		<td><select id="profesional" name="profesional" title="Seleccione un profesional" required> 
 				<option value="">Seleccione uno:</option>
 		</select></td>
 	</tr>
-	<tr>
-		<td><input type="button" value="Generar gráfica" title="Click para generar la gráfica" id="reporte" ></td>
-	</tr>
+
 </table>
+<br>
+<button class="btn btn-primary ewButton" name="btnsubmit" id="reporte" type="submit"> Generar gráfica </button>
+
+<br>
+<br>
+<hr>
 
 </div>
-<div id="container" style="height: 400px; min-width: 310px"></div>
+
+
+<div id="container" style="max-height: 400px; min-width: 310px"></div>
+
+<div id="linea"></div>
+
+<script>
+document.getElementById("reporte").onclick = function() {myFunction()};
+
+function myFunction() {
+
+	var ano = document.getElementById("ano").value;
+	var fase=document.getElementById("fase").value;
+	var profesional=document.getElementById("profesional").value;
+		
+	if(ano != "" && fase !="" && profesional !="" ){
+		document.getElementById("linea").innerHTML = "<hr><br>";
+	}
+	else{
+		pass;
+	}    
+}
+</script>
+
 <script>
 $(document).ready(function(){
 				$.ajax({
@@ -1942,11 +1976,38 @@ $("#reporte").click(function(){
 });
 
 </script>
+
+
 <?php if ($grafica_retiro_personal_list->TotalRecs > 0 && $grafica_retiro_personal_list->ExportOptions->Visible()) { ?>
-Si desea exportar la tabla en formato excel haga click en el siguiente icono <?php $grafica_retiro_personal_list->ExportOptions->Render("body") ?>
-<?php } ?>
-<?php if ($grafica_retiro_personal_list->SearchOptions->Visible()) { ?>
-<font color="#C0C0C0">Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente </font><?php $grafica_retiro_personal_list->SearchOptions->Render("body") ?>
+
+<h3>Resumen de datos</h3>
+
+<p>La siguiente tabla presenta el listado de evacuación de personal y el motivo de evacuación </p>
+<hr>
+
+<div class="ewToolbar">
+<table>
+	<tr>
+		<td><?php $grafica_retiro_personal_list->ExportOptions->Render("body") ?>
+			<?php } ?>
+			<?php if ($grafica_retiro_personal_list->SearchOptions->Visible()) { ?></td>
+		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono</td>
+	</tr>
+</table>
+</div>
+<hr>
+
+<br>
+<table>
+	<tr>
+		<td><?php $grafica_retiro_personal_list->SearchOptions->Render("body") ?></td>
+		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente</td>
+	</tr>
+</table>
+<br>
+<hr>
+<br>
+
 <?php } ?>
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
@@ -1995,64 +2056,66 @@ $grafica_retiro_personal->RowType = EW_ROWTYPE_SEARCH;
 $grafica_retiro_personal->ResetAttrs();
 $grafica_retiro_personal_list->RenderRow();
 ?>
-<div id="xsr_1" class="ewRow">
+
+<table>
+	<tr>
+		<td><label for="x_Motivo_Eva" class="ewSearchCaption ewLabel">MOTIVO EVACUACIÓN</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Motivo_Eva" id="z_Motivo_Eva" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_Motivo_Eva" name="x_Motivo_Eva" id="x_Motivo_Eva" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_retiro_personal->Motivo_Eva->PlaceHolder) ?>" value="<?php echo $grafica_retiro_personal->Motivo_Eva->EditValue ?>"<?php echo $grafica_retiro_personal->Motivo_Eva->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_Profesional_especializado" class="ewSearchCaption ewLabel">PROFESIONAL ESPECIALIZADO</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Profesional_especializado" id="z_Profesional_especializado" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_Profesional_especializado" name="x_Profesional_especializado" id="x_Profesional_especializado" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_retiro_personal->Profesional_especializado->PlaceHolder) ?>" value="<?php echo $grafica_retiro_personal->Profesional_especializado->EditValue ?>"<?php echo $grafica_retiro_personal->Profesional_especializado->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_Punto" class="ewSearchCaption ewLabel">PUNTO ERRADICACIÓN</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_retiro_personal->Punto->PlaceHolder) ?>" value="<?php echo $grafica_retiro_personal->Punto->EditValue ?>"<?php echo $grafica_retiro_personal->Punto->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_AF1o" class="ewSearchCaption ewLabel">AÑO</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_AF1o" id="z_AF1o" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_AF1o" name="x_AF1o" id="x_AF1o" size="30" maxlength="4" placeholder="<?php echo ew_HtmlEncode($grafica_retiro_personal->AF1o->PlaceHolder) ?>" value="<?php echo $grafica_retiro_personal->AF1o->EditValue ?>"<?php echo $grafica_retiro_personal->AF1o->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_Fase" class="ewSearchCaption ewLabel">FASE</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Fase" id="z_Fase" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_Fase" name="x_Fase" id="x_Fase" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($grafica_retiro_personal->Fase->PlaceHolder) ?>" value="<?php echo $grafica_retiro_personal->Fase->EditValue ?>"<?php echo $grafica_retiro_personal->Fase->EditAttributes() ?>>
+			</span></td>
+	</tr>
+</table>
+
 <?php if ($grafica_retiro_personal->Motivo_Eva->Visible) { // Motivo_Eva ?>
-	<div id="xsc_Motivo_Eva" class="ewCell form-group">
-		<label for="x_Motivo_Eva" class="ewSearchCaption ewLabel"><?php echo $grafica_retiro_personal->Motivo_Eva->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Motivo_Eva" id="z_Motivo_Eva" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Motivo_Eva" name="x_Motivo_Eva" id="x_Motivo_Eva" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_retiro_personal->Motivo_Eva->PlaceHolder) ?>" value="<?php echo $grafica_retiro_personal->Motivo_Eva->EditValue ?>"<?php echo $grafica_retiro_personal->Motivo_Eva->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_2" class="ewRow">
 <?php if ($grafica_retiro_personal->Profesional_especializado->Visible) { // Profesional_especializado ?>
-	<div id="xsc_Profesional_especializado" class="ewCell form-group">
-		<label for="x_Profesional_especializado" class="ewSearchCaption ewLabel"><?php echo $grafica_retiro_personal->Profesional_especializado->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Profesional_especializado" id="z_Profesional_especializado" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Profesional_especializado" name="x_Profesional_especializado" id="x_Profesional_especializado" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_retiro_personal->Profesional_especializado->PlaceHolder) ?>" value="<?php echo $grafica_retiro_personal->Profesional_especializado->EditValue ?>"<?php echo $grafica_retiro_personal->Profesional_especializado->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_3" class="ewRow">
 <?php if ($grafica_retiro_personal->Punto->Visible) { // Punto ?>
-	<div id="xsc_Punto" class="ewCell form-group">
-		<label for="x_Punto" class="ewSearchCaption ewLabel"><?php echo $grafica_retiro_personal->Punto->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_retiro_personal->Punto->PlaceHolder) ?>" value="<?php echo $grafica_retiro_personal->Punto->EditValue ?>"<?php echo $grafica_retiro_personal->Punto->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_4" class="ewRow">
 <?php if ($grafica_retiro_personal->AF1o->Visible) { // Año ?>
-	<div id="xsc_AF1o" class="ewCell form-group">
-		<label for="x_AF1o" class="ewSearchCaption ewLabel"><?php echo $grafica_retiro_personal->AF1o->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_AF1o" id="z_AF1o" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_AF1o" name="x_AF1o" id="x_AF1o" size="30" maxlength="4" placeholder="<?php echo ew_HtmlEncode($grafica_retiro_personal->AF1o->PlaceHolder) ?>" value="<?php echo $grafica_retiro_personal->AF1o->EditValue ?>"<?php echo $grafica_retiro_personal->AF1o->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_5" class="ewRow">
 <?php if ($grafica_retiro_personal->Fase->Visible) { // Fase ?>
-	<div id="xsc_Fase" class="ewCell form-group">
-		<label for="x_Fase" class="ewSearchCaption ewLabel"><?php echo $grafica_retiro_personal->Fase->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Fase" id="z_Fase" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Fase" name="x_Fase" id="x_Fase" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($grafica_retiro_personal->Fase->PlaceHolder) ?>" value="<?php echo $grafica_retiro_personal->Fase->EditValue ?>"<?php echo $grafica_retiro_personal->Fase->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_6" class="ewRow">
-	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-</div>
+
+<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+<br>
+<br>
+<hr>
+
 	</div>
 </div>
 </form>

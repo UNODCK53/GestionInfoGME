@@ -1697,18 +1697,41 @@ fgrafica_dias_contratadoslistsrch.ValidateRequired = false; // No JavaScript val
 <?php if ($grafica_dias_contratados->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-<h2>Reporte de Días contratados</h2><p>La siguiente tabla contiene el listado de los días trabajados en zona por cada Punto de erradicación, desde que firmaron contrato hasta que finalizaron la fase</p>Si desea exportar la tabla en formato excel haga click en el siguiente icono 
-<?php if ($grafica_dias_contratados_list->TotalRecs > 0 && $grafica_dias_contratados_list->ExportOptions->Visible()) { ?>
-<?php $grafica_dias_contratados_list->ExportOptions->Render("body") ?>
+<h2>Reporte de Días contratados</h2>
+<p>La siguiente tabla contiene el listado de los días trabajados en zona por cada Punto de erradicación, desde que firmaron contrato hasta que finalizaron la fase</p>
+<hr>
+
+<table>
+	<tr>
+		<td><?php if ($grafica_dias_contratados_list->TotalRecs > 0 && $grafica_dias_contratados_list->ExportOptions->Visible()) { ?>
+			<?php $grafica_dias_contratados_list->ExportOptions->Render("body") ?></td>
+		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono </td>
+	</tr>
+</table>
+
+<hr>
+
 <?php } ?>
 <?php if ($grafica_dias_contratados->Export == "") { ?>
-<?php echo $Language->SelectionForm(); ?>
+
 <?php } ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
 <?php if ($grafica_dias_contratados_list->SearchOptions->Visible()) { ?>
-<font color="#C0C0C0">Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente </font><?php $grafica_dias_contratados_list->SearchOptions->Render("body") ?>
+
+<br>
+<table>
+	<tr>
+		<td><?php $grafica_dias_contratados_list->SearchOptions->Render("body") ?></td>
+		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente</td>
+	</tr>
+</table>
+<br>
+<hr>
+<br>
+
+
 <?php } ?>
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
@@ -1757,31 +1780,39 @@ $grafica_dias_contratados->RowType = EW_ROWTYPE_SEARCH;
 $grafica_dias_contratados->ResetAttrs();
 $grafica_dias_contratados_list->RenderRow();
 ?>
-<div id="xsr_1" class="ewRow">
+
+<table>
+	<tr>
+		<td><label for="x_Punto" class="ewSearchCaption ewLabel">PUNTO DE ERRADICACIÓN</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_dias_contratados->Punto->PlaceHolder) ?>" value="<?php echo $grafica_dias_contratados->Punto->EditValue ?>"<?php echo $grafica_dias_contratados->Punto->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_Profesional" class="ewSearchCaption ewLabel">PROFESIONAL</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Profesional" id="z_Profesional" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_Profesional" name="x_Profesional" id="x_Profesional" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_dias_contratados->Profesional->PlaceHolder) ?>" value="<?php echo $grafica_dias_contratados->Profesional->EditValue ?>"<?php echo $grafica_dias_contratados->Profesional->EditAttributes() ?>>
+			</span></td>
+	</tr>
+</table>
+<br>
+<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+<br>
+<br>
+<hr>
+
+
 <?php if ($grafica_dias_contratados->Punto->Visible) { // Punto ?>
-	<div id="xsc_Punto" class="ewCell form-group">
-		<label for="x_Punto" class="ewSearchCaption ewLabel"><?php echo $grafica_dias_contratados->Punto->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_dias_contratados->Punto->PlaceHolder) ?>" value="<?php echo $grafica_dias_contratados->Punto->EditValue ?>"<?php echo $grafica_dias_contratados->Punto->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_2" class="ewRow">
+
 <?php if ($grafica_dias_contratados->Profesional->Visible) { // Profesional ?>
-	<div id="xsc_Profesional" class="ewCell form-group">
-		<label for="x_Profesional" class="ewSearchCaption ewLabel"><?php echo $grafica_dias_contratados->Profesional->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Profesional" id="z_Profesional" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Profesional" name="x_Profesional" id="x_Profesional" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_dias_contratados->Profesional->PlaceHolder) ?>" value="<?php echo $grafica_dias_contratados->Profesional->EditValue ?>"<?php echo $grafica_dias_contratados->Profesional->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_3" class="ewRow">
-	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-</div>
+
+
 	</div>
 </div>
 </form>

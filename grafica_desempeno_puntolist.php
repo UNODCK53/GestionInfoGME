@@ -1809,13 +1809,17 @@ fgrafica_desempeno_puntolistsrch.ValidateRequired = false; // No JavaScript vali
 </script>
 <?php } ?>
 <?php if ($grafica_desempeno_punto->Export == "") { ?>
+
+ <!--Aca inicia la pagina --> 
+
 <div class="ewToolbar">
 <?php if ($grafica_desempeno_punto->Export == "") { ?>
-<?php $Breadcrumb->Render(); ?>
+ <!--De esta línea saque el botón de HOME --> 
+ <?php $Breadcrumb->Render(); ?>
 <?php } ?>
 
 <?php if ($grafica_desempeno_punto->Export == "") { ?>
-<?php echo $Language->SelectionForm(); ?>
+
 <?php } ?>
 <div class="clearfix"></div>
 </div>
@@ -1861,35 +1865,73 @@ $grafica_desempeno_punto_list->ShowMessage();
 <script src="http://code.highcharts.com/modules/drilldown.js"></script>
 
 <table>
-	<h2>Desempeño de erradicación por Punto</h2>
-	<p> Este reporte despliega el promedio de área erradicada diariamente en cada punto, calculando el total de hectáreas erradicadas en el punto y dividiéndolo entre el total de días en los que se realizó erradicación </p><br>
-	<p>La gráfica permite visualizar la información en <strong>dos niveles diferentes al darle  Click </strong>sobre las columnas </p><p>- -El primer nivel muestra el promedio de hectáreas erradicadas por día de erradicación en cada Punto</p> <p>- El segundo nivel muestra el total de hectáreas erradicadas para el punto de erradicación seleccionado</p><br>
-	
 	<tr>
-	<td>Año:</td>
-		<td><select id="ano" name="ano" title="Seleccione el año de erradicación" onchange="borrar1(this)" required> 
-				<option value="">Seleccione uno:</option>	
-			</select></td>
-	</tr>
-	<tr>
-		<td>Fase:</td>
-		<td><select id="fase" name="fase" title="Seleccione la fase de erradicacón" required> 
-				<option value="">Seleccione una:</option>
-		</select></td>
-	</tr>
-	<tr>
-		<td>Profesional:</td>
-		<td><select id="profesional" name="profesional" title="Seleccione un profesional" required> 
-				<option value="">Seleccione uno:</option>
-		</select></td>
-	</tr>
-	<tr>
-		<td><input type="button" value="Generar gráfica" title="Click para generar la gráfica" id="reporte" ></td>
+		<td><h2>Desempeño de erradicación por Punto</h2></td>
+		<td width="5%"></td>
+		<td></td>
 	</tr>
 </table>
 
+
+
+<table >
+
+	
+	
+	<br>
+	<p> Este reporte despliega el promedio de área erradicada diariamente en cada punto, calculando el total de hectáreas erradicadas en el punto y dividiéndolo entre el total de días en los que se realizó erradicación </p><br>
+	<hr>
+	<h3>Generador de gráfica</h3>
+	<i><strong>Nota:</strong> Seleccione una opción en todos los campos</i><br>
+	<br>
+	<tr>
+		<td >
+			<table>
+				<tr>
+
+					<td>Año:</td>
+					<td width="5%"></td>
+					<td><select id="ano" name="ano" title="Seleccione el año de erradicación" onchange="borrar1(this)" required> 
+							<option value="">Seleccione uno:</option>	
+						</select></td>
+				</tr>
+				<tr>
+					<td>Fase:</td>
+					<td width="5%"></td>
+					<td><select id="fase" name="fase" title="Seleccione la fase de erradicacón" required> 
+							<option value="">Seleccione una:</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td>Profesional:</td>
+					<td width="5%"></td>
+					<td><select id="profesional" name="profesional" title="Seleccione un profesional" required> 
+							<option value="">Seleccione uno:</option>
+					</select></td>
+				</tr>
+			</table>
+		<br>
+		<button class="btn btn-primary ewButton" name="btnsubmit" id="reporte" type="submit"> Generar gráfica </button>
+
+		</td>
+		
+		<td width="5%"></td>
+
+		<td align="justify" valign="top">
+			<p><strong>Nota:</strong><br>La gráfica permite visualizar la información en dos niveles diferentes <strong>al darle  Click sobre las columnas:</strong><br>
+			- El primer nivel muestra el promedio de hectáreas erradicadas por día de erradicación en cada Punto<br>
+			- El segundo nivel muestra el total de hectáreas erradicadas para el punto de erradicación seleccionado</p>	
+		</td>
+		
+	</tr>
+		
+</table>
+
 </div>
-<div id="container" style="height: 400px; min-width: 310px"></div>
+<br>
+<hr>
+<br>
+<div id="container" style="max-height: 400px; min-width: 310px"></div>
 <script>
 $(document).ready(function(){
 				$.ajax({
@@ -1946,6 +1988,8 @@ $(document).ready(function(){
 					}			
 				});
 			});
+
+
 	});
 		
 		function borrar1(x) {
@@ -1957,11 +2001,18 @@ $(document).ready(function(){
 		}
 		
 $("#reporte").click(function(){
+
+
 	var ano = document.getElementById("ano").value;
 	var fase=document.getElementById("fase").value;
 	var profesional=document.getElementById("profesional").value;
 	var dataString = 'ano='+ ano+'&fase='+ fase+'&profesional='+profesional;
+
+	
+
 	if(ano != "" && fase !="" && profesional !="" ){
+
+		
 	$.ajax({
 					type: "GET",
 					async: false,
@@ -2034,26 +2085,81 @@ $("#reporte").click(function(){
 					error: function() {
 					
 						alert("No hay conección con la base de datos apra realizar la descarga");
-					}			
+					}
+
+
 			});
+			
+
 			
 	}else
 		{
 			alert("Para generar la gráfica debe seleccionar una opción en todos los campos ");
 		}
+
 	
 });
 
 </script>
-<div><p>La siguiente tabla contiene las hectáres erradicadas por Punto, asi como el número de días contratados y con erradicación; datos necesarios para calcular el desempeño de erradicación por Punto</p>Si desea exportar la tabla en formato excel haga click en el siguiente icono 
-	<?php if ($grafica_desempeno_punto_list->TotalRecs > 0 && $grafica_desempeno_punto_list->ExportOptions->Visible()) { ?>
-	<?php $grafica_desempeno_punto_list->ExportOptions->Render("body") ?>
-	<?php } ?> 
+
+<script type="text/javascript">
+$("#container").click(function(){
+	
+}	
+</script>
+
+<div id="linea"></div>
+
+
+<script>
+document.getElementById("reporte").onclick = function() {myFunction()};
+
+function myFunction() {
+
+	var ano = document.getElementById("ano").value;
+	var fase=document.getElementById("fase").value;
+	var profesional=document.getElementById("profesional").value;
+	
+	if(ano != "" && fase !="" && profesional !="" ){
+		document.getElementById("linea").innerHTML = "<hr><br>";
+	}
+	else{
+		pass;
+	}    
+}
+</script>
+
+
+
+<h3>Resumen de datos</h3>
+<p>La siguiente tabla contiene las hectáres erradicadas por Punto, asi como el número de días contratados y con erradicación; datos necesarios para calcular el desempeño de erradicación por Punto</p>
+<hr>
+<div class="ewToolbar">
+<table>
+	<tr>
+		<td><?php $grafica_desempeno_punto_list->ExportOptions->Render("body") ?></td>
+		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono </td>
+	</tr>
+</table>
 </div>
-<font color="#C0C0C0">Si desea realizar filtros en la tabla haga click en "Buscar" e ingrese el dato en la columna correspondiente </font>
-<?php if ($grafica_desempeno_punto_list->SearchOptions->Visible()) { ?>
-<?php $grafica_desempeno_punto_list->SearchOptions->Render("body") ?>
-<?php } ?>
+<?php if ($grafica_desempeno_punto_list->TotalRecs > 0 && $grafica_desempeno_punto_list->ExportOptions->Visible()) { ?>
+<?php } ?> 
+<hr>
+<br>
+<table>
+	<tr>
+		<td><?php if ($grafica_desempeno_punto_list->SearchOptions->Visible()) { ?><?php } ?><?php $grafica_desempeno_punto_list->SearchOptions->Render("body") ?>
+		</td>
+		<td>Si desea realizar filtros en la tabla ingrese el dato en la caja y haga click en "Buscar"</td>
+	</tr>
+</table>
+<br>
+<hr>
+<br>
+
+
+
+
 <?php if ($Security->CanSearch()) { ?>
 <?php if ($grafica_desempeno_punto->Export == "" && $grafica_desempeno_punto->CurrentAction == "") { ?>
 <form name="fgrafica_desempeno_puntolistsrch" id="fgrafica_desempeno_puntolistsrch" class="form-inline ewForm" action="<?php echo ew_CurrentPage() ?>">
@@ -2081,6 +2187,9 @@ $grafica_desempeno_punto_list->RenderRow();
 		<span class="ewSearchField">
 <input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_desempeno_punto->Punto->PlaceHolder) ?>" value="<?php echo $grafica_desempeno_punto->Punto->EditValue ?>"<?php echo $grafica_desempeno_punto->Punto->EditAttributes() ?>>
 </span>
+<br>
+<br>
+<hr>
 	</div>
 <?php } ?>
 </div>

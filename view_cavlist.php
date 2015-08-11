@@ -2770,10 +2770,9 @@ fview_cavlistsrch.ValidateRequired = false; // No JavaScript validation
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
 <H2> Control de áreas VIVAC</h2>
-<hr>
-<br>
+
 <p>La siguiente tabla contiene los informes de Áreas VIVAC realizados desde la fase II de erradicación 2015 a la fecha</p>
-<br>
+
 <hr>
 
 <table>
@@ -2787,7 +2786,7 @@ fview_cavlistsrch.ValidateRequired = false; // No JavaScript validation
 <hr>
 
 <?php if ($view_cav->Export == "") { ?>
-<?php echo $Language->SelectionForm(); ?>
+
 <?php } ?>
 
 </div>

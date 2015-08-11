@@ -1634,7 +1634,7 @@ fgrafica_dia_dia_hectareaslistsrch.ValidateRequired = false; // No JavaScript va
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
 <?php if ($grafica_dia_dia_hectareas->Export == "") { ?>
-<?php echo $Language->SelectionForm(); ?>
+
 <?php } ?>
 <div class="clearfix"></div>
 </div>
@@ -1677,13 +1677,19 @@ $grafica_dia_dia_hectareas_list->RenderOtherOptions();
 
 
 <div>
-<table>
+
 
 <h2>Cantidad de hectáreas erradicadas por día </h2>
 	<p>Este reporte muestra la erradicación diaria por Punto, según filtros de año y fase </p><br>
-	<p>La gráfica permite visualizar de forma rápida en qué días se erradicaron más hectáreas de cultivos ilícitos</p><br>
+	<hr>
+	<h3>Generador de gráfica</h3>
+	
+	<p>La gráfica permite visualizar de forma rápida en qué días se erradicaron más hectáreas de cultivos ilícitos</p>
+	<i><strong>Nota:</strong> Seleccione una opción en todos los campos</i><br><br>
+<table>
 	<tr>
 		<td>Año:</td>
+		<td width="5%"></td>
 		<td><select id="ano" name="ano" title="Seleccione el año de erradicación" onchange="borrar1(this)" required> 
 				<option value="">Seleccione uno:</option>
 				
@@ -1691,6 +1697,7 @@ $grafica_dia_dia_hectareas_list->RenderOtherOptions();
 	</tr>
 	<tr>
 		<td>Fase:</td>
+		<td width="5%"></td>
 		<td><select id="fase" name="fase" title="Seleccione la fase de erradicacón" required> 
 				<option value="">Seleccione una:</option>
 				
@@ -1698,15 +1705,24 @@ $grafica_dia_dia_hectareas_list->RenderOtherOptions();
 	</tr>
 	<tr>
 		<td>Punto de erradicación:</td>
+		<td width="5%"></td>
 		<td><select id="punto" name="punto" title="Seleccione la fase de erradicación" required> 
 				<option value="">Seleccione uno:</option>
 				
 			</select></td>
 	</tr>
-	<tr>
-		<td><input type="button" value="Generar gráfica" title="Click para generar la gráfica" id="reporte" ></td>
-	</tr>
+	
 </table>
+<br>
+
+<button class="btn btn-primary ewButton" name="btnsubmit" id="reporte" type="submit"> Generar gráfica </button>
+
+<br>
+<br>
+<hr>
+<br>
+
+
 <script type="text/javascript">
 
 		$(document).ready(function(){
@@ -1928,17 +1944,57 @@ console.log(vector3);
 });	
 	</script>
 </div>
-<div id="container" style="height:700px; min-width: 310px ;"></div>
+<div id="container" style="max-height:700px; min-width: 310px ;"></div>
+<div id="linea"></div>
+
+<script>
+document.getElementById("reporte").onclick = function() {myFunction()};
+
+function myFunction() {
+
+	var ano = document.getElementById("ano").value;
+	var fase=document.getElementById("fase").value;
+	var punto=document.getElementById("punto").value;
+	
+	if(ano != "" && fase !="" && punto !="" ){
+		document.getElementById("linea").innerHTML = "<hr><br>";
+	}
+	else{
+		pass;
+	}    
+}
+</script>
 </div>
 
 
-<p>La siguiente tabla contiene el reporte de erradicación diario en las fases de erradicación, según Punto de erradicación</p>Si desea exportar la tabla en formato excel haga click en el siguiente icono 
-<?php if ($grafica_dia_dia_hectareas_list->TotalRecs > 0 && $grafica_dia_dia_hectareas_list->ExportOptions->Visible()) { ?>
-<?php $grafica_dia_dia_hectareas_list->ExportOptions->Render("body") ?>
+<h3>Resumen de datos</h3>
+<p>La siguiente tabla contiene el reporte de erradicación diario en las fases de erradicación, según Punto de erradicación</p>
+<hr>
+
+<div class="ewToolbar">
+<table>
+	<tr>
+		<td><?php if ($grafica_dia_dia_hectareas_list->TotalRecs > 0 && $grafica_dia_dia_hectareas_list->ExportOptions->Visible()) { ?>
+			<?php $grafica_dia_dia_hectareas_list->ExportOptions->Render("body") ?></td>
+		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono</td>
+	</tr>
+</table>
+</div>
+<hr>
+<br>
+<table>
+	<tr>
+		<td><?php $grafica_dia_dia_hectareas_list->SearchOptions->Render("body") ?></td>
+		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente</td>
+	</tr>
+</table>
+<br>
+<hr>
+<br>
 <?php } ?>
-<font color="#C0C0C0">Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente </font>
+
 <?php if ($grafica_dia_dia_hectareas_list->SearchOptions->Visible()) { ?>
-<?php $grafica_dia_dia_hectareas_list->SearchOptions->Render("body") ?>
+
 <?php } ?>
 <?php if ($Security->CanSearch()) { ?>
 <?php if ($grafica_dia_dia_hectareas->Export == "" && $grafica_dia_dia_hectareas->CurrentAction == "") { ?>
@@ -1969,6 +2025,7 @@ $grafica_dia_dia_hectareas_list->RenderRow();
 </span>
 	</div>
 <?php } ?>
+
 </div>
 <div id="xsr_2" class="ewRow">
 <?php if ($grafica_dia_dia_hectareas->Fecha->Visible) { // Fecha ?>
@@ -1984,6 +2041,8 @@ $grafica_dia_dia_hectareas_list->RenderRow();
 <div id="xsr_3" class="ewRow">
 	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
 </div>
+
+<hr>
 	</div>
 </div>
 </form>

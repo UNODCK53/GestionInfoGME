@@ -1661,17 +1661,16 @@ fgrafica_apoyos_zonaleslistsrch.ValidateRequired = false; // No JavaScript valid
 <?php if ($grafica_apoyos_zonales->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-<h2 style:'background-color: lightgray;'>Reporte de Apoyos Zonales</h2>
-<hr><br> 
-<p>La siguiente tabla contiene el listado Apoyos zonales que tiene a cargo cada Profesional especializado, según punto de erradicación.<br>
+<h2>Reporte de Apoyos Zonales</h2>
+
+<p>La siguiente tabla contiene el listado Apoyos zonales que tiene a cargo cada Profesional especializado, según punto de erradicación.
 </p>
 <hr> 
 <table>
 	<tr>
 		<td valign="center"><?php if ($grafica_apoyos_zonales_list->TotalRecs > 0 && $grafica_apoyos_zonales_list->ExportOptions->Visible()) { ?>
-
-<?php $grafica_apoyos_zonales_list->ExportOptions->Render("body") ?>
-<?php } ?></td>
+			<?php $grafica_apoyos_zonales_list->ExportOptions->Render("body") ?>
+			<?php } ?></td>
 		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono</td>
 		
 	</tr>	
@@ -1679,12 +1678,13 @@ fgrafica_apoyos_zonaleslistsrch.ValidateRequired = false; // No JavaScript valid
 <hr> 
 
 <?php if ($grafica_apoyos_zonales->Export == "") { ?>
-
 <?php } ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
 <?php if ($grafica_apoyos_zonales_list->SearchOptions->Visible()) { ?>
+
+
 
 <br>
 <table>
@@ -1696,6 +1696,9 @@ fgrafica_apoyos_zonaleslistsrch.ValidateRequired = false; // No JavaScript valid
 <br>
 <hr>
 <br>
+
+
+
 
 <?php } ?>
 <?php

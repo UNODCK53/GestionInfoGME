@@ -1742,7 +1742,7 @@ fgrafica_intervencion_geograficalistsrch.ValidateRequired = false; // No JavaScr
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
 <?php if ($grafica_intervencion_geografica->Export == "") { ?>
-<?php echo $Language->SelectionForm(); ?>
+
 <?php } ?>
 <div class="clearfix"></div>
 </div>
@@ -1754,11 +1754,16 @@ fgrafica_intervencion_geograficalistsrch.ValidateRequired = false; // No JavaScr
 <script src="./Highcharts/js/modules/treemap.js"></script>
 <table>
 	<h2>Intervención geográfica de erradicación</h2>
-	<p>Este reporte muestra el total de hectáreas erradicadas  por departamento y municipios, según filtros de año y fase </p><br>
-	<p>La gráfica permite visualizar la información de erradicación en <strong>tres niveles diferentes al darle  Click </strong>sobre el los cuadros </p><p>- El primer nivel muestra información a escala departamental, si el departamento posee más de un municipio con erradicación, el cuadro del departamento se dividirá según el número de municipios y el tamaño de estas divisiones será proporcional de área erradicada en cada municipio</p> <p>- El segundo nivel muestra información a escala municipal, las divisiones en este nivel hacen referencia a los tipos de cultivos erradicados en cada municipio y su proporción de área erradicada</p><p>- El tercer nivel muestra las hectáreas erradicadas por tipo de cultivo</p><br>
+	<p>Este reporte muestra el total de hectáreas erradicadas  por departamento y municipios, según filtros de año y fase </p>
 
+	<hr>
+	<h3>Generador de gráfica</h3>
+	<p>La gráfica permite visualizar la información de erradicación en <strong>tres niveles diferentes al darle  Click </strong>sobre el los cuadros </p><p>- El primer nivel muestra información a escala departamental, si el departamento posee más de un municipio con erradicación, el cuadro del departamento se dividirá según el número de municipios y el tamaño de estas divisiones será proporcional de área erradicada en cada municipio</p> <p>- El segundo nivel muestra información a escala municipal, las divisiones en este nivel hacen referencia a los tipos de cultivos erradicados en cada municipio y su proporción de área erradicada</p><p>- El tercer nivel muestra las hectáreas erradicadas por tipo de cultivo</p><br>
+	<i><strong>Nota:</strong> Seleccione una opción en todos los campos</i><br>
+	<br>
 	<tr>
 		<td>Año:</td>
+		<td width="5%"></td>
 		<td><select id="ano" name="ano" title="Seleccione el año de erradicación" onchange="borrar(this)" required> 
 				<option value="">Seleccione uno:</option>
 				
@@ -1766,18 +1771,43 @@ fgrafica_intervencion_geograficalistsrch.ValidateRequired = false; // No JavaScr
 	</tr>
 	<tr>
 		<td>Fase:</td>
+		<td width="5%"></td>
 		<td><select id="fase" name="fase" title="Seleccione la fase de erradicacón" required> 
 				<option value="">Seleccione una:</option>
 				
 			</select></td>
 	</tr>
-	<tr>
-		<td><input type="button" value="Generar gráfica" title="Click para generar la gráfica" id="reporte" ></td>
-	</tr>
+	
 </table>
+<br>
+<button class="btn btn-primary ewButton" name="btnsubmit" id="reporte" type="submit"> Generar gráfica </button>
+<br>
+<br>
+<hr>
 
 </div>
-<div id="container" style="height: 400px; min-width: 310px"></div>
+<div id="container" style="max-height: 400px; min-width: 310px"></div>
+
+<div id="linea"></div>
+
+
+<script>
+document.getElementById("reporte").onclick = function() {myFunction()};
+
+function myFunction() {
+
+	var ano = document.getElementById("ano").value;
+	var fase=document.getElementById("fase").value;
+		
+	if(ano != "" && fase !="" ){
+		document.getElementById("linea").innerHTML = "<hr><br>";
+	}
+	else{
+		pass;
+	}    
+}
+</script>
+
 <script>
 $(document).ready(function(){
 				$.ajax({
@@ -1899,12 +1929,33 @@ $("#reporte").click(function(){
 });
 
 </script>
-La siguiente tabla contiene la distribución de área erradicada por Departamento y Municipio por año y fase de erradicación</p>Si desea exportar la tabla en formato excel haga click en el siguiente icono 
-<?php if ($grafica_intervencion_geografica_list->TotalRecs > 0 && $grafica_intervencion_geografica_list->ExportOptions->Visible()) { ?>
-<?php $grafica_intervencion_geografica_list->ExportOptions->Render("body") ?>
+
+<h3>Resumen de datos</h3>
+La siguiente tabla contiene la distribución de área erradicada por Departamento y Municipio por año y fase de erradicación</p>
+<hr>
+<div class="ewToolbar">
+<table>
+	<TR>
+		<td><?php if ($grafica_intervencion_geografica_list->TotalRecs > 0 && $grafica_intervencion_geografica_list->ExportOptions->Visible()) { ?>
+			<?php $grafica_intervencion_geografica_list->ExportOptions->Render("body") ?></td>
+		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono </td>
+	</TR>
+</table>
+</div>
+<hr>
+<br>
+<table>
+	<tr>
+		<td><?php if ($grafica_intervencion_geografica_list->SearchOptions->Visible()) { ?>
+			<?php $grafica_intervencion_geografica_list->SearchOptions->Render("body") ?></td>
+		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente</td>
+	</tr>
+</table>
+<br>
+<hr>
+<br>
 <?php } ?>
-<?php if ($grafica_intervencion_geografica_list->SearchOptions->Visible()) { ?>
-<font color="#C0C0C0">Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente </font><?php $grafica_intervencion_geografica_list->SearchOptions->Render("body") ?>
+
 <?php } ?>
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
@@ -1953,31 +2004,37 @@ $grafica_intervencion_geografica->RowType = EW_ROWTYPE_SEARCH;
 $grafica_intervencion_geografica->ResetAttrs();
 $grafica_intervencion_geografica_list->RenderRow();
 ?>
-<div id="xsr_1" class="ewRow">
+
+<table>
+	<tr>
+		<td><label for="x_Departamento" class="ewSearchCaption ewLabel">DEPARTAMENTO</label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Departamento" id="z_Departamento" value="LIKE"></span></td>
+		<td width="5%"</td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_Departamento" name="x_Departamento" id="x_Departamento" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($grafica_intervencion_geografica->Departamento->PlaceHolder) ?>" value="<?php echo $grafica_intervencion_geografica->Departamento->EditValue ?>"<?php echo $grafica_intervencion_geografica->Departamento->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_Muncipio" class="ewSearchCaption ewLabel">MUNICIPIO</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Muncipio" id="z_Muncipio" value="LIKE"></span></td>
+		<td width="5%"</td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_Muncipio" name="x_Muncipio" id="x_Muncipio" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_intervencion_geografica->Muncipio->PlaceHolder) ?>" value="<?php echo $grafica_intervencion_geografica->Muncipio->EditValue ?>"<?php echo $grafica_intervencion_geografica->Muncipio->EditAttributes() ?>>
+			</span></td>
+	</tr>		
+</table>
+
 <?php if ($grafica_intervencion_geografica->Departamento->Visible) { // Departamento ?>
-	<div id="xsc_Departamento" class="ewCell form-group">
-		<label for="x_Departamento" class="ewSearchCaption ewLabel"><?php echo $grafica_intervencion_geografica->Departamento->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Departamento" id="z_Departamento" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Departamento" name="x_Departamento" id="x_Departamento" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($grafica_intervencion_geografica->Departamento->PlaceHolder) ?>" value="<?php echo $grafica_intervencion_geografica->Departamento->EditValue ?>"<?php echo $grafica_intervencion_geografica->Departamento->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_2" class="ewRow">
+
 <?php if ($grafica_intervencion_geografica->Muncipio->Visible) { // Muncipio ?>
-	<div id="xsc_Muncipio" class="ewCell form-group">
-		<label for="x_Muncipio" class="ewSearchCaption ewLabel"><?php echo $grafica_intervencion_geografica->Muncipio->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Muncipio" id="z_Muncipio" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Muncipio" name="x_Muncipio" id="x_Muncipio" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_intervencion_geografica->Muncipio->PlaceHolder) ?>" value="<?php echo $grafica_intervencion_geografica->Muncipio->EditValue ?>"<?php echo $grafica_intervencion_geografica->Muncipio->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_3" class="ewRow">
-	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-</div>
+
+<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+<br>
+<br>
+<hr>
+
 	</div>
 </div>
 </form>

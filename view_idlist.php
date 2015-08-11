@@ -3896,10 +3896,8 @@ fview_idlistsrch.ValidateRequired = false; // No JavaScript validation
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
 <H2> Informe diario</h2>
-<hr>
-<br>
 <p>La siguiente tabla contiene los informes diarios realizados desde la fase II de erradicación 2015 a la fecha</p>
-<br>
+
 <hr>
 <table>
 	<tr>
@@ -3916,7 +3914,9 @@ fview_idlistsrch.ValidateRequired = false; // No JavaScript validation
 
 <hr>
 </div>
+
 <?php if ($view_id_list->SearchOptions->Visible()) { ?>
+
 <br>
 <table>
 	<tr>

@@ -1907,18 +1907,40 @@ fgrafica_erradicacion_fuerza_departamentolistsrch.ValidateRequired = false; // N
 <?php if ($grafica_erradicacion_fuerza_departamento->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-<h2>Reporte de erradicación según fuerza pública</h2><p>La siguiente tabla contiene las hectáreas erradicadas según fuerza pública para cada Punto de erradicación, desde fase III de erradicación 2015 a la fecha</p>Si desea exportar la tabla en formato excel haga click en el siguiente icono 
-<?php if ($grafica_erradicacion_fuerza_departamento_list->TotalRecs > 0 && $grafica_erradicacion_fuerza_departamento_list->ExportOptions->Visible()) { ?>
-<?php $grafica_erradicacion_fuerza_departamento_list->ExportOptions->Render("body") ?>
-<?php } ?>
-<?php if ($grafica_erradicacion_fuerza_departamento->Export == "") { ?>
-<?php echo $Language->SelectionForm(); ?>
-<?php } ?>
+
+<h2>Reporte de erradicación según fuerza pública</h2>
+<p>La siguiente tabla contiene las hectáreas erradicadas según fuerza pública para cada Punto de erradicación, desde fase III de erradicación 2015 a la fecha</p>
+<hr>
+
+<table>
+	<tr>
+		<td><?php if ($grafica_erradicacion_fuerza_departamento_list->TotalRecs > 0 && $grafica_erradicacion_fuerza_departamento_list->ExportOptions->Visible()) { ?>
+			<?php $grafica_erradicacion_fuerza_departamento_list->ExportOptions->Render("body") ?></td>
+		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono </td>
+	</tr>
+</table>
+<hr>
+<br>
 <div class="clearfix"></div>
 </div>
+<table>
+	<tr>
+		<td><?php $grafica_erradicacion_fuerza_departamento_list->SearchOptions->Render("body") ?></td>
+		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente</td>
+	</tr>
+</table>
+
+<br>
+<hr>
+<br>
+<?php } ?>
+<?php if ($grafica_erradicacion_fuerza_departamento->Export == "") { ?>
+
+<?php } ?>
+
 <?php } ?>
 <?php if ($grafica_erradicacion_fuerza_departamento_list->SearchOptions->Visible()) { ?>
-<font color="#C0C0C0">Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente </font><?php $grafica_erradicacion_fuerza_departamento_list->SearchOptions->Render("body") ?>
+
 <?php } ?>
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
@@ -1967,86 +1989,89 @@ $grafica_erradicacion_fuerza_departamento->RowType = EW_ROWTYPE_SEARCH;
 $grafica_erradicacion_fuerza_departamento->ResetAttrs();
 $grafica_erradicacion_fuerza_departamento_list->RenderRow();
 ?>
-<div id="xsr_1" class="ewRow">
+
+<table>
+	<tr>
+		<td><label for="x_fuerza" class="ewSearchCaption ewLabel">FUERZA</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_fuerza" id="z_fuerza" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_fuerza" name="x_fuerza" id="x_fuerza" size="30" maxlength="70" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->fuerza->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->fuerza->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->fuerza->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_Departamento" class="ewSearchCaption ewLabel">DEPARTAMENTO</label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Departamento" id="z_Departamento" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_Departamento" name="x_Departamento" id="x_Departamento" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->Departamento->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->Departamento->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->Departamento->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_Muncipio" class="ewSearchCaption ewLabel">MUNICIPIO</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Muncipio" id="z_Muncipio" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_Muncipio" name="x_Muncipio" id="x_Muncipio" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->Muncipio->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->Muncipio->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->Muncipio->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_Punto" class="ewSearchCaption ewLabel">PUNTO DE ERRADICACIÓN</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->Punto->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->Punto->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->Punto->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_aF1o" class="ewSearchCaption ewLabel">AÑO</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_aF1o" id="z_aF1o" value="="></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_aF1o" name="x_aF1o" id="x_aF1o" size="30" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->aF1o->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->aF1o->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->aF1o->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_fase" class="ewSearchCaption ewLabel">FASE</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_fase" id="z_fase" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_fase" name="x_fase" id="x_fase" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->fase->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->fase->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->fase->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_Profesional_especializado" class="ewSearchCaption ewLabel">PROFESIONAL ESPECIALIZADO</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Profesional_especializado" id="z_Profesional_especializado" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_Profesional_especializado" name="x_Profesional_especializado" id="x_Profesional_especializado" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->Profesional_especializado->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->EditAttributes() ?>>
+			</span></td>
+	</tr>
+</table>
+
 <?php if ($grafica_erradicacion_fuerza_departamento->fuerza->Visible) { // fuerza ?>
-	<div id="xsc_fuerza" class="ewCell form-group">
-		<label for="x_fuerza" class="ewSearchCaption ewLabel"><?php echo $grafica_erradicacion_fuerza_departamento->fuerza->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_fuerza" id="z_fuerza" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_fuerza" name="x_fuerza" id="x_fuerza" size="30" maxlength="70" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->fuerza->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->fuerza->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->fuerza->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_2" class="ewRow">
 <?php if ($grafica_erradicacion_fuerza_departamento->Departamento->Visible) { // Departamento ?>
-	<div id="xsc_Departamento" class="ewCell form-group">
-		<label for="x_Departamento" class="ewSearchCaption ewLabel"><?php echo $grafica_erradicacion_fuerza_departamento->Departamento->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Departamento" id="z_Departamento" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Departamento" name="x_Departamento" id="x_Departamento" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->Departamento->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->Departamento->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->Departamento->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_3" class="ewRow">
 <?php if ($grafica_erradicacion_fuerza_departamento->Muncipio->Visible) { // Muncipio ?>
-	<div id="xsc_Muncipio" class="ewCell form-group">
-		<label for="x_Muncipio" class="ewSearchCaption ewLabel"><?php echo $grafica_erradicacion_fuerza_departamento->Muncipio->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Muncipio" id="z_Muncipio" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Muncipio" name="x_Muncipio" id="x_Muncipio" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->Muncipio->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->Muncipio->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->Muncipio->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_4" class="ewRow">
 <?php if ($grafica_erradicacion_fuerza_departamento->Punto->Visible) { // Punto ?>
-	<div id="xsc_Punto" class="ewCell form-group">
-		<label for="x_Punto" class="ewSearchCaption ewLabel"><?php echo $grafica_erradicacion_fuerza_departamento->Punto->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->Punto->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->Punto->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->Punto->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_5" class="ewRow">
 <?php if ($grafica_erradicacion_fuerza_departamento->aF1o->Visible) { // año ?>
-	<div id="xsc_aF1o" class="ewCell form-group">
-		<label for="x_aF1o" class="ewSearchCaption ewLabel"><?php echo $grafica_erradicacion_fuerza_departamento->aF1o->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_aF1o" id="z_aF1o" value="="></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_aF1o" name="x_aF1o" id="x_aF1o" size="30" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->aF1o->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->aF1o->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->aF1o->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_6" class="ewRow">
 <?php if ($grafica_erradicacion_fuerza_departamento->fase->Visible) { // fase ?>
-	<div id="xsc_fase" class="ewCell form-group">
-		<label for="x_fase" class="ewSearchCaption ewLabel"><?php echo $grafica_erradicacion_fuerza_departamento->fase->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_fase" id="z_fase" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_fase" name="x_fase" id="x_fase" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->fase->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->fase->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->fase->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_7" class="ewRow">
+
 <?php if ($grafica_erradicacion_fuerza_departamento->Profesional_especializado->Visible) { // Profesional_especializado ?>
-	<div id="xsc_Profesional_especializado" class="ewCell form-group">
-		<label for="x_Profesional_especializado" class="ewSearchCaption ewLabel"><?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Profesional_especializado" id="z_Profesional_especializado" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Profesional_especializado" name="x_Profesional_especializado" id="x_Profesional_especializado" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->Profesional_especializado->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_8" class="ewRow">
-	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-</div>
+
+<br>
+<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+
+<br>
+<br>
+<hr>
+
 	</div>
 </div>
 </form>

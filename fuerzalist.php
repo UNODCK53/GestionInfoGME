@@ -1981,15 +1981,40 @@ ffuerzalistsrch.ValidateRequired = false; // No JavaScript validation
 <?php if ($fuerza->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-<h2>Fuerza Pública</h2><p>En esta página se observa, adiciona y edita la información referente a la fuerza pública que esta acompañando la labor de erradicación en cada Punto <p>
+<h2>Fuerza Pública</h2>
+<p>En esta página se observa, adiciona y edita la información referente a la fuerza pública que esta acompañando la labor de erradicación en cada Punto <p>
+<hr>
+
+<table>
+	<tr>
+		<td><?php $fuerza_list->ExportOptions->Render("body") ?></td>
+		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono</td>
+	</tr>	
+</table>
+
+<hr>
+</div>
+<div>
+<br>
+
+<table>
+	<tr>
+		<td><?php $fuerza_list->SearchOptions->Render("body") ?></td>
+		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente</td>
+	</tr>
+</table>
+<br>
+<hr>
+<br>
+
 <?php if ($fuerza_list->TotalRecs > 0 && $fuerza_list->ExportOptions->Visible()) { ?>
-<?php $fuerza_list->ExportOptions->Render("body") ?>
+
 <?php } ?>
 <?php if ($fuerza_list->SearchOptions->Visible()) { ?>
-<?php $fuerza_list->SearchOptions->Render("body") ?>
+
 <?php } ?>
 <?php if ($fuerza->Export == "") { ?>
-<?php echo $Language->SelectionForm(); ?>
+
 <?php } ?>
 <div class="clearfix"></div>
 </div>
@@ -2041,139 +2066,126 @@ $fuerza->RowType = EW_ROWTYPE_SEARCH;
 $fuerza->ResetAttrs();
 $fuerza_list->RenderRow();
 ?>
-<div id="xsr_1" class="ewRow">
+
+<table>
+	<tr>
+		<td><label for="x_Fuerza" class="ewSearchCaption ewLabel">FUERZA</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Fuerza" id="z_Fuerza" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<select data-field="x_Fuerza" id="x_Fuerza" name="x_Fuerza"<?php echo $fuerza->Fuerza->EditAttributes() ?>>
+			<?php
+			if (is_array($fuerza->Fuerza->EditValue)) {
+				$arwrk = $fuerza->Fuerza->EditValue;
+				$rowswrk = count($arwrk);
+				$emptywrk = TRUE;
+				for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+					$selwrk = (strval($fuerza->Fuerza->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+					if ($selwrk <> "") $emptywrk = FALSE;
+			?>
+			<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+			<?php echo $arwrk[$rowcntwrk][1] ?>
+			</option>
+			<?php
+				}
+			}
+			?>
+			</select>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_Estado" class="ewSearchCaption ewLabel">ESTADO</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Estado" id="z_Estado" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<select data-field="x_Estado" id="x_Estado" name="x_Estado"<?php echo $fuerza->Estado->EditAttributes() ?>>
+			<?php
+			if (is_array($fuerza->Estado->EditValue)) {
+				$arwrk = $fuerza->Estado->EditValue;
+				$rowswrk = count($arwrk);
+				$emptywrk = TRUE;
+				for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+					$selwrk = (strval($fuerza->Estado->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+					if ($selwrk <> "") $emptywrk = FALSE;
+			?>
+			<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+			<?php echo $arwrk[$rowcntwrk][1] ?>
+			</option>
+			<?php
+				}
+			}
+			?>
+			</select>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_AF1o" class="ewSearchCaption ewLabel">AÑO</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_AF1o" id="z_AF1o" value="="></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_AF1o" name="x_AF1o" id="x_AF1o" size="30" placeholder="<?php echo ew_HtmlEncode($fuerza->AF1o->PlaceHolder) ?>" value="<?php echo $fuerza->AF1o->EditValue ?>"<?php echo $fuerza->AF1o->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_Fase" class="ewSearchCaption ewLabel">FASE</label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Fase" id="z_Fase" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<select data-field="x_Fase" id="x_Fase" name="x_Fase"<?php echo $fuerza->Fase->EditAttributes() ?>>
+			<?php
+			if (is_array($fuerza->Fase->EditValue)) {
+				$arwrk = $fuerza->Fase->EditValue;
+				$rowswrk = count($arwrk);
+				$emptywrk = TRUE;
+				for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+					$selwrk = (strval($fuerza->Fase->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+					if ($selwrk <> "") $emptywrk = FALSE;
+			?>
+			<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+			<?php echo $arwrk[$rowcntwrk][1] ?>
+			</option>
+			<?php
+				}
+			}
+			?>
+			</select>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x__23_del_punto" class="ewSearchCaption ewLabel">NÚMERO DEL PUNTO</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z__23_del_punto" id="z__23_del_punto" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x__23_del_punto" name="x__23_del_punto" id="x__23_del_punto" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($fuerza->_23_del_punto->PlaceHolder) ?>" value="<?php echo $fuerza->_23_del_punto->EditValue ?>"<?php echo $fuerza->_23_del_punto->EditAttributes() ?>>
+			</span></td>
+	</tr>
+	<tr>
+		<td><label for="x_Punto" class="ewSearchCaption ewLabel">PUNTO DE ERRADICACIÓN</label>
+			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="30" maxlength="6" placeholder="<?php echo ew_HtmlEncode($fuerza->Punto->PlaceHolder) ?>" value="<?php echo $fuerza->Punto->EditValue ?>"<?php echo $fuerza->Punto->EditAttributes() ?>>
+			</span></td>
+	</tr>
+</table>
+
 <?php if ($fuerza->Fuerza->Visible) { // Fuerza ?>
-	<div id="xsc_Fuerza" class="ewCell form-group">
-		<label for="x_Fuerza" class="ewSearchCaption ewLabel"><?php echo $fuerza->Fuerza->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Fuerza" id="z_Fuerza" value="LIKE"></span>
-		<span class="ewSearchField">
-<select data-field="x_Fuerza" id="x_Fuerza" name="x_Fuerza"<?php echo $fuerza->Fuerza->EditAttributes() ?>>
-<?php
-if (is_array($fuerza->Fuerza->EditValue)) {
-	$arwrk = $fuerza->Fuerza->EditValue;
-	$rowswrk = count($arwrk);
-	$emptywrk = TRUE;
-	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
-		$selwrk = (strval($fuerza->Fuerza->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;
-?>
-<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
-<?php echo $arwrk[$rowcntwrk][1] ?>
-</option>
-<?php
-	}
-}
-?>
-</select>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_2" class="ewRow">
 <?php if ($fuerza->Estado->Visible) { // Estado ?>
-	<div id="xsc_Estado" class="ewCell form-group">
-		<label for="x_Estado" class="ewSearchCaption ewLabel"><?php echo $fuerza->Estado->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Estado" id="z_Estado" value="LIKE"></span>
-		<span class="ewSearchField">
-<select data-field="x_Estado" id="x_Estado" name="x_Estado"<?php echo $fuerza->Estado->EditAttributes() ?>>
-<?php
-if (is_array($fuerza->Estado->EditValue)) {
-	$arwrk = $fuerza->Estado->EditValue;
-	$rowswrk = count($arwrk);
-	$emptywrk = TRUE;
-	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
-		$selwrk = (strval($fuerza->Estado->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;
-?>
-<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
-<?php echo $arwrk[$rowcntwrk][1] ?>
-</option>
-<?php
-	}
-}
-?>
-</select>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_3" class="ewRow">
 <?php if ($fuerza->AF1o->Visible) { // Año ?>
-	<div id="xsc_AF1o" class="ewCell form-group">
-		<label for="x_AF1o" class="ewSearchCaption ewLabel"><?php echo $fuerza->AF1o->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_AF1o" id="z_AF1o" value="="></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_AF1o" name="x_AF1o" id="x_AF1o" size="30" placeholder="<?php echo ew_HtmlEncode($fuerza->AF1o->PlaceHolder) ?>" value="<?php echo $fuerza->AF1o->EditValue ?>"<?php echo $fuerza->AF1o->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_4" class="ewRow">
 <?php if ($fuerza->Fase->Visible) { // Fase ?>
-	<div id="xsc_Fase" class="ewCell form-group">
-		<label for="x_Fase" class="ewSearchCaption ewLabel"><?php echo $fuerza->Fase->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Fase" id="z_Fase" value="LIKE"></span>
-		<span class="ewSearchField">
-<select data-field="x_Fase" id="x_Fase" name="x_Fase"<?php echo $fuerza->Fase->EditAttributes() ?>>
-<?php
-if (is_array($fuerza->Fase->EditValue)) {
-	$arwrk = $fuerza->Fase->EditValue;
-	$rowswrk = count($arwrk);
-	$emptywrk = TRUE;
-	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
-		$selwrk = (strval($fuerza->Fase->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;
-?>
-<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
-<?php echo $arwrk[$rowcntwrk][1] ?>
-</option>
-<?php
-	}
-}
-?>
-</select>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_5" class="ewRow">
 <?php if ($fuerza->_23_del_punto->Visible) { // #_del_punto ?>
-	<div id="xsc__23_del_punto" class="ewCell form-group">
-		<label for="x__23_del_punto" class="ewSearchCaption ewLabel"><?php echo $fuerza->_23_del_punto->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z__23_del_punto" id="z__23_del_punto" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x__23_del_punto" name="x__23_del_punto" id="x__23_del_punto" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($fuerza->_23_del_punto->PlaceHolder) ?>" value="<?php echo $fuerza->_23_del_punto->EditValue ?>"<?php echo $fuerza->_23_del_punto->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_6" class="ewRow">
 <?php if ($fuerza->Punto->Visible) { // Punto ?>
-	<div id="xsc_Punto" class="ewCell form-group">
-		<label for="x_Punto" class="ewSearchCaption ewLabel"><?php echo $fuerza->Punto->FldCaption() ?></label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="30" maxlength="6" placeholder="<?php echo ew_HtmlEncode($fuerza->Punto->PlaceHolder) ?>" value="<?php echo $fuerza->Punto->EditValue ?>"<?php echo $fuerza->Punto->EditAttributes() ?>>
-</span>
-	</div>
 <?php } ?>
-</div>
-<div id="xsr_7" class="ewRow">
-	<div class="ewQuickSearch input-group">
-	<input type="text" name="<?php echo EW_TABLE_BASIC_SEARCH ?>" id="<?php echo EW_TABLE_BASIC_SEARCH ?>" class="form-control" value="<?php echo ew_HtmlEncode($fuerza_list->BasicSearch->getKeyword()) ?>" placeholder="<?php echo ew_HtmlEncode($Language->Phrase("Search")) ?>">
-	<input type="hidden" name="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" id="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" value="<?php echo ew_HtmlEncode($fuerza_list->BasicSearch->getType()) ?>">
-	<div class="input-group-btn">
-		<button type="button" data-toggle="dropdown" class="btn btn-default"><span id="searchtype"><?php echo $fuerza_list->BasicSearch->getTypeNameShort() ?></span><span class="caret"></span></button>
-		<ul class="dropdown-menu pull-right" role="menu">
-			<li<?php if ($fuerza_list->BasicSearch->getType() == "") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this)"><?php echo $Language->Phrase("QuickSearchAuto") ?></a></li>
-			<li<?php if ($fuerza_list->BasicSearch->getType() == "=") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'=')"><?php echo $Language->Phrase("QuickSearchExact") ?></a></li>
-			<li<?php if ($fuerza_list->BasicSearch->getType() == "AND") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'AND')"><?php echo $Language->Phrase("QuickSearchAll") ?></a></li>
-			<li<?php if ($fuerza_list->BasicSearch->getType() == "OR") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'OR')"><?php echo $Language->Phrase("QuickSearchAny") ?></a></li>
-		</ul>
-	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-	</div>
-	</div>
-</div>
+
+<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+<br><br>
+<hr>
+
 	</div>
 </div>
 </form>

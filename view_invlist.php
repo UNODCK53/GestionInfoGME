@@ -3068,12 +3068,13 @@ fview_invlistsrch.ValidateRequired = false; // No JavaScript validation
 <div class="ewToolbar">
 <?php if ($view_inv->Export == "") { ?>
 
+<?php $Breadcrumb->Render(); ?>
+
 <div>
 	<div></div>
-
 	<table>
 	<tr width="100%">
-	<td width="70%"><H2> Informe de inventario</h2></td><td align="right"><?php $Breadcrumb->Render(); ?></td>
+	<td width="70%"><H2> Informe de inventario</h2></td><td align="right"></td>
 	</tr>	
 </table>
 </div>
@@ -3086,14 +3087,15 @@ fview_invlistsrch.ValidateRequired = false; // No JavaScript validation
 <br>
 <hr>
 
+<?php if ($view_inv->Export == "") { ?>
+
 <table>
 	<tr>
 		<td>
 			<?php if ($view_inv_list->TotalRecs > 0 && $view_inv_list->ExportOptions->Visible()) { ?>
 			<?php $view_inv_list->ExportOptions->Render("body") ?>
-			<?php } ?>
-
-			<?php if ($view_inv->Export == "") { ?>
+			
+			
 		</td>
 		<td>
 			Si desea exportar la tabla en formato excel haga click en el siguiente icono 
@@ -3101,9 +3103,14 @@ fview_invlistsrch.ValidateRequired = false; // No JavaScript validation
 	</tr>
 </table>
 
+
 <hr>
 
 <?php if ($view_inv_list->SearchOptions->Visible()) { ?>
+<?php } ?>
+
+</div>
+<div>
 <br>
 <table>
 	<tr>
@@ -3119,9 +3126,9 @@ fview_invlistsrch.ValidateRequired = false; // No JavaScript validation
 </table>
 <br>
 <hr>
+
+
 <br>
-
-
 <?php } ?>
 
 <?php
@@ -3224,7 +3231,7 @@ $view_inv_list->RenderRow();
 </table>
 
 
-</div>  /*Aca termina el DIV de la derecha 
+</div>  <!--Aca termina el DIV de la derecha--> 
 
 <?php if ($view_inv->USUARIO->Visible) { // USUARIO ?>
 <?php } ?>
