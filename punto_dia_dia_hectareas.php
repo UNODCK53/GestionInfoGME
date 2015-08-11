@@ -11,7 +11,7 @@ function valores ($ano,$fase,$punto) {
 		$sql_PE="";
 	}else
 	{
-		$sql_PE=" and `NOM_PE`='".$punto."' ";
+		$sql_PE=" and (CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_PE ELSE NOM_PE END )='".$punto."' ";
 	}
 	if ($fase==99){
 		$sql_fase="";
@@ -27,7 +27,7 @@ function valores ($ano,$fase,$punto) {
 	}
 	
 	$fechas=mysql_query("select CAST(CONCAT(SUBSTR(`FECHA_REPORT`,7,4),'-',`MES`,'-',`DIA`,' 00:00:00')as date) as fechas FROM gestioninfogme.info_diario " .$sql_ano.$sql_fase.$sql_PE." group by fechas ORDER BY `fechas` ASC");
-	$PE=mysql_query("select (CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_PE ELSE NOM_PE END ) as NOM_PEs FROM gestioninfogme.info_diario ".$sql_ano.$sql_fase.$sql_PE." group by NOM_PE ORDER BY `NOM_PEs` ASC");
+	$PE=mysql_query("select (CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_PE ELSE NOM_PE END ) as NOM_PEs FROM gestioninfogme.info_diario ".$sql_ano.$sql_fase.$sql_PE." group by (CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_PE ELSE NOM_PE END ) ORDER BY `NOM_PEs` ASC");
 	$fechas_array= array();
 	while ($fila2 = mysql_fetch_array($fechas, MYSQL_ASSOC)) {
 		$fechas_array[]=$fila2['fechas'];
