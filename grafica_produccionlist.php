@@ -1826,14 +1826,17 @@ $grafica_produccion_list->ShowMessage();
 		
 		if(ano != "" && fase !="" && punto !=""){
 			if(ano==99){	
-				var titulo="Serie histórica ";
-				var fases="2015 fase II a 2015 fase II";
+				var titulo="Serie histórica desde el ";
+				var fases="2015 fase II a "+fecha;
 			}else if(fase==99 && ano != 99){
 				var titulo="Todas las fases del ";
 				var fases=ano;
-			}else{
+			}else if(fase!=99 && ano != 99 && punto == 99){
 				var titulo="Fase "+ fase;
 				var fases=" del "+ano;
+			}else if(fase!=99 && ano != 99 && punto != 99){
+				var titulo="Fase "+ fase;
+				var fases=" del "+ano+ " ,Punto de erradicación "+punto;
 			}
 			$.ajax({
 					type: "GET",

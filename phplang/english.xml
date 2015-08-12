@@ -286,7 +286,7 @@
 		<phrase id="quicksearchanyshort" value="Any" client="1"/><!-- v11 -->
 		<phrase id="quicksearchexact" value="Coincidencia exacta" client="1"/><!-- v11 -->
 		<phrase id="quicksearchexactshort" value="Exact" client="1"/><!-- v11 -->
-		<phrase id="record" value="Resgistros"/>
+		<phrase id="record" value="Registros"/>
 		<phrase id="recordchangedbyotheruser" value="Data has been changed by other user. Click [Reload] to retrieve the changed data (your data in the form will be overwritten) or click [Overwrite] to overwrite the changed data."/>
 		<phrase id="recorddeleted" value="record(s) deleted"/>
 		<phrase id="recordinserted" value="record(s) inserted"/>
