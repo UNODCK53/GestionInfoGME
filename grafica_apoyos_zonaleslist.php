@@ -1663,7 +1663,7 @@ fgrafica_apoyos_zonaleslistsrch.ValidateRequired = false; // No JavaScript valid
 <?php } ?>
 <h2>Reporte de Apoyos Zonales</h2>
 
-<p>La siguiente tabla contiene el listado Apoyos zonales que tiene a cargo cada Profesional especializado, según punto de erradicación.
+<p>La siguiente tabla contiene el listado de Apoyos zonales que tiene a cargo cada Profesional especializado, según punto de erradicación.
 </p>
 <hr> 
 <table>

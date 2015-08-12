@@ -1758,7 +1758,7 @@ fgrafica_intervencion_geograficalistsrch.ValidateRequired = false; // No JavaScr
 
 	<hr>
 	<h3>Generador de gráfica</h3>
-	<p>La gráfica permite visualizar la información de erradicación en <strong>tres niveles diferentes al darle  Click </strong>sobre el los cuadros </p><p>- El primer nivel muestra información a escala departamental, si el departamento posee más de un municipio con erradicación, el cuadro del departamento se dividirá según el número de municipios y el tamaño de estas divisiones será proporcional de área erradicada en cada municipio</p> <p>- El segundo nivel muestra información a escala municipal, las divisiones en este nivel hacen referencia a los tipos de cultivos erradicados en cada municipio y su proporción de área erradicada</p><p>- El tercer nivel muestra las hectáreas erradicadas por tipo de cultivo</p><br>
+	<p>La gráfica permite visualizar la información de erradicación en <strong>tres niveles diferentes al hacer  Click </strong>sobre los cuadros </p><p>- El primer nivel muestra información a escala departamental, si el departamento posee más de un municipio con erradicación, el cuadro del departamento se dividirá según el número de municipios y el tamaño de estas divisiones será proporcional al área erradicada en cada municipio</p> <p>- El segundo nivel muestra información a escala municipal, las divisiones en este nivel hacen referencia a los tipos de cultivos erradicados en cada municipio y su proporción de área erradicada</p><p>- El tercer nivel muestra las hectáreas erradicadas por tipo de cultivo</p><br>
 	<i><strong>Nota:</strong> Seleccione una opción en todos los campos</i><br>
 	<br>
 	<tr>
@@ -1931,7 +1931,7 @@ $("#reporte").click(function(){
 </script>
 
 <h3>Resumen de datos</h3>
-La siguiente tabla contiene la distribución de área erradicada por Departamento y Municipio por año y fase de erradicación</p>
+La siguiente tabla contiene la distribución de área erradicada por departamento y municipio por año y fase de erradicación</p>
 <hr>
 <div class="ewToolbar">
 <table>
