@@ -7,7 +7,13 @@ $grafica_accidentes_trabajo = NULL;
 // Table class for grafica_accidentes_trabajo
 //
 class cgrafica_accidentes_trabajo extends cTable {
-	var $a;
+	var $Profesional_especializado;
+	var $Punto;
+	var $Cargo_Afectado;
+	var $Tipo_incidente;
+	var $Evacuado;
+	var $No_evacuado;
+	var $Total_Evacuados;
 
 	//
 	// Table class constructor
@@ -19,7 +25,7 @@ class cgrafica_accidentes_trabajo extends cTable {
 		if (!isset($Language)) $Language = new cLanguage();
 		$this->TableVar = 'grafica_accidentes_trabajo';
 		$this->TableName = 'grafica_accidentes_trabajo';
-		$this->TableType = 'TABLE';
+		$this->TableType = 'VIEW';
 		$this->ExportAll = TRUE;
 		$this->ExportPageBreakCount = 0; // Page break per every n record (PDF only)
 		$this->ExportPageOrientation = "portrait"; // Page orientation (PDF only)
@@ -35,10 +41,36 @@ class cgrafica_accidentes_trabajo extends cTable {
 		$this->UserIDAllowSecurity = 0; // User ID Allow
 		$this->BasicSearch = new cBasicSearch($this->TableVar);
 
-		// a
-		$this->a = new cField('grafica_accidentes_trabajo', 'grafica_accidentes_trabajo', 'x_a', 'a', '`a`', '`a`', 3, -1, FALSE, '`a`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->a->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
-		$this->fields['a'] = &$this->a;
+		// Profesional_especializado
+		$this->Profesional_especializado = new cField('grafica_accidentes_trabajo', 'grafica_accidentes_trabajo', 'x_Profesional_especializado', 'Profesional_especializado', '`Profesional_especializado`', '`Profesional_especializado`', 201, -1, FALSE, '`Profesional_especializado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['Profesional_especializado'] = &$this->Profesional_especializado;
+
+		// Punto
+		$this->Punto = new cField('grafica_accidentes_trabajo', 'grafica_accidentes_trabajo', 'x_Punto', 'Punto', '`Punto`', '`Punto`', 201, -1, FALSE, '`Punto`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['Punto'] = &$this->Punto;
+
+		// Cargo_Afectado
+		$this->Cargo_Afectado = new cField('grafica_accidentes_trabajo', 'grafica_accidentes_trabajo', 'x_Cargo_Afectado', 'Cargo_Afectado', '`Cargo_Afectado`', '`Cargo_Afectado`', 201, -1, FALSE, '`Cargo_Afectado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['Cargo_Afectado'] = &$this->Cargo_Afectado;
+
+		// Tipo_incidente
+		$this->Tipo_incidente = new cField('grafica_accidentes_trabajo', 'grafica_accidentes_trabajo', 'x_Tipo_incidente', 'Tipo_incidente', '`Tipo_incidente`', '`Tipo_incidente`', 200, -1, FALSE, '`Tipo_incidente`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['Tipo_incidente'] = &$this->Tipo_incidente;
+
+		// Evacuado
+		$this->Evacuado = new cField('grafica_accidentes_trabajo', 'grafica_accidentes_trabajo', 'x_Evacuado', 'Evacuado', '`Evacuado`', '`Evacuado`', 131, -1, FALSE, '`Evacuado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->Evacuado->FldDefaultErrMsg = $Language->Phrase("IncorrectFloat");
+		$this->fields['Evacuado'] = &$this->Evacuado;
+
+		// No_evacuado
+		$this->No_evacuado = new cField('grafica_accidentes_trabajo', 'grafica_accidentes_trabajo', 'x_No_evacuado', 'No_evacuado', '`No_evacuado`', '`No_evacuado`', 131, -1, FALSE, '`No_evacuado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->No_evacuado->FldDefaultErrMsg = $Language->Phrase("IncorrectFloat");
+		$this->fields['No_evacuado'] = &$this->No_evacuado;
+
+		// Total_Evacuados
+		$this->Total_Evacuados = new cField('grafica_accidentes_trabajo', 'grafica_accidentes_trabajo', 'x_Total_Evacuados', 'Total_Evacuados', '`Total_Evacuados`', '`Total_Evacuados`', 20, -1, FALSE, '`Total_Evacuados`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->Total_Evacuados->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['Total_Evacuados'] = &$this->Total_Evacuados;
 	}
 
 	// Multiple column sort
@@ -510,7 +542,13 @@ class cgrafica_accidentes_trabajo extends cTable {
 
 	// Load row values from recordset
 	function LoadListRowValues(&$rs) {
-		$this->a->setDbValue($rs->fields('a'));
+		$this->Profesional_especializado->setDbValue($rs->fields('Profesional_especializado'));
+		$this->Punto->setDbValue($rs->fields('Punto'));
+		$this->Cargo_Afectado->setDbValue($rs->fields('Cargo_Afectado'));
+		$this->Tipo_incidente->setDbValue($rs->fields('Tipo_incidente'));
+		$this->Evacuado->setDbValue($rs->fields('Evacuado'));
+		$this->No_evacuado->setDbValue($rs->fields('No_evacuado'));
+		$this->Total_Evacuados->setDbValue($rs->fields('Total_Evacuados'));
 	}
 
 	// Render list row values
@@ -521,16 +559,76 @@ class cgrafica_accidentes_trabajo extends cTable {
 		$this->Row_Rendering();
 
    // Common render codes
-		// a
-		// a
+		// Profesional_especializado
+		// Punto
+		// Cargo_Afectado
+		// Tipo_incidente
+		// Evacuado
+		// No_evacuado
+		// Total_Evacuados
+		// Profesional_especializado
 
-		$this->a->ViewValue = $this->a->CurrentValue;
-		$this->a->ViewCustomAttributes = "";
+		$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->CurrentValue;
+		$this->Profesional_especializado->ViewCustomAttributes = "";
 
-		// a
-		$this->a->LinkCustomAttributes = "";
-		$this->a->HrefValue = "";
-		$this->a->TooltipValue = "";
+		// Punto
+		$this->Punto->ViewValue = $this->Punto->CurrentValue;
+		$this->Punto->ViewCustomAttributes = "";
+
+		// Cargo_Afectado
+		$this->Cargo_Afectado->ViewValue = $this->Cargo_Afectado->CurrentValue;
+		$this->Cargo_Afectado->ViewCustomAttributes = "";
+
+		// Tipo_incidente
+		$this->Tipo_incidente->ViewValue = $this->Tipo_incidente->CurrentValue;
+		$this->Tipo_incidente->ViewCustomAttributes = "";
+
+		// Evacuado
+		$this->Evacuado->ViewValue = $this->Evacuado->CurrentValue;
+		$this->Evacuado->ViewCustomAttributes = "";
+
+		// No_evacuado
+		$this->No_evacuado->ViewValue = $this->No_evacuado->CurrentValue;
+		$this->No_evacuado->ViewCustomAttributes = "";
+
+		// Total_Evacuados
+		$this->Total_Evacuados->ViewValue = $this->Total_Evacuados->CurrentValue;
+		$this->Total_Evacuados->ViewCustomAttributes = "";
+
+		// Profesional_especializado
+		$this->Profesional_especializado->LinkCustomAttributes = "";
+		$this->Profesional_especializado->HrefValue = "";
+		$this->Profesional_especializado->TooltipValue = "";
+
+		// Punto
+		$this->Punto->LinkCustomAttributes = "";
+		$this->Punto->HrefValue = "";
+		$this->Punto->TooltipValue = "";
+
+		// Cargo_Afectado
+		$this->Cargo_Afectado->LinkCustomAttributes = "";
+		$this->Cargo_Afectado->HrefValue = "";
+		$this->Cargo_Afectado->TooltipValue = "";
+
+		// Tipo_incidente
+		$this->Tipo_incidente->LinkCustomAttributes = "";
+		$this->Tipo_incidente->HrefValue = "";
+		$this->Tipo_incidente->TooltipValue = "";
+
+		// Evacuado
+		$this->Evacuado->LinkCustomAttributes = "";
+		$this->Evacuado->HrefValue = "";
+		$this->Evacuado->TooltipValue = "";
+
+		// No_evacuado
+		$this->No_evacuado->LinkCustomAttributes = "";
+		$this->No_evacuado->HrefValue = "";
+		$this->No_evacuado->TooltipValue = "";
+
+		// Total_Evacuados
+		$this->Total_Evacuados->LinkCustomAttributes = "";
+		$this->Total_Evacuados->HrefValue = "";
+		$this->Total_Evacuados->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -543,11 +641,49 @@ class cgrafica_accidentes_trabajo extends cTable {
 		// Call Row Rendering event
 		$this->Row_Rendering();
 
-		// a
-		$this->a->EditAttrs["class"] = "form-control";
-		$this->a->EditCustomAttributes = "";
-		$this->a->EditValue = ew_HtmlEncode($this->a->CurrentValue);
-		$this->a->PlaceHolder = ew_RemoveHtml($this->a->FldCaption());
+		// Profesional_especializado
+		$this->Profesional_especializado->EditAttrs["class"] = "form-control";
+		$this->Profesional_especializado->EditCustomAttributes = "";
+		$this->Profesional_especializado->EditValue = ew_HtmlEncode($this->Profesional_especializado->CurrentValue);
+		$this->Profesional_especializado->PlaceHolder = ew_RemoveHtml($this->Profesional_especializado->FldCaption());
+
+		// Punto
+		$this->Punto->EditAttrs["class"] = "form-control";
+		$this->Punto->EditCustomAttributes = "";
+		$this->Punto->EditValue = ew_HtmlEncode($this->Punto->CurrentValue);
+		$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
+
+		// Cargo_Afectado
+		$this->Cargo_Afectado->EditAttrs["class"] = "form-control";
+		$this->Cargo_Afectado->EditCustomAttributes = "";
+		$this->Cargo_Afectado->EditValue = ew_HtmlEncode($this->Cargo_Afectado->CurrentValue);
+		$this->Cargo_Afectado->PlaceHolder = ew_RemoveHtml($this->Cargo_Afectado->FldCaption());
+
+		// Tipo_incidente
+		$this->Tipo_incidente->EditAttrs["class"] = "form-control";
+		$this->Tipo_incidente->EditCustomAttributes = "";
+		$this->Tipo_incidente->EditValue = ew_HtmlEncode($this->Tipo_incidente->CurrentValue);
+		$this->Tipo_incidente->PlaceHolder = ew_RemoveHtml($this->Tipo_incidente->FldCaption());
+
+		// Evacuado
+		$this->Evacuado->EditAttrs["class"] = "form-control";
+		$this->Evacuado->EditCustomAttributes = "";
+		$this->Evacuado->EditValue = ew_HtmlEncode($this->Evacuado->CurrentValue);
+		$this->Evacuado->PlaceHolder = ew_RemoveHtml($this->Evacuado->FldCaption());
+		if (strval($this->Evacuado->EditValue) <> "" && is_numeric($this->Evacuado->EditValue)) $this->Evacuado->EditValue = ew_FormatNumber($this->Evacuado->EditValue, -2, -1, -2, 0);
+
+		// No_evacuado
+		$this->No_evacuado->EditAttrs["class"] = "form-control";
+		$this->No_evacuado->EditCustomAttributes = "";
+		$this->No_evacuado->EditValue = ew_HtmlEncode($this->No_evacuado->CurrentValue);
+		$this->No_evacuado->PlaceHolder = ew_RemoveHtml($this->No_evacuado->FldCaption());
+		if (strval($this->No_evacuado->EditValue) <> "" && is_numeric($this->No_evacuado->EditValue)) $this->No_evacuado->EditValue = ew_FormatNumber($this->No_evacuado->EditValue, -2, -1, -2, 0);
+
+		// Total_Evacuados
+		$this->Total_Evacuados->EditAttrs["class"] = "form-control";
+		$this->Total_Evacuados->EditCustomAttributes = "";
+		$this->Total_Evacuados->EditValue = ew_HtmlEncode($this->Total_Evacuados->CurrentValue);
+		$this->Total_Evacuados->PlaceHolder = ew_RemoveHtml($this->Total_Evacuados->FldCaption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -576,9 +712,21 @@ class cgrafica_accidentes_trabajo extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
-					if ($this->a->Exportable) $Doc->ExportCaption($this->a);
+					if ($this->Profesional_especializado->Exportable) $Doc->ExportCaption($this->Profesional_especializado);
+					if ($this->Punto->Exportable) $Doc->ExportCaption($this->Punto);
+					if ($this->Cargo_Afectado->Exportable) $Doc->ExportCaption($this->Cargo_Afectado);
+					if ($this->Tipo_incidente->Exportable) $Doc->ExportCaption($this->Tipo_incidente);
+					if ($this->Evacuado->Exportable) $Doc->ExportCaption($this->Evacuado);
+					if ($this->No_evacuado->Exportable) $Doc->ExportCaption($this->No_evacuado);
+					if ($this->Total_Evacuados->Exportable) $Doc->ExportCaption($this->Total_Evacuados);
 				} else {
-					if ($this->a->Exportable) $Doc->ExportCaption($this->a);
+					if ($this->Profesional_especializado->Exportable) $Doc->ExportCaption($this->Profesional_especializado);
+					if ($this->Punto->Exportable) $Doc->ExportCaption($this->Punto);
+					if ($this->Cargo_Afectado->Exportable) $Doc->ExportCaption($this->Cargo_Afectado);
+					if ($this->Tipo_incidente->Exportable) $Doc->ExportCaption($this->Tipo_incidente);
+					if ($this->Evacuado->Exportable) $Doc->ExportCaption($this->Evacuado);
+					if ($this->No_evacuado->Exportable) $Doc->ExportCaption($this->No_evacuado);
+					if ($this->Total_Evacuados->Exportable) $Doc->ExportCaption($this->Total_Evacuados);
 				}
 				$Doc->EndExportRow();
 			}
@@ -610,9 +758,21 @@ class cgrafica_accidentes_trabajo extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
-						if ($this->a->Exportable) $Doc->ExportField($this->a);
+						if ($this->Profesional_especializado->Exportable) $Doc->ExportField($this->Profesional_especializado);
+						if ($this->Punto->Exportable) $Doc->ExportField($this->Punto);
+						if ($this->Cargo_Afectado->Exportable) $Doc->ExportField($this->Cargo_Afectado);
+						if ($this->Tipo_incidente->Exportable) $Doc->ExportField($this->Tipo_incidente);
+						if ($this->Evacuado->Exportable) $Doc->ExportField($this->Evacuado);
+						if ($this->No_evacuado->Exportable) $Doc->ExportField($this->No_evacuado);
+						if ($this->Total_Evacuados->Exportable) $Doc->ExportField($this->Total_Evacuados);
 					} else {
-						if ($this->a->Exportable) $Doc->ExportField($this->a);
+						if ($this->Profesional_especializado->Exportable) $Doc->ExportField($this->Profesional_especializado);
+						if ($this->Punto->Exportable) $Doc->ExportField($this->Punto);
+						if ($this->Cargo_Afectado->Exportable) $Doc->ExportField($this->Cargo_Afectado);
+						if ($this->Tipo_incidente->Exportable) $Doc->ExportField($this->Tipo_incidente);
+						if ($this->Evacuado->Exportable) $Doc->ExportField($this->Evacuado);
+						if ($this->No_evacuado->Exportable) $Doc->ExportField($this->No_evacuado);
+						if ($this->Total_Evacuados->Exportable) $Doc->ExportField($this->Total_Evacuados);
 					}
 					$Doc->EndExportRow();
 				}

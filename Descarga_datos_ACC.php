@@ -5,7 +5,7 @@
 	mysql_select_db($base_datos,$db);
 	
 	$sql =mysql_query("select*from(select
-	llave, F_Sincron,USUARIO,Cargo_gme,NOM_PE, Otro_PE,NOM_APOYO,Otro_Nom_Apoyo,Otro_CC_Apoyo,NOM_ENLACE,Otro_Nom_Enlace,Otro_CC_Enlace,NOM_PGE,Otro_Nom_PGE,Otro_CC_PGE,Departamento,Muncipio,NOM_VDA, LATITUD,GRA_LAT,MIN_LAT,SEG_LAT,GRA_LONG,MIN_LONG, SEG_LONG,FECHA_ACC,HORA_ACC,Hora_ingreso,FP_Armada,FP_Ejercito,FP_Policia,NOM_COMANDANTE,TESTI1, CC_TESTI1, CARGO_TESTI1,TESTI2, CC_TESTI2,CARGO_TESTI2,Afectados,NUM_Afectado,Nom_Afectado,CC_Afectado,Cargo_Afectado, Parte_Cuerpo,ESTADO_AFEC,EVACUADO,DESC_ACC 
+	llave, F_Sincron,USUARIO,Cargo_gme,NOM_PE, Otro_PE,NOM_APOYO,Otro_Nom_Apoyo,Otro_CC_Apoyo,NOM_ENLACE,Otro_Nom_Enlace,Otro_CC_Enlace,NOM_PGE,Otro_Nom_PGE,Otro_CC_PGE,Departamento,Muncipio,NOM_VDA, LATITUD,GRA_LAT,MIN_LAT,SEG_LAT,GRA_LONG,MIN_LONG, SEG_LONG,FECHA_ACC,HORA_ACC,Hora_ingreso,FP_Armada,FP_Ejercito,FP_Policia,NOM_COMANDANTE,TESTI1, CC_TESTI1, CARGO_TESTI1,TESTI2, CC_TESTI2,CARGO_TESTI2,Afectados,NUM_Afectado,Nom_Afectado,CC_Afectado,Cargo_Afectado, Parte_Cuerpo,ESTADO_AFEC,EVACUADO,DESC_ACC,'No' as Modificado,  (case when Afectados=0 then llave else  concat(llave,NUM_Afectado) end ) as llave_2
 		from
 			(select
 				llave, F_Sincron,USUARIO,Cargo_gme,NOM_PE, Otro_PE,NOM_APOYO,Otro_Nom_Apoyo,Otro_CC_Apoyo,NOM_ENLACE,Otro_Nom_Enlace,Otro_CC_Enlace,NOM_PGE,Otro_Nom_PGE,Otro_CC_PGE,Departamento,Muncipio,NOM_VDA, LATITUD,GRA_LAT,MIN_LAT,SEG_LAT,GRA_LONG,MIN_LONG, SEG_LONG,FECHA_ACC,HORA_ACC,Hora_ingreso,FP_Armada,FP_Ejercito,FP_Policia,NOM_COMANDANTE,TESTI1, CC_TESTI1, CARGO_TESTI1,TESTI2, CC_TESTI2,dominio.CARGO_TESTI2,Afectados	

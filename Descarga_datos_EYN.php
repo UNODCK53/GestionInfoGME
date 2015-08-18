@@ -9,7 +9,7 @@
 		from
 
 (select
-	llave as ID_Formulario,F_Sincron,USUARIO,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,dominio.PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata, Muncipio,Departamento,F_llegada,Fecha
+	llave as ID_Formulario,F_Sincron,USUARIO,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,dominio.PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata, Muncipio,Departamento,F_llegada,Fecha,'No' as Modificado, (case when Num_Evacua=0 then llave else concat(llave,NUM_Novedad) end ) as llave_2
 	from
 		(select
 			llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata, Muncipio,Departamento,dominio.F_llegada,Fecha

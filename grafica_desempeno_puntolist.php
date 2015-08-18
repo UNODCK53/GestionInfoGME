@@ -1809,55 +1809,13 @@ fgrafica_desempeno_puntolistsrch.ValidateRequired = false; // No JavaScript vali
 </script>
 <?php } ?>
 <?php if ($grafica_desempeno_punto->Export == "") { ?>
-
- <!--Aca inicia la pagina --> 
-
 <div class="ewToolbar">
 <?php if ($grafica_desempeno_punto->Export == "") { ?>
- <!--De esta línea saque el botón de HOME --> 
- <?php $Breadcrumb->Render(); ?>
-<?php } ?>
-
-<?php if ($grafica_desempeno_punto->Export == "") { ?>
-
+<?php $Breadcrumb->Render(); ?>
 <?php } ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<?php
-	$bSelectLimit = EW_SELECT_LIMIT;
-	if ($bSelectLimit) {
-		if ($grafica_desempeno_punto_list->TotalRecs <= 0)
-			$grafica_desempeno_punto_list->TotalRecs = $grafica_desempeno_punto->SelectRecordCount();
-	} else {
-		if (!$grafica_desempeno_punto_list->Recordset && ($grafica_desempeno_punto_list->Recordset = $grafica_desempeno_punto_list->LoadRecordset()))
-			$grafica_desempeno_punto_list->TotalRecs = $grafica_desempeno_punto_list->Recordset->RecordCount();
-	}
-	$grafica_desempeno_punto_list->StartRec = 1;
-	if ($grafica_desempeno_punto_list->DisplayRecs <= 0 || ($grafica_desempeno_punto->Export <> "" && $grafica_desempeno_punto->ExportAll)) // Display all records
-		$grafica_desempeno_punto_list->DisplayRecs = $grafica_desempeno_punto_list->TotalRecs;
-	if (!($grafica_desempeno_punto->Export <> "" && $grafica_desempeno_punto->ExportAll))
-		$grafica_desempeno_punto_list->SetUpStartRec(); // Set up start record position
-	if ($bSelectLimit)
-		$grafica_desempeno_punto_list->Recordset = $grafica_desempeno_punto_list->LoadRecordset($grafica_desempeno_punto_list->StartRec-1, $grafica_desempeno_punto_list->DisplayRecs);
-
-	// Set no record found message
-	if ($grafica_desempeno_punto->CurrentAction == "" && $grafica_desempeno_punto_list->TotalRecs == 0) {
-		if (!$Security->CanList())
-			$grafica_desempeno_punto_list->setWarningMessage($Language->Phrase("NoPermission"));
-		if ($grafica_desempeno_punto_list->SearchWhere == "0=101")
-			$grafica_desempeno_punto_list->setWarningMessage($Language->Phrase("EnterSearchCriteria"));
-		else
-			$grafica_desempeno_punto_list->setWarningMessage($Language->Phrase("NoRecord"));
-	}
-$grafica_desempeno_punto_list->RenderOtherOptions();
-?>
-
-<?php $grafica_desempeno_punto_list->ShowPageHeader(); ?>
-<?php
-$grafica_desempeno_punto_list->ShowMessage();
-?>
-<?php if ($grafica_desempeno_punto_list->TotalRecs > 0 || $grafica_desempeno_punto->CurrentAction <> "") { ?>
 <div>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="./Highcharts/js/modules/exporting.js"></script>
@@ -1879,7 +1837,7 @@ $grafica_desempeno_punto_list->ShowMessage();
 	
 	
 	<br>
-	<p> Este reporte despliega el promedio de área erradicada diariamente en cada punto, calculando el total de hectáreas erradicadas en el punto y dividiéndolo entre el total de días en los que se realizó erradicación </p><br>
+	<p> Este reporte despliega el promedio de área erradicada diariamente en cada punto, calculando el total de hectáreas erradicadas en el punto y dividiéndolo entre el total de días efectivos en los que se realizó erradicación </p></p><p> <font color="#F78181">Datos operativos del grupo de erradicación, cifras no oficiales, pendiente de validación y verificación por parte del ente neutral</font><br>
 	<hr>
 	<h3>Generador de gráfica</h3>
 	<i><strong>Nota:</strong> Seleccione una opción en todos los campos</i><br>
@@ -1915,13 +1873,7 @@ $grafica_desempeno_punto_list->ShowMessage();
 
 		</td>
 		
-		<td width="5%"></td>
-
-		<td align="justify" valign="top">
-			<p><strong>Nota:</strong><br>La gráfica permite visualizar la información en dos niveles diferentes <strong>al darle  Click sobre las columnas:</strong><br>
-			- El primer nivel muestra el promedio de hectáreas erradicadas por día de erradicación en cada Punto<br>
-			- El segundo nivel muestra el total de hectáreas erradicadas para el punto de erradicación seleccionado</p>	
-		</td>
+		
 		
 	</tr>
 		
@@ -2002,7 +1954,11 @@ $(document).ready(function(){
 		
 $("#reporte").click(function(){
 
-
+	var fecha = new Date();
+	var dd = fecha.getDate();
+	var mm = fecha.getMonth()+1; 
+	var yyyy = fecha.getFullYear();
+	var fecha = dd+'/'+mm+'/'+yyyy;
 	var ano = document.getElementById("ano").value;
 	var fase=document.getElementById("fase").value;
 	var profesional=document.getElementById("profesional").value;
@@ -2012,7 +1968,19 @@ $("#reporte").click(function(){
 
 	if(ano != "" && fase !="" && profesional !="" ){
 
-		
+		if(ano==99){	
+				var titulo="Serie histórica desde el ";
+				var fases="2015 fase II a "+fecha;
+			}else if(fase==99 && ano != 99){
+				var titulo="Todas las fases del ";
+				var fases=ano;
+			}else if(fase!=99 && ano != 99 && profesional == 99){
+				var titulo="Fase "+ fase;
+				var fases=" del "+ano;
+			}else if(fase!=99 && ano != 99 && profesional != 99){
+				var titulo="Fase "+ fase;
+				var fases=" del "+ano+ " ,Profecional especializado "+profesional;
+			}
 	$.ajax({
 					type: "GET",
 					async: false,
@@ -2023,6 +1991,105 @@ $("#reporte").click(function(){
 					success: function(dato)
 					{
 						$('#container').highcharts({
+							chart: {
+								zoomType: 'xy'
+							},
+							title: {
+								text: 'Desempeño de erradicación por punto'
+							},
+							subtitle: {
+								text: titulo + fases + " .Fuente a: "+fecha
+							},
+							xAxis: [{
+								categories: dato.c,
+								crosshair: true
+							}],
+							yAxis: [{ // Primary yAxis
+								labels: {
+									format: '{value}',
+									style: {
+										color: Highcharts.getOptions().colors[1]
+									}
+								},
+								title: {
+									text: 'Días con erradicación',
+									style: {
+										color: Highcharts.getOptions().colors[1]
+									}
+								},
+								min: 0
+							}, { // Secondary yAxis
+								title: {
+									text: 'Hectáreas erradicadas',
+									style: {
+										color: Highcharts.getOptions().colors[0]
+									}
+								},
+								labels: {
+									format: '{value} ha',
+									style: {
+										color: Highcharts.getOptions().colors[0]
+									}
+								},
+								opposite: true
+							}, { // Tertiary yAxis
+									gridLineWidth: 0,
+									title: {
+										text: 'Prodemio Diario de erradicación efectiva',
+										style: {
+											color: Highcharts.getOptions().colors[1]
+										}
+									},
+									min: 0,
+									ax: 2,
+									labels: {
+										format: '{value}',
+										style: {
+											color: Highcharts.getOptions().colors[1]
+										}
+									},
+									opposite: true
+								}],
+							
+							tooltip: {
+									shared: true
+								
+							},
+							legend: {
+								layout: 'vertical',
+								align: 'left',
+								x: 120,
+								verticalAlign: 'top',
+								y: 100,
+								floating: true,
+								backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+							},
+							series: [{
+								name: 'Hectáreas erradicadas',
+								type: 'column',
+								yAxis: 1,
+								data: dato.a,
+								tooltip: {
+									valueSuffix: ' ha'
+								}
+
+							}, {
+								name: 'Días con erradicaión',
+								type: 'spline',
+								data: dato.b,
+							},{
+								name: 'Prodemio Diario',
+								type: 'spline',
+								yAxis: 1,
+								data: dato.d,
+								tooltip: {
+									valueSuffix: ' ha/por dia'
+								}
+
+							}]
+						});
+						
+						/*$('#container').highcharts({//grafica para barras y drilldown
 							chart: {
 								type: 'column'
 							},
@@ -2079,7 +2146,7 @@ $("#reporte").click(function(){
 							drilldown: {
 								series: dato.b
 							}
-						});
+						});*/
 						
 					},
 					error: function() {
@@ -2156,10 +2223,34 @@ function myFunction() {
 <br>
 <hr>
 <br>
+<?php
+	$bSelectLimit = EW_SELECT_LIMIT;
+	if ($bSelectLimit) {
+		if ($grafica_desempeno_punto_list->TotalRecs <= 0)
+			$grafica_desempeno_punto_list->TotalRecs = $grafica_desempeno_punto->SelectRecordCount();
+	} else {
+		if (!$grafica_desempeno_punto_list->Recordset && ($grafica_desempeno_punto_list->Recordset = $grafica_desempeno_punto_list->LoadRecordset()))
+			$grafica_desempeno_punto_list->TotalRecs = $grafica_desempeno_punto_list->Recordset->RecordCount();
+	}
+	$grafica_desempeno_punto_list->StartRec = 1;
+	if ($grafica_desempeno_punto_list->DisplayRecs <= 0 || ($grafica_desempeno_punto->Export <> "" && $grafica_desempeno_punto->ExportAll)) // Display all records
+		$grafica_desempeno_punto_list->DisplayRecs = $grafica_desempeno_punto_list->TotalRecs;
+	if (!($grafica_desempeno_punto->Export <> "" && $grafica_desempeno_punto->ExportAll))
+		$grafica_desempeno_punto_list->SetUpStartRec(); // Set up start record position
+	if ($bSelectLimit)
+		$grafica_desempeno_punto_list->Recordset = $grafica_desempeno_punto_list->LoadRecordset($grafica_desempeno_punto_list->StartRec-1, $grafica_desempeno_punto_list->DisplayRecs);
 
-
-
-
+	// Set no record found message
+	if ($grafica_desempeno_punto->CurrentAction == "" && $grafica_desempeno_punto_list->TotalRecs == 0) {
+		if (!$Security->CanList())
+			$grafica_desempeno_punto_list->setWarningMessage($Language->Phrase("NoPermission"));
+		if ($grafica_desempeno_punto_list->SearchWhere == "0=101")
+			$grafica_desempeno_punto_list->setWarningMessage($Language->Phrase("EnterSearchCriteria"));
+		else
+			$grafica_desempeno_punto_list->setWarningMessage($Language->Phrase("NoRecord"));
+	}
+$grafica_desempeno_punto_list->RenderOtherOptions();
+?>
 <?php if ($Security->CanSearch()) { ?>
 <?php if ($grafica_desempeno_punto->Export == "" && $grafica_desempeno_punto->CurrentAction == "") { ?>
 <form name="fgrafica_desempeno_puntolistsrch" id="fgrafica_desempeno_puntolistsrch" class="form-inline ewForm" action="<?php echo ew_CurrentPage() ?>">
@@ -2187,9 +2278,6 @@ $grafica_desempeno_punto_list->RenderRow();
 		<span class="ewSearchField">
 <input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_desempeno_punto->Punto->PlaceHolder) ?>" value="<?php echo $grafica_desempeno_punto->Punto->EditValue ?>"<?php echo $grafica_desempeno_punto->Punto->EditAttributes() ?>>
 </span>
-<br>
-<br>
-<hr>
 	</div>
 <?php } ?>
 </div>
@@ -2201,6 +2289,11 @@ $grafica_desempeno_punto_list->RenderRow();
 </form>
 <?php } ?>
 <?php } ?>
+<?php $grafica_desempeno_punto_list->ShowPageHeader(); ?>
+<?php
+$grafica_desempeno_punto_list->ShowMessage();
+?>
+<?php if ($grafica_desempeno_punto_list->TotalRecs > 0 || $grafica_desempeno_punto->CurrentAction <> "") { ?>
 <div class="ewGrid">
 <?php if ($grafica_desempeno_punto->Export == "") { ?>
 <div class="ewGridUpperPanel">

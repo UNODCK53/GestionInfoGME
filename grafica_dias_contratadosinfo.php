@@ -12,6 +12,7 @@ class cgrafica_dias_contratados extends cTable {
 	var $Firma_Contrato_Gme;
 	var $Llegada_GME_a_su_lugar_de_Origen;
 	var $dias;
+	var $Dias_reportados;
 
 	//
 	// Table class constructor
@@ -56,9 +57,14 @@ class cgrafica_dias_contratados extends cTable {
 		$this->fields['Llegada_GME_a_su_lugar_de_Origen'] = &$this->Llegada_GME_a_su_lugar_de_Origen;
 
 		// dias
-		$this->dias = new cField('grafica_dias_contratados', 'grafica_dias_contratados', 'x_dias', 'dias', '`dias`', '`dias`', 5, -1, FALSE, '`dias`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->dias = new cField('grafica_dias_contratados', 'grafica_dias_contratados', 'x_dias', 'dias', '`dias`', '`dias`', 20, -1, FALSE, '`dias`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->dias->FldDefaultErrMsg = $Language->Phrase("IncorrectFloat");
 		$this->fields['dias'] = &$this->dias;
+
+		// Dias_reportados
+		$this->Dias_reportados = new cField('grafica_dias_contratados', 'grafica_dias_contratados', 'x_Dias_reportados', 'Dias_reportados', '`Dias_reportados`', '`Dias_reportados`', 20, -1, FALSE, '`Dias_reportados`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->Dias_reportados->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['Dias_reportados'] = &$this->Dias_reportados;
 	}
 
 	// Multiple column sort
@@ -535,6 +541,7 @@ class cgrafica_dias_contratados extends cTable {
 		$this->Firma_Contrato_Gme->setDbValue($rs->fields('Firma_Contrato_Gme'));
 		$this->Llegada_GME_a_su_lugar_de_Origen->setDbValue($rs->fields('Llegada_GME_a_su_lugar_de_Origen'));
 		$this->dias->setDbValue($rs->fields('dias'));
+		$this->Dias_reportados->setDbValue($rs->fields('Dias_reportados'));
 	}
 
 	// Render list row values
@@ -550,6 +557,7 @@ class cgrafica_dias_contratados extends cTable {
 		// Firma_Contrato_Gme
 		// Llegada_GME_a_su_lugar_de_Origen
 		// dias
+		// Dias_reportados
 		// Punto
 
 		$this->Punto->ViewValue = $this->Punto->CurrentValue;
@@ -570,6 +578,10 @@ class cgrafica_dias_contratados extends cTable {
 		// dias
 		$this->dias->ViewValue = $this->dias->CurrentValue;
 		$this->dias->ViewCustomAttributes = "";
+
+		// Dias_reportados
+		$this->Dias_reportados->ViewValue = $this->Dias_reportados->CurrentValue;
+		$this->Dias_reportados->ViewCustomAttributes = "";
 
 		// Punto
 		$this->Punto->LinkCustomAttributes = "";
@@ -595,6 +607,11 @@ class cgrafica_dias_contratados extends cTable {
 		$this->dias->LinkCustomAttributes = "";
 		$this->dias->HrefValue = "";
 		$this->dias->TooltipValue = "";
+
+		// Dias_reportados
+		$this->Dias_reportados->LinkCustomAttributes = "";
+		$this->Dias_reportados->HrefValue = "";
+		$this->Dias_reportados->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -636,7 +653,12 @@ class cgrafica_dias_contratados extends cTable {
 		$this->dias->EditCustomAttributes = "";
 		$this->dias->EditValue = ew_HtmlEncode($this->dias->CurrentValue);
 		$this->dias->PlaceHolder = ew_RemoveHtml($this->dias->FldCaption());
-		if (strval($this->dias->EditValue) <> "" && is_numeric($this->dias->EditValue)) $this->dias->EditValue = ew_FormatNumber($this->dias->EditValue, -2, -1, -2, 0);
+
+		// Dias_reportados
+		$this->Dias_reportados->EditAttrs["class"] = "form-control";
+		$this->Dias_reportados->EditCustomAttributes = "";
+		$this->Dias_reportados->EditValue = ew_HtmlEncode($this->Dias_reportados->CurrentValue);
+		$this->Dias_reportados->PlaceHolder = ew_RemoveHtml($this->Dias_reportados->FldCaption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -670,12 +692,14 @@ class cgrafica_dias_contratados extends cTable {
 					if ($this->Firma_Contrato_Gme->Exportable) $Doc->ExportCaption($this->Firma_Contrato_Gme);
 					if ($this->Llegada_GME_a_su_lugar_de_Origen->Exportable) $Doc->ExportCaption($this->Llegada_GME_a_su_lugar_de_Origen);
 					if ($this->dias->Exportable) $Doc->ExportCaption($this->dias);
+					if ($this->Dias_reportados->Exportable) $Doc->ExportCaption($this->Dias_reportados);
 				} else {
 					if ($this->Punto->Exportable) $Doc->ExportCaption($this->Punto);
 					if ($this->Profesional->Exportable) $Doc->ExportCaption($this->Profesional);
 					if ($this->Firma_Contrato_Gme->Exportable) $Doc->ExportCaption($this->Firma_Contrato_Gme);
 					if ($this->Llegada_GME_a_su_lugar_de_Origen->Exportable) $Doc->ExportCaption($this->Llegada_GME_a_su_lugar_de_Origen);
 					if ($this->dias->Exportable) $Doc->ExportCaption($this->dias);
+					if ($this->Dias_reportados->Exportable) $Doc->ExportCaption($this->Dias_reportados);
 				}
 				$Doc->EndExportRow();
 			}
@@ -712,12 +736,14 @@ class cgrafica_dias_contratados extends cTable {
 						if ($this->Firma_Contrato_Gme->Exportable) $Doc->ExportField($this->Firma_Contrato_Gme);
 						if ($this->Llegada_GME_a_su_lugar_de_Origen->Exportable) $Doc->ExportField($this->Llegada_GME_a_su_lugar_de_Origen);
 						if ($this->dias->Exportable) $Doc->ExportField($this->dias);
+						if ($this->Dias_reportados->Exportable) $Doc->ExportField($this->Dias_reportados);
 					} else {
 						if ($this->Punto->Exportable) $Doc->ExportField($this->Punto);
 						if ($this->Profesional->Exportable) $Doc->ExportField($this->Profesional);
 						if ($this->Firma_Contrato_Gme->Exportable) $Doc->ExportField($this->Firma_Contrato_Gme);
 						if ($this->Llegada_GME_a_su_lugar_de_Origen->Exportable) $Doc->ExportField($this->Llegada_GME_a_su_lugar_de_Origen);
 						if ($this->dias->Exportable) $Doc->ExportField($this->dias);
+						if ($this->Dias_reportados->Exportable) $Doc->ExportField($this->Dias_reportados);
 					}
 					$Doc->EndExportRow();
 				}

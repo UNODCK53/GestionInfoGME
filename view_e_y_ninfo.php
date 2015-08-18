@@ -38,6 +38,8 @@ class cview_e_y_n extends cTable {
 	var $Departamento;
 	var $F_llegada;
 	var $Fecha;
+	var $Modificado;
+	var $llave_2;
 
 	//
 	// Table class constructor
@@ -191,6 +193,14 @@ class cview_e_y_n extends cTable {
 		// Fecha
 		$this->Fecha = new cField('view_e_y_n', 'view_e_y_n', 'x_Fecha', 'Fecha', '`Fecha`', '`Fecha`', 200, -1, FALSE, '`Fecha`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['Fecha'] = &$this->Fecha;
+
+		// Modificado
+		$this->Modificado = new cField('view_e_y_n', 'view_e_y_n', 'x_Modificado', 'Modificado', '`Modificado`', '`Modificado`', 200, -1, FALSE, '`Modificado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['Modificado'] = &$this->Modificado;
+
+		// llave_2
+		$this->llave_2 = new cField('view_e_y_n', 'view_e_y_n', 'x_llave_2', 'llave_2', '`llave_2`', '`llave_2`', 200, -1, FALSE, '`llave_2`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['llave_2'] = &$this->llave_2;
 	}
 
 	// Multiple column sort
@@ -501,6 +511,8 @@ class cview_e_y_n extends cTable {
 	function DeleteSQL(&$rs, $where = "") {
 		$sql = "DELETE FROM " . $this->UpdateTable . " WHERE ";
 		if ($rs) {
+			if (array_key_exists('llave_2', $rs))
+				ew_AddFilter($where, ew_QuotedName('llave_2') . '=' . ew_QuotedValue($rs['llave_2'], $this->llave_2->FldDataType));
 		}
 		$filter = $this->CurrentFilter;
 		ew_AddFilter($filter, $where);
@@ -519,12 +531,13 @@ class cview_e_y_n extends cTable {
 
 	// Key filter WHERE clause
 	function SqlKeyFilter() {
-		return "";
+		return "`llave_2` = '@llave_2@'";
 	}
 
 	// Key filter
 	function KeyFilter() {
 		$sKeyFilter = $this->SqlKeyFilter();
+		$sKeyFilter = str_replace("@llave_2@", ew_AdjustSql($this->llave_2->CurrentValue), $sKeyFilter); // Replace key value
 		return $sKeyFilter;
 	}
 
@@ -596,6 +609,11 @@ class cview_e_y_n extends cTable {
 	function KeyUrl($url, $parm = "") {
 		$sUrl = $url . "?";
 		if ($parm <> "") $sUrl .= $parm . "&";
+		if (!is_null($this->llave_2->CurrentValue)) {
+			$sUrl .= "llave_2=" . urlencode($this->llave_2->CurrentValue);
+		} else {
+			return "javascript:alert(ewLanguage.Phrase('InvalidRecord'));";
+		}
 		return $sUrl;
 	}
 
@@ -624,6 +642,7 @@ class cview_e_y_n extends cTable {
 			$arKeys = ew_StripSlashes($_GET["key_m"]);
 			$cnt = count($arKeys);
 		} elseif (isset($_GET)) {
+			$arKeys[] = @$_GET["llave_2"]; // llave_2
 
 			//return $arKeys; // Do not return yet, so the values will also be checked by the following code
 		}
@@ -642,6 +661,7 @@ class cview_e_y_n extends cTable {
 		$sKeyFilter = "";
 		foreach ($arKeys as $key) {
 			if ($sKeyFilter <> "") $sKeyFilter .= " OR ";
+			$this->llave_2->CurrentValue = $key;
 			$sKeyFilter .= "(" . $this->KeyFilter() . ")";
 		}
 		return $sKeyFilter;
@@ -693,6 +713,8 @@ class cview_e_y_n extends cTable {
 		$this->Departamento->setDbValue($rs->fields('Departamento'));
 		$this->F_llegada->setDbValue($rs->fields('F_llegada'));
 		$this->Fecha->setDbValue($rs->fields('Fecha'));
+		$this->Modificado->setDbValue($rs->fields('Modificado'));
+		$this->llave_2->setDbValue($rs->fields('llave_2'));
 	}
 
 	// Render list row values
@@ -734,8 +756,12 @@ class cview_e_y_n extends cTable {
 		// Departamento
 		// F_llegada
 		// Fecha
-		// ID_Formulario
+		// Modificado
+		// llave_2
 
+		$this->llave_2->CellCssStyle = "white-space: nowrap;";
+
+		// ID_Formulario
 		$this->ID_Formulario->ViewValue = $this->ID_Formulario->CurrentValue;
 		$this->ID_Formulario->ViewCustomAttributes = "";
 
@@ -859,6 +885,14 @@ class cview_e_y_n extends cTable {
 		// Fecha
 		$this->Fecha->ViewValue = $this->Fecha->CurrentValue;
 		$this->Fecha->ViewCustomAttributes = "";
+
+		// Modificado
+		$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+		$this->Modificado->ViewCustomAttributes = "";
+
+		// llave_2
+		$this->llave_2->ViewValue = $this->llave_2->CurrentValue;
+		$this->llave_2->ViewCustomAttributes = "";
 
 		// ID_Formulario
 		$this->ID_Formulario->LinkCustomAttributes = "";
@@ -1015,6 +1049,16 @@ class cview_e_y_n extends cTable {
 		$this->Fecha->HrefValue = "";
 		$this->Fecha->TooltipValue = "";
 
+		// Modificado
+		$this->Modificado->LinkCustomAttributes = "";
+		$this->Modificado->HrefValue = "";
+		$this->Modificado->TooltipValue = "";
+
+		// llave_2
+		$this->llave_2->LinkCustomAttributes = "";
+		$this->llave_2->HrefValue = "";
+		$this->llave_2->TooltipValue = "";
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -1029,86 +1073,87 @@ class cview_e_y_n extends cTable {
 		// ID_Formulario
 		$this->ID_Formulario->EditAttrs["class"] = "form-control";
 		$this->ID_Formulario->EditCustomAttributes = "";
-		$this->ID_Formulario->EditValue = ew_HtmlEncode($this->ID_Formulario->CurrentValue);
-		$this->ID_Formulario->PlaceHolder = ew_RemoveHtml($this->ID_Formulario->FldCaption());
+		$this->ID_Formulario->EditValue = $this->ID_Formulario->CurrentValue;
+		$this->ID_Formulario->ViewCustomAttributes = "";
 
 		// F_Sincron
 		$this->F_Sincron->EditAttrs["class"] = "form-control";
 		$this->F_Sincron->EditCustomAttributes = "";
-		$this->F_Sincron->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->F_Sincron->CurrentValue, 7));
-		$this->F_Sincron->PlaceHolder = ew_RemoveHtml($this->F_Sincron->FldCaption());
+		$this->F_Sincron->EditValue = $this->F_Sincron->CurrentValue;
+		$this->F_Sincron->EditValue = ew_FormatDateTime($this->F_Sincron->EditValue, 7);
+		$this->F_Sincron->ViewCustomAttributes = "";
 
 		// USUARIO
 		$this->USUARIO->EditAttrs["class"] = "form-control";
 		$this->USUARIO->EditCustomAttributes = "";
-		$this->USUARIO->EditValue = ew_HtmlEncode($this->USUARIO->CurrentValue);
-		$this->USUARIO->PlaceHolder = ew_RemoveHtml($this->USUARIO->FldCaption());
+		$this->USUARIO->EditValue = $this->USUARIO->CurrentValue;
+		$this->USUARIO->ViewCustomAttributes = "";
 
 		// Cargo_gme
 		$this->Cargo_gme->EditAttrs["class"] = "form-control";
 		$this->Cargo_gme->EditCustomAttributes = "";
-		$this->Cargo_gme->EditValue = ew_HtmlEncode($this->Cargo_gme->CurrentValue);
-		$this->Cargo_gme->PlaceHolder = ew_RemoveHtml($this->Cargo_gme->FldCaption());
+		$this->Cargo_gme->EditValue = $this->Cargo_gme->CurrentValue;
+		$this->Cargo_gme->ViewCustomAttributes = "";
 
 		// NOM_GE
 		$this->NOM_GE->EditAttrs["class"] = "form-control";
 		$this->NOM_GE->EditCustomAttributes = "";
-		$this->NOM_GE->EditValue = ew_HtmlEncode($this->NOM_GE->CurrentValue);
-		$this->NOM_GE->PlaceHolder = ew_RemoveHtml($this->NOM_GE->FldCaption());
+		$this->NOM_GE->EditValue = $this->NOM_GE->CurrentValue;
+		$this->NOM_GE->ViewCustomAttributes = "";
 
 		// Otro_PGE
 		$this->Otro_PGE->EditAttrs["class"] = "form-control";
 		$this->Otro_PGE->EditCustomAttributes = "";
-		$this->Otro_PGE->EditValue = ew_HtmlEncode($this->Otro_PGE->CurrentValue);
-		$this->Otro_PGE->PlaceHolder = ew_RemoveHtml($this->Otro_PGE->FldCaption());
+		$this->Otro_PGE->EditValue = $this->Otro_PGE->CurrentValue;
+		$this->Otro_PGE->ViewCustomAttributes = "";
 
 		// Otro_CC_PGE
 		$this->Otro_CC_PGE->EditAttrs["class"] = "form-control";
 		$this->Otro_CC_PGE->EditCustomAttributes = "";
-		$this->Otro_CC_PGE->EditValue = ew_HtmlEncode($this->Otro_CC_PGE->CurrentValue);
-		$this->Otro_CC_PGE->PlaceHolder = ew_RemoveHtml($this->Otro_CC_PGE->FldCaption());
+		$this->Otro_CC_PGE->EditValue = $this->Otro_CC_PGE->CurrentValue;
+		$this->Otro_CC_PGE->ViewCustomAttributes = "";
 
 		// TIPO_INFORME
 		$this->TIPO_INFORME->EditAttrs["class"] = "form-control";
 		$this->TIPO_INFORME->EditCustomAttributes = "";
-		$this->TIPO_INFORME->EditValue = ew_HtmlEncode($this->TIPO_INFORME->CurrentValue);
-		$this->TIPO_INFORME->PlaceHolder = ew_RemoveHtml($this->TIPO_INFORME->FldCaption());
+		$this->TIPO_INFORME->EditValue = $this->TIPO_INFORME->CurrentValue;
+		$this->TIPO_INFORME->ViewCustomAttributes = "";
 
 		// FECHA_NOVEDAD
 		$this->FECHA_NOVEDAD->EditAttrs["class"] = "form-control";
 		$this->FECHA_NOVEDAD->EditCustomAttributes = "";
-		$this->FECHA_NOVEDAD->EditValue = ew_HtmlEncode($this->FECHA_NOVEDAD->CurrentValue);
-		$this->FECHA_NOVEDAD->PlaceHolder = ew_RemoveHtml($this->FECHA_NOVEDAD->FldCaption());
+		$this->FECHA_NOVEDAD->EditValue = $this->FECHA_NOVEDAD->CurrentValue;
+		$this->FECHA_NOVEDAD->ViewCustomAttributes = "";
 
 		// DIA
 		$this->DIA->EditAttrs["class"] = "form-control";
 		$this->DIA->EditCustomAttributes = "";
-		$this->DIA->EditValue = ew_HtmlEncode($this->DIA->CurrentValue);
-		$this->DIA->PlaceHolder = ew_RemoveHtml($this->DIA->FldCaption());
+		$this->DIA->EditValue = $this->DIA->CurrentValue;
+		$this->DIA->ViewCustomAttributes = "";
 
 		// MES
 		$this->MES->EditAttrs["class"] = "form-control";
 		$this->MES->EditCustomAttributes = "";
-		$this->MES->EditValue = ew_HtmlEncode($this->MES->CurrentValue);
-		$this->MES->PlaceHolder = ew_RemoveHtml($this->MES->FldCaption());
+		$this->MES->EditValue = $this->MES->CurrentValue;
+		$this->MES->ViewCustomAttributes = "";
 
 		// Num_Evacua
 		$this->Num_Evacua->EditAttrs["class"] = "form-control";
 		$this->Num_Evacua->EditCustomAttributes = "";
-		$this->Num_Evacua->EditValue = ew_HtmlEncode($this->Num_Evacua->CurrentValue);
-		$this->Num_Evacua->PlaceHolder = ew_RemoveHtml($this->Num_Evacua->FldCaption());
+		$this->Num_Evacua->EditValue = $this->Num_Evacua->CurrentValue;
+		$this->Num_Evacua->ViewCustomAttributes = "";
 
 		// PTO_INCOMU
 		$this->PTO_INCOMU->EditAttrs["class"] = "form-control";
 		$this->PTO_INCOMU->EditCustomAttributes = "";
-		$this->PTO_INCOMU->EditValue = ew_HtmlEncode($this->PTO_INCOMU->CurrentValue);
-		$this->PTO_INCOMU->PlaceHolder = ew_RemoveHtml($this->PTO_INCOMU->FldCaption());
+		$this->PTO_INCOMU->EditValue = $this->PTO_INCOMU->CurrentValue;
+		$this->PTO_INCOMU->ViewCustomAttributes = "";
 
 		// OBS_punt_inco
 		$this->OBS_punt_inco->EditAttrs["class"] = "form-control";
 		$this->OBS_punt_inco->EditCustomAttributes = "";
-		$this->OBS_punt_inco->EditValue = ew_HtmlEncode($this->OBS_punt_inco->CurrentValue);
-		$this->OBS_punt_inco->PlaceHolder = ew_RemoveHtml($this->OBS_punt_inco->FldCaption());
+		$this->OBS_punt_inco->EditValue = $this->OBS_punt_inco->CurrentValue;
+		$this->OBS_punt_inco->ViewCustomAttributes = "";
 
 		// OBS_ENLACE
 		$this->OBS_ENLACE->EditAttrs["class"] = "form-control";
@@ -1119,38 +1164,38 @@ class cview_e_y_n extends cTable {
 		// NUM_Novedad
 		$this->NUM_Novedad->EditAttrs["class"] = "form-control";
 		$this->NUM_Novedad->EditCustomAttributes = "";
-		$this->NUM_Novedad->EditValue = ew_HtmlEncode($this->NUM_Novedad->CurrentValue);
-		$this->NUM_Novedad->PlaceHolder = ew_RemoveHtml($this->NUM_Novedad->FldCaption());
+		$this->NUM_Novedad->EditValue = $this->NUM_Novedad->CurrentValue;
+		$this->NUM_Novedad->ViewCustomAttributes = "";
 
 		// Nom_Per_Evacu
 		$this->Nom_Per_Evacu->EditAttrs["class"] = "form-control";
 		$this->Nom_Per_Evacu->EditCustomAttributes = "";
-		$this->Nom_Per_Evacu->EditValue = ew_HtmlEncode($this->Nom_Per_Evacu->CurrentValue);
-		$this->Nom_Per_Evacu->PlaceHolder = ew_RemoveHtml($this->Nom_Per_Evacu->FldCaption());
+		$this->Nom_Per_Evacu->EditValue = $this->Nom_Per_Evacu->CurrentValue;
+		$this->Nom_Per_Evacu->ViewCustomAttributes = "";
 
 		// Nom_Otro_Per_Evacu
 		$this->Nom_Otro_Per_Evacu->EditAttrs["class"] = "form-control";
 		$this->Nom_Otro_Per_Evacu->EditCustomAttributes = "";
-		$this->Nom_Otro_Per_Evacu->EditValue = ew_HtmlEncode($this->Nom_Otro_Per_Evacu->CurrentValue);
-		$this->Nom_Otro_Per_Evacu->PlaceHolder = ew_RemoveHtml($this->Nom_Otro_Per_Evacu->FldCaption());
+		$this->Nom_Otro_Per_Evacu->EditValue = $this->Nom_Otro_Per_Evacu->CurrentValue;
+		$this->Nom_Otro_Per_Evacu->ViewCustomAttributes = "";
 
 		// CC_Otro_Per_Evacu
 		$this->CC_Otro_Per_Evacu->EditAttrs["class"] = "form-control";
 		$this->CC_Otro_Per_Evacu->EditCustomAttributes = "";
-		$this->CC_Otro_Per_Evacu->EditValue = ew_HtmlEncode($this->CC_Otro_Per_Evacu->CurrentValue);
-		$this->CC_Otro_Per_Evacu->PlaceHolder = ew_RemoveHtml($this->CC_Otro_Per_Evacu->FldCaption());
+		$this->CC_Otro_Per_Evacu->EditValue = $this->CC_Otro_Per_Evacu->CurrentValue;
+		$this->CC_Otro_Per_Evacu->ViewCustomAttributes = "";
 
 		// Cargo_Per_EVA
 		$this->Cargo_Per_EVA->EditAttrs["class"] = "form-control";
 		$this->Cargo_Per_EVA->EditCustomAttributes = "";
-		$this->Cargo_Per_EVA->EditValue = ew_HtmlEncode($this->Cargo_Per_EVA->CurrentValue);
-		$this->Cargo_Per_EVA->PlaceHolder = ew_RemoveHtml($this->Cargo_Per_EVA->FldCaption());
+		$this->Cargo_Per_EVA->EditValue = $this->Cargo_Per_EVA->CurrentValue;
+		$this->Cargo_Per_EVA->ViewCustomAttributes = "";
 
 		// Motivo_Eva
 		$this->Motivo_Eva->EditAttrs["class"] = "form-control";
 		$this->Motivo_Eva->EditCustomAttributes = "";
-		$this->Motivo_Eva->EditValue = ew_HtmlEncode($this->Motivo_Eva->CurrentValue);
-		$this->Motivo_Eva->PlaceHolder = ew_RemoveHtml($this->Motivo_Eva->FldCaption());
+		$this->Motivo_Eva->EditValue = $this->Motivo_Eva->CurrentValue;
+		$this->Motivo_Eva->ViewCustomAttributes = "";
 
 		// OBS_EVA
 		$this->OBS_EVA->EditAttrs["class"] = "form-control";
@@ -1161,56 +1206,68 @@ class cview_e_y_n extends cTable {
 		// NOM_PE
 		$this->NOM_PE->EditAttrs["class"] = "form-control";
 		$this->NOM_PE->EditCustomAttributes = "";
-		$this->NOM_PE->EditValue = ew_HtmlEncode($this->NOM_PE->CurrentValue);
-		$this->NOM_PE->PlaceHolder = ew_RemoveHtml($this->NOM_PE->FldCaption());
+		$this->NOM_PE->EditValue = $this->NOM_PE->CurrentValue;
+		$this->NOM_PE->ViewCustomAttributes = "";
 
 		// Otro_Nom_PE
 		$this->Otro_Nom_PE->EditAttrs["class"] = "form-control";
 		$this->Otro_Nom_PE->EditCustomAttributes = "";
-		$this->Otro_Nom_PE->EditValue = ew_HtmlEncode($this->Otro_Nom_PE->CurrentValue);
-		$this->Otro_Nom_PE->PlaceHolder = ew_RemoveHtml($this->Otro_Nom_PE->FldCaption());
+		$this->Otro_Nom_PE->EditValue = $this->Otro_Nom_PE->CurrentValue;
+		$this->Otro_Nom_PE->ViewCustomAttributes = "";
 
 		// NOM_CAPATAZ
 		$this->NOM_CAPATAZ->EditAttrs["class"] = "form-control";
 		$this->NOM_CAPATAZ->EditCustomAttributes = "";
-		$this->NOM_CAPATAZ->EditValue = ew_HtmlEncode($this->NOM_CAPATAZ->CurrentValue);
-		$this->NOM_CAPATAZ->PlaceHolder = ew_RemoveHtml($this->NOM_CAPATAZ->FldCaption());
+		$this->NOM_CAPATAZ->EditValue = $this->NOM_CAPATAZ->CurrentValue;
+		$this->NOM_CAPATAZ->ViewCustomAttributes = "";
 
 		// Otro_Nom_Capata
 		$this->Otro_Nom_Capata->EditAttrs["class"] = "form-control";
 		$this->Otro_Nom_Capata->EditCustomAttributes = "";
-		$this->Otro_Nom_Capata->EditValue = ew_HtmlEncode($this->Otro_Nom_Capata->CurrentValue);
-		$this->Otro_Nom_Capata->PlaceHolder = ew_RemoveHtml($this->Otro_Nom_Capata->FldCaption());
+		$this->Otro_Nom_Capata->EditValue = $this->Otro_Nom_Capata->CurrentValue;
+		$this->Otro_Nom_Capata->ViewCustomAttributes = "";
 
 		// Otro_CC_Capata
 		$this->Otro_CC_Capata->EditAttrs["class"] = "form-control";
 		$this->Otro_CC_Capata->EditCustomAttributes = "";
-		$this->Otro_CC_Capata->EditValue = ew_HtmlEncode($this->Otro_CC_Capata->CurrentValue);
-		$this->Otro_CC_Capata->PlaceHolder = ew_RemoveHtml($this->Otro_CC_Capata->FldCaption());
+		$this->Otro_CC_Capata->EditValue = $this->Otro_CC_Capata->CurrentValue;
+		$this->Otro_CC_Capata->ViewCustomAttributes = "";
 
 		// Muncipio
 		$this->Muncipio->EditAttrs["class"] = "form-control";
 		$this->Muncipio->EditCustomAttributes = "";
-		$this->Muncipio->EditValue = ew_HtmlEncode($this->Muncipio->CurrentValue);
-		$this->Muncipio->PlaceHolder = ew_RemoveHtml($this->Muncipio->FldCaption());
+		$this->Muncipio->EditValue = $this->Muncipio->CurrentValue;
+		$this->Muncipio->ViewCustomAttributes = "";
 
 		// Departamento
 		$this->Departamento->EditAttrs["class"] = "form-control";
 		$this->Departamento->EditCustomAttributes = "";
-		$this->Departamento->EditValue = ew_HtmlEncode($this->Departamento->CurrentValue);
-		$this->Departamento->PlaceHolder = ew_RemoveHtml($this->Departamento->FldCaption());
+		$this->Departamento->EditValue = $this->Departamento->CurrentValue;
+		$this->Departamento->ViewCustomAttributes = "";
 
 		// F_llegada
 		$this->F_llegada->EditAttrs["class"] = "form-control";
 		$this->F_llegada->EditCustomAttributes = "";
-		$this->F_llegada->EditValue = ew_HtmlEncode($this->F_llegada->CurrentValue);
-		$this->F_llegada->PlaceHolder = ew_RemoveHtml($this->F_llegada->FldCaption());
+		$this->F_llegada->EditValue = $this->F_llegada->CurrentValue;
+		$this->F_llegada->ViewCustomAttributes = "";
 
 		// Fecha
 		$this->Fecha->EditAttrs["class"] = "form-control";
 		$this->Fecha->EditCustomAttributes = "";
-		$this->Fecha->EditValue = ew_HtmlEncode($this->Fecha->CurrentValue);
-		$this->Fecha->PlaceHolder = ew_RemoveHtml($this->Fecha->FldCaption());
+		$this->Fecha->EditValue = $this->Fecha->CurrentValue;
+		$this->Fecha->ViewCustomAttributes = "";
+
+		// Modificado
+		$this->Modificado->EditAttrs["class"] = "form-control";
+		$this->Modificado->EditCustomAttributes = "";
+		$this->Modificado->EditValue = ew_HtmlEncode($this->Modificado->CurrentValue);
+		$this->Modificado->PlaceHolder = ew_RemoveHtml($this->Modificado->FldCaption());
+
+		// llave_2
+		$this->llave_2->EditAttrs["class"] = "form-control";
+		$this->llave_2->EditCustomAttributes = "";
+		$this->llave_2->EditValue = $this->llave_2->CurrentValue;
+		$this->llave_2->ViewCustomAttributes = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -1270,6 +1327,7 @@ class cview_e_y_n extends cTable {
 					if ($this->Departamento->Exportable) $Doc->ExportCaption($this->Departamento);
 					if ($this->F_llegada->Exportable) $Doc->ExportCaption($this->F_llegada);
 					if ($this->Fecha->Exportable) $Doc->ExportCaption($this->Fecha);
+					if ($this->Modificado->Exportable) $Doc->ExportCaption($this->Modificado);
 				} else {
 					if ($this->ID_Formulario->Exportable) $Doc->ExportCaption($this->ID_Formulario);
 					if ($this->F_Sincron->Exportable) $Doc->ExportCaption($this->F_Sincron);
@@ -1302,6 +1360,7 @@ class cview_e_y_n extends cTable {
 					if ($this->Departamento->Exportable) $Doc->ExportCaption($this->Departamento);
 					if ($this->F_llegada->Exportable) $Doc->ExportCaption($this->F_llegada);
 					if ($this->Fecha->Exportable) $Doc->ExportCaption($this->Fecha);
+					if ($this->Modificado->Exportable) $Doc->ExportCaption($this->Modificado);
 				}
 				$Doc->EndExportRow();
 			}
@@ -1364,6 +1423,7 @@ class cview_e_y_n extends cTable {
 						if ($this->Departamento->Exportable) $Doc->ExportField($this->Departamento);
 						if ($this->F_llegada->Exportable) $Doc->ExportField($this->F_llegada);
 						if ($this->Fecha->Exportable) $Doc->ExportField($this->Fecha);
+						if ($this->Modificado->Exportable) $Doc->ExportField($this->Modificado);
 					} else {
 						if ($this->ID_Formulario->Exportable) $Doc->ExportField($this->ID_Formulario);
 						if ($this->F_Sincron->Exportable) $Doc->ExportField($this->F_Sincron);
@@ -1396,6 +1456,7 @@ class cview_e_y_n extends cTable {
 						if ($this->Departamento->Exportable) $Doc->ExportField($this->Departamento);
 						if ($this->F_llegada->Exportable) $Doc->ExportField($this->F_llegada);
 						if ($this->Fecha->Exportable) $Doc->ExportField($this->Fecha);
+						if ($this->Modificado->Exportable) $Doc->ExportField($this->Modificado);
 					}
 					$Doc->EndExportRow();
 				}

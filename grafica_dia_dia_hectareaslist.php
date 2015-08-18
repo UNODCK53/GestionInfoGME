@@ -1680,11 +1680,11 @@ $grafica_dia_dia_hectareas_list->RenderOtherOptions();
 
 
 <h2>Cantidad de hectáreas erradicadas por día </h2>
-	<p>Este reporte muestra la erradicación diaria por Punto, según filtros de año y fase </p><br>
+	<p>Este reporte muestra la erradicación diaria por Punto, según filtros de año y fase </p></p><p> <font color="#F78181">Datos operativos del grupo de erradicación, cifras no oficiales, pendiente de validación y verificación por parte del ente neutral</font><br>
 	<hr>
 	<h3>Generador de gráfica</h3>
 	
-	<p>La gráfica permite visualizar de forma rápida en qué días se erradicaron más hectáreas de cultivos ilícitos</p>
+	<p>La gráfica permite visualizar de forma rápida el comportamiento de la erradicación diaria</p>
 	<i><strong>Nota:</strong> Seleccione una opción en todos los campos</i><br><br>
 <table>
 	<tr>

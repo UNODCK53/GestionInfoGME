@@ -537,8 +537,27 @@ class cgrafica_accidentes_trabajo_list extends cgrafica_accidentes_trabajo {
 					$option->HideAllOptions();
 			}
 
+			// Get default search criteria
+			ew_AddFilter($this->DefaultSearchWhere, $this->AdvancedSearchWhere(TRUE));
+
+			// Get and validate search values for advanced search
+			$this->LoadSearchValues(); // Get search values
+			if (!$this->ValidateSearch())
+				$this->setFailureMessage($gsSearchError);
+
+			// Restore search parms from Session if not searching / reset / export
+			if (($this->Export <> "" || $this->Command <> "search" && $this->Command <> "reset" && $this->Command <> "resetall") && $this->CheckSearchParms())
+				$this->RestoreSearchParms();
+
+			// Call Recordset SearchValidated event
+			$this->Recordset_SearchValidated();
+
 			// Set up sorting order
 			$this->SetUpSortOrder();
+
+			// Get search criteria for advanced search
+			if ($gsSearchError == "")
+				$sSrchAdvanced = $this->AdvancedSearchWhere();
 		}
 
 		// Restore display records
@@ -550,6 +569,31 @@ class cgrafica_accidentes_trabajo_list extends cgrafica_accidentes_trabajo {
 
 		// Load Sorting Order
 		$this->LoadSortOrder();
+
+		// Load search default if no existing search criteria
+		if (!$this->CheckSearchParms()) {
+
+			// Load advanced search from default
+			if ($this->LoadAdvancedSearchDefault()) {
+				$sSrchAdvanced = $this->AdvancedSearchWhere();
+			}
+		}
+
+		// Build search criteria
+		ew_AddFilter($this->SearchWhere, $sSrchAdvanced);
+		ew_AddFilter($this->SearchWhere, $sSrchBasic);
+
+		// Call Recordset_Searching event
+		$this->Recordset_Searching($this->SearchWhere);
+
+		// Save search criteria
+		if ($this->Command == "search" && !$this->RestoreSearch) {
+			$this->setSearchWhere($this->SearchWhere); // Save to Session
+			$this->StartRec = 1; // Reset start record counter
+			$this->setStartRecordNumber($this->StartRec);
+		} else {
+			$this->SearchWhere = $this->getSearchWhere();
+		}
 
 		// Build filter
 		$sFilter = "";
@@ -619,6 +663,144 @@ class cgrafica_accidentes_trabajo_list extends cgrafica_accidentes_trabajo {
 		return TRUE;
 	}
 
+	// Advanced search WHERE clause based on QueryString
+	function AdvancedSearchWhere($Default = FALSE) {
+		global $Security;
+		$sWhere = "";
+		if (!$Security->CanSearch()) return "";
+		$this->BuildSearchSql($sWhere, $this->Profesional_especializado, $Default, FALSE); // Profesional_especializado
+		$this->BuildSearchSql($sWhere, $this->Punto, $Default, FALSE); // Punto
+		$this->BuildSearchSql($sWhere, $this->Cargo_Afectado, $Default, FALSE); // Cargo_Afectado
+		$this->BuildSearchSql($sWhere, $this->Tipo_incidente, $Default, FALSE); // Tipo_incidente
+		$this->BuildSearchSql($sWhere, $this->Evacuado, $Default, FALSE); // Evacuado
+		$this->BuildSearchSql($sWhere, $this->No_evacuado, $Default, FALSE); // No_evacuado
+		$this->BuildSearchSql($sWhere, $this->Total_Evacuados, $Default, FALSE); // Total_Evacuados
+
+		// Set up search parm
+		if (!$Default && $sWhere <> "") {
+			$this->Command = "search";
+		}
+		if (!$Default && $this->Command == "search") {
+			$this->Profesional_especializado->AdvancedSearch->Save(); // Profesional_especializado
+			$this->Punto->AdvancedSearch->Save(); // Punto
+			$this->Cargo_Afectado->AdvancedSearch->Save(); // Cargo_Afectado
+			$this->Tipo_incidente->AdvancedSearch->Save(); // Tipo_incidente
+			$this->Evacuado->AdvancedSearch->Save(); // Evacuado
+			$this->No_evacuado->AdvancedSearch->Save(); // No_evacuado
+			$this->Total_Evacuados->AdvancedSearch->Save(); // Total_Evacuados
+		}
+		return $sWhere;
+	}
+
+	// Build search SQL
+	function BuildSearchSql(&$Where, &$Fld, $Default, $MultiValue) {
+		$FldParm = substr($Fld->FldVar, 2);
+		$FldVal = ($Default) ? $Fld->AdvancedSearch->SearchValueDefault : $Fld->AdvancedSearch->SearchValue; // @$_GET["x_$FldParm"]
+		$FldOpr = ($Default) ? $Fld->AdvancedSearch->SearchOperatorDefault : $Fld->AdvancedSearch->SearchOperator; // @$_GET["z_$FldParm"]
+		$FldCond = ($Default) ? $Fld->AdvancedSearch->SearchConditionDefault : $Fld->AdvancedSearch->SearchCondition; // @$_GET["v_$FldParm"]
+		$FldVal2 = ($Default) ? $Fld->AdvancedSearch->SearchValue2Default : $Fld->AdvancedSearch->SearchValue2; // @$_GET["y_$FldParm"]
+		$FldOpr2 = ($Default) ? $Fld->AdvancedSearch->SearchOperator2Default : $Fld->AdvancedSearch->SearchOperator2; // @$_GET["w_$FldParm"]
+		$sWrk = "";
+
+		//$FldVal = ew_StripSlashes($FldVal);
+		if (is_array($FldVal)) $FldVal = implode(",", $FldVal);
+
+		//$FldVal2 = ew_StripSlashes($FldVal2);
+		if (is_array($FldVal2)) $FldVal2 = implode(",", $FldVal2);
+		$FldOpr = strtoupper(trim($FldOpr));
+		if ($FldOpr == "") $FldOpr = "=";
+		$FldOpr2 = strtoupper(trim($FldOpr2));
+		if ($FldOpr2 == "") $FldOpr2 = "=";
+		if (EW_SEARCH_MULTI_VALUE_OPTION == 1 || $FldOpr <> "LIKE" ||
+			($FldOpr2 <> "LIKE" && $FldVal2 <> ""))
+			$MultiValue = FALSE;
+		if ($MultiValue) {
+			$sWrk1 = ($FldVal <> "") ? ew_GetMultiSearchSql($Fld, $FldOpr, $FldVal) : ""; // Field value 1
+			$sWrk2 = ($FldVal2 <> "") ? ew_GetMultiSearchSql($Fld, $FldOpr2, $FldVal2) : ""; // Field value 2
+			$sWrk = $sWrk1; // Build final SQL
+			if ($sWrk2 <> "")
+				$sWrk = ($sWrk <> "") ? "($sWrk) $FldCond ($sWrk2)" : $sWrk2;
+		} else {
+			$FldVal = $this->ConvertSearchValue($Fld, $FldVal);
+			$FldVal2 = $this->ConvertSearchValue($Fld, $FldVal2);
+			$sWrk = ew_GetSearchSql($Fld, $FldVal, $FldOpr, $FldCond, $FldVal2, $FldOpr2);
+		}
+		ew_AddFilter($Where, $sWrk);
+	}
+
+	// Convert search value
+	function ConvertSearchValue(&$Fld, $FldVal) {
+		if ($FldVal == EW_NULL_VALUE || $FldVal == EW_NOT_NULL_VALUE)
+			return $FldVal;
+		$Value = $FldVal;
+		if ($Fld->FldDataType == EW_DATATYPE_BOOLEAN) {
+			if ($FldVal <> "") $Value = ($FldVal == "1" || strtolower(strval($FldVal)) == "y" || strtolower(strval($FldVal)) == "t") ? $Fld->TrueValue : $Fld->FalseValue;
+		} elseif ($Fld->FldDataType == EW_DATATYPE_DATE) {
+			if ($FldVal <> "") $Value = ew_UnFormatDateTime($FldVal, $Fld->FldDateTimeFormat);
+		}
+		return $Value;
+	}
+
+	// Check if search parm exists
+	function CheckSearchParms() {
+		if ($this->Profesional_especializado->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->Punto->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->Cargo_Afectado->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->Tipo_incidente->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->Evacuado->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->No_evacuado->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->Total_Evacuados->AdvancedSearch->IssetSession())
+			return TRUE;
+		return FALSE;
+	}
+
+	// Clear all search parameters
+	function ResetSearchParms() {
+
+		// Clear search WHERE clause
+		$this->SearchWhere = "";
+		$this->setSearchWhere($this->SearchWhere);
+
+		// Clear advanced search parameters
+		$this->ResetAdvancedSearchParms();
+	}
+
+	// Load advanced search default values
+	function LoadAdvancedSearchDefault() {
+		return FALSE;
+	}
+
+	// Clear all advanced search parameters
+	function ResetAdvancedSearchParms() {
+		$this->Profesional_especializado->AdvancedSearch->UnsetSession();
+		$this->Punto->AdvancedSearch->UnsetSession();
+		$this->Cargo_Afectado->AdvancedSearch->UnsetSession();
+		$this->Tipo_incidente->AdvancedSearch->UnsetSession();
+		$this->Evacuado->AdvancedSearch->UnsetSession();
+		$this->No_evacuado->AdvancedSearch->UnsetSession();
+		$this->Total_Evacuados->AdvancedSearch->UnsetSession();
+	}
+
+	// Restore all search parameters
+	function RestoreSearchParms() {
+		$this->RestoreSearch = TRUE;
+
+		// Restore advanced search values
+		$this->Profesional_especializado->AdvancedSearch->Load();
+		$this->Punto->AdvancedSearch->Load();
+		$this->Cargo_Afectado->AdvancedSearch->Load();
+		$this->Tipo_incidente->AdvancedSearch->Load();
+		$this->Evacuado->AdvancedSearch->Load();
+		$this->No_evacuado->AdvancedSearch->Load();
+		$this->Total_Evacuados->AdvancedSearch->Load();
+	}
+
 	// Set up sort parameters
 	function SetUpSortOrder() {
 
@@ -629,7 +811,13 @@ class cgrafica_accidentes_trabajo_list extends cgrafica_accidentes_trabajo {
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
-			$this->UpdateSort($this->a, $bCtrl); // a
+			$this->UpdateSort($this->Profesional_especializado, $bCtrl); // Profesional_especializado
+			$this->UpdateSort($this->Punto, $bCtrl); // Punto
+			$this->UpdateSort($this->Cargo_Afectado, $bCtrl); // Cargo_Afectado
+			$this->UpdateSort($this->Tipo_incidente, $bCtrl); // Tipo_incidente
+			$this->UpdateSort($this->Evacuado, $bCtrl); // Evacuado
+			$this->UpdateSort($this->No_evacuado, $bCtrl); // No_evacuado
+			$this->UpdateSort($this->Total_Evacuados, $bCtrl); // Total_Evacuados
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -654,11 +842,21 @@ class cgrafica_accidentes_trabajo_list extends cgrafica_accidentes_trabajo {
 		// Check if reset command
 		if (substr($this->Command,0,5) == "reset") {
 
+			// Reset search criteria
+			if ($this->Command == "reset" || $this->Command == "resetall")
+				$this->ResetSearchParms();
+
 			// Reset sorting order
 			if ($this->Command == "resetsort") {
 				$sOrderBy = "";
 				$this->setSessionOrderBy($sOrderBy);
-				$this->a->setSort("");
+				$this->Profesional_especializado->setSort("");
+				$this->Punto->setSort("");
+				$this->Cargo_Afectado->setSort("");
+				$this->Tipo_incidente->setSort("");
+				$this->Evacuado->setSort("");
+				$this->No_evacuado->setSort("");
+				$this->Total_Evacuados->setSort("");
 			}
 
 			// Reset start position
@@ -812,6 +1010,17 @@ class cgrafica_accidentes_trabajo_list extends cgrafica_accidentes_trabajo {
 		$this->SearchOptions->Tag = "div";
 		$this->SearchOptions->TagClassName = "ewSearchOption";
 
+		// Search button
+		$item = &$this->SearchOptions->Add("searchtoggle");
+		$SearchToggleClass = ($this->SearchWhere <> "") ? " active" : " active";
+		$item->Body = "<button type=\"button\" class=\"btn btn-default ewSearchToggle" . $SearchToggleClass . "\" title=\"" . $Language->Phrase("SearchPanel") . "\" data-caption=\"" . $Language->Phrase("SearchPanel") . "\" data-toggle=\"button\" data-form=\"fgrafica_accidentes_trabajolistsrch\">" . $Language->Phrase("SearchBtn") . "</button>";
+		$item->Visible = TRUE;
+
+		// Show all button
+		$item = &$this->SearchOptions->Add("showall");
+		$item->Body = "<a class=\"btn btn-default ewShowAll\" title=\"" . $Language->Phrase("ShowAll") . "\" data-caption=\"" . $Language->Phrase("ShowAll") . "\" href=\"" . $this->PageUrl() . "cmd=reset\">" . $Language->Phrase("ShowAllBtn") . "</a>";
+		$item->Visible = ($this->SearchWhere <> $this->DefaultSearchWhere && $this->SearchWhere <> "0=101");
+
 		// Button group for search
 		$this->SearchOptions->UseDropDownButton = FALSE;
 		$this->SearchOptions->UseImageAndText = TRUE;
@@ -875,6 +1084,48 @@ class cgrafica_accidentes_trabajo_list extends cgrafica_accidentes_trabajo {
 		}
 	}
 
+	//  Load search values for validation
+	function LoadSearchValues() {
+		global $objForm;
+
+		// Load search values
+		// Profesional_especializado
+
+		$this->Profesional_especializado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Profesional_especializado"]);
+		if ($this->Profesional_especializado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Profesional_especializado->AdvancedSearch->SearchOperator = @$_GET["z_Profesional_especializado"];
+
+		// Punto
+		$this->Punto->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Punto"]);
+		if ($this->Punto->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Punto->AdvancedSearch->SearchOperator = @$_GET["z_Punto"];
+
+		// Cargo_Afectado
+		$this->Cargo_Afectado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Cargo_Afectado"]);
+		if ($this->Cargo_Afectado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Cargo_Afectado->AdvancedSearch->SearchOperator = @$_GET["z_Cargo_Afectado"];
+
+		// Tipo_incidente
+		$this->Tipo_incidente->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Tipo_incidente"]);
+		if ($this->Tipo_incidente->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Tipo_incidente->AdvancedSearch->SearchOperator = @$_GET["z_Tipo_incidente"];
+
+		// Evacuado
+		$this->Evacuado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Evacuado"]);
+		if ($this->Evacuado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Evacuado->AdvancedSearch->SearchOperator = @$_GET["z_Evacuado"];
+
+		// No_evacuado
+		$this->No_evacuado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_No_evacuado"]);
+		if ($this->No_evacuado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->No_evacuado->AdvancedSearch->SearchOperator = @$_GET["z_No_evacuado"];
+
+		// Total_Evacuados
+		$this->Total_Evacuados->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Total_Evacuados"]);
+		if ($this->Total_Evacuados->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Total_Evacuados->AdvancedSearch->SearchOperator = @$_GET["z_Total_Evacuados"];
+	}
+
 	// Load recordset
 	function LoadRecordset($offset = -1, $rowcnt = -1) {
 		global $conn;
@@ -921,14 +1172,26 @@ class cgrafica_accidentes_trabajo_list extends cgrafica_accidentes_trabajo {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		$this->a->setDbValue($rs->fields('a'));
+		$this->Profesional_especializado->setDbValue($rs->fields('Profesional_especializado'));
+		$this->Punto->setDbValue($rs->fields('Punto'));
+		$this->Cargo_Afectado->setDbValue($rs->fields('Cargo_Afectado'));
+		$this->Tipo_incidente->setDbValue($rs->fields('Tipo_incidente'));
+		$this->Evacuado->setDbValue($rs->fields('Evacuado'));
+		$this->No_evacuado->setDbValue($rs->fields('No_evacuado'));
+		$this->Total_Evacuados->setDbValue($rs->fields('Total_Evacuados'));
 	}
 
 	// Load DbValue from recordset
 	function LoadDbValues(&$rs) {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
-		$this->a->DbValue = $row['a'];
+		$this->Profesional_especializado->DbValue = $row['Profesional_especializado'];
+		$this->Punto->DbValue = $row['Punto'];
+		$this->Cargo_Afectado->DbValue = $row['Cargo_Afectado'];
+		$this->Tipo_incidente->DbValue = $row['Tipo_incidente'];
+		$this->Evacuado->DbValue = $row['Evacuado'];
+		$this->No_evacuado->DbValue = $row['No_evacuado'];
+		$this->Total_Evacuados->DbValue = $row['Total_Evacuados'];
 	}
 
 	// Load old record
@@ -962,27 +1225,177 @@ class cgrafica_accidentes_trabajo_list extends cgrafica_accidentes_trabajo {
 		$this->InlineCopyUrl = $this->GetInlineCopyUrl();
 		$this->DeleteUrl = $this->GetDeleteUrl();
 
+		// Convert decimal values if posted back
+		if ($this->Evacuado->FormValue == $this->Evacuado->CurrentValue && is_numeric(ew_StrToFloat($this->Evacuado->CurrentValue)))
+			$this->Evacuado->CurrentValue = ew_StrToFloat($this->Evacuado->CurrentValue);
+
+		// Convert decimal values if posted back
+		if ($this->No_evacuado->FormValue == $this->No_evacuado->CurrentValue && is_numeric(ew_StrToFloat($this->No_evacuado->CurrentValue)))
+			$this->No_evacuado->CurrentValue = ew_StrToFloat($this->No_evacuado->CurrentValue);
+
 		// Call Row_Rendering event
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// a
+		// Profesional_especializado
+		// Punto
+		// Cargo_Afectado
+		// Tipo_incidente
+		// Evacuado
+		// No_evacuado
+		// Total_Evacuados
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-			// a
-			$this->a->ViewValue = $this->a->CurrentValue;
-			$this->a->ViewCustomAttributes = "";
+			// Profesional_especializado
+			$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->CurrentValue;
+			$this->Profesional_especializado->ViewCustomAttributes = "";
 
-			// a
-			$this->a->LinkCustomAttributes = "";
-			$this->a->HrefValue = "";
-			$this->a->TooltipValue = "";
+			// Punto
+			$this->Punto->ViewValue = $this->Punto->CurrentValue;
+			$this->Punto->ViewCustomAttributes = "";
+
+			// Cargo_Afectado
+			$this->Cargo_Afectado->ViewValue = $this->Cargo_Afectado->CurrentValue;
+			$this->Cargo_Afectado->ViewCustomAttributes = "";
+
+			// Tipo_incidente
+			$this->Tipo_incidente->ViewValue = $this->Tipo_incidente->CurrentValue;
+			$this->Tipo_incidente->ViewCustomAttributes = "";
+
+			// Evacuado
+			$this->Evacuado->ViewValue = $this->Evacuado->CurrentValue;
+			$this->Evacuado->ViewCustomAttributes = "";
+
+			// No_evacuado
+			$this->No_evacuado->ViewValue = $this->No_evacuado->CurrentValue;
+			$this->No_evacuado->ViewCustomAttributes = "";
+
+			// Total_Evacuados
+			$this->Total_Evacuados->ViewValue = $this->Total_Evacuados->CurrentValue;
+			$this->Total_Evacuados->ViewCustomAttributes = "";
+
+			// Profesional_especializado
+			$this->Profesional_especializado->LinkCustomAttributes = "";
+			$this->Profesional_especializado->HrefValue = "";
+			$this->Profesional_especializado->TooltipValue = "";
+
+			// Punto
+			$this->Punto->LinkCustomAttributes = "";
+			$this->Punto->HrefValue = "";
+			$this->Punto->TooltipValue = "";
+
+			// Cargo_Afectado
+			$this->Cargo_Afectado->LinkCustomAttributes = "";
+			$this->Cargo_Afectado->HrefValue = "";
+			$this->Cargo_Afectado->TooltipValue = "";
+
+			// Tipo_incidente
+			$this->Tipo_incidente->LinkCustomAttributes = "";
+			$this->Tipo_incidente->HrefValue = "";
+			$this->Tipo_incidente->TooltipValue = "";
+
+			// Evacuado
+			$this->Evacuado->LinkCustomAttributes = "";
+			$this->Evacuado->HrefValue = "";
+			$this->Evacuado->TooltipValue = "";
+
+			// No_evacuado
+			$this->No_evacuado->LinkCustomAttributes = "";
+			$this->No_evacuado->HrefValue = "";
+			$this->No_evacuado->TooltipValue = "";
+
+			// Total_Evacuados
+			$this->Total_Evacuados->LinkCustomAttributes = "";
+			$this->Total_Evacuados->HrefValue = "";
+			$this->Total_Evacuados->TooltipValue = "";
+		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
+
+			// Profesional_especializado
+			$this->Profesional_especializado->EditAttrs["class"] = "form-control";
+			$this->Profesional_especializado->EditCustomAttributes = "";
+			$this->Profesional_especializado->EditValue = ew_HtmlEncode($this->Profesional_especializado->AdvancedSearch->SearchValue);
+			$this->Profesional_especializado->PlaceHolder = ew_RemoveHtml($this->Profesional_especializado->FldCaption());
+
+			// Punto
+			$this->Punto->EditAttrs["class"] = "form-control";
+			$this->Punto->EditCustomAttributes = "";
+			$this->Punto->EditValue = ew_HtmlEncode($this->Punto->AdvancedSearch->SearchValue);
+			$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
+
+			// Cargo_Afectado
+			$this->Cargo_Afectado->EditAttrs["class"] = "form-control";
+			$this->Cargo_Afectado->EditCustomAttributes = "";
+			$this->Cargo_Afectado->EditValue = ew_HtmlEncode($this->Cargo_Afectado->AdvancedSearch->SearchValue);
+			$this->Cargo_Afectado->PlaceHolder = ew_RemoveHtml($this->Cargo_Afectado->FldCaption());
+
+			// Tipo_incidente
+			$this->Tipo_incidente->EditAttrs["class"] = "form-control";
+			$this->Tipo_incidente->EditCustomAttributes = "";
+			$this->Tipo_incidente->EditValue = ew_HtmlEncode($this->Tipo_incidente->AdvancedSearch->SearchValue);
+			$this->Tipo_incidente->PlaceHolder = ew_RemoveHtml($this->Tipo_incidente->FldCaption());
+
+			// Evacuado
+			$this->Evacuado->EditAttrs["class"] = "form-control";
+			$this->Evacuado->EditCustomAttributes = "";
+			$this->Evacuado->EditValue = ew_HtmlEncode($this->Evacuado->AdvancedSearch->SearchValue);
+			$this->Evacuado->PlaceHolder = ew_RemoveHtml($this->Evacuado->FldCaption());
+
+			// No_evacuado
+			$this->No_evacuado->EditAttrs["class"] = "form-control";
+			$this->No_evacuado->EditCustomAttributes = "";
+			$this->No_evacuado->EditValue = ew_HtmlEncode($this->No_evacuado->AdvancedSearch->SearchValue);
+			$this->No_evacuado->PlaceHolder = ew_RemoveHtml($this->No_evacuado->FldCaption());
+
+			// Total_Evacuados
+			$this->Total_Evacuados->EditAttrs["class"] = "form-control";
+			$this->Total_Evacuados->EditCustomAttributes = "";
+			$this->Total_Evacuados->EditValue = ew_HtmlEncode($this->Total_Evacuados->AdvancedSearch->SearchValue);
+			$this->Total_Evacuados->PlaceHolder = ew_RemoveHtml($this->Total_Evacuados->FldCaption());
+		}
+		if ($this->RowType == EW_ROWTYPE_ADD ||
+			$this->RowType == EW_ROWTYPE_EDIT ||
+			$this->RowType == EW_ROWTYPE_SEARCH) { // Add / Edit / Search row
+			$this->SetupFieldTitles();
 		}
 
 		// Call Row Rendered event
 		if ($this->RowType <> EW_ROWTYPE_AGGREGATEINIT)
 			$this->Row_Rendered();
+	}
+
+	// Validate search
+	function ValidateSearch() {
+		global $gsSearchError;
+
+		// Initialize
+		$gsSearchError = "";
+
+		// Check if validation required
+		if (!EW_SERVER_VALIDATE)
+			return TRUE;
+
+		// Return validate result
+		$ValidateSearch = ($gsSearchError == "");
+
+		// Call Form_CustomValidate event
+		$sFormCustomError = "";
+		$ValidateSearch = $ValidateSearch && $this->Form_CustomValidate($sFormCustomError);
+		if ($sFormCustomError <> "") {
+			ew_AddMessage($gsSearchError, $sFormCustomError);
+		}
+		return $ValidateSearch;
+	}
+
+	// Load advanced search
+	function LoadAdvancedSearch() {
+		$this->Profesional_especializado->AdvancedSearch->Load();
+		$this->Punto->AdvancedSearch->Load();
+		$this->Cargo_Afectado->AdvancedSearch->Load();
+		$this->Tipo_incidente->AdvancedSearch->Load();
+		$this->Evacuado->AdvancedSearch->Load();
+		$this->No_evacuado->AdvancedSearch->Load();
+		$this->Total_Evacuados->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -1306,6 +1719,41 @@ fgrafica_accidentes_trabajolist.ValidateRequired = false;
 // Dynamic selection lists
 // Form object for search
 
+var fgrafica_accidentes_trabajolistsrch = new ew_Form("fgrafica_accidentes_trabajolistsrch");
+
+// Validate function for search
+fgrafica_accidentes_trabajolistsrch.Validate = function(fobj) {
+	if (!this.ValidateRequired)
+		return true; // Ignore validation
+	fobj = fobj || this.Form;
+	this.PostAutoSuggest();
+	var infix = "";
+
+	// Set up row object
+	ew_ElementsToRow(fobj);
+
+	// Fire Form_CustomValidate event
+	if (!this.Form_CustomValidate(fobj))
+		return false;
+	return true;
+}
+
+// Form_CustomValidate event
+fgrafica_accidentes_trabajolistsrch.Form_CustomValidate = 
+ function(fobj) { // DO NOT CHANGE THIS LINE!
+
+ 	// Your custom validation code here, return false if invalid. 
+ 	return true;
+ }
+
+// Use JavaScript validation or not
+<?php if (EW_CLIENT_VALIDATE) { ?>
+fgrafica_accidentes_trabajolistsrch.ValidateRequired = true; // Use JavaScript validation
+<?php } else { ?>
+fgrafica_accidentes_trabajolistsrch.ValidateRequired = false; // No JavaScript validation
+<?php } ?>
+
+// Dynamic selection lists
 </script>
 <script type="text/javascript">
 
@@ -1319,6 +1767,9 @@ fgrafica_accidentes_trabajolist.ValidateRequired = false;
 <?php } ?>
 <?php if ($grafica_accidentes_trabajo_list->TotalRecs > 0 && $grafica_accidentes_trabajo_list->ExportOptions->Visible()) { ?>
 <?php $grafica_accidentes_trabajo_list->ExportOptions->Render("body") ?>
+<?php } ?>
+<?php if ($grafica_accidentes_trabajo_list->SearchOptions->Visible()) { ?>
+<?php $grafica_accidentes_trabajo_list->SearchOptions->Render("body") ?>
 <?php } ?>
 <?php if ($grafica_accidentes_trabajo->Export == "") { ?>
 <?php echo $Language->SelectionForm(); ?>
@@ -1354,6 +1805,77 @@ fgrafica_accidentes_trabajolist.ValidateRequired = false;
 	}
 $grafica_accidentes_trabajo_list->RenderOtherOptions();
 ?>
+<?php if ($Security->CanSearch()) { ?>
+<?php if ($grafica_accidentes_trabajo->Export == "" && $grafica_accidentes_trabajo->CurrentAction == "") { ?>
+<form name="fgrafica_accidentes_trabajolistsrch" id="fgrafica_accidentes_trabajolistsrch" class="form-inline ewForm" action="<?php echo ew_CurrentPage() ?>">
+<?php $SearchPanelClass = ($grafica_accidentes_trabajo_list->SearchWhere <> "") ? " in" : " in"; ?>
+<div id="fgrafica_accidentes_trabajolistsrch_SearchPanel" class="ewSearchPanel collapse<?php echo $SearchPanelClass ?>">
+<input type="hidden" name="cmd" value="search">
+<input type="hidden" name="t" value="grafica_accidentes_trabajo">
+	<div class="ewBasicSearch">
+<?php
+if ($gsSearchError == "")
+	$grafica_accidentes_trabajo_list->LoadAdvancedSearch(); // Load advanced search
+
+// Render for search
+$grafica_accidentes_trabajo->RowType = EW_ROWTYPE_SEARCH;
+
+// Render row
+$grafica_accidentes_trabajo->ResetAttrs();
+$grafica_accidentes_trabajo_list->RenderRow();
+?>
+<div id="xsr_1" class="ewRow">
+<?php if ($grafica_accidentes_trabajo->Profesional_especializado->Visible) { // Profesional_especializado ?>
+	<div id="xsc_Profesional_especializado" class="ewCell form-group">
+		<label for="x_Profesional_especializado" class="ewSearchCaption ewLabel"><?php echo $grafica_accidentes_trabajo->Profesional_especializado->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Profesional_especializado" id="z_Profesional_especializado" value="LIKE"></span>
+		<span class="ewSearchField">
+<input type="text" data-field="x_Profesional_especializado" name="x_Profesional_especializado" id="x_Profesional_especializado" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_accidentes_trabajo->Profesional_especializado->PlaceHolder) ?>" value="<?php echo $grafica_accidentes_trabajo->Profesional_especializado->EditValue ?>"<?php echo $grafica_accidentes_trabajo->Profesional_especializado->EditAttributes() ?>>
+</span>
+	</div>
+<?php } ?>
+</div>
+<div id="xsr_2" class="ewRow">
+<?php if ($grafica_accidentes_trabajo->Punto->Visible) { // Punto ?>
+	<div id="xsc_Punto" class="ewCell form-group">
+		<label for="x_Punto" class="ewSearchCaption ewLabel"><?php echo $grafica_accidentes_trabajo->Punto->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span>
+		<span class="ewSearchField">
+<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_accidentes_trabajo->Punto->PlaceHolder) ?>" value="<?php echo $grafica_accidentes_trabajo->Punto->EditValue ?>"<?php echo $grafica_accidentes_trabajo->Punto->EditAttributes() ?>>
+</span>
+	</div>
+<?php } ?>
+</div>
+<div id="xsr_3" class="ewRow">
+<?php if ($grafica_accidentes_trabajo->Cargo_Afectado->Visible) { // Cargo_Afectado ?>
+	<div id="xsc_Cargo_Afectado" class="ewCell form-group">
+		<label for="x_Cargo_Afectado" class="ewSearchCaption ewLabel"><?php echo $grafica_accidentes_trabajo->Cargo_Afectado->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Cargo_Afectado" id="z_Cargo_Afectado" value="LIKE"></span>
+		<span class="ewSearchField">
+<input type="text" data-field="x_Cargo_Afectado" name="x_Cargo_Afectado" id="x_Cargo_Afectado" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_accidentes_trabajo->Cargo_Afectado->PlaceHolder) ?>" value="<?php echo $grafica_accidentes_trabajo->Cargo_Afectado->EditValue ?>"<?php echo $grafica_accidentes_trabajo->Cargo_Afectado->EditAttributes() ?>>
+</span>
+	</div>
+<?php } ?>
+</div>
+<div id="xsr_4" class="ewRow">
+<?php if ($grafica_accidentes_trabajo->Tipo_incidente->Visible) { // Tipo_incidente ?>
+	<div id="xsc_Tipo_incidente" class="ewCell form-group">
+		<label for="x_Tipo_incidente" class="ewSearchCaption ewLabel"><?php echo $grafica_accidentes_trabajo->Tipo_incidente->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Tipo_incidente" id="z_Tipo_incidente" value="LIKE"></span>
+		<span class="ewSearchField">
+<input type="text" data-field="x_Tipo_incidente" name="x_Tipo_incidente" id="x_Tipo_incidente" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($grafica_accidentes_trabajo->Tipo_incidente->PlaceHolder) ?>" value="<?php echo $grafica_accidentes_trabajo->Tipo_incidente->EditValue ?>"<?php echo $grafica_accidentes_trabajo->Tipo_incidente->EditAttributes() ?>>
+</span>
+	</div>
+<?php } ?>
+</div>
+<div id="xsr_5" class="ewRow">
+	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+</div>
+	</div>
+</div>
+</form>
+<?php } ?>
+<?php } ?>
 <?php $grafica_accidentes_trabajo_list->ShowPageHeader(); ?>
 <?php
 $grafica_accidentes_trabajo_list->ShowMessage();
@@ -1440,12 +1962,66 @@ $grafica_accidentes_trabajo_list->RenderListOptions();
 // Render list options (header, left)
 $grafica_accidentes_trabajo_list->ListOptions->Render("header", "left");
 ?>
-<?php if ($grafica_accidentes_trabajo->a->Visible) { // a ?>
-	<?php if ($grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->a) == "") { ?>
-		<th data-name="a"><div id="elh_grafica_accidentes_trabajo_a" class="grafica_accidentes_trabajo_a"><div class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->a->FldCaption() ?></div></div></th>
+<?php if ($grafica_accidentes_trabajo->Profesional_especializado->Visible) { // Profesional_especializado ?>
+	<?php if ($grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->Profesional_especializado) == "") { ?>
+		<th data-name="Profesional_especializado"><div id="elh_grafica_accidentes_trabajo_Profesional_especializado" class="grafica_accidentes_trabajo_Profesional_especializado"><div class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->Profesional_especializado->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="a"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->a) ?>',2);"><div id="elh_grafica_accidentes_trabajo_a" class="grafica_accidentes_trabajo_a">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->a->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_accidentes_trabajo->a->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_accidentes_trabajo->a->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+		<th data-name="Profesional_especializado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->Profesional_especializado) ?>',2);"><div id="elh_grafica_accidentes_trabajo_Profesional_especializado" class="grafica_accidentes_trabajo_Profesional_especializado">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->Profesional_especializado->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_accidentes_trabajo->Profesional_especializado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_accidentes_trabajo->Profesional_especializado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($grafica_accidentes_trabajo->Punto->Visible) { // Punto ?>
+	<?php if ($grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->Punto) == "") { ?>
+		<th data-name="Punto"><div id="elh_grafica_accidentes_trabajo_Punto" class="grafica_accidentes_trabajo_Punto"><div class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->Punto->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Punto"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->Punto) ?>',2);"><div id="elh_grafica_accidentes_trabajo_Punto" class="grafica_accidentes_trabajo_Punto">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->Punto->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_accidentes_trabajo->Punto->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_accidentes_trabajo->Punto->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($grafica_accidentes_trabajo->Cargo_Afectado->Visible) { // Cargo_Afectado ?>
+	<?php if ($grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->Cargo_Afectado) == "") { ?>
+		<th data-name="Cargo_Afectado"><div id="elh_grafica_accidentes_trabajo_Cargo_Afectado" class="grafica_accidentes_trabajo_Cargo_Afectado"><div class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->Cargo_Afectado->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Cargo_Afectado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->Cargo_Afectado) ?>',2);"><div id="elh_grafica_accidentes_trabajo_Cargo_Afectado" class="grafica_accidentes_trabajo_Cargo_Afectado">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->Cargo_Afectado->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_accidentes_trabajo->Cargo_Afectado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_accidentes_trabajo->Cargo_Afectado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($grafica_accidentes_trabajo->Tipo_incidente->Visible) { // Tipo_incidente ?>
+	<?php if ($grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->Tipo_incidente) == "") { ?>
+		<th data-name="Tipo_incidente"><div id="elh_grafica_accidentes_trabajo_Tipo_incidente" class="grafica_accidentes_trabajo_Tipo_incidente"><div class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->Tipo_incidente->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Tipo_incidente"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->Tipo_incidente) ?>',2);"><div id="elh_grafica_accidentes_trabajo_Tipo_incidente" class="grafica_accidentes_trabajo_Tipo_incidente">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->Tipo_incidente->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_accidentes_trabajo->Tipo_incidente->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_accidentes_trabajo->Tipo_incidente->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($grafica_accidentes_trabajo->Evacuado->Visible) { // Evacuado ?>
+	<?php if ($grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->Evacuado) == "") { ?>
+		<th data-name="Evacuado"><div id="elh_grafica_accidentes_trabajo_Evacuado" class="grafica_accidentes_trabajo_Evacuado"><div class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->Evacuado->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Evacuado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->Evacuado) ?>',2);"><div id="elh_grafica_accidentes_trabajo_Evacuado" class="grafica_accidentes_trabajo_Evacuado">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->Evacuado->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_accidentes_trabajo->Evacuado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_accidentes_trabajo->Evacuado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($grafica_accidentes_trabajo->No_evacuado->Visible) { // No_evacuado ?>
+	<?php if ($grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->No_evacuado) == "") { ?>
+		<th data-name="No_evacuado"><div id="elh_grafica_accidentes_trabajo_No_evacuado" class="grafica_accidentes_trabajo_No_evacuado"><div class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->No_evacuado->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="No_evacuado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->No_evacuado) ?>',2);"><div id="elh_grafica_accidentes_trabajo_No_evacuado" class="grafica_accidentes_trabajo_No_evacuado">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->No_evacuado->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_accidentes_trabajo->No_evacuado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_accidentes_trabajo->No_evacuado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($grafica_accidentes_trabajo->Total_Evacuados->Visible) { // Total_Evacuados ?>
+	<?php if ($grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->Total_Evacuados) == "") { ?>
+		<th data-name="Total_Evacuados"><div id="elh_grafica_accidentes_trabajo_Total_Evacuados" class="grafica_accidentes_trabajo_Total_Evacuados"><div class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->Total_Evacuados->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Total_Evacuados"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_accidentes_trabajo->SortUrl($grafica_accidentes_trabajo->Total_Evacuados) ?>',2);"><div id="elh_grafica_accidentes_trabajo_Total_Evacuados" class="grafica_accidentes_trabajo_Total_Evacuados">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_accidentes_trabajo->Total_Evacuados->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_accidentes_trabajo->Total_Evacuados->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_accidentes_trabajo->Total_Evacuados->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -1514,11 +2090,47 @@ while ($grafica_accidentes_trabajo_list->RecCnt < $grafica_accidentes_trabajo_li
 // Render list options (body, left)
 $grafica_accidentes_trabajo_list->ListOptions->Render("body", "left", $grafica_accidentes_trabajo_list->RowCnt);
 ?>
-	<?php if ($grafica_accidentes_trabajo->a->Visible) { // a ?>
-		<td data-name="a"<?php echo $grafica_accidentes_trabajo->a->CellAttributes() ?>>
-<span<?php echo $grafica_accidentes_trabajo->a->ViewAttributes() ?>>
-<?php echo $grafica_accidentes_trabajo->a->ListViewValue() ?></span>
+	<?php if ($grafica_accidentes_trabajo->Profesional_especializado->Visible) { // Profesional_especializado ?>
+		<td data-name="Profesional_especializado"<?php echo $grafica_accidentes_trabajo->Profesional_especializado->CellAttributes() ?>>
+<span<?php echo $grafica_accidentes_trabajo->Profesional_especializado->ViewAttributes() ?>>
+<?php echo $grafica_accidentes_trabajo->Profesional_especializado->ListViewValue() ?></span>
 <a id="<?php echo $grafica_accidentes_trabajo_list->PageObjName . "_row_" . $grafica_accidentes_trabajo_list->RowCnt ?>"></a></td>
+	<?php } ?>
+	<?php if ($grafica_accidentes_trabajo->Punto->Visible) { // Punto ?>
+		<td data-name="Punto"<?php echo $grafica_accidentes_trabajo->Punto->CellAttributes() ?>>
+<span<?php echo $grafica_accidentes_trabajo->Punto->ViewAttributes() ?>>
+<?php echo $grafica_accidentes_trabajo->Punto->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($grafica_accidentes_trabajo->Cargo_Afectado->Visible) { // Cargo_Afectado ?>
+		<td data-name="Cargo_Afectado"<?php echo $grafica_accidentes_trabajo->Cargo_Afectado->CellAttributes() ?>>
+<span<?php echo $grafica_accidentes_trabajo->Cargo_Afectado->ViewAttributes() ?>>
+<?php echo $grafica_accidentes_trabajo->Cargo_Afectado->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($grafica_accidentes_trabajo->Tipo_incidente->Visible) { // Tipo_incidente ?>
+		<td data-name="Tipo_incidente"<?php echo $grafica_accidentes_trabajo->Tipo_incidente->CellAttributes() ?>>
+<span<?php echo $grafica_accidentes_trabajo->Tipo_incidente->ViewAttributes() ?>>
+<?php echo $grafica_accidentes_trabajo->Tipo_incidente->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($grafica_accidentes_trabajo->Evacuado->Visible) { // Evacuado ?>
+		<td data-name="Evacuado"<?php echo $grafica_accidentes_trabajo->Evacuado->CellAttributes() ?>>
+<span<?php echo $grafica_accidentes_trabajo->Evacuado->ViewAttributes() ?>>
+<?php echo $grafica_accidentes_trabajo->Evacuado->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($grafica_accidentes_trabajo->No_evacuado->Visible) { // No_evacuado ?>
+		<td data-name="No_evacuado"<?php echo $grafica_accidentes_trabajo->No_evacuado->CellAttributes() ?>>
+<span<?php echo $grafica_accidentes_trabajo->No_evacuado->ViewAttributes() ?>>
+<?php echo $grafica_accidentes_trabajo->No_evacuado->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($grafica_accidentes_trabajo->Total_Evacuados->Visible) { // Total_Evacuados ?>
+		<td data-name="Total_Evacuados"<?php echo $grafica_accidentes_trabajo->Total_Evacuados->CellAttributes() ?>>
+<span<?php echo $grafica_accidentes_trabajo->Total_Evacuados->ViewAttributes() ?>>
+<?php echo $grafica_accidentes_trabajo->Total_Evacuados->ListViewValue() ?></span>
+</td>
 	<?php } ?>
 <?php
 
@@ -1619,6 +2231,7 @@ if ($grafica_accidentes_trabajo_list->Recordset)
 <?php } ?>
 <?php if ($grafica_accidentes_trabajo->Export == "") { ?>
 <script type="text/javascript">
+fgrafica_accidentes_trabajolistsrch.Init();
 fgrafica_accidentes_trabajolist.Init();
 </script>
 <?php } ?>

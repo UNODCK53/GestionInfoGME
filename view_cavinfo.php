@@ -52,6 +52,7 @@ class cview_cav extends cTable {
 	var $OBSERVACION;
 	var $AD1O;
 	var $FASE;
+	var $Modificado;
 
 	//
 	// Table class constructor
@@ -275,6 +276,10 @@ class cview_cav extends cTable {
 		// FASE
 		$this->FASE = new cField('view_cav', 'view_cav', 'x_FASE', 'FASE', '`FASE`', '`FASE`', 200, -1, FALSE, '`FASE`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['FASE'] = &$this->FASE;
+
+		// Modificado
+		$this->Modificado = new cField('view_cav', 'view_cav', 'x_Modificado', 'Modificado', '`Modificado`', '`Modificado`', 200, -1, FALSE, '`Modificado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['Modificado'] = &$this->Modificado;
 	}
 
 	// Multiple column sort
@@ -585,6 +590,8 @@ class cview_cav extends cTable {
 	function DeleteSQL(&$rs, $where = "") {
 		$sql = "DELETE FROM " . $this->UpdateTable . " WHERE ";
 		if ($rs) {
+			if (array_key_exists('llave', $rs))
+				ew_AddFilter($where, ew_QuotedName('llave') . '=' . ew_QuotedValue($rs['llave'], $this->llave->FldDataType));
 		}
 		$filter = $this->CurrentFilter;
 		ew_AddFilter($filter, $where);
@@ -603,12 +610,13 @@ class cview_cav extends cTable {
 
 	// Key filter WHERE clause
 	function SqlKeyFilter() {
-		return "";
+		return "`llave` = '@llave@'";
 	}
 
 	// Key filter
 	function KeyFilter() {
 		$sKeyFilter = $this->SqlKeyFilter();
+		$sKeyFilter = str_replace("@llave@", ew_AdjustSql($this->llave->CurrentValue), $sKeyFilter); // Replace key value
 		return $sKeyFilter;
 	}
 
@@ -680,6 +688,11 @@ class cview_cav extends cTable {
 	function KeyUrl($url, $parm = "") {
 		$sUrl = $url . "?";
 		if ($parm <> "") $sUrl .= $parm . "&";
+		if (!is_null($this->llave->CurrentValue)) {
+			$sUrl .= "llave=" . urlencode($this->llave->CurrentValue);
+		} else {
+			return "javascript:alert(ewLanguage.Phrase('InvalidRecord'));";
+		}
 		return $sUrl;
 	}
 
@@ -708,6 +721,7 @@ class cview_cav extends cTable {
 			$arKeys = ew_StripSlashes($_GET["key_m"]);
 			$cnt = count($arKeys);
 		} elseif (isset($_GET)) {
+			$arKeys[] = @$_GET["llave"]; // llave
 
 			//return $arKeys; // Do not return yet, so the values will also be checked by the following code
 		}
@@ -726,6 +740,7 @@ class cview_cav extends cTable {
 		$sKeyFilter = "";
 		foreach ($arKeys as $key) {
 			if ($sKeyFilter <> "") $sKeyFilter .= " OR ";
+			$this->llave->CurrentValue = $key;
 			$sKeyFilter .= "(" . $this->KeyFilter() . ")";
 		}
 		return $sKeyFilter;
@@ -791,6 +806,7 @@ class cview_cav extends cTable {
 		$this->OBSERVACION->setDbValue($rs->fields('OBSERVACION'));
 		$this->AD1O->setDbValue($rs->fields('AÑO'));
 		$this->FASE->setDbValue($rs->fields('FASE'));
+		$this->Modificado->setDbValue($rs->fields('Modificado'));
 	}
 
 	// Render list row values
@@ -846,6 +862,7 @@ class cview_cav extends cTable {
 		// OBSERVACION
 		// AÑO
 		// FASE
+		// Modificado
 		// llave
 
 		$this->llave->ViewValue = $this->llave->CurrentValue;
@@ -1027,6 +1044,10 @@ class cview_cav extends cTable {
 		// FASE
 		$this->FASE->ViewValue = $this->FASE->CurrentValue;
 		$this->FASE->ViewCustomAttributes = "";
+
+		// Modificado
+		$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+		$this->Modificado->ViewCustomAttributes = "";
 
 		// llave
 		$this->llave->LinkCustomAttributes = "";
@@ -1253,6 +1274,11 @@ class cview_cav extends cTable {
 		$this->FASE->HrefValue = "";
 		$this->FASE->TooltipValue = "";
 
+		// Modificado
+		$this->Modificado->LinkCustomAttributes = "";
+		$this->Modificado->HrefValue = "";
+		$this->Modificado->TooltipValue = "";
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -1267,227 +1293,225 @@ class cview_cav extends cTable {
 		// llave
 		$this->llave->EditAttrs["class"] = "form-control";
 		$this->llave->EditCustomAttributes = "";
-		$this->llave->EditValue = ew_HtmlEncode($this->llave->CurrentValue);
-		$this->llave->PlaceHolder = ew_RemoveHtml($this->llave->FldCaption());
+		$this->llave->EditValue = $this->llave->CurrentValue;
+		$this->llave->ViewCustomAttributes = "";
 
 		// F_Sincron
 		$this->F_Sincron->EditAttrs["class"] = "form-control";
 		$this->F_Sincron->EditCustomAttributes = "";
-		$this->F_Sincron->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->F_Sincron->CurrentValue, 7));
-		$this->F_Sincron->PlaceHolder = ew_RemoveHtml($this->F_Sincron->FldCaption());
+		$this->F_Sincron->EditValue = $this->F_Sincron->CurrentValue;
+		$this->F_Sincron->EditValue = ew_FormatDateTime($this->F_Sincron->EditValue, 7);
+		$this->F_Sincron->ViewCustomAttributes = "";
 
 		// USUARIO
 		$this->USUARIO->EditAttrs["class"] = "form-control";
 		$this->USUARIO->EditCustomAttributes = "";
-		$this->USUARIO->EditValue = ew_HtmlEncode($this->USUARIO->CurrentValue);
-		$this->USUARIO->PlaceHolder = ew_RemoveHtml($this->USUARIO->FldCaption());
+		$this->USUARIO->EditValue = $this->USUARIO->CurrentValue;
+		$this->USUARIO->ViewCustomAttributes = "";
 
 		// Cargo_gme
 		$this->Cargo_gme->EditAttrs["class"] = "form-control";
 		$this->Cargo_gme->EditCustomAttributes = "";
-		$this->Cargo_gme->EditValue = ew_HtmlEncode($this->Cargo_gme->CurrentValue);
-		$this->Cargo_gme->PlaceHolder = ew_RemoveHtml($this->Cargo_gme->FldCaption());
+		$this->Cargo_gme->EditValue = $this->Cargo_gme->CurrentValue;
+		$this->Cargo_gme->ViewCustomAttributes = "";
 
 		// Num_AV
 		$this->Num_AV->EditAttrs["class"] = "form-control";
 		$this->Num_AV->EditCustomAttributes = "";
-		$this->Num_AV->EditValue = ew_HtmlEncode($this->Num_AV->CurrentValue);
-		$this->Num_AV->PlaceHolder = ew_RemoveHtml($this->Num_AV->FldCaption());
+		$this->Num_AV->EditValue = $this->Num_AV->CurrentValue;
+		$this->Num_AV->ViewCustomAttributes = "";
 
 		// NOM_APOYO
 		$this->NOM_APOYO->EditAttrs["class"] = "form-control";
 		$this->NOM_APOYO->EditCustomAttributes = "";
-		$this->NOM_APOYO->EditValue = ew_HtmlEncode($this->NOM_APOYO->CurrentValue);
-		$this->NOM_APOYO->PlaceHolder = ew_RemoveHtml($this->NOM_APOYO->FldCaption());
+		$this->NOM_APOYO->EditValue = $this->NOM_APOYO->CurrentValue;
+		$this->NOM_APOYO->ViewCustomAttributes = "";
 
 		// Otro_Nom_Apoyo
 		$this->Otro_Nom_Apoyo->EditAttrs["class"] = "form-control";
 		$this->Otro_Nom_Apoyo->EditCustomAttributes = "";
-		$this->Otro_Nom_Apoyo->EditValue = ew_HtmlEncode($this->Otro_Nom_Apoyo->CurrentValue);
-		$this->Otro_Nom_Apoyo->PlaceHolder = ew_RemoveHtml($this->Otro_Nom_Apoyo->FldCaption());
+		$this->Otro_Nom_Apoyo->EditValue = $this->Otro_Nom_Apoyo->CurrentValue;
+		$this->Otro_Nom_Apoyo->ViewCustomAttributes = "";
 
 		// Otro_CC_Apoyo
 		$this->Otro_CC_Apoyo->EditAttrs["class"] = "form-control";
 		$this->Otro_CC_Apoyo->EditCustomAttributes = "";
-		$this->Otro_CC_Apoyo->EditValue = ew_HtmlEncode($this->Otro_CC_Apoyo->CurrentValue);
-		$this->Otro_CC_Apoyo->PlaceHolder = ew_RemoveHtml($this->Otro_CC_Apoyo->FldCaption());
+		$this->Otro_CC_Apoyo->EditValue = $this->Otro_CC_Apoyo->CurrentValue;
+		$this->Otro_CC_Apoyo->ViewCustomAttributes = "";
 
 		// NOM_PE
 		$this->NOM_PE->EditAttrs["class"] = "form-control";
 		$this->NOM_PE->EditCustomAttributes = "";
-		$this->NOM_PE->EditValue = ew_HtmlEncode($this->NOM_PE->CurrentValue);
-		$this->NOM_PE->PlaceHolder = ew_RemoveHtml($this->NOM_PE->FldCaption());
+		$this->NOM_PE->EditValue = $this->NOM_PE->CurrentValue;
+		$this->NOM_PE->ViewCustomAttributes = "";
 
 		// Otro_PE
 		$this->Otro_PE->EditAttrs["class"] = "form-control";
 		$this->Otro_PE->EditCustomAttributes = "";
-		$this->Otro_PE->EditValue = ew_HtmlEncode($this->Otro_PE->CurrentValue);
-		$this->Otro_PE->PlaceHolder = ew_RemoveHtml($this->Otro_PE->FldCaption());
+		$this->Otro_PE->EditValue = $this->Otro_PE->CurrentValue;
+		$this->Otro_PE->ViewCustomAttributes = "";
 
 		// Departamento
 		$this->Departamento->EditAttrs["class"] = "form-control";
 		$this->Departamento->EditCustomAttributes = "";
-		$this->Departamento->EditValue = ew_HtmlEncode($this->Departamento->CurrentValue);
-		$this->Departamento->PlaceHolder = ew_RemoveHtml($this->Departamento->FldCaption());
+		$this->Departamento->EditValue = $this->Departamento->CurrentValue;
+		$this->Departamento->ViewCustomAttributes = "";
 
 		// Muncipio
 		$this->Muncipio->EditAttrs["class"] = "form-control";
 		$this->Muncipio->EditCustomAttributes = "";
-		$this->Muncipio->EditValue = ew_HtmlEncode($this->Muncipio->CurrentValue);
-		$this->Muncipio->PlaceHolder = ew_RemoveHtml($this->Muncipio->FldCaption());
+		$this->Muncipio->EditValue = $this->Muncipio->CurrentValue;
+		$this->Muncipio->ViewCustomAttributes = "";
 
 		// NOM_VDA
 		$this->NOM_VDA->EditAttrs["class"] = "form-control";
 		$this->NOM_VDA->EditCustomAttributes = "";
-		$this->NOM_VDA->EditValue = ew_HtmlEncode($this->NOM_VDA->CurrentValue);
-		$this->NOM_VDA->PlaceHolder = ew_RemoveHtml($this->NOM_VDA->FldCaption());
+		$this->NOM_VDA->EditValue = $this->NOM_VDA->CurrentValue;
+		$this->NOM_VDA->ViewCustomAttributes = "";
 
 		// NO_E
 		$this->NO_E->EditAttrs["class"] = "form-control";
 		$this->NO_E->EditCustomAttributes = "";
-		$this->NO_E->EditValue = ew_HtmlEncode($this->NO_E->CurrentValue);
-		$this->NO_E->PlaceHolder = ew_RemoveHtml($this->NO_E->FldCaption());
+		$this->NO_E->EditValue = $this->NO_E->CurrentValue;
+		$this->NO_E->ViewCustomAttributes = "";
 
 		// NO_OF
 		$this->NO_OF->EditAttrs["class"] = "form-control";
 		$this->NO_OF->EditCustomAttributes = "";
-		$this->NO_OF->EditValue = ew_HtmlEncode($this->NO_OF->CurrentValue);
-		$this->NO_OF->PlaceHolder = ew_RemoveHtml($this->NO_OF->FldCaption());
+		$this->NO_OF->EditValue = $this->NO_OF->CurrentValue;
+		$this->NO_OF->ViewCustomAttributes = "";
 
 		// NO_SUBOF
 		$this->NO_SUBOF->EditAttrs["class"] = "form-control";
 		$this->NO_SUBOF->EditCustomAttributes = "";
-		$this->NO_SUBOF->EditValue = ew_HtmlEncode($this->NO_SUBOF->CurrentValue);
-		$this->NO_SUBOF->PlaceHolder = ew_RemoveHtml($this->NO_SUBOF->FldCaption());
+		$this->NO_SUBOF->EditValue = $this->NO_SUBOF->CurrentValue;
+		$this->NO_SUBOF->ViewCustomAttributes = "";
 
 		// NO_SOL
 		$this->NO_SOL->EditAttrs["class"] = "form-control";
 		$this->NO_SOL->EditCustomAttributes = "";
-		$this->NO_SOL->EditValue = ew_HtmlEncode($this->NO_SOL->CurrentValue);
-		$this->NO_SOL->PlaceHolder = ew_RemoveHtml($this->NO_SOL->FldCaption());
+		$this->NO_SOL->EditValue = $this->NO_SOL->CurrentValue;
+		$this->NO_SOL->ViewCustomAttributes = "";
 
 		// NO_PATRU
 		$this->NO_PATRU->EditAttrs["class"] = "form-control";
 		$this->NO_PATRU->EditCustomAttributes = "";
-		$this->NO_PATRU->EditValue = ew_HtmlEncode($this->NO_PATRU->CurrentValue);
-		$this->NO_PATRU->PlaceHolder = ew_RemoveHtml($this->NO_PATRU->FldCaption());
+		$this->NO_PATRU->EditValue = $this->NO_PATRU->CurrentValue;
+		$this->NO_PATRU->ViewCustomAttributes = "";
 
 		// Nom_enfer
 		$this->Nom_enfer->EditAttrs["class"] = "form-control";
 		$this->Nom_enfer->EditCustomAttributes = "";
-		$this->Nom_enfer->EditValue = ew_HtmlEncode($this->Nom_enfer->CurrentValue);
-		$this->Nom_enfer->PlaceHolder = ew_RemoveHtml($this->Nom_enfer->FldCaption());
+		$this->Nom_enfer->EditValue = $this->Nom_enfer->CurrentValue;
+		$this->Nom_enfer->ViewCustomAttributes = "";
 
 		// Otro_Nom_Enfer
 		$this->Otro_Nom_Enfer->EditAttrs["class"] = "form-control";
 		$this->Otro_Nom_Enfer->EditCustomAttributes = "";
-		$this->Otro_Nom_Enfer->EditValue = ew_HtmlEncode($this->Otro_Nom_Enfer->CurrentValue);
-		$this->Otro_Nom_Enfer->PlaceHolder = ew_RemoveHtml($this->Otro_Nom_Enfer->FldCaption());
+		$this->Otro_Nom_Enfer->EditValue = $this->Otro_Nom_Enfer->CurrentValue;
+		$this->Otro_Nom_Enfer->ViewCustomAttributes = "";
 
 		// Otro_CC_Enfer
 		$this->Otro_CC_Enfer->EditAttrs["class"] = "form-control";
 		$this->Otro_CC_Enfer->EditCustomAttributes = "";
-		$this->Otro_CC_Enfer->EditValue = ew_HtmlEncode($this->Otro_CC_Enfer->CurrentValue);
-		$this->Otro_CC_Enfer->PlaceHolder = ew_RemoveHtml($this->Otro_CC_Enfer->FldCaption());
+		$this->Otro_CC_Enfer->EditValue = $this->Otro_CC_Enfer->CurrentValue;
+		$this->Otro_CC_Enfer->ViewCustomAttributes = "";
 
 		// Armada
 		$this->Armada->EditAttrs["class"] = "form-control";
 		$this->Armada->EditCustomAttributes = "";
-		$this->Armada->EditValue = ew_HtmlEncode($this->Armada->CurrentValue);
-		$this->Armada->PlaceHolder = ew_RemoveHtml($this->Armada->FldCaption());
-		if (strval($this->Armada->EditValue) <> "" && is_numeric($this->Armada->EditValue)) $this->Armada->EditValue = ew_FormatNumber($this->Armada->EditValue, -2, -1, -2, 0);
+		$this->Armada->EditValue = $this->Armada->CurrentValue;
+		$this->Armada->ViewCustomAttributes = "";
 
 		// Ejercito
 		$this->Ejercito->EditAttrs["class"] = "form-control";
 		$this->Ejercito->EditCustomAttributes = "";
-		$this->Ejercito->EditValue = ew_HtmlEncode($this->Ejercito->CurrentValue);
-		$this->Ejercito->PlaceHolder = ew_RemoveHtml($this->Ejercito->FldCaption());
-		if (strval($this->Ejercito->EditValue) <> "" && is_numeric($this->Ejercito->EditValue)) $this->Ejercito->EditValue = ew_FormatNumber($this->Ejercito->EditValue, -2, -1, -2, 0);
+		$this->Ejercito->EditValue = $this->Ejercito->CurrentValue;
+		$this->Ejercito->ViewCustomAttributes = "";
 
 		// Policia
 		$this->Policia->EditAttrs["class"] = "form-control";
 		$this->Policia->EditCustomAttributes = "";
-		$this->Policia->EditValue = ew_HtmlEncode($this->Policia->CurrentValue);
-		$this->Policia->PlaceHolder = ew_RemoveHtml($this->Policia->FldCaption());
-		if (strval($this->Policia->EditValue) <> "" && is_numeric($this->Policia->EditValue)) $this->Policia->EditValue = ew_FormatNumber($this->Policia->EditValue, -2, -1, -2, 0);
+		$this->Policia->EditValue = $this->Policia->CurrentValue;
+		$this->Policia->ViewCustomAttributes = "";
 
 		// NOM_UNIDAD
 		$this->NOM_UNIDAD->EditAttrs["class"] = "form-control";
 		$this->NOM_UNIDAD->EditCustomAttributes = "";
-		$this->NOM_UNIDAD->EditValue = ew_HtmlEncode($this->NOM_UNIDAD->CurrentValue);
-		$this->NOM_UNIDAD->PlaceHolder = ew_RemoveHtml($this->NOM_UNIDAD->FldCaption());
+		$this->NOM_UNIDAD->EditValue = $this->NOM_UNIDAD->CurrentValue;
+		$this->NOM_UNIDAD->ViewCustomAttributes = "";
 
 		// NOM_COMAN
 		$this->NOM_COMAN->EditAttrs["class"] = "form-control";
 		$this->NOM_COMAN->EditCustomAttributes = "";
-		$this->NOM_COMAN->EditValue = ew_HtmlEncode($this->NOM_COMAN->CurrentValue);
-		$this->NOM_COMAN->PlaceHolder = ew_RemoveHtml($this->NOM_COMAN->FldCaption());
+		$this->NOM_COMAN->EditValue = $this->NOM_COMAN->CurrentValue;
+		$this->NOM_COMAN->ViewCustomAttributes = "";
 
 		// CC_COMAN
 		$this->CC_COMAN->EditAttrs["class"] = "form-control";
 		$this->CC_COMAN->EditCustomAttributes = "";
-		$this->CC_COMAN->EditValue = ew_HtmlEncode($this->CC_COMAN->CurrentValue);
-		$this->CC_COMAN->PlaceHolder = ew_RemoveHtml($this->CC_COMAN->FldCaption());
+		$this->CC_COMAN->EditValue = $this->CC_COMAN->CurrentValue;
+		$this->CC_COMAN->ViewCustomAttributes = "";
 
 		// TEL_COMAN
 		$this->TEL_COMAN->EditAttrs["class"] = "form-control";
 		$this->TEL_COMAN->EditCustomAttributes = "";
-		$this->TEL_COMAN->EditValue = ew_HtmlEncode($this->TEL_COMAN->CurrentValue);
-		$this->TEL_COMAN->PlaceHolder = ew_RemoveHtml($this->TEL_COMAN->FldCaption());
+		$this->TEL_COMAN->EditValue = $this->TEL_COMAN->CurrentValue;
+		$this->TEL_COMAN->ViewCustomAttributes = "";
 
 		// RANGO_COMAN
 		$this->RANGO_COMAN->EditAttrs["class"] = "form-control";
 		$this->RANGO_COMAN->EditCustomAttributes = "";
-		$this->RANGO_COMAN->EditValue = ew_HtmlEncode($this->RANGO_COMAN->CurrentValue);
-		$this->RANGO_COMAN->PlaceHolder = ew_RemoveHtml($this->RANGO_COMAN->FldCaption());
+		$this->RANGO_COMAN->EditValue = $this->RANGO_COMAN->CurrentValue;
+		$this->RANGO_COMAN->ViewCustomAttributes = "";
 
 		// Otro_rango
 		$this->Otro_rango->EditAttrs["class"] = "form-control";
 		$this->Otro_rango->EditCustomAttributes = "";
-		$this->Otro_rango->EditValue = ew_HtmlEncode($this->Otro_rango->CurrentValue);
-		$this->Otro_rango->PlaceHolder = ew_RemoveHtml($this->Otro_rango->FldCaption());
+		$this->Otro_rango->EditValue = $this->Otro_rango->CurrentValue;
+		$this->Otro_rango->ViewCustomAttributes = "";
 
 		// NO_GDETECCION
 		$this->NO_GDETECCION->EditAttrs["class"] = "form-control";
 		$this->NO_GDETECCION->EditCustomAttributes = "";
-		$this->NO_GDETECCION->EditValue = ew_HtmlEncode($this->NO_GDETECCION->CurrentValue);
-		$this->NO_GDETECCION->PlaceHolder = ew_RemoveHtml($this->NO_GDETECCION->FldCaption());
+		$this->NO_GDETECCION->EditValue = $this->NO_GDETECCION->CurrentValue;
+		$this->NO_GDETECCION->ViewCustomAttributes = "";
 
 		// NO_BINOMIO
 		$this->NO_BINOMIO->EditAttrs["class"] = "form-control";
 		$this->NO_BINOMIO->EditCustomAttributes = "";
-		$this->NO_BINOMIO->EditValue = ew_HtmlEncode($this->NO_BINOMIO->CurrentValue);
-		$this->NO_BINOMIO->PlaceHolder = ew_RemoveHtml($this->NO_BINOMIO->FldCaption());
+		$this->NO_BINOMIO->EditValue = $this->NO_BINOMIO->CurrentValue;
+		$this->NO_BINOMIO->ViewCustomAttributes = "";
 
 		// FECHA_INTO_AV
 		$this->FECHA_INTO_AV->EditAttrs["class"] = "form-control";
 		$this->FECHA_INTO_AV->EditCustomAttributes = "";
-		$this->FECHA_INTO_AV->EditValue = ew_HtmlEncode($this->FECHA_INTO_AV->CurrentValue);
-		$this->FECHA_INTO_AV->PlaceHolder = ew_RemoveHtml($this->FECHA_INTO_AV->FldCaption());
+		$this->FECHA_INTO_AV->EditValue = $this->FECHA_INTO_AV->CurrentValue;
+		$this->FECHA_INTO_AV->ViewCustomAttributes = "";
 
 		// DIA
 		$this->DIA->EditAttrs["class"] = "form-control";
 		$this->DIA->EditCustomAttributes = "";
-		$this->DIA->EditValue = ew_HtmlEncode($this->DIA->CurrentValue);
-		$this->DIA->PlaceHolder = ew_RemoveHtml($this->DIA->FldCaption());
+		$this->DIA->EditValue = $this->DIA->CurrentValue;
+		$this->DIA->ViewCustomAttributes = "";
 
 		// MES
 		$this->MES->EditAttrs["class"] = "form-control";
 		$this->MES->EditCustomAttributes = "";
-		$this->MES->EditValue = ew_HtmlEncode($this->MES->CurrentValue);
-		$this->MES->PlaceHolder = ew_RemoveHtml($this->MES->FldCaption());
+		$this->MES->EditValue = $this->MES->CurrentValue;
+		$this->MES->ViewCustomAttributes = "";
 
 		// LATITUD
 		$this->LATITUD->EditAttrs["class"] = "form-control";
 		$this->LATITUD->EditCustomAttributes = "";
-		$this->LATITUD->EditValue = ew_HtmlEncode($this->LATITUD->CurrentValue);
-		$this->LATITUD->PlaceHolder = ew_RemoveHtml($this->LATITUD->FldCaption());
+		$this->LATITUD->EditValue = $this->LATITUD->CurrentValue;
+		$this->LATITUD->ViewCustomAttributes = "";
 
 		// GRA_LAT
 		$this->GRA_LAT->EditAttrs["class"] = "form-control";
 		$this->GRA_LAT->EditCustomAttributes = "";
-		$this->GRA_LAT->EditValue = ew_HtmlEncode($this->GRA_LAT->CurrentValue);
-		$this->GRA_LAT->PlaceHolder = ew_RemoveHtml($this->GRA_LAT->FldCaption());
+		$this->GRA_LAT->EditValue = $this->GRA_LAT->CurrentValue;
+		$this->GRA_LAT->ViewCustomAttributes = "";
 
 		// MIN_LAT
 		$this->MIN_LAT->EditAttrs["class"] = "form-control";
@@ -1498,28 +1522,26 @@ class cview_cav extends cTable {
 		// SEG_LAT
 		$this->SEG_LAT->EditAttrs["class"] = "form-control";
 		$this->SEG_LAT->EditCustomAttributes = "";
-		$this->SEG_LAT->EditValue = ew_HtmlEncode($this->SEG_LAT->CurrentValue);
-		$this->SEG_LAT->PlaceHolder = ew_RemoveHtml($this->SEG_LAT->FldCaption());
-		if (strval($this->SEG_LAT->EditValue) <> "" && is_numeric($this->SEG_LAT->EditValue)) $this->SEG_LAT->EditValue = ew_FormatNumber($this->SEG_LAT->EditValue, -2, -1, -2, 0);
+		$this->SEG_LAT->EditValue = $this->SEG_LAT->CurrentValue;
+		$this->SEG_LAT->ViewCustomAttributes = "";
 
 		// GRA_LONG
 		$this->GRA_LONG->EditAttrs["class"] = "form-control";
 		$this->GRA_LONG->EditCustomAttributes = "";
-		$this->GRA_LONG->EditValue = ew_HtmlEncode($this->GRA_LONG->CurrentValue);
-		$this->GRA_LONG->PlaceHolder = ew_RemoveHtml($this->GRA_LONG->FldCaption());
+		$this->GRA_LONG->EditValue = $this->GRA_LONG->CurrentValue;
+		$this->GRA_LONG->ViewCustomAttributes = "";
 
 		// MIN_LONG
 		$this->MIN_LONG->EditAttrs["class"] = "form-control";
 		$this->MIN_LONG->EditCustomAttributes = "";
-		$this->MIN_LONG->EditValue = ew_HtmlEncode($this->MIN_LONG->CurrentValue);
-		$this->MIN_LONG->PlaceHolder = ew_RemoveHtml($this->MIN_LONG->FldCaption());
+		$this->MIN_LONG->EditValue = $this->MIN_LONG->CurrentValue;
+		$this->MIN_LONG->ViewCustomAttributes = "";
 
 		// SEG_LONG
 		$this->SEG_LONG->EditAttrs["class"] = "form-control";
 		$this->SEG_LONG->EditCustomAttributes = "";
-		$this->SEG_LONG->EditValue = ew_HtmlEncode($this->SEG_LONG->CurrentValue);
-		$this->SEG_LONG->PlaceHolder = ew_RemoveHtml($this->SEG_LONG->FldCaption());
-		if (strval($this->SEG_LONG->EditValue) <> "" && is_numeric($this->SEG_LONG->EditValue)) $this->SEG_LONG->EditValue = ew_FormatNumber($this->SEG_LONG->EditValue, -2, -1, -2, 0);
+		$this->SEG_LONG->EditValue = $this->SEG_LONG->CurrentValue;
+		$this->SEG_LONG->ViewCustomAttributes = "";
 
 		// OBSERVACION
 		$this->OBSERVACION->EditAttrs["class"] = "form-control";
@@ -1530,14 +1552,20 @@ class cview_cav extends cTable {
 		// AÑO
 		$this->AD1O->EditAttrs["class"] = "form-control";
 		$this->AD1O->EditCustomAttributes = "";
-		$this->AD1O->EditValue = ew_HtmlEncode($this->AD1O->CurrentValue);
-		$this->AD1O->PlaceHolder = ew_RemoveHtml($this->AD1O->FldCaption());
+		$this->AD1O->EditValue = $this->AD1O->CurrentValue;
+		$this->AD1O->ViewCustomAttributes = "";
 
 		// FASE
 		$this->FASE->EditAttrs["class"] = "form-control";
 		$this->FASE->EditCustomAttributes = "";
-		$this->FASE->EditValue = ew_HtmlEncode($this->FASE->CurrentValue);
-		$this->FASE->PlaceHolder = ew_RemoveHtml($this->FASE->FldCaption());
+		$this->FASE->EditValue = $this->FASE->CurrentValue;
+		$this->FASE->ViewCustomAttributes = "";
+
+		// Modificado
+		$this->Modificado->EditAttrs["class"] = "form-control";
+		$this->Modificado->EditCustomAttributes = "";
+		$this->Modificado->EditValue = ew_HtmlEncode($this->Modificado->CurrentValue);
+		$this->Modificado->PlaceHolder = ew_RemoveHtml($this->Modificado->FldCaption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -1611,6 +1639,7 @@ class cview_cav extends cTable {
 					if ($this->OBSERVACION->Exportable) $Doc->ExportCaption($this->OBSERVACION);
 					if ($this->AD1O->Exportable) $Doc->ExportCaption($this->AD1O);
 					if ($this->FASE->Exportable) $Doc->ExportCaption($this->FASE);
+					if ($this->Modificado->Exportable) $Doc->ExportCaption($this->Modificado);
 				} else {
 					if ($this->llave->Exportable) $Doc->ExportCaption($this->llave);
 					if ($this->F_Sincron->Exportable) $Doc->ExportCaption($this->F_Sincron);
@@ -1657,6 +1686,7 @@ class cview_cav extends cTable {
 					if ($this->OBSERVACION->Exportable) $Doc->ExportCaption($this->OBSERVACION);
 					if ($this->AD1O->Exportable) $Doc->ExportCaption($this->AD1O);
 					if ($this->FASE->Exportable) $Doc->ExportCaption($this->FASE);
+					if ($this->Modificado->Exportable) $Doc->ExportCaption($this->Modificado);
 				}
 				$Doc->EndExportRow();
 			}
@@ -1733,6 +1763,7 @@ class cview_cav extends cTable {
 						if ($this->OBSERVACION->Exportable) $Doc->ExportField($this->OBSERVACION);
 						if ($this->AD1O->Exportable) $Doc->ExportField($this->AD1O);
 						if ($this->FASE->Exportable) $Doc->ExportField($this->FASE);
+						if ($this->Modificado->Exportable) $Doc->ExportField($this->Modificado);
 					} else {
 						if ($this->llave->Exportable) $Doc->ExportField($this->llave);
 						if ($this->F_Sincron->Exportable) $Doc->ExportField($this->F_Sincron);
@@ -1779,6 +1810,7 @@ class cview_cav extends cTable {
 						if ($this->OBSERVACION->Exportable) $Doc->ExportField($this->OBSERVACION);
 						if ($this->AD1O->Exportable) $Doc->ExportField($this->AD1O);
 						if ($this->FASE->Exportable) $Doc->ExportField($this->FASE);
+						if ($this->Modificado->Exportable) $Doc->ExportField($this->Modificado);
 					}
 					$Doc->EndExportRow();
 				}

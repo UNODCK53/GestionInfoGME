@@ -671,7 +671,8 @@ class cview_cav_list extends cview_cav {
 	// Set up key values
 	function SetupKeyValues($key) {
 		$arrKeyFlds = explode($GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"], $key);
-		if (count($arrKeyFlds) >= 0) {
+		if (count($arrKeyFlds) >= 1) {
+			$this->llave->setFormValue($arrKeyFlds[0]);
 		}
 		return TRUE;
 	}
@@ -694,6 +695,7 @@ class cview_cav_list extends cview_cav {
 		$this->BuildSearchSql($sWhere, $this->FECHA_INTO_AV, $Default, FALSE); // FECHA_INTO_AV
 		$this->BuildSearchSql($sWhere, $this->AD1O, $Default, FALSE); // AÑO
 		$this->BuildSearchSql($sWhere, $this->FASE, $Default, FALSE); // FASE
+		$this->BuildSearchSql($sWhere, $this->Modificado, $Default, FALSE); // Modificado
 
 		// Set up search parm
 		if (!$Default && $sWhere <> "") {
@@ -713,6 +715,7 @@ class cview_cav_list extends cview_cav {
 			$this->FECHA_INTO_AV->AdvancedSearch->Save(); // FECHA_INTO_AV
 			$this->AD1O->AdvancedSearch->Save(); // AÑO
 			$this->FASE->AdvancedSearch->Save(); // FASE
+			$this->Modificado->AdvancedSearch->Save(); // Modificado
 		}
 		return $sWhere;
 	}
@@ -782,6 +785,7 @@ class cview_cav_list extends cview_cav {
 		$this->BuildBasicSearchSQL($sWhere, $this->FECHA_INTO_AV, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->AD1O, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->FASE, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->Modificado, $arKeywords, $type);
 		return $sWhere;
 	}
 
@@ -922,6 +926,8 @@ class cview_cav_list extends cview_cav {
 			return TRUE;
 		if ($this->FASE->AdvancedSearch->IssetSession())
 			return TRUE;
+		if ($this->Modificado->AdvancedSearch->IssetSession())
+			return TRUE;
 		return FALSE;
 	}
 
@@ -964,6 +970,7 @@ class cview_cav_list extends cview_cav {
 		$this->FECHA_INTO_AV->AdvancedSearch->UnsetSession();
 		$this->AD1O->AdvancedSearch->UnsetSession();
 		$this->FASE->AdvancedSearch->UnsetSession();
+		$this->Modificado->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
@@ -987,6 +994,7 @@ class cview_cav_list extends cview_cav {
 		$this->FECHA_INTO_AV->AdvancedSearch->Load();
 		$this->AD1O->AdvancedSearch->Load();
 		$this->FASE->AdvancedSearch->Load();
+		$this->Modificado->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -1044,6 +1052,7 @@ class cview_cav_list extends cview_cav {
 			$this->UpdateSort($this->OBSERVACION, $bCtrl); // OBSERVACION
 			$this->UpdateSort($this->AD1O, $bCtrl); // AÑO
 			$this->UpdateSort($this->FASE, $bCtrl); // FASE
+			$this->UpdateSort($this->Modificado, $bCtrl); // Modificado
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1121,6 +1130,7 @@ class cview_cav_list extends cview_cav {
 				$this->OBSERVACION->setSort("");
 				$this->AD1O->setSort("");
 				$this->FASE->setSort("");
+				$this->Modificado->setSort("");
 			}
 
 			// Reset start position
@@ -1138,6 +1148,18 @@ class cview_cav_list extends cview_cav {
 		$item->Body = "";
 		$item->OnLeft = TRUE;
 		$item->Visible = FALSE;
+
+		// "edit"
+		$item = &$this->ListOptions->Add("edit");
+		$item->CssStyle = "white-space: nowrap;";
+		$item->Visible = $Security->CanEdit();
+		$item->OnLeft = TRUE;
+
+		// "delete"
+		$item = &$this->ListOptions->Add("delete");
+		$item->CssStyle = "white-space: nowrap;";
+		$item->Visible = $Security->CanDelete();
+		$item->OnLeft = TRUE;
 
 		// "checkbox"
 		$item = &$this->ListOptions->Add("checkbox");
@@ -1169,8 +1191,24 @@ class cview_cav_list extends cview_cav {
 		global $Security, $Language, $objForm;
 		$this->ListOptions->LoadDefault();
 
+		// "edit"
+		$oListOpt = &$this->ListOptions->Items["edit"];
+		if ($Security->CanEdit()) {
+			$oListOpt->Body = "<a class=\"ewRowLink ewEdit\" title=\"" . ew_HtmlTitle($Language->Phrase("EditLink")) . "\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("EditLink")) . "\" href=\"" . ew_HtmlEncode($this->EditUrl) . "\">" . $Language->Phrase("EditLink") . "</a>";
+		} else {
+			$oListOpt->Body = "";
+		}
+
+		// "delete"
+		$oListOpt = &$this->ListOptions->Items["delete"];
+		if ($Security->CanDelete())
+			$oListOpt->Body = "<a class=\"ewRowLink ewDelete\"" . "" . " title=\"" . ew_HtmlTitle($Language->Phrase("DeleteLink")) . "\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("DeleteLink")) . "\" href=\"" . ew_HtmlEncode($this->DeleteUrl) . "\">" . $Language->Phrase("DeleteLink") . "</a>";
+		else
+			$oListOpt->Body = "";
+
 		// "checkbox"
 		$oListOpt = &$this->ListOptions->Items["checkbox"];
+		$oListOpt->Body = "<input type=\"checkbox\" name=\"key_m[]\" value=\"" . ew_HtmlEncode($this->llave->CurrentValue) . "\" onclick='ew_ClickMultiCheckbox(event, this);'>";
 		$this->RenderListOptionsExt();
 
 		// Call ListOptions_Rendered event
@@ -1425,6 +1463,11 @@ class cview_cav_list extends cview_cav {
 		$this->FASE->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_FASE"]);
 		if ($this->FASE->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->FASE->AdvancedSearch->SearchOperator = @$_GET["z_FASE"];
+
+		// Modificado
+		$this->Modificado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Modificado"]);
+		if ($this->Modificado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Modificado->AdvancedSearch->SearchOperator = @$_GET["z_Modificado"];
 	}
 
 	// Load recordset
@@ -1518,6 +1561,7 @@ class cview_cav_list extends cview_cav {
 		$this->OBSERVACION->setDbValue($rs->fields('OBSERVACION'));
 		$this->AD1O->setDbValue($rs->fields('AÑO'));
 		$this->FASE->setDbValue($rs->fields('FASE'));
+		$this->Modificado->setDbValue($rs->fields('Modificado'));
 	}
 
 	// Load DbValue from recordset
@@ -1569,6 +1613,7 @@ class cview_cav_list extends cview_cav {
 		$this->OBSERVACION->DbValue = $row['OBSERVACION'];
 		$this->AD1O->DbValue = $row['AÑO'];
 		$this->FASE->DbValue = $row['FASE'];
+		$this->Modificado->DbValue = $row['Modificado'];
 	}
 
 	// Load old record
@@ -1576,6 +1621,10 @@ class cview_cav_list extends cview_cav {
 
 		// Load key values from Session
 		$bValidKey = TRUE;
+		if (strval($this->getKey("llave")) <> "")
+			$this->llave->CurrentValue = $this->getKey("llave"); // llave
+		else
+			$bValidKey = FALSE;
 
 		// Load old recordset
 		if ($bValidKey) {
@@ -1671,6 +1720,7 @@ class cview_cav_list extends cview_cav {
 		// OBSERVACION
 		// AÑO
 		// FASE
+		// Modificado
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -1854,6 +1904,10 @@ class cview_cav_list extends cview_cav {
 			// FASE
 			$this->FASE->ViewValue = $this->FASE->CurrentValue;
 			$this->FASE->ViewCustomAttributes = "";
+
+			// Modificado
+			$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+			$this->Modificado->ViewCustomAttributes = "";
 
 			// llave
 			$this->llave->LinkCustomAttributes = "";
@@ -2079,6 +2133,11 @@ class cview_cav_list extends cview_cav {
 			$this->FASE->LinkCustomAttributes = "";
 			$this->FASE->HrefValue = "";
 			$this->FASE->TooltipValue = "";
+
+			// Modificado
+			$this->Modificado->LinkCustomAttributes = "";
+			$this->Modificado->HrefValue = "";
+			$this->Modificado->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
 			// llave
@@ -2350,6 +2409,12 @@ class cview_cav_list extends cview_cav {
 			$this->FASE->EditCustomAttributes = "";
 			$this->FASE->EditValue = ew_HtmlEncode($this->FASE->AdvancedSearch->SearchValue);
 			$this->FASE->PlaceHolder = ew_RemoveHtml($this->FASE->FldCaption());
+
+			// Modificado
+			$this->Modificado->EditAttrs["class"] = "form-control";
+			$this->Modificado->EditCustomAttributes = "";
+			$this->Modificado->EditValue = ew_HtmlEncode($this->Modificado->AdvancedSearch->SearchValue);
+			$this->Modificado->PlaceHolder = ew_RemoveHtml($this->Modificado->FldCaption());
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -2400,6 +2465,7 @@ class cview_cav_list extends cview_cav {
 		$this->FECHA_INTO_AV->AdvancedSearch->Load();
 		$this->AD1O->AdvancedSearch->Load();
 		$this->FASE->AdvancedSearch->Load();
+		$this->Modificado->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -2780,6 +2846,9 @@ fview_cavlistsrch.ValidateRequired = false; // No JavaScript validation
 		<td><?php if ($view_cav_list->TotalRecs > 0 && $view_cav_list->ExportOptions->Visible()) { ?>
 			<?php $view_cav_list->ExportOptions->Render("body") ?>
 			<?php } ?></td>
+
+
+
 		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono </td>		
 	</tr>	
 </table>
@@ -2787,7 +2856,9 @@ fview_cavlistsrch.ValidateRequired = false; // No JavaScript validation
 
 <?php if ($view_cav->Export == "") { ?>
 
+
 <?php } ?>
+
 
 </div>
 <br>
@@ -2854,6 +2925,7 @@ $view_cav->ResetAttrs();
 $view_cav_list->RenderRow();
 ?>
 
+
 <table>
 	<tr>
 		<td><label for="x_USUARIO" class="ewSearchCaption ewLabel"><?php echo $view_cav->USUARIO->FldCaption() ?></label>
@@ -2900,17 +2972,76 @@ $view_cav_list->RenderRow();
 <br>
 
 <?php if ($view_cav->USUARIO->Visible) { // USUARIO ?>
-<?php } ?>
-<?php if ($view_cav->NOM_APOYO->Visible) { // NOM_APOYO ?>
-<?php } ?>
-<?php if ($view_cav->NOM_PE->Visible) { // NOM_PE ?>
-<?php } ?>
-<?php if ($view_cav->AD1O->Visible) { // AÑO ?>
-<?php } ?>
-<?php if ($view_cav->FASE->Visible) { // FASE ?>
+
+
+
+
+
+
+
 <?php } ?>
 
+
+<?php if ($view_cav->NOM_APOYO->Visible) { // NOM_APOYO ?>
+
+
+
+
+
+
+
+<?php } ?>
+
+
+<?php if ($view_cav->NOM_PE->Visible) { // NOM_PE ?>
+
+
+
+
+
+
+
+<?php } ?>
+
+
+<?php if ($view_cav->AD1O->Visible) { // AÑO ?>
+
+
+
+
+
+
+
+<?php } ?>
+
+
+<?php if ($view_cav->FASE->Visible) { // FASE ?>
+
+
+
+
+
+
+
+<?php } ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+
+
+
 
 <br>
 <br>
@@ -2920,7 +3051,6 @@ $view_cav_list->RenderRow();
 </div>
 
 </form>
-
 <?php } ?>
 <?php } ?>
 <?php $view_cav_list->ShowPageHeader(); ?>
@@ -3414,6 +3544,15 @@ $view_cav_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
+<?php if ($view_cav->Modificado->Visible) { // Modificado ?>
+	<?php if ($view_cav->SortUrl($view_cav->Modificado) == "") { ?>
+		<th data-name="Modificado"><div id="elh_view_cav_Modificado" class="view_cav_Modificado"><div class="ewTableHeaderCaption"><?php echo $view_cav->Modificado->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Modificado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_cav->SortUrl($view_cav->Modificado) ?>',2);"><div id="elh_view_cav_Modificado" class="view_cav_Modificado">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_cav->Modificado->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view_cav->Modificado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_cav->Modificado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
 <?php
 
 // Render list options (header, right)
@@ -3747,6 +3886,12 @@ $view_cav_list->ListOptions->Render("body", "left", $view_cav_list->RowCnt);
 		<td data-name="FASE"<?php echo $view_cav->FASE->CellAttributes() ?>>
 <span<?php echo $view_cav->FASE->ViewAttributes() ?>>
 <?php echo $view_cav->FASE->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($view_cav->Modificado->Visible) { // Modificado ?>
+		<td data-name="Modificado"<?php echo $view_cav->Modificado->CellAttributes() ?>>
+<span<?php echo $view_cav->Modificado->ViewAttributes() ?>>
+<?php echo $view_cav->Modificado->ListViewValue() ?></span>
 </td>
 	<?php } ?>
 <?php

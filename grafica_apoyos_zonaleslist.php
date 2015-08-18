@@ -1663,7 +1663,7 @@ fgrafica_apoyos_zonaleslistsrch.ValidateRequired = false; // No JavaScript valid
 <?php } ?>
 <h2>Reporte de Apoyos Zonales</h2>
 
-<p>La siguiente tabla contiene el listado de Apoyos zonales que tiene a cargo cada Profesional especializado, según punto de erradicación.
+<p>La siguiente tabla contiene el listado de apoyos zonales asignados por Punto de erradicación.</p><p> <font color="#F78181">Datos operativos del grupo de erradicación, cifras no oficiales, pendiente de validación y verificación por parte del ente neutral</font>
 </p>
 <hr> 
 <table>
@@ -1893,6 +1893,24 @@ $grafica_apoyos_zonales_list->RenderListOptions();
 // Render list options (header, left)
 $grafica_apoyos_zonales_list->ListOptions->Render("header", "left");
 ?>
+<?php if ($grafica_apoyos_zonales->Punto->Visible) { // Punto ?>
+	<?php if ($grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Punto) == "") { ?>
+		<th data-name="Punto"><div id="elh_grafica_apoyos_zonales_Punto" class="grafica_apoyos_zonales_Punto"><div class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Punto->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Punto"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Punto) ?>',2);"><div id="elh_grafica_apoyos_zonales_Punto" class="grafica_apoyos_zonales_Punto">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Punto->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_apoyos_zonales->Punto->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_apoyos_zonales->Punto->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>	
+<?php if ($grafica_apoyos_zonales->Apoyo_zonal->Visible) { // Apoyo_zonal ?>
+	<?php if ($grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Apoyo_zonal) == "") { ?>
+		<th data-name="Apoyo_zonal"><div id="elh_grafica_apoyos_zonales_Apoyo_zonal" class="grafica_apoyos_zonales_Apoyo_zonal"><div class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Apoyo_zonal->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Apoyo_zonal"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Apoyo_zonal) ?>',2);"><div id="elh_grafica_apoyos_zonales_Apoyo_zonal" class="grafica_apoyos_zonales_Apoyo_zonal">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Apoyo_zonal->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_apoyos_zonales->Apoyo_zonal->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_apoyos_zonales->Apoyo_zonal->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>	
 <?php if ($grafica_apoyos_zonales->Profesional_Especializado->Visible) { // Profesional_Especializado ?>
 	<?php if ($grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Profesional_Especializado) == "") { ?>
 		<th data-name="Profesional_Especializado"><div id="elh_grafica_apoyos_zonales_Profesional_Especializado" class="grafica_apoyos_zonales_Profesional_Especializado"><div class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Profesional_Especializado->FldCaption() ?></div></div></th>
@@ -1902,33 +1920,7 @@ $grafica_apoyos_zonales_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
-<?php if ($grafica_apoyos_zonales->Punto->Visible) { // Punto ?>
-	<?php if ($grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Punto) == "") { ?>
-		<th data-name="Punto"><div id="elh_grafica_apoyos_zonales_Punto" class="grafica_apoyos_zonales_Punto"><div class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Punto->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="Punto"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Punto) ?>',2);"><div id="elh_grafica_apoyos_zonales_Punto" class="grafica_apoyos_zonales_Punto">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Punto->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_apoyos_zonales->Punto->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_apoyos_zonales->Punto->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
-<?php if ($grafica_apoyos_zonales->Apoyo_zonal->Visible) { // Apoyo_zonal ?>
-	<?php if ($grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Apoyo_zonal) == "") { ?>
-		<th data-name="Apoyo_zonal"><div id="elh_grafica_apoyos_zonales_Apoyo_zonal" class="grafica_apoyos_zonales_Apoyo_zonal"><div class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Apoyo_zonal->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="Apoyo_zonal"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Apoyo_zonal) ?>',2);"><div id="elh_grafica_apoyos_zonales_Apoyo_zonal" class="grafica_apoyos_zonales_Apoyo_zonal">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Apoyo_zonal->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_apoyos_zonales->Apoyo_zonal->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_apoyos_zonales->Apoyo_zonal->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
-<?php if ($grafica_apoyos_zonales->Cargo->Visible) { // Cargo ?>
-	<?php if ($grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Cargo) == "") { ?>
-		<th data-name="Cargo"><div id="elh_grafica_apoyos_zonales_Cargo" class="grafica_apoyos_zonales_Cargo"><div class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Cargo->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="Cargo"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Cargo) ?>',2);"><div id="elh_grafica_apoyos_zonales_Cargo" class="grafica_apoyos_zonales_Cargo">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Cargo->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_apoyos_zonales->Cargo->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_apoyos_zonales->Cargo->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
+	
 <?php
 
 // Render list options (header, right)
@@ -1994,12 +1986,6 @@ while ($grafica_apoyos_zonales_list->RecCnt < $grafica_apoyos_zonales_list->Stop
 // Render list options (body, left)
 $grafica_apoyos_zonales_list->ListOptions->Render("body", "left", $grafica_apoyos_zonales_list->RowCnt);
 ?>
-	<?php if ($grafica_apoyos_zonales->Profesional_Especializado->Visible) { // Profesional_Especializado ?>
-		<td data-name="Profesional_Especializado"<?php echo $grafica_apoyos_zonales->Profesional_Especializado->CellAttributes() ?>>
-<span<?php echo $grafica_apoyos_zonales->Profesional_Especializado->ViewAttributes() ?>>
-<?php echo $grafica_apoyos_zonales->Profesional_Especializado->ListViewValue() ?></span>
-<a id="<?php echo $grafica_apoyos_zonales_list->PageObjName . "_row_" . $grafica_apoyos_zonales_list->RowCnt ?>"></a></td>
-	<?php } ?>
 	<?php if ($grafica_apoyos_zonales->Punto->Visible) { // Punto ?>
 		<td data-name="Punto"<?php echo $grafica_apoyos_zonales->Punto->CellAttributes() ?>>
 <span<?php echo $grafica_apoyos_zonales->Punto->ViewAttributes() ?>>
@@ -2012,12 +1998,15 @@ $grafica_apoyos_zonales_list->ListOptions->Render("body", "left", $grafica_apoyo
 <?php echo $grafica_apoyos_zonales->Apoyo_zonal->ListViewValue() ?></span>
 </td>
 	<?php } ?>
-	<?php if ($grafica_apoyos_zonales->Cargo->Visible) { // Cargo ?>
-		<td data-name="Cargo"<?php echo $grafica_apoyos_zonales->Cargo->CellAttributes() ?>>
-<span<?php echo $grafica_apoyos_zonales->Cargo->ViewAttributes() ?>>
-<?php echo $grafica_apoyos_zonales->Cargo->ListViewValue() ?></span>
-</td>
+	<?php if ($grafica_apoyos_zonales->Profesional_Especializado->Visible) { // Profesional_Especializado ?>
+		<td data-name="Profesional_Especializado"<?php echo $grafica_apoyos_zonales->Profesional_Especializado->CellAttributes() ?>>
+<span<?php echo $grafica_apoyos_zonales->Profesional_Especializado->ViewAttributes() ?>>
+<?php echo $grafica_apoyos_zonales->Profesional_Especializado->ListViewValue() ?></span>
+<a id="<?php echo $grafica_apoyos_zonales_list->PageObjName . "_row_" . $grafica_apoyos_zonales_list->RowCnt ?>"></a></td>
 	<?php } ?>
+	
+	
+	
 <?php
 
 // Render list options (body, right)

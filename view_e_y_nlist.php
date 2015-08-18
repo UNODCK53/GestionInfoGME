@@ -671,7 +671,8 @@ class cview_e_y_n_list extends cview_e_y_n {
 	// Set up key values
 	function SetupKeyValues($key) {
 		$arrKeyFlds = explode($GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"], $key);
-		if (count($arrKeyFlds) >= 0) {
+		if (count($arrKeyFlds) >= 1) {
+			$this->llave_2->setFormValue($arrKeyFlds[0]);
 		}
 		return TRUE;
 	}
@@ -690,6 +691,7 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$this->BuildSearchSql($sWhere, $this->Otro_Nom_PE, $Default, FALSE); // Otro_Nom_PE
 		$this->BuildSearchSql($sWhere, $this->Muncipio, $Default, FALSE); // Muncipio
 		$this->BuildSearchSql($sWhere, $this->Departamento, $Default, FALSE); // Departamento
+		$this->BuildSearchSql($sWhere, $this->Modificado, $Default, FALSE); // Modificado
 
 		// Set up search parm
 		if (!$Default && $sWhere <> "") {
@@ -705,6 +707,7 @@ class cview_e_y_n_list extends cview_e_y_n {
 			$this->Otro_Nom_PE->AdvancedSearch->Save(); // Otro_Nom_PE
 			$this->Muncipio->AdvancedSearch->Save(); // Muncipio
 			$this->Departamento->AdvancedSearch->Save(); // Departamento
+			$this->Modificado->AdvancedSearch->Save(); // Modificado
 		}
 		return $sWhere;
 	}
@@ -770,6 +773,7 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$this->BuildBasicSearchSQL($sWhere, $this->Otro_Nom_PE, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->Muncipio, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->Departamento, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->Modificado, $arKeywords, $type);
 		return $sWhere;
 	}
 
@@ -902,6 +906,8 @@ class cview_e_y_n_list extends cview_e_y_n {
 			return TRUE;
 		if ($this->Departamento->AdvancedSearch->IssetSession())
 			return TRUE;
+		if ($this->Modificado->AdvancedSearch->IssetSession())
+			return TRUE;
 		return FALSE;
 	}
 
@@ -940,6 +946,7 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$this->Otro_Nom_PE->AdvancedSearch->UnsetSession();
 		$this->Muncipio->AdvancedSearch->UnsetSession();
 		$this->Departamento->AdvancedSearch->UnsetSession();
+		$this->Modificado->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
@@ -959,6 +966,7 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$this->Otro_Nom_PE->AdvancedSearch->Load();
 		$this->Muncipio->AdvancedSearch->Load();
 		$this->Departamento->AdvancedSearch->Load();
+		$this->Modificado->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -1002,6 +1010,7 @@ class cview_e_y_n_list extends cview_e_y_n {
 			$this->UpdateSort($this->Departamento, $bCtrl); // Departamento
 			$this->UpdateSort($this->F_llegada, $bCtrl); // F_llegada
 			$this->UpdateSort($this->Fecha, $bCtrl); // Fecha
+			$this->UpdateSort($this->Modificado, $bCtrl); // Modificado
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1065,6 +1074,7 @@ class cview_e_y_n_list extends cview_e_y_n {
 				$this->Departamento->setSort("");
 				$this->F_llegada->setSort("");
 				$this->Fecha->setSort("");
+				$this->Modificado->setSort("");
 			}
 
 			// Reset start position
@@ -1082,6 +1092,18 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$item->Body = "";
 		$item->OnLeft = TRUE;
 		$item->Visible = FALSE;
+
+		// "edit"
+		$item = &$this->ListOptions->Add("edit");
+		$item->CssStyle = "white-space: nowrap;";
+		$item->Visible = $Security->CanEdit();
+		$item->OnLeft = TRUE;
+
+		// "delete"
+		$item = &$this->ListOptions->Add("delete");
+		$item->CssStyle = "white-space: nowrap;";
+		$item->Visible = $Security->CanDelete();
+		$item->OnLeft = TRUE;
 
 		// "checkbox"
 		$item = &$this->ListOptions->Add("checkbox");
@@ -1113,8 +1135,24 @@ class cview_e_y_n_list extends cview_e_y_n {
 		global $Security, $Language, $objForm;
 		$this->ListOptions->LoadDefault();
 
+		// "edit"
+		$oListOpt = &$this->ListOptions->Items["edit"];
+		if ($Security->CanEdit()) {
+			$oListOpt->Body = "<a class=\"ewRowLink ewEdit\" title=\"" . ew_HtmlTitle($Language->Phrase("EditLink")) . "\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("EditLink")) . "\" href=\"" . ew_HtmlEncode($this->EditUrl) . "\">" . $Language->Phrase("EditLink") . "</a>";
+		} else {
+			$oListOpt->Body = "";
+		}
+
+		// "delete"
+		$oListOpt = &$this->ListOptions->Items["delete"];
+		if ($Security->CanDelete())
+			$oListOpt->Body = "<a class=\"ewRowLink ewDelete\"" . "" . " title=\"" . ew_HtmlTitle($Language->Phrase("DeleteLink")) . "\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("DeleteLink")) . "\" href=\"" . ew_HtmlEncode($this->DeleteUrl) . "\">" . $Language->Phrase("DeleteLink") . "</a>";
+		else
+			$oListOpt->Body = "";
+
 		// "checkbox"
 		$oListOpt = &$this->ListOptions->Items["checkbox"];
+		$oListOpt->Body = "<input type=\"checkbox\" name=\"key_m[]\" value=\"" . ew_HtmlEncode($this->llave_2->CurrentValue) . "\" onclick='ew_ClickMultiCheckbox(event, this);'>";
 		$this->RenderListOptionsExt();
 
 		// Call ListOptions_Rendered event
@@ -1349,6 +1387,11 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$this->Departamento->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Departamento"]);
 		if ($this->Departamento->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->Departamento->AdvancedSearch->SearchOperator = @$_GET["z_Departamento"];
+
+		// Modificado
+		$this->Modificado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Modificado"]);
+		if ($this->Modificado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Modificado->AdvancedSearch->SearchOperator = @$_GET["z_Modificado"];
 	}
 
 	// Load recordset
@@ -1428,6 +1471,8 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$this->Departamento->setDbValue($rs->fields('Departamento'));
 		$this->F_llegada->setDbValue($rs->fields('F_llegada'));
 		$this->Fecha->setDbValue($rs->fields('Fecha'));
+		$this->Modificado->setDbValue($rs->fields('Modificado'));
+		$this->llave_2->setDbValue($rs->fields('llave_2'));
 	}
 
 	// Load DbValue from recordset
@@ -1465,6 +1510,8 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$this->Departamento->DbValue = $row['Departamento'];
 		$this->F_llegada->DbValue = $row['F_llegada'];
 		$this->Fecha->DbValue = $row['Fecha'];
+		$this->Modificado->DbValue = $row['Modificado'];
+		$this->llave_2->DbValue = $row['llave_2'];
 	}
 
 	// Load old record
@@ -1472,6 +1519,10 @@ class cview_e_y_n_list extends cview_e_y_n {
 
 		// Load key values from Session
 		$bValidKey = TRUE;
+		if (strval($this->getKey("llave_2")) <> "")
+			$this->llave_2->CurrentValue = $this->getKey("llave_2"); // llave_2
+		else
+			$bValidKey = FALSE;
 
 		// Load old recordset
 		if ($bValidKey) {
@@ -1533,7 +1584,10 @@ class cview_e_y_n_list extends cview_e_y_n {
 		// Departamento
 		// F_llegada
 		// Fecha
+		// Modificado
+		// llave_2
 
+		$this->llave_2->CellCssStyle = "white-space: nowrap;";
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 			// ID_Formulario
@@ -1660,6 +1714,10 @@ class cview_e_y_n_list extends cview_e_y_n {
 			// Fecha
 			$this->Fecha->ViewValue = $this->Fecha->CurrentValue;
 			$this->Fecha->ViewCustomAttributes = "";
+
+			// Modificado
+			$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+			$this->Modificado->ViewCustomAttributes = "";
 
 			// ID_Formulario
 			$this->ID_Formulario->LinkCustomAttributes = "";
@@ -1815,6 +1873,11 @@ class cview_e_y_n_list extends cview_e_y_n {
 			$this->Fecha->LinkCustomAttributes = "";
 			$this->Fecha->HrefValue = "";
 			$this->Fecha->TooltipValue = "";
+
+			// Modificado
+			$this->Modificado->LinkCustomAttributes = "";
+			$this->Modificado->HrefValue = "";
+			$this->Modificado->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
 			// ID_Formulario
@@ -2002,6 +2065,12 @@ class cview_e_y_n_list extends cview_e_y_n {
 			$this->Fecha->EditCustomAttributes = "";
 			$this->Fecha->EditValue = ew_HtmlEncode($this->Fecha->AdvancedSearch->SearchValue);
 			$this->Fecha->PlaceHolder = ew_RemoveHtml($this->Fecha->FldCaption());
+
+			// Modificado
+			$this->Modificado->EditAttrs["class"] = "form-control";
+			$this->Modificado->EditCustomAttributes = "";
+			$this->Modificado->EditValue = ew_HtmlEncode($this->Modificado->AdvancedSearch->SearchValue);
+			$this->Modificado->PlaceHolder = ew_RemoveHtml($this->Modificado->FldCaption());
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -2048,6 +2117,7 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$this->Otro_Nom_PE->AdvancedSearch->Load();
 		$this->Muncipio->AdvancedSearch->Load();
 		$this->Departamento->AdvancedSearch->Load();
+		$this->Modificado->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -2417,6 +2487,12 @@ fview_e_y_nlistsrch.ValidateRequired = false; // No JavaScript validation
 <?php if ($view_e_y_n->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
+<?php if ($view_e_y_n_list->TotalRecs > 0 && $view_e_y_n_list->ExportOptions->Visible()) { ?>
+<?php $view_e_y_n_list->ExportOptions->Render("body") ?>
+<?php } ?>
+
+
+
 <H2> Informe de Enlace y Novedad</h2>
 
 <p>La siguiente tabla contiene los informes de Enlace y Novedad realizados desde la fase II de erradicación 2015 a la fecha</p>
@@ -2436,7 +2512,11 @@ fview_e_y_nlistsrch.ValidateRequired = false; // No JavaScript validation
 <?php } ?>
 <?php if ($view_e_y_n->Export == "") { ?>
 
+
+
 <?php } ?>
+
+
 
 </div>
 
@@ -2505,6 +2585,8 @@ $view_e_y_n->ResetAttrs();
 $view_e_y_n_list->RenderRow();
 ?>
 
+
+
 <br>
 
 <table>
@@ -2539,11 +2621,95 @@ $view_e_y_n_list->RenderRow();
 <button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
 
 <?php if ($view_e_y_n->USUARIO->Visible) { // USUARIO ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <?php } ?>
+
+
+
+
 <?php if ($view_e_y_n->NOM_GE->Visible) { // NOM_GE ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <?php } ?>
+
+
+
+
 <?php if ($view_e_y_n->NOM_PE->Visible) { // NOM_PE ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <?php } ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <br>
 <br>
@@ -2920,6 +3086,15 @@ $view_e_y_n_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
+<?php if ($view_e_y_n->Modificado->Visible) { // Modificado ?>
+	<?php if ($view_e_y_n->SortUrl($view_e_y_n->Modificado) == "") { ?>
+		<th data-name="Modificado"><div id="elh_view_e_y_n_Modificado" class="view_e_y_n_Modificado"><div class="ewTableHeaderCaption"><?php echo $view_e_y_n->Modificado->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Modificado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_e_y_n->SortUrl($view_e_y_n->Modificado) ?>',2);"><div id="elh_view_e_y_n_Modificado" class="view_e_y_n_Modificado">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_e_y_n->Modificado->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view_e_y_n->Modificado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_e_y_n->Modificado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
 <?php
 
 // Render list options (header, right)
@@ -3169,6 +3344,12 @@ $view_e_y_n_list->ListOptions->Render("body", "left", $view_e_y_n_list->RowCnt);
 		<td data-name="Fecha"<?php echo $view_e_y_n->Fecha->CellAttributes() ?>>
 <span<?php echo $view_e_y_n->Fecha->ViewAttributes() ?>>
 <?php echo $view_e_y_n->Fecha->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($view_e_y_n->Modificado->Visible) { // Modificado ?>
+		<td data-name="Modificado"<?php echo $view_e_y_n->Modificado->CellAttributes() ?>>
+<span<?php echo $view_e_y_n->Modificado->ViewAttributes() ?>>
+<?php echo $view_e_y_n->Modificado->ListViewValue() ?></span>
 </td>
 	<?php } ?>
 <?php

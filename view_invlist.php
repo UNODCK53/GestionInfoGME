@@ -671,7 +671,8 @@ class cview_inv_list extends cview_inv {
 	// Set up key values
 	function SetupKeyValues($key) {
 		$arrKeyFlds = explode($GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"], $key);
-		if (count($arrKeyFlds) >= 0) {
+		if (count($arrKeyFlds) >= 1) {
+			$this->llave->setFormValue($arrKeyFlds[0]);
 		}
 		return TRUE;
 	}
@@ -688,6 +689,7 @@ class cview_inv_list extends cview_inv {
 		$this->BuildSearchSql($sWhere, $this->AD1O, $Default, FALSE); // AÑO
 		$this->BuildSearchSql($sWhere, $this->FASE, $Default, FALSE); // FASE
 		$this->BuildSearchSql($sWhere, $this->FECHA_INV, $Default, FALSE); // FECHA_INV
+		$this->BuildSearchSql($sWhere, $this->Modificado, $Default, FALSE); // Modificado
 
 		// Set up search parm
 		if (!$Default && $sWhere <> "") {
@@ -701,6 +703,7 @@ class cview_inv_list extends cview_inv {
 			$this->AD1O->AdvancedSearch->Save(); // AÑO
 			$this->FASE->AdvancedSearch->Save(); // FASE
 			$this->FECHA_INV->AdvancedSearch->Save(); // FECHA_INV
+			$this->Modificado->AdvancedSearch->Save(); // Modificado
 		}
 		return $sWhere;
 	}
@@ -764,6 +767,7 @@ class cview_inv_list extends cview_inv {
 		$this->BuildBasicSearchSQL($sWhere, $this->AD1O, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->FASE, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->FECHA_INV, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->Modificado, $arKeywords, $type);
 		return $sWhere;
 	}
 
@@ -892,6 +896,8 @@ class cview_inv_list extends cview_inv {
 			return TRUE;
 		if ($this->FECHA_INV->AdvancedSearch->IssetSession())
 			return TRUE;
+		if ($this->Modificado->AdvancedSearch->IssetSession())
+			return TRUE;
 		return FALSE;
 	}
 
@@ -928,6 +934,7 @@ class cview_inv_list extends cview_inv {
 		$this->AD1O->AdvancedSearch->UnsetSession();
 		$this->FASE->AdvancedSearch->UnsetSession();
 		$this->FECHA_INV->AdvancedSearch->UnsetSession();
+		$this->Modificado->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
@@ -945,6 +952,7 @@ class cview_inv_list extends cview_inv {
 		$this->AD1O->AdvancedSearch->Load();
 		$this->FASE->AdvancedSearch->Load();
 		$this->FECHA_INV->AdvancedSearch->Load();
+		$this->Modificado->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -1021,6 +1029,7 @@ class cview_inv_list extends cview_inv {
 			$this->UpdateSort($this->_3_Motosierra, $bCtrl); // 3_Motosierra
 			$this->UpdateSort($this->_3_Palin, $bCtrl); // 3_Palin
 			$this->UpdateSort($this->_3_Tubo_galvanizado, $bCtrl); // 3_Tubo_galvanizado
+			$this->UpdateSort($this->Modificado, $bCtrl); // Modificado
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1117,6 +1126,7 @@ class cview_inv_list extends cview_inv {
 				$this->_3_Motosierra->setSort("");
 				$this->_3_Palin->setSort("");
 				$this->_3_Tubo_galvanizado->setSort("");
+				$this->Modificado->setSort("");
 			}
 
 			// Reset start position
@@ -1134,6 +1144,18 @@ class cview_inv_list extends cview_inv {
 		$item->Body = "";
 		$item->OnLeft = TRUE;
 		$item->Visible = FALSE;
+
+		// "edit"
+		$item = &$this->ListOptions->Add("edit");
+		$item->CssStyle = "white-space: nowrap;";
+		$item->Visible = $Security->CanEdit();
+		$item->OnLeft = TRUE;
+
+		// "delete"
+		$item = &$this->ListOptions->Add("delete");
+		$item->CssStyle = "white-space: nowrap;";
+		$item->Visible = $Security->CanDelete();
+		$item->OnLeft = TRUE;
 
 		// "checkbox"
 		$item = &$this->ListOptions->Add("checkbox");
@@ -1165,8 +1187,24 @@ class cview_inv_list extends cview_inv {
 		global $Security, $Language, $objForm;
 		$this->ListOptions->LoadDefault();
 
+		// "edit"
+		$oListOpt = &$this->ListOptions->Items["edit"];
+		if ($Security->CanEdit()) {
+			$oListOpt->Body = "<a class=\"ewRowLink ewEdit\" title=\"" . ew_HtmlTitle($Language->Phrase("EditLink")) . "\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("EditLink")) . "\" href=\"" . ew_HtmlEncode($this->EditUrl) . "\">" . $Language->Phrase("EditLink") . "</a>";
+		} else {
+			$oListOpt->Body = "";
+		}
+
+		// "delete"
+		$oListOpt = &$this->ListOptions->Items["delete"];
+		if ($Security->CanDelete())
+			$oListOpt->Body = "<a class=\"ewRowLink ewDelete\"" . "" . " title=\"" . ew_HtmlTitle($Language->Phrase("DeleteLink")) . "\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("DeleteLink")) . "\" href=\"" . ew_HtmlEncode($this->DeleteUrl) . "\">" . $Language->Phrase("DeleteLink") . "</a>";
+		else
+			$oListOpt->Body = "";
+
 		// "checkbox"
 		$oListOpt = &$this->ListOptions->Items["checkbox"];
+		$oListOpt->Body = "<input type=\"checkbox\" name=\"key_m[]\" value=\"" . ew_HtmlEncode($this->llave->CurrentValue) . "\" onclick='ew_ClickMultiCheckbox(event, this);'>";
 		$this->RenderListOptionsExt();
 
 		// Call ListOptions_Rendered event
@@ -1391,6 +1429,11 @@ class cview_inv_list extends cview_inv {
 		$this->FECHA_INV->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_FECHA_INV"]);
 		if ($this->FECHA_INV->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->FECHA_INV->AdvancedSearch->SearchOperator = @$_GET["z_FECHA_INV"];
+
+		// Modificado
+		$this->Modificado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Modificado"]);
+		if ($this->Modificado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Modificado->AdvancedSearch->SearchOperator = @$_GET["z_Modificado"];
 	}
 
 	// Load recordset
@@ -1505,6 +1548,7 @@ class cview_inv_list extends cview_inv {
 		$this->_3_Motosierra->setDbValue($rs->fields('3_Motosierra'));
 		$this->_3_Palin->setDbValue($rs->fields('3_Palin'));
 		$this->_3_Tubo_galvanizado->setDbValue($rs->fields('3_Tubo_galvanizado'));
+		$this->Modificado->setDbValue($rs->fields('Modificado'));
 	}
 
 	// Load DbValue from recordset
@@ -1577,6 +1621,7 @@ class cview_inv_list extends cview_inv {
 		$this->_3_Motosierra->DbValue = $row['3_Motosierra'];
 		$this->_3_Palin->DbValue = $row['3_Palin'];
 		$this->_3_Tubo_galvanizado->DbValue = $row['3_Tubo_galvanizado'];
+		$this->Modificado->DbValue = $row['Modificado'];
 	}
 
 	// Load old record
@@ -1584,6 +1629,10 @@ class cview_inv_list extends cview_inv {
 
 		// Load key values from Session
 		$bValidKey = TRUE;
+		if (strval($this->getKey("llave")) <> "")
+			$this->llave->CurrentValue = $this->getKey("llave"); // llave
+		else
+			$bValidKey = FALSE;
 
 		// Load old recordset
 		if ($bValidKey) {
@@ -1692,6 +1741,7 @@ class cview_inv_list extends cview_inv {
 		// 3_Motosierra
 		// 3_Palin
 		// 3_Tubo_galvanizado
+		// Modificado
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -1951,6 +2001,10 @@ class cview_inv_list extends cview_inv {
 			// 3_Tubo_galvanizado
 			$this->_3_Tubo_galvanizado->ViewValue = $this->_3_Tubo_galvanizado->CurrentValue;
 			$this->_3_Tubo_galvanizado->ViewCustomAttributes = "";
+
+			// Modificado
+			$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+			$this->Modificado->ViewCustomAttributes = "";
 
 			// llave
 			$this->llave->LinkCustomAttributes = "";
@@ -2271,6 +2325,11 @@ class cview_inv_list extends cview_inv {
 			$this->_3_Tubo_galvanizado->LinkCustomAttributes = "";
 			$this->_3_Tubo_galvanizado->HrefValue = "";
 			$this->_3_Tubo_galvanizado->TooltipValue = "";
+
+			// Modificado
+			$this->Modificado->LinkCustomAttributes = "";
+			$this->Modificado->HrefValue = "";
+			$this->Modificado->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
 			// llave
@@ -2656,6 +2715,12 @@ class cview_inv_list extends cview_inv {
 			$this->_3_Tubo_galvanizado->EditCustomAttributes = "";
 			$this->_3_Tubo_galvanizado->EditValue = ew_HtmlEncode($this->_3_Tubo_galvanizado->AdvancedSearch->SearchValue);
 			$this->_3_Tubo_galvanizado->PlaceHolder = ew_RemoveHtml($this->_3_Tubo_galvanizado->FldCaption());
+
+			// Modificado
+			$this->Modificado->EditAttrs["class"] = "form-control";
+			$this->Modificado->EditCustomAttributes = "";
+			$this->Modificado->EditValue = ew_HtmlEncode($this->Modificado->AdvancedSearch->SearchValue);
+			$this->Modificado->PlaceHolder = ew_RemoveHtml($this->Modificado->FldCaption());
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -2700,6 +2765,7 @@ class cview_inv_list extends cview_inv {
 		$this->AD1O->AdvancedSearch->Load();
 		$this->FASE->AdvancedSearch->Load();
 		$this->FECHA_INV->AdvancedSearch->Load();
+		$this->Modificado->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -3067,9 +3133,7 @@ fview_invlistsrch.ValidateRequired = false; // No JavaScript validation
 <?php if ($view_inv->Export == "") { ?>
 <div class="ewToolbar">
 <?php if ($view_inv->Export == "") { ?>
-
 <?php $Breadcrumb->Render(); ?>
-
 <div>
 	<div></div>
 	<table>
@@ -3106,8 +3170,14 @@ fview_invlistsrch.ValidateRequired = false; // No JavaScript validation
 
 <hr>
 
+
 <?php if ($view_inv_list->SearchOptions->Visible()) { ?>
+
 <?php } ?>
+
+
+
+
 
 </div>
 <div>
@@ -3130,7 +3200,6 @@ fview_invlistsrch.ValidateRequired = false; // No JavaScript validation
 
 <br>
 <?php } ?>
-
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
 	if ($bSelectLimit) {
@@ -3230,17 +3299,64 @@ $view_inv_list->RenderRow();
 	</tr>
 </table>
 
-
 </div>  <!--Aca termina el DIV de la derecha--> 
 
+
 <?php if ($view_inv->USUARIO->Visible) { // USUARIO ?>
+
+
+
+
+
+
+
 <?php } ?>
+
+
 <?php if ($view_inv->NOM_PE->Visible) { // NOM_PE ?>
+
+
+
+
+
+
+
 <?php } ?>
+
+
 <?php if ($view_inv->AD1O->Visible) { // AÑO ?>
+
+
+
+
+
+
+
 <?php } ?>
+
+
 <?php if ($view_inv->FASE->Visible) { // FASE ?>
+
+
+
+
+
+
+
 <?php } ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
 
@@ -3248,8 +3364,11 @@ $view_inv_list->RenderRow();
 <br>
 <hr>
 
+
 	</div>
 </div>
+
+
 </form>
 <?php } ?>
 <?php } ?>
@@ -3915,6 +4034,15 @@ $view_inv_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
+<?php if ($view_inv->Modificado->Visible) { // Modificado ?>
+	<?php if ($view_inv->SortUrl($view_inv->Modificado) == "") { ?>
+		<th data-name="Modificado"><div id="elh_view_inv_Modificado" class="view_inv_Modificado"><div class="ewTableHeaderCaption"><?php echo $view_inv->Modificado->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Modificado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_inv->SortUrl($view_inv->Modificado) ?>',2);"><div id="elh_view_inv_Modificado" class="view_inv_Modificado">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_inv->Modificado->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view_inv->Modificado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_inv->Modificado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
 <?php
 
 // Render list options (header, right)
@@ -4362,6 +4490,12 @@ $view_inv_list->ListOptions->Render("body", "left", $view_inv_list->RowCnt);
 		<td data-name="_3_Tubo_galvanizado"<?php echo $view_inv->_3_Tubo_galvanizado->CellAttributes() ?>>
 <span<?php echo $view_inv->_3_Tubo_galvanizado->ViewAttributes() ?>>
 <?php echo $view_inv->_3_Tubo_galvanizado->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($view_inv->Modificado->Visible) { // Modificado ?>
+		<td data-name="Modificado"<?php echo $view_inv->Modificado->CellAttributes() ?>>
+<span<?php echo $view_inv->Modificado->ViewAttributes() ?>>
+<?php echo $view_inv->Modificado->ListViewValue() ?></span>
 </td>
 	<?php } ?>
 <?php

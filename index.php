@@ -246,8 +246,6 @@ class cdefault {
 			$this->Page_Terminate("view_cavlist.php");
 		if ($Security->AllowList(CurrentProjectID() . 'view_e_y_n'))
 			$this->Page_Terminate("view_e_y_nlist.php");
-		if ($Security->AllowList(CurrentProjectID() . 'view1_acc'))
-			$this->Page_Terminate("view1_acclist.php");
 		if ($Security->AllowList(CurrentProjectID() . 'view_inv'))
 			$this->Page_Terminate("view_invlist.php");
 		if ($Security->AllowList(CurrentProjectID() . 'view_id'))
@@ -280,6 +278,10 @@ class cdefault {
 			$this->Page_Terminate("grafica_produccionlist.php");
 		if ($Security->AllowList(CurrentProjectID() . 'fuerza'))
 			$this->Page_Terminate("fuerzalist.php");
+		if ($Security->AllowList(CurrentProjectID() . 'grafica_capacidad_efectiva'))
+			$this->Page_Terminate("grafica_capacidad_efectivalist.php");
+		if ($Security->AllowList(CurrentProjectID() . 'view1_acc'))
+			$this->Page_Terminate("view1_acclist.php");
 		if ($Security->IsLoggedIn()) {
 			$this->setFailureMessage($Language->Phrase("NoPermission") . "<br><br><a href=\"logout.php\">" . $Language->Phrase("BackToLogin") . "</a>");
 		} else {

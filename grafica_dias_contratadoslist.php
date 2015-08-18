@@ -673,6 +673,7 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 		$this->BuildSearchSql($sWhere, $this->Firma_Contrato_Gme, $Default, FALSE); // Firma_Contrato_Gme
 		$this->BuildSearchSql($sWhere, $this->Llegada_GME_a_su_lugar_de_Origen, $Default, FALSE); // Llegada_GME_a_su_lugar_de_Origen
 		$this->BuildSearchSql($sWhere, $this->dias, $Default, FALSE); // dias
+		$this->BuildSearchSql($sWhere, $this->Dias_reportados, $Default, FALSE); // Dias_reportados
 
 		// Set up search parm
 		if (!$Default && $sWhere <> "") {
@@ -684,6 +685,7 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 			$this->Firma_Contrato_Gme->AdvancedSearch->Save(); // Firma_Contrato_Gme
 			$this->Llegada_GME_a_su_lugar_de_Origen->AdvancedSearch->Save(); // Llegada_GME_a_su_lugar_de_Origen
 			$this->dias->AdvancedSearch->Save(); // dias
+			$this->Dias_reportados->AdvancedSearch->Save(); // Dias_reportados
 		}
 		return $sWhere;
 	}
@@ -749,6 +751,8 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 			return TRUE;
 		if ($this->dias->AdvancedSearch->IssetSession())
 			return TRUE;
+		if ($this->Dias_reportados->AdvancedSearch->IssetSession())
+			return TRUE;
 		return FALSE;
 	}
 
@@ -775,6 +779,7 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 		$this->Firma_Contrato_Gme->AdvancedSearch->UnsetSession();
 		$this->Llegada_GME_a_su_lugar_de_Origen->AdvancedSearch->UnsetSession();
 		$this->dias->AdvancedSearch->UnsetSession();
+		$this->Dias_reportados->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
@@ -787,6 +792,7 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 		$this->Firma_Contrato_Gme->AdvancedSearch->Load();
 		$this->Llegada_GME_a_su_lugar_de_Origen->AdvancedSearch->Load();
 		$this->dias->AdvancedSearch->Load();
+		$this->Dias_reportados->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -804,6 +810,7 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 			$this->UpdateSort($this->Firma_Contrato_Gme, $bCtrl); // Firma_Contrato_Gme
 			$this->UpdateSort($this->Llegada_GME_a_su_lugar_de_Origen, $bCtrl); // Llegada_GME_a_su_lugar_de_Origen
 			$this->UpdateSort($this->dias, $bCtrl); // dias
+			$this->UpdateSort($this->Dias_reportados, $bCtrl); // Dias_reportados
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -841,6 +848,7 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 				$this->Firma_Contrato_Gme->setSort("");
 				$this->Llegada_GME_a_su_lugar_de_Origen->setSort("");
 				$this->dias->setSort("");
+				$this->Dias_reportados->setSort("");
 			}
 
 			// Reset start position
@@ -1098,6 +1106,11 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 		$this->dias->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_dias"]);
 		if ($this->dias->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->dias->AdvancedSearch->SearchOperator = @$_GET["z_dias"];
+
+		// Dias_reportados
+		$this->Dias_reportados->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Dias_reportados"]);
+		if ($this->Dias_reportados->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Dias_reportados->AdvancedSearch->SearchOperator = @$_GET["z_Dias_reportados"];
 	}
 
 	// Load recordset
@@ -1151,6 +1164,7 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 		$this->Firma_Contrato_Gme->setDbValue($rs->fields('Firma_Contrato_Gme'));
 		$this->Llegada_GME_a_su_lugar_de_Origen->setDbValue($rs->fields('Llegada_GME_a_su_lugar_de_Origen'));
 		$this->dias->setDbValue($rs->fields('dias'));
+		$this->Dias_reportados->setDbValue($rs->fields('Dias_reportados'));
 	}
 
 	// Load DbValue from recordset
@@ -1162,6 +1176,7 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 		$this->Firma_Contrato_Gme->DbValue = $row['Firma_Contrato_Gme'];
 		$this->Llegada_GME_a_su_lugar_de_Origen->DbValue = $row['Llegada_GME_a_su_lugar_de_Origen'];
 		$this->dias->DbValue = $row['dias'];
+		$this->Dias_reportados->DbValue = $row['Dias_reportados'];
 	}
 
 	// Load old record
@@ -1195,10 +1210,6 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 		$this->InlineCopyUrl = $this->GetInlineCopyUrl();
 		$this->DeleteUrl = $this->GetDeleteUrl();
 
-		// Convert decimal values if posted back
-		if ($this->dias->FormValue == $this->dias->CurrentValue && is_numeric(ew_StrToFloat($this->dias->CurrentValue)))
-			$this->dias->CurrentValue = ew_StrToFloat($this->dias->CurrentValue);
-
 		// Call Row_Rendering event
 		$this->Row_Rendering();
 
@@ -1208,6 +1219,7 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 		// Firma_Contrato_Gme
 		// Llegada_GME_a_su_lugar_de_Origen
 		// dias
+		// Dias_reportados
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -1230,6 +1242,10 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 			// dias
 			$this->dias->ViewValue = $this->dias->CurrentValue;
 			$this->dias->ViewCustomAttributes = "";
+
+			// Dias_reportados
+			$this->Dias_reportados->ViewValue = $this->Dias_reportados->CurrentValue;
+			$this->Dias_reportados->ViewCustomAttributes = "";
 
 			// Punto
 			$this->Punto->LinkCustomAttributes = "";
@@ -1255,6 +1271,11 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 			$this->dias->LinkCustomAttributes = "";
 			$this->dias->HrefValue = "";
 			$this->dias->TooltipValue = "";
+
+			// Dias_reportados
+			$this->Dias_reportados->LinkCustomAttributes = "";
+			$this->Dias_reportados->HrefValue = "";
+			$this->Dias_reportados->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
 			// Punto
@@ -1286,6 +1307,12 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 			$this->dias->EditCustomAttributes = "";
 			$this->dias->EditValue = ew_HtmlEncode($this->dias->AdvancedSearch->SearchValue);
 			$this->dias->PlaceHolder = ew_RemoveHtml($this->dias->FldCaption());
+
+			// Dias_reportados
+			$this->Dias_reportados->EditAttrs["class"] = "form-control";
+			$this->Dias_reportados->EditCustomAttributes = "";
+			$this->Dias_reportados->EditValue = ew_HtmlEncode($this->Dias_reportados->AdvancedSearch->SearchValue);
+			$this->Dias_reportados->PlaceHolder = ew_RemoveHtml($this->Dias_reportados->FldCaption());
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -1328,6 +1355,7 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 		$this->Firma_Contrato_Gme->AdvancedSearch->Load();
 		$this->Llegada_GME_a_su_lugar_de_Origen->AdvancedSearch->Load();
 		$this->dias->AdvancedSearch->Load();
+		$this->Dias_reportados->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -1698,13 +1726,16 @@ fgrafica_dias_contratadoslistsrch.ValidateRequired = false; // No JavaScript val
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
 <h2>Reporte de Días contratados</h2>
-<p>La siguiente tabla contiene el listado de los días trabajados en zona por cada Punto de erradicación, desde que firmaron contrato hasta que finalizaron la fase</p>
+<p>La siguiente tabla contiene el listado de los días trabajados en zona por cada Punto de erradicación, desde que firmaron contrato hasta que finalizaron la fase</p><p><font color="#F78181">Datos operativos del grupo de erradicación, cifras no oficiales, pendiente de validación y verificación por parte del ente neutral</font></p>
 <hr>
 
 <table>
 	<tr>
 		<td><?php if ($grafica_dias_contratados_list->TotalRecs > 0 && $grafica_dias_contratados_list->ExportOptions->Visible()) { ?>
 			<?php $grafica_dias_contratados_list->ExportOptions->Render("body") ?></td>
+
+
+
 		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono </td>
 	</tr>
 </table>
@@ -1713,6 +1744,7 @@ fgrafica_dias_contratadoslistsrch.ValidateRequired = false; // No JavaScript val
 
 <?php } ?>
 <?php if ($grafica_dias_contratados->Export == "") { ?>
+
 
 <?php } ?>
 <div class="clearfix"></div>
@@ -1764,7 +1796,7 @@ $grafica_dias_contratados_list->RenderOtherOptions();
 <?php if ($Security->CanSearch()) { ?>
 <?php if ($grafica_dias_contratados->Export == "" && $grafica_dias_contratados->CurrentAction == "") { ?>
 <form name="fgrafica_dias_contratadoslistsrch" id="fgrafica_dias_contratadoslistsrch" class="form-inline ewForm" action="<?php echo ew_CurrentPage() ?>">
-<?php $SearchPanelClass = ($grafica_dias_contratados_list->SearchWhere <> "") ? " " : " "; ?>
+<?php $SearchPanelClass = ($grafica_dias_contratados_list->SearchWhere <> "") ? " in" : " in"; ?>
 <div id="fgrafica_dias_contratadoslistsrch_SearchPanel" class="ewSearchPanel collapse<?php echo $SearchPanelClass ?>">
 <input type="hidden" name="cmd" value="search">
 <input type="hidden" name="t" value="grafica_dias_contratados">
@@ -1780,6 +1812,8 @@ $grafica_dias_contratados->RowType = EW_ROWTYPE_SEARCH;
 $grafica_dias_contratados->ResetAttrs();
 $grafica_dias_contratados_list->RenderRow();
 ?>
+<div id="xsr_1" class="ewRow">
+
 
 <table>
 	<tr>
@@ -1804,13 +1838,6 @@ $grafica_dias_contratados_list->RenderRow();
 <br>
 <br>
 <hr>
-
-
-<?php if ($grafica_dias_contratados->Punto->Visible) { // Punto ?>
-<?php } ?>
-
-<?php if ($grafica_dias_contratados->Profesional->Visible) { // Profesional ?>
-<?php } ?>
 
 
 	</div>
@@ -1949,6 +1976,15 @@ $grafica_dias_contratados_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
+<?php if ($grafica_dias_contratados->Dias_reportados->Visible) { // Dias_reportados ?>
+	<?php if ($grafica_dias_contratados->SortUrl($grafica_dias_contratados->Dias_reportados) == "") { ?>
+		<th data-name="Dias_reportados"><div id="elh_grafica_dias_contratados_Dias_reportados" class="grafica_dias_contratados_Dias_reportados"><div class="ewTableHeaderCaption"><?php echo $grafica_dias_contratados->Dias_reportados->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Dias_reportados"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_dias_contratados->SortUrl($grafica_dias_contratados->Dias_reportados) ?>',2);"><div id="elh_grafica_dias_contratados_Dias_reportados" class="grafica_dias_contratados_Dias_reportados">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_dias_contratados->Dias_reportados->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_dias_contratados->Dias_reportados->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_dias_contratados->Dias_reportados->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
 <?php
 
 // Render list options (header, right)
@@ -2042,6 +2078,12 @@ $grafica_dias_contratados_list->ListOptions->Render("body", "left", $grafica_dia
 		<td data-name="dias"<?php echo $grafica_dias_contratados->dias->CellAttributes() ?>>
 <span<?php echo $grafica_dias_contratados->dias->ViewAttributes() ?>>
 <?php echo $grafica_dias_contratados->dias->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($grafica_dias_contratados->Dias_reportados->Visible) { // Dias_reportados ?>
+		<td data-name="Dias_reportados"<?php echo $grafica_dias_contratados->Dias_reportados->CellAttributes() ?>>
+<span<?php echo $grafica_dias_contratados->Dias_reportados->ViewAttributes() ?>>
+<?php echo $grafica_dias_contratados->Dias_reportados->ListViewValue() ?></span>
 </td>
 	<?php } ?>
 <?php

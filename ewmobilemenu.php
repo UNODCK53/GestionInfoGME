@@ -13,7 +13,7 @@ $RootMenu->AddMenuItem(127, "mmci_Control_c1reas_Vivac", $Language->MenuPhrase("
 $RootMenu->AddMenuItem(159, "mmi_view_cav", $Language->MenuPhrase("159", "MenuText"), "view_cavlist.php", 127, "", AllowListMenu('{D6213859-7C64-4DB8-BACE-8E97DF9FA7FD}view_cav'), FALSE);
 $RootMenu->AddMenuItem(64, "mmi_control_vivac", $Language->MenuPhrase("64", "MenuText"), "control_vivaclist.php", 127, "", AllowListMenu('{D6213859-7C64-4DB8-BACE-8E97DF9FA7FD}control_vivac'), FALSE);
 $RootMenu->AddMenuItem(151, "mmci_Reporte_de_Accidentes", $Language->MenuPhrase("151", "MenuText"), "", -1, "", IsLoggedIn(), TRUE, TRUE);
-$RootMenu->AddMenuItem(163, "mmi_view1_acc", $Language->MenuPhrase("163", "MenuText"), "view1_acclist.php", 151, "", AllowListMenu('{D6213859-7C64-4DB8-BACE-8E97DF9FA7FD}view1_acc'), FALSE);
+$RootMenu->AddMenuItem(276, "mmi_view1_acc", $Language->MenuPhrase("276", "MenuText"), "view1_acclist.php", 151, "", AllowListMenu('{D6213859-7C64-4DB8-BACE-8E97DF9FA7FD}view1_acc'), FALSE);
 $RootMenu->AddMenuItem(144, "mmi_accidentes", $Language->MenuPhrase("144", "MenuText"), "accidenteslist.php", 151, "", AllowListMenu('{D6213859-7C64-4DB8-BACE-8E97DF9FA7FD}accidentes'), FALSE);
 $RootMenu->AddMenuItem(152, "mmci_Enlace_y_Novedad", $Language->MenuPhrase("152", "MenuText"), "", -1, "", IsLoggedIn(), TRUE, TRUE);
 $RootMenu->AddMenuItem(162, "mmi_view_e_y_n", $Language->MenuPhrase("162", "MenuText"), "view_e_y_nlist.php", 152, "", AllowListMenu('{D6213859-7C64-4DB8-BACE-8E97DF9FA7FD}view_e_y_n'), FALSE);
@@ -22,6 +22,7 @@ $RootMenu->AddMenuItem(228, "mmci_Modulo_de_Gre1ficas", $Language->MenuPhrase("2
 $RootMenu->AddMenuItem(231, "mmi_grafica_accidentes_trabajo", $Language->MenuPhrase("231", "MenuText"), "grafica_accidentes_trabajolist.php", 228, "", AllowListMenu('{D6213859-7C64-4DB8-BACE-8E97DF9FA7FD}grafica_accidentes_trabajo'), FALSE);
 $RootMenu->AddMenuItem(232, "mmi_grafica_apoyos_zonales", $Language->MenuPhrase("232", "MenuText"), "grafica_apoyos_zonaleslist.php", 228, "", AllowListMenu('{D6213859-7C64-4DB8-BACE-8E97DF9FA7FD}grafica_apoyos_zonales'), FALSE);
 $RootMenu->AddMenuItem(233, "mmi_grafica_desempeno_punto", $Language->MenuPhrase("233", "MenuText"), "grafica_desempeno_puntolist.php", 228, "", AllowListMenu('{D6213859-7C64-4DB8-BACE-8E97DF9FA7FD}grafica_desempeno_punto'), FALSE);
+$RootMenu->AddMenuItem(275, "mmi_grafica_capacidad_efectiva", $Language->MenuPhrase("275", "MenuText"), "grafica_capacidad_efectivalist.php", 228, "", AllowListMenu('{D6213859-7C64-4DB8-BACE-8E97DF9FA7FD}grafica_capacidad_efectiva'), FALSE);
 $RootMenu->AddMenuItem(234, "mmi_grafica_dia_dia_hectareas", $Language->MenuPhrase("234", "MenuText"), "grafica_dia_dia_hectareaslist.php", 228, "", AllowListMenu('{D6213859-7C64-4DB8-BACE-8E97DF9FA7FD}grafica_dia_dia_hectareas'), FALSE);
 $RootMenu->AddMenuItem(235, "mmi_grafica_dias_contratados", $Language->MenuPhrase("235", "MenuText"), "grafica_dias_contratadoslist.php", 228, "", AllowListMenu('{D6213859-7C64-4DB8-BACE-8E97DF9FA7FD}grafica_dias_contratados'), FALSE);
 $RootMenu->AddMenuItem(236, "mmi_grafica_disponibilidad_gme", $Language->MenuPhrase("236", "MenuText"), "grafica_disponibilidad_gmelist.php", 228, "", AllowListMenu('{D6213859-7C64-4DB8-BACE-8E97DF9FA7FD}grafica_disponibilidad_gme'), FALSE);

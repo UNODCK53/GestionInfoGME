@@ -671,7 +671,8 @@ class cview_id_list extends cview_id {
 	// Set up key values
 	function SetupKeyValues($key) {
 		$arrKeyFlds = explode($GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"], $key);
-		if (count($arrKeyFlds) >= 0) {
+		if (count($arrKeyFlds) >= 1) {
+			$this->llave->setFormValue($arrKeyFlds[0]);
 		}
 		return TRUE;
 	}
@@ -690,8 +691,11 @@ class cview_id_list extends cview_id {
 		$this->BuildSearchSql($sWhere, $this->FECHA_REPORT, $Default, FALSE); // FECHA_REPORT
 		$this->BuildSearchSql($sWhere, $this->Departamento, $Default, FALSE); // Departamento
 		$this->BuildSearchSql($sWhere, $this->Muncipio, $Default, FALSE); // Muncipio
+		$this->BuildSearchSql($sWhere, $this->FUERZA, $Default, FALSE); // FUERZA
+		$this->BuildSearchSql($sWhere, $this->_3_MUSE, $Default, FALSE); // 3_MUSE
 		$this->BuildSearchSql($sWhere, $this->AD1O, $Default, FALSE); // AÑO
 		$this->BuildSearchSql($sWhere, $this->FASE, $Default, FALSE); // FASE
+		$this->BuildSearchSql($sWhere, $this->Modificado, $Default, FALSE); // Modificado
 
 		// Set up search parm
 		if (!$Default && $sWhere <> "") {
@@ -707,8 +711,11 @@ class cview_id_list extends cview_id {
 			$this->FECHA_REPORT->AdvancedSearch->Save(); // FECHA_REPORT
 			$this->Departamento->AdvancedSearch->Save(); // Departamento
 			$this->Muncipio->AdvancedSearch->Save(); // Muncipio
+			$this->FUERZA->AdvancedSearch->Save(); // FUERZA
+			$this->_3_MUSE->AdvancedSearch->Save(); // 3_MUSE
 			$this->AD1O->AdvancedSearch->Save(); // AÑO
 			$this->FASE->AdvancedSearch->Save(); // FASE
+			$this->Modificado->AdvancedSearch->Save(); // Modificado
 		}
 		return $sWhere;
 	}
@@ -774,8 +781,10 @@ class cview_id_list extends cview_id {
 		$this->BuildBasicSearchSQL($sWhere, $this->FECHA_REPORT, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->Departamento, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->Muncipio, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->FUERZA, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->AD1O, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->FASE, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->Modificado, $arKeywords, $type);
 		return $sWhere;
 	}
 
@@ -908,9 +917,15 @@ class cview_id_list extends cview_id {
 			return TRUE;
 		if ($this->Muncipio->AdvancedSearch->IssetSession())
 			return TRUE;
+		if ($this->FUERZA->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->_3_MUSE->AdvancedSearch->IssetSession())
+			return TRUE;
 		if ($this->AD1O->AdvancedSearch->IssetSession())
 			return TRUE;
 		if ($this->FASE->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->Modificado->AdvancedSearch->IssetSession())
 			return TRUE;
 		return FALSE;
 	}
@@ -950,8 +965,11 @@ class cview_id_list extends cview_id {
 		$this->FECHA_REPORT->AdvancedSearch->UnsetSession();
 		$this->Departamento->AdvancedSearch->UnsetSession();
 		$this->Muncipio->AdvancedSearch->UnsetSession();
+		$this->FUERZA->AdvancedSearch->UnsetSession();
+		$this->_3_MUSE->AdvancedSearch->UnsetSession();
 		$this->AD1O->AdvancedSearch->UnsetSession();
 		$this->FASE->AdvancedSearch->UnsetSession();
+		$this->Modificado->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
@@ -971,8 +989,11 @@ class cview_id_list extends cview_id {
 		$this->FECHA_REPORT->AdvancedSearch->Load();
 		$this->Departamento->AdvancedSearch->Load();
 		$this->Muncipio->AdvancedSearch->Load();
+		$this->FUERZA->AdvancedSearch->Load();
+		$this->_3_MUSE->AdvancedSearch->Load();
 		$this->AD1O->AdvancedSearch->Load();
 		$this->FASE->AdvancedSearch->Load();
+		$this->Modificado->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -1055,6 +1076,7 @@ class cview_id_list extends cview_id {
 			$this->UpdateSort($this->_3_Hostigamiento, $bCtrl); // 3_Hostigamiento
 			$this->UpdateSort($this->_3_MAP_Controlada, $bCtrl); // 3_MAP_Controlada
 			$this->UpdateSort($this->_3_MAP_No_controlada, $bCtrl); // 3_MAP_No_controlada
+			$this->UpdateSort($this->_3_MUSE, $bCtrl); // 3_MUSE
 			$this->UpdateSort($this->_3_Operaciones_de_seguridad, $bCtrl); // 3_Operaciones_de_seguridad
 			$this->UpdateSort($this->LATITUD_segurid, $bCtrl); // LATITUD_segurid
 			$this->UpdateSort($this->GRA_LAT_segurid, $bCtrl); // GRA_LAT_segurid
@@ -1078,6 +1100,7 @@ class cview_id_list extends cview_id {
 			$this->UpdateSort($this->NUM_Poli, $bCtrl); // NUM_Poli
 			$this->UpdateSort($this->AD1O, $bCtrl); // AÑO
 			$this->UpdateSort($this->FASE, $bCtrl); // FASE
+			$this->UpdateSort($this->Modificado, $bCtrl); // Modificado
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1180,6 +1203,7 @@ class cview_id_list extends cview_id {
 				$this->_3_Hostigamiento->setSort("");
 				$this->_3_MAP_Controlada->setSort("");
 				$this->_3_MAP_No_controlada->setSort("");
+				$this->_3_MUSE->setSort("");
 				$this->_3_Operaciones_de_seguridad->setSort("");
 				$this->LATITUD_segurid->setSort("");
 				$this->GRA_LAT_segurid->setSort("");
@@ -1203,6 +1227,7 @@ class cview_id_list extends cview_id {
 				$this->NUM_Poli->setSort("");
 				$this->AD1O->setSort("");
 				$this->FASE->setSort("");
+				$this->Modificado->setSort("");
 			}
 
 			// Reset start position
@@ -1220,6 +1245,18 @@ class cview_id_list extends cview_id {
 		$item->Body = "";
 		$item->OnLeft = TRUE;
 		$item->Visible = FALSE;
+
+		// "edit"
+		$item = &$this->ListOptions->Add("edit");
+		$item->CssStyle = "white-space: nowrap;";
+		$item->Visible = $Security->CanEdit();
+		$item->OnLeft = TRUE;
+
+		// "delete"
+		$item = &$this->ListOptions->Add("delete");
+		$item->CssStyle = "white-space: nowrap;";
+		$item->Visible = $Security->CanDelete();
+		$item->OnLeft = TRUE;
 
 		// "checkbox"
 		$item = &$this->ListOptions->Add("checkbox");
@@ -1251,8 +1288,24 @@ class cview_id_list extends cview_id {
 		global $Security, $Language, $objForm;
 		$this->ListOptions->LoadDefault();
 
+		// "edit"
+		$oListOpt = &$this->ListOptions->Items["edit"];
+		if ($Security->CanEdit()) {
+			$oListOpt->Body = "<a class=\"ewRowLink ewEdit\" title=\"" . ew_HtmlTitle($Language->Phrase("EditLink")) . "\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("EditLink")) . "\" href=\"" . ew_HtmlEncode($this->EditUrl) . "\">" . $Language->Phrase("EditLink") . "</a>";
+		} else {
+			$oListOpt->Body = "";
+		}
+
+		// "delete"
+		$oListOpt = &$this->ListOptions->Items["delete"];
+		if ($Security->CanDelete())
+			$oListOpt->Body = "<a class=\"ewRowLink ewDelete\"" . "" . " title=\"" . ew_HtmlTitle($Language->Phrase("DeleteLink")) . "\" data-caption=\"" . ew_HtmlTitle($Language->Phrase("DeleteLink")) . "\" href=\"" . ew_HtmlEncode($this->DeleteUrl) . "\">" . $Language->Phrase("DeleteLink") . "</a>";
+		else
+			$oListOpt->Body = "";
+
 		// "checkbox"
 		$oListOpt = &$this->ListOptions->Items["checkbox"];
+		$oListOpt->Body = "<input type=\"checkbox\" name=\"key_m[]\" value=\"" . ew_HtmlEncode($this->llave->CurrentValue) . "\" onclick='ew_ClickMultiCheckbox(event, this);'>";
 		$this->RenderListOptionsExt();
 
 		// Call ListOptions_Rendered event
@@ -1488,6 +1541,16 @@ class cview_id_list extends cview_id {
 		if ($this->Muncipio->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->Muncipio->AdvancedSearch->SearchOperator = @$_GET["z_Muncipio"];
 
+		// FUERZA
+		$this->FUERZA->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_FUERZA"]);
+		if ($this->FUERZA->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->FUERZA->AdvancedSearch->SearchOperator = @$_GET["z_FUERZA"];
+
+		// 3_MUSE
+		$this->_3_MUSE->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x__3_MUSE"]);
+		if ($this->_3_MUSE->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->_3_MUSE->AdvancedSearch->SearchOperator = @$_GET["z__3_MUSE"];
+
 		// AÑO
 		$this->AD1O->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_AD1O"]);
 		if ($this->AD1O->AdvancedSearch->SearchValue <> "") $this->Command = "search";
@@ -1497,6 +1560,11 @@ class cview_id_list extends cview_id {
 		$this->FASE->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_FASE"]);
 		if ($this->FASE->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->FASE->AdvancedSearch->SearchOperator = @$_GET["z_FASE"];
+
+		// Modificado
+		$this->Modificado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Modificado"]);
+		if ($this->Modificado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Modificado->AdvancedSearch->SearchOperator = @$_GET["z_Modificado"];
 	}
 
 	// Load recordset
@@ -1563,6 +1631,7 @@ class cview_id_list extends cview_id {
 		$this->TEMA->setDbValue($rs->fields('TEMA'));
 		$this->Otro_Tema->setDbValue($rs->fields('Otro_Tema'));
 		$this->OBSERVACION->setDbValue($rs->fields('OBSERVACION'));
+		$this->FUERZA->setDbValue($rs->fields('FUERZA'));
 		$this->NOM_VDA->setDbValue($rs->fields('NOM_VDA'));
 		$this->Ha_Coca->setDbValue($rs->fields('Ha_Coca'));
 		$this->Ha_Amapola->setDbValue($rs->fields('Ha_Amapola'));
@@ -1615,6 +1684,7 @@ class cview_id_list extends cview_id {
 		$this->_3_Hostigamiento->setDbValue($rs->fields('3_Hostigamiento'));
 		$this->_3_MAP_Controlada->setDbValue($rs->fields('3_MAP_Controlada'));
 		$this->_3_MAP_No_controlada->setDbValue($rs->fields('3_MAP_No_controlada'));
+		$this->_3_MUSE->setDbValue($rs->fields('3_MUSE'));
 		$this->_3_Operaciones_de_seguridad->setDbValue($rs->fields('3_Operaciones_de_seguridad'));
 		$this->LATITUD_segurid->setDbValue($rs->fields('LATITUD_segurid'));
 		$this->GRA_LAT_segurid->setDbValue($rs->fields('GRA_LAT_segurid'));
@@ -1638,6 +1708,7 @@ class cview_id_list extends cview_id {
 		$this->NUM_Poli->setDbValue($rs->fields('NUM_Poli'));
 		$this->AD1O->setDbValue($rs->fields('AÑO'));
 		$this->FASE->setDbValue($rs->fields('FASE'));
+		$this->Modificado->setDbValue($rs->fields('Modificado'));
 	}
 
 	// Load DbValue from recordset
@@ -1662,6 +1733,7 @@ class cview_id_list extends cview_id {
 		$this->TEMA->DbValue = $row['TEMA'];
 		$this->Otro_Tema->DbValue = $row['Otro_Tema'];
 		$this->OBSERVACION->DbValue = $row['OBSERVACION'];
+		$this->FUERZA->DbValue = $row['FUERZA'];
 		$this->NOM_VDA->DbValue = $row['NOM_VDA'];
 		$this->Ha_Coca->DbValue = $row['Ha_Coca'];
 		$this->Ha_Amapola->DbValue = $row['Ha_Amapola'];
@@ -1714,6 +1786,7 @@ class cview_id_list extends cview_id {
 		$this->_3_Hostigamiento->DbValue = $row['3_Hostigamiento'];
 		$this->_3_MAP_Controlada->DbValue = $row['3_MAP_Controlada'];
 		$this->_3_MAP_No_controlada->DbValue = $row['3_MAP_No_controlada'];
+		$this->_3_MUSE->DbValue = $row['3_MUSE'];
 		$this->_3_Operaciones_de_seguridad->DbValue = $row['3_Operaciones_de_seguridad'];
 		$this->LATITUD_segurid->DbValue = $row['LATITUD_segurid'];
 		$this->GRA_LAT_segurid->DbValue = $row['GRA_LAT_segurid'];
@@ -1737,6 +1810,7 @@ class cview_id_list extends cview_id {
 		$this->NUM_Poli->DbValue = $row['NUM_Poli'];
 		$this->AD1O->DbValue = $row['AÑO'];
 		$this->FASE->DbValue = $row['FASE'];
+		$this->Modificado->DbValue = $row['Modificado'];
 	}
 
 	// Load old record
@@ -1744,6 +1818,10 @@ class cview_id_list extends cview_id {
 
 		// Load key values from Session
 		$bValidKey = TRUE;
+		if (strval($this->getKey("llave")) <> "")
+			$this->llave->CurrentValue = $this->getKey("llave"); // llave
+		else
+			$bValidKey = FALSE;
 
 		// Load old recordset
 		if ($bValidKey) {
@@ -1943,6 +2021,10 @@ class cview_id_list extends cview_id {
 			$this->_3_MAP_No_controlada->CurrentValue = ew_StrToFloat($this->_3_MAP_No_controlada->CurrentValue);
 
 		// Convert decimal values if posted back
+		if ($this->_3_MUSE->FormValue == $this->_3_MUSE->CurrentValue && is_numeric(ew_StrToFloat($this->_3_MUSE->CurrentValue)))
+			$this->_3_MUSE->CurrentValue = ew_StrToFloat($this->_3_MUSE->CurrentValue);
+
+		// Convert decimal values if posted back
 		if ($this->_3_Operaciones_de_seguridad->FormValue == $this->_3_Operaciones_de_seguridad->CurrentValue && is_numeric(ew_StrToFloat($this->_3_Operaciones_de_seguridad->CurrentValue)))
 			$this->_3_Operaciones_de_seguridad->CurrentValue = ew_StrToFloat($this->_3_Operaciones_de_seguridad->CurrentValue);
 
@@ -2004,6 +2086,7 @@ class cview_id_list extends cview_id {
 		// TEMA
 		// Otro_Tema
 		// OBSERVACION
+		// FUERZA
 		// NOM_VDA
 		// Ha_Coca
 		// Ha_Amapola
@@ -2056,6 +2139,7 @@ class cview_id_list extends cview_id {
 		// 3_Hostigamiento
 		// 3_MAP_Controlada
 		// 3_MAP_No_controlada
+		// 3_MUSE
 		// 3_Operaciones_de_seguridad
 		// LATITUD_segurid
 		// GRA_LAT_segurid
@@ -2079,6 +2163,7 @@ class cview_id_list extends cview_id {
 		// NUM_Poli
 		// AÑO
 		// FASE
+		// Modificado
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -2363,6 +2448,10 @@ class cview_id_list extends cview_id {
 			$this->_3_MAP_No_controlada->ViewValue = $this->_3_MAP_No_controlada->CurrentValue;
 			$this->_3_MAP_No_controlada->ViewCustomAttributes = "";
 
+			// 3_MUSE
+			$this->_3_MUSE->ViewValue = $this->_3_MUSE->CurrentValue;
+			$this->_3_MUSE->ViewCustomAttributes = "";
+
 			// 3_Operaciones_de_seguridad
 			$this->_3_Operaciones_de_seguridad->ViewValue = $this->_3_Operaciones_de_seguridad->CurrentValue;
 			$this->_3_Operaciones_de_seguridad->ViewCustomAttributes = "";
@@ -2454,6 +2543,10 @@ class cview_id_list extends cview_id {
 			// FASE
 			$this->FASE->ViewValue = $this->FASE->CurrentValue;
 			$this->FASE->ViewCustomAttributes = "";
+
+			// Modificado
+			$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+			$this->Modificado->ViewCustomAttributes = "";
 
 			// llave
 			$this->llave->LinkCustomAttributes = "";
@@ -2805,6 +2898,11 @@ class cview_id_list extends cview_id {
 			$this->_3_MAP_No_controlada->HrefValue = "";
 			$this->_3_MAP_No_controlada->TooltipValue = "";
 
+			// 3_MUSE
+			$this->_3_MUSE->LinkCustomAttributes = "";
+			$this->_3_MUSE->HrefValue = "";
+			$this->_3_MUSE->TooltipValue = "";
+
 			// 3_Operaciones_de_seguridad
 			$this->_3_Operaciones_de_seguridad->LinkCustomAttributes = "";
 			$this->_3_Operaciones_de_seguridad->HrefValue = "";
@@ -2919,6 +3017,11 @@ class cview_id_list extends cview_id {
 			$this->FASE->LinkCustomAttributes = "";
 			$this->FASE->HrefValue = "";
 			$this->FASE->TooltipValue = "";
+
+			// Modificado
+			$this->Modificado->LinkCustomAttributes = "";
+			$this->Modificado->HrefValue = "";
+			$this->Modificado->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
 			// llave
@@ -3341,6 +3444,12 @@ class cview_id_list extends cview_id {
 			$this->_3_MAP_No_controlada->EditValue = ew_HtmlEncode($this->_3_MAP_No_controlada->AdvancedSearch->SearchValue);
 			$this->_3_MAP_No_controlada->PlaceHolder = ew_RemoveHtml($this->_3_MAP_No_controlada->FldCaption());
 
+			// 3_MUSE
+			$this->_3_MUSE->EditAttrs["class"] = "form-control";
+			$this->_3_MUSE->EditCustomAttributes = "";
+			$this->_3_MUSE->EditValue = ew_HtmlEncode($this->_3_MUSE->AdvancedSearch->SearchValue);
+			$this->_3_MUSE->PlaceHolder = ew_RemoveHtml($this->_3_MUSE->FldCaption());
+
 			// 3_Operaciones_de_seguridad
 			$this->_3_Operaciones_de_seguridad->EditAttrs["class"] = "form-control";
 			$this->_3_Operaciones_de_seguridad->EditCustomAttributes = "";
@@ -3478,6 +3587,12 @@ class cview_id_list extends cview_id {
 			$this->FASE->EditCustomAttributes = "";
 			$this->FASE->EditValue = ew_HtmlEncode($this->FASE->AdvancedSearch->SearchValue);
 			$this->FASE->PlaceHolder = ew_RemoveHtml($this->FASE->FldCaption());
+
+			// Modificado
+			$this->Modificado->EditAttrs["class"] = "form-control";
+			$this->Modificado->EditCustomAttributes = "";
+			$this->Modificado->EditValue = ew_HtmlEncode($this->Modificado->AdvancedSearch->SearchValue);
+			$this->Modificado->PlaceHolder = ew_RemoveHtml($this->Modificado->FldCaption());
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -3524,8 +3639,11 @@ class cview_id_list extends cview_id {
 		$this->FECHA_REPORT->AdvancedSearch->Load();
 		$this->Departamento->AdvancedSearch->Load();
 		$this->Muncipio->AdvancedSearch->Load();
+		$this->FUERZA->AdvancedSearch->Load();
+		$this->_3_MUSE->AdvancedSearch->Load();
 		$this->AD1O->AdvancedSearch->Load();
 		$this->FASE->AdvancedSearch->Load();
+		$this->Modificado->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -3895,6 +4013,18 @@ fview_idlistsrch.ValidateRequired = false; // No JavaScript validation
 <?php if ($view_id->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
+<?php if ($view_id_list->TotalRecs > 0 && $view_id_list->ExportOptions->Visible()) { ?>
+<?php $view_id_list->ExportOptions->Render("body") ?>
+<?php } ?>
+<?php if ($view_id_list->SearchOptions->Visible()) { ?>
+<?php $view_id_list->SearchOptions->Render("body") ?>
+<?php } ?>
+
+
+
+
+
+
 <H2> Informe diario</h2>
 <p>La siguiente tabla contiene los informes diarios realizados desde la fase II de erradicación 2015 a la fecha</p>
 
@@ -3903,8 +4033,10 @@ fview_idlistsrch.ValidateRequired = false; // No JavaScript validation
 	<tr>
 		<td>
 			<?php if ($view_id_list->TotalRecs > 0 && $view_id_list->ExportOptions->Visible()) { ?>
+
 			<?php $view_id_list->ExportOptions->Render("body") ?>
 			<?php } ?>
+
 		</td>
 		<td>
 			Si desea exportar la tabla en formato excel haga click en el siguiente icono 
@@ -3914,6 +4046,7 @@ fview_idlistsrch.ValidateRequired = false; // No JavaScript validation
 
 <hr>
 </div>
+
 
 <?php if ($view_id_list->SearchOptions->Visible()) { ?>
 
@@ -3982,6 +4115,7 @@ $view_id->RowType = EW_ROWTYPE_SEARCH;
 $view_id->ResetAttrs();
 $view_id_list->RenderRow();
 ?>
+
 
 <table>
 	<tr>
@@ -4056,17 +4190,77 @@ $view_id_list->RenderRow();
 </table>
 
 <?php if ($view_id->USUARIO->Visible) { // USUARIO ?>
-<?php } ?>
-<?php if ($view_id->NOM_PE->Visible) { // NOM_PE ?>	
-<?php } ?>
-<?php if ($view_id->NOM_PGE->Visible) { // NOM_PGE ?>
-<?php } ?>
-<?php if ($view_id->AD1O->Visible) { // AÑO ?>
-<?php } ?>
-<?php if ($view_id->FASE->Visible) { // FASE ?>
+
+
+
+
+
+
+
 <?php } ?>
 
+
+
+
+
+
+
+
+
+
+<?php if ($view_id->NOM_PE->Visible) { // NOM_PE ?>	
+<?php } ?>
+
+
+<?php if ($view_id->NOM_PGE->Visible) { // NOM_PGE ?>
+
+
+
+
+
+
+
+<?php } ?>
+
+
+<?php if ($view_id->AD1O->Visible) { // AÑO ?>
+
+
+
+
+
+
+
+<?php } ?>
+
+
+<?php if ($view_id->FASE->Visible) { // FASE ?>
+
+
+
+
+
+
+
+<?php } ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+
+
+
 
 <br>
 <br>
@@ -4793,6 +4987,15 @@ $view_id_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
+<?php if ($view_id->_3_MUSE->Visible) { // 3_MUSE ?>
+	<?php if ($view_id->SortUrl($view_id->_3_MUSE) == "") { ?>
+		<th data-name="_3_MUSE"><div id="elh_view_id__3_MUSE" class="view_id__3_MUSE"><div class="ewTableHeaderCaption"><?php echo $view_id->_3_MUSE->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="_3_MUSE"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_id->SortUrl($view_id->_3_MUSE) ?>',2);"><div id="elh_view_id__3_MUSE" class="view_id__3_MUSE">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_id->_3_MUSE->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view_id->_3_MUSE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_id->_3_MUSE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
 <?php if ($view_id->_3_Operaciones_de_seguridad->Visible) { // 3_Operaciones_de_seguridad ?>
 	<?php if ($view_id->SortUrl($view_id->_3_Operaciones_de_seguridad) == "") { ?>
 		<th data-name="_3_Operaciones_de_seguridad"><div id="elh_view_id__3_Operaciones_de_seguridad" class="view_id__3_Operaciones_de_seguridad"><div class="ewTableHeaderCaption"><?php echo $view_id->_3_Operaciones_de_seguridad->FldCaption() ?></div></div></th>
@@ -4997,6 +5200,15 @@ $view_id_list->ListOptions->Render("header", "left");
 	<?php } else { ?>
 		<th data-name="FASE"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_id->SortUrl($view_id->FASE) ?>',2);"><div id="elh_view_id_FASE" class="view_id_FASE">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_id->FASE->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view_id->FASE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_id->FASE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($view_id->Modificado->Visible) { // Modificado ?>
+	<?php if ($view_id->SortUrl($view_id->Modificado) == "") { ?>
+		<th data-name="Modificado"><div id="elh_view_id_Modificado" class="view_id_Modificado"><div class="ewTableHeaderCaption"><?php echo $view_id->Modificado->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Modificado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_id->SortUrl($view_id->Modificado) ?>',2);"><div id="elh_view_id_Modificado" class="view_id_Modificado">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_id->Modificado->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view_id->Modificado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_id->Modificado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -5485,6 +5697,12 @@ $view_id_list->ListOptions->Render("body", "left", $view_id_list->RowCnt);
 <?php echo $view_id->_3_MAP_No_controlada->ListViewValue() ?></span>
 </td>
 	<?php } ?>
+	<?php if ($view_id->_3_MUSE->Visible) { // 3_MUSE ?>
+		<td data-name="_3_MUSE"<?php echo $view_id->_3_MUSE->CellAttributes() ?>>
+<span<?php echo $view_id->_3_MUSE->ViewAttributes() ?>>
+<?php echo $view_id->_3_MUSE->ListViewValue() ?></span>
+</td>
+	<?php } ?>
 	<?php if ($view_id->_3_Operaciones_de_seguridad->Visible) { // 3_Operaciones_de_seguridad ?>
 		<td data-name="_3_Operaciones_de_seguridad"<?php echo $view_id->_3_Operaciones_de_seguridad->CellAttributes() ?>>
 <span<?php echo $view_id->_3_Operaciones_de_seguridad->ViewAttributes() ?>>
@@ -5621,6 +5839,12 @@ $view_id_list->ListOptions->Render("body", "left", $view_id_list->RowCnt);
 		<td data-name="FASE"<?php echo $view_id->FASE->CellAttributes() ?>>
 <span<?php echo $view_id->FASE->ViewAttributes() ?>>
 <?php echo $view_id->FASE->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($view_id->Modificado->Visible) { // Modificado ?>
+		<td data-name="Modificado"<?php echo $view_id->Modificado->CellAttributes() ?>>
+<span<?php echo $view_id->Modificado->ViewAttributes() ?>>
+<?php echo $view_id->Modificado->ListViewValue() ?></span>
 </td>
 	<?php } ?>
 <?php
