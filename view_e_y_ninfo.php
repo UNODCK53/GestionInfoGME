@@ -35,11 +35,11 @@ class cview_e_y_n extends cTable {
 	var $Otro_Nom_Capata;
 	var $Otro_CC_Capata;
 	var $Muncipio;
-	var $Departamento;
 	var $F_llegada;
 	var $Fecha;
 	var $Modificado;
 	var $llave_2;
+	var $departamento;
 
 	//
 	// Table class constructor
@@ -101,7 +101,7 @@ class cview_e_y_n extends cTable {
 		$this->fields['TIPO_INFORME'] = &$this->TIPO_INFORME;
 
 		// FECHA_NOVEDAD
-		$this->FECHA_NOVEDAD = new cField('view_e_y_n', 'view_e_y_n', 'x_FECHA_NOVEDAD', 'FECHA_NOVEDAD', '`FECHA_NOVEDAD`', '`FECHA_NOVEDAD`', 200, -1, FALSE, '`FECHA_NOVEDAD`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->FECHA_NOVEDAD = new cField('view_e_y_n', 'view_e_y_n', 'x_FECHA_NOVEDAD', 'FECHA_NOVEDAD', '`FECHA_NOVEDAD`', '`FECHA_NOVEDAD`', 200, 5, FALSE, '`FECHA_NOVEDAD`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['FECHA_NOVEDAD'] = &$this->FECHA_NOVEDAD;
 
 		// DIA
@@ -182,10 +182,6 @@ class cview_e_y_n extends cTable {
 		$this->Muncipio = new cField('view_e_y_n', 'view_e_y_n', 'x_Muncipio', 'Muncipio', '`Muncipio`', '`Muncipio`', 201, -1, FALSE, '`Muncipio`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['Muncipio'] = &$this->Muncipio;
 
-		// Departamento
-		$this->Departamento = new cField('view_e_y_n', 'view_e_y_n', 'x_Departamento', 'Departamento', '`Departamento`', '`Departamento`', 200, -1, FALSE, '`Departamento`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->fields['Departamento'] = &$this->Departamento;
-
 		// F_llegada
 		$this->F_llegada = new cField('view_e_y_n', 'view_e_y_n', 'x_F_llegada', 'F_llegada', '`F_llegada`', '`F_llegada`', 201, -1, FALSE, '`F_llegada`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['F_llegada'] = &$this->F_llegada;
@@ -201,6 +197,10 @@ class cview_e_y_n extends cTable {
 		// llave_2
 		$this->llave_2 = new cField('view_e_y_n', 'view_e_y_n', 'x_llave_2', 'llave_2', '`llave_2`', '`llave_2`', 200, -1, FALSE, '`llave_2`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['llave_2'] = &$this->llave_2;
+
+		// departamento
+		$this->departamento = new cField('view_e_y_n', 'view_e_y_n', 'x_departamento', 'departamento', '`departamento`', '`departamento`', 200, -1, FALSE, '`departamento`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['departamento'] = &$this->departamento;
 	}
 
 	// Multiple column sort
@@ -710,11 +710,11 @@ class cview_e_y_n extends cTable {
 		$this->Otro_Nom_Capata->setDbValue($rs->fields('Otro_Nom_Capata'));
 		$this->Otro_CC_Capata->setDbValue($rs->fields('Otro_CC_Capata'));
 		$this->Muncipio->setDbValue($rs->fields('Muncipio'));
-		$this->Departamento->setDbValue($rs->fields('Departamento'));
 		$this->F_llegada->setDbValue($rs->fields('F_llegada'));
 		$this->Fecha->setDbValue($rs->fields('Fecha'));
 		$this->Modificado->setDbValue($rs->fields('Modificado'));
 		$this->llave_2->setDbValue($rs->fields('llave_2'));
+		$this->departamento->setDbValue($rs->fields('departamento'));
 	}
 
 	// Render list row values
@@ -753,7 +753,6 @@ class cview_e_y_n extends cTable {
 		// Otro_Nom_Capata
 		// Otro_CC_Capata
 		// Muncipio
-		// Departamento
 		// F_llegada
 		// Fecha
 		// Modificado
@@ -761,7 +760,9 @@ class cview_e_y_n extends cTable {
 
 		$this->llave_2->CellCssStyle = "white-space: nowrap;";
 
+		// departamento
 		// ID_Formulario
+
 		$this->ID_Formulario->ViewValue = $this->ID_Formulario->CurrentValue;
 		$this->ID_Formulario->ViewCustomAttributes = "";
 
@@ -771,7 +772,36 @@ class cview_e_y_n extends cTable {
 		$this->F_Sincron->ViewCustomAttributes = "";
 
 		// USUARIO
-		$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+		if (strval($this->USUARIO->CurrentValue) <> "") {
+			$sFilterWrk = "`USUARIO`" . ew_SearchString("=", $this->USUARIO->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->USUARIO, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `USUARIO` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->USUARIO->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+			}
+		} else {
+			$this->USUARIO->ViewValue = NULL;
+		}
 		$this->USUARIO->ViewCustomAttributes = "";
 
 		// Cargo_gme
@@ -779,7 +809,36 @@ class cview_e_y_n extends cTable {
 		$this->Cargo_gme->ViewCustomAttributes = "";
 
 		// NOM_GE
-		$this->NOM_GE->ViewValue = $this->NOM_GE->CurrentValue;
+		if (strval($this->NOM_GE->CurrentValue) <> "") {
+			$sFilterWrk = "`NOM_GE`" . ew_SearchString("=", $this->NOM_GE->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `NOM_GE`, `NOM_GE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `NOM_GE`, `NOM_GE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->NOM_GE, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `NOM_GE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->NOM_GE->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->NOM_GE->ViewValue = $this->NOM_GE->CurrentValue;
+			}
+		} else {
+			$this->NOM_GE->ViewValue = NULL;
+		}
 		$this->NOM_GE->ViewCustomAttributes = "";
 
 		// Otro_PGE
@@ -791,11 +850,45 @@ class cview_e_y_n extends cTable {
 		$this->Otro_CC_PGE->ViewCustomAttributes = "";
 
 		// TIPO_INFORME
-		$this->TIPO_INFORME->ViewValue = $this->TIPO_INFORME->CurrentValue;
+		if (strval($this->TIPO_INFORME->CurrentValue) <> "") {
+			$sFilterWrk = "`label`" . ew_SearchString("=", $this->TIPO_INFORME->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+				$sWhereWrk = "";
+				break;
+		}
+		$lookuptblfilter = "`list name`='informe'";
+		if (strval($lookuptblfilter) <> "") {
+			ew_AddFilter($sWhereWrk, $lookuptblfilter);
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->TIPO_INFORME, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `label` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->TIPO_INFORME->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->TIPO_INFORME->ViewValue = $this->TIPO_INFORME->CurrentValue;
+			}
+		} else {
+			$this->TIPO_INFORME->ViewValue = NULL;
+		}
 		$this->TIPO_INFORME->ViewCustomAttributes = "";
 
 		// FECHA_NOVEDAD
 		$this->FECHA_NOVEDAD->ViewValue = $this->FECHA_NOVEDAD->CurrentValue;
+		$this->FECHA_NOVEDAD->ViewValue = ew_FormatDateTime($this->FECHA_NOVEDAD->ViewValue, 5);
 		$this->FECHA_NOVEDAD->ViewCustomAttributes = "";
 
 		// DIA
@@ -811,7 +904,20 @@ class cview_e_y_n extends cTable {
 		$this->Num_Evacua->ViewCustomAttributes = "";
 
 		// PTO_INCOMU
-		$this->PTO_INCOMU->ViewValue = $this->PTO_INCOMU->CurrentValue;
+		if (strval($this->PTO_INCOMU->CurrentValue) <> "") {
+			switch ($this->PTO_INCOMU->CurrentValue) {
+				case $this->PTO_INCOMU->FldTagValue(1):
+					$this->PTO_INCOMU->ViewValue = $this->PTO_INCOMU->FldTagCaption(1) <> "" ? $this->PTO_INCOMU->FldTagCaption(1) : $this->PTO_INCOMU->CurrentValue;
+					break;
+				case $this->PTO_INCOMU->FldTagValue(2):
+					$this->PTO_INCOMU->ViewValue = $this->PTO_INCOMU->FldTagCaption(2) <> "" ? $this->PTO_INCOMU->FldTagCaption(2) : $this->PTO_INCOMU->CurrentValue;
+					break;
+				default:
+					$this->PTO_INCOMU->ViewValue = $this->PTO_INCOMU->CurrentValue;
+			}
+		} else {
+			$this->PTO_INCOMU->ViewValue = NULL;
+		}
 		$this->PTO_INCOMU->ViewCustomAttributes = "";
 
 		// OBS_punt_inco
@@ -839,11 +945,77 @@ class cview_e_y_n extends cTable {
 		$this->CC_Otro_Per_Evacu->ViewCustomAttributes = "";
 
 		// Cargo_Per_EVA
-		$this->Cargo_Per_EVA->ViewValue = $this->Cargo_Per_EVA->CurrentValue;
+		if (strval($this->Cargo_Per_EVA->CurrentValue) <> "") {
+			$sFilterWrk = "`label`" . ew_SearchString("=", $this->Cargo_Per_EVA->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+				$sWhereWrk = "";
+				break;
+		}
+		$lookuptblfilter = "`list name`='cargo'";
+		if (strval($lookuptblfilter) <> "") {
+			ew_AddFilter($sWhereWrk, $lookuptblfilter);
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Cargo_Per_EVA, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `label` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Cargo_Per_EVA->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Cargo_Per_EVA->ViewValue = $this->Cargo_Per_EVA->CurrentValue;
+			}
+		} else {
+			$this->Cargo_Per_EVA->ViewValue = NULL;
+		}
 		$this->Cargo_Per_EVA->ViewCustomAttributes = "";
 
 		// Motivo_Eva
-		$this->Motivo_Eva->ViewValue = $this->Motivo_Eva->CurrentValue;
+		if (strval($this->Motivo_Eva->CurrentValue) <> "") {
+			$sFilterWrk = "`label`" . ew_SearchString("=", $this->Motivo_Eva->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+				$sWhereWrk = "";
+				break;
+		}
+		$lookuptblfilter = "`list name`='motivo'";
+		if (strval($lookuptblfilter) <> "") {
+			ew_AddFilter($sWhereWrk, $lookuptblfilter);
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Motivo_Eva, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `label` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Motivo_Eva->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Motivo_Eva->ViewValue = $this->Motivo_Eva->CurrentValue;
+			}
+		} else {
+			$this->Motivo_Eva->ViewValue = NULL;
+		}
 		$this->Motivo_Eva->ViewCustomAttributes = "";
 
 		// OBS_EVA
@@ -851,7 +1023,36 @@ class cview_e_y_n extends cTable {
 		$this->OBS_EVA->ViewCustomAttributes = "";
 
 		// NOM_PE
-		$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+		if (strval($this->NOM_PE->CurrentValue) <> "") {
+			$sFilterWrk = "`NOM_PE`" . ew_SearchString("=", $this->NOM_PE->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->NOM_PE, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `NOM_PE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->NOM_PE->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+			}
+		} else {
+			$this->NOM_PE->ViewValue = NULL;
+		}
 		$this->NOM_PE->ViewCustomAttributes = "";
 
 		// Otro_Nom_PE
@@ -874,12 +1075,21 @@ class cview_e_y_n extends cTable {
 		$this->Muncipio->ViewValue = $this->Muncipio->CurrentValue;
 		$this->Muncipio->ViewCustomAttributes = "";
 
-		// Departamento
-		$this->Departamento->ViewValue = $this->Departamento->CurrentValue;
-		$this->Departamento->ViewCustomAttributes = "";
-
 		// F_llegada
-		$this->F_llegada->ViewValue = $this->F_llegada->CurrentValue;
+		if (strval($this->F_llegada->CurrentValue) <> "") {
+			switch ($this->F_llegada->CurrentValue) {
+				case $this->F_llegada->FldTagValue(1):
+					$this->F_llegada->ViewValue = $this->F_llegada->FldTagCaption(1) <> "" ? $this->F_llegada->FldTagCaption(1) : $this->F_llegada->CurrentValue;
+					break;
+				case $this->F_llegada->FldTagValue(2):
+					$this->F_llegada->ViewValue = $this->F_llegada->FldTagCaption(2) <> "" ? $this->F_llegada->FldTagCaption(2) : $this->F_llegada->CurrentValue;
+					break;
+				default:
+					$this->F_llegada->ViewValue = $this->F_llegada->CurrentValue;
+			}
+		} else {
+			$this->F_llegada->ViewValue = NULL;
+		}
 		$this->F_llegada->ViewCustomAttributes = "";
 
 		// Fecha
@@ -887,12 +1097,29 @@ class cview_e_y_n extends cTable {
 		$this->Fecha->ViewCustomAttributes = "";
 
 		// Modificado
-		$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+		if (strval($this->Modificado->CurrentValue) <> "") {
+			switch ($this->Modificado->CurrentValue) {
+				case $this->Modificado->FldTagValue(1):
+					$this->Modificado->ViewValue = $this->Modificado->FldTagCaption(1) <> "" ? $this->Modificado->FldTagCaption(1) : $this->Modificado->CurrentValue;
+					break;
+				case $this->Modificado->FldTagValue(2):
+					$this->Modificado->ViewValue = $this->Modificado->FldTagCaption(2) <> "" ? $this->Modificado->FldTagCaption(2) : $this->Modificado->CurrentValue;
+					break;
+				default:
+					$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+			}
+		} else {
+			$this->Modificado->ViewValue = NULL;
+		}
 		$this->Modificado->ViewCustomAttributes = "";
 
 		// llave_2
 		$this->llave_2->ViewValue = $this->llave_2->CurrentValue;
 		$this->llave_2->ViewCustomAttributes = "";
+
+		// departamento
+		$this->departamento->ViewValue = $this->departamento->CurrentValue;
+		$this->departamento->ViewCustomAttributes = "";
 
 		// ID_Formulario
 		$this->ID_Formulario->LinkCustomAttributes = "";
@@ -1034,11 +1261,6 @@ class cview_e_y_n extends cTable {
 		$this->Muncipio->HrefValue = "";
 		$this->Muncipio->TooltipValue = "";
 
-		// Departamento
-		$this->Departamento->LinkCustomAttributes = "";
-		$this->Departamento->HrefValue = "";
-		$this->Departamento->TooltipValue = "";
-
 		// F_llegada
 		$this->F_llegada->LinkCustomAttributes = "";
 		$this->F_llegada->HrefValue = "";
@@ -1058,6 +1280,11 @@ class cview_e_y_n extends cTable {
 		$this->llave_2->LinkCustomAttributes = "";
 		$this->llave_2->HrefValue = "";
 		$this->llave_2->TooltipValue = "";
+
+		// departamento
+		$this->departamento->LinkCustomAttributes = "";
+		$this->departamento->HrefValue = "";
+		$this->departamento->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -1086,7 +1313,36 @@ class cview_e_y_n extends cTable {
 		// USUARIO
 		$this->USUARIO->EditAttrs["class"] = "form-control";
 		$this->USUARIO->EditCustomAttributes = "";
-		$this->USUARIO->EditValue = $this->USUARIO->CurrentValue;
+		if (strval($this->USUARIO->CurrentValue) <> "") {
+			$sFilterWrk = "`USUARIO`" . ew_SearchString("=", $this->USUARIO->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->USUARIO, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `USUARIO` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->USUARIO->EditValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->USUARIO->EditValue = $this->USUARIO->CurrentValue;
+			}
+		} else {
+			$this->USUARIO->EditValue = NULL;
+		}
 		$this->USUARIO->ViewCustomAttributes = "";
 
 		// Cargo_gme
@@ -1098,62 +1354,61 @@ class cview_e_y_n extends cTable {
 		// NOM_GE
 		$this->NOM_GE->EditAttrs["class"] = "form-control";
 		$this->NOM_GE->EditCustomAttributes = "";
-		$this->NOM_GE->EditValue = $this->NOM_GE->CurrentValue;
-		$this->NOM_GE->ViewCustomAttributes = "";
 
 		// Otro_PGE
 		$this->Otro_PGE->EditAttrs["class"] = "form-control";
 		$this->Otro_PGE->EditCustomAttributes = "";
-		$this->Otro_PGE->EditValue = $this->Otro_PGE->CurrentValue;
-		$this->Otro_PGE->ViewCustomAttributes = "";
+		$this->Otro_PGE->EditValue = ew_HtmlEncode($this->Otro_PGE->CurrentValue);
+		$this->Otro_PGE->PlaceHolder = ew_RemoveHtml($this->Otro_PGE->FldCaption());
 
 		// Otro_CC_PGE
 		$this->Otro_CC_PGE->EditAttrs["class"] = "form-control";
 		$this->Otro_CC_PGE->EditCustomAttributes = "";
-		$this->Otro_CC_PGE->EditValue = $this->Otro_CC_PGE->CurrentValue;
-		$this->Otro_CC_PGE->ViewCustomAttributes = "";
+		$this->Otro_CC_PGE->EditValue = ew_HtmlEncode($this->Otro_CC_PGE->CurrentValue);
+		$this->Otro_CC_PGE->PlaceHolder = ew_RemoveHtml($this->Otro_CC_PGE->FldCaption());
 
 		// TIPO_INFORME
 		$this->TIPO_INFORME->EditAttrs["class"] = "form-control";
 		$this->TIPO_INFORME->EditCustomAttributes = "";
-		$this->TIPO_INFORME->EditValue = $this->TIPO_INFORME->CurrentValue;
-		$this->TIPO_INFORME->ViewCustomAttributes = "";
 
 		// FECHA_NOVEDAD
 		$this->FECHA_NOVEDAD->EditAttrs["class"] = "form-control";
 		$this->FECHA_NOVEDAD->EditCustomAttributes = "";
-		$this->FECHA_NOVEDAD->EditValue = $this->FECHA_NOVEDAD->CurrentValue;
-		$this->FECHA_NOVEDAD->ViewCustomAttributes = "";
+		$this->FECHA_NOVEDAD->EditValue = ew_HtmlEncode($this->FECHA_NOVEDAD->CurrentValue);
+		$this->FECHA_NOVEDAD->PlaceHolder = ew_RemoveHtml($this->FECHA_NOVEDAD->FldCaption());
 
 		// DIA
 		$this->DIA->EditAttrs["class"] = "form-control";
 		$this->DIA->EditCustomAttributes = "";
-		$this->DIA->EditValue = $this->DIA->CurrentValue;
-		$this->DIA->ViewCustomAttributes = "";
+		$this->DIA->EditValue = ew_HtmlEncode($this->DIA->CurrentValue);
+		$this->DIA->PlaceHolder = ew_RemoveHtml($this->DIA->FldCaption());
 
 		// MES
 		$this->MES->EditAttrs["class"] = "form-control";
 		$this->MES->EditCustomAttributes = "";
-		$this->MES->EditValue = $this->MES->CurrentValue;
-		$this->MES->ViewCustomAttributes = "";
+		$this->MES->EditValue = ew_HtmlEncode($this->MES->CurrentValue);
+		$this->MES->PlaceHolder = ew_RemoveHtml($this->MES->FldCaption());
 
 		// Num_Evacua
 		$this->Num_Evacua->EditAttrs["class"] = "form-control";
 		$this->Num_Evacua->EditCustomAttributes = "";
-		$this->Num_Evacua->EditValue = $this->Num_Evacua->CurrentValue;
-		$this->Num_Evacua->ViewCustomAttributes = "";
+		$this->Num_Evacua->EditValue = ew_HtmlEncode($this->Num_Evacua->CurrentValue);
+		$this->Num_Evacua->PlaceHolder = ew_RemoveHtml($this->Num_Evacua->FldCaption());
 
 		// PTO_INCOMU
 		$this->PTO_INCOMU->EditAttrs["class"] = "form-control";
 		$this->PTO_INCOMU->EditCustomAttributes = "";
-		$this->PTO_INCOMU->EditValue = $this->PTO_INCOMU->CurrentValue;
-		$this->PTO_INCOMU->ViewCustomAttributes = "";
+		$arwrk = array();
+		$arwrk[] = array($this->PTO_INCOMU->FldTagValue(1), $this->PTO_INCOMU->FldTagCaption(1) <> "" ? $this->PTO_INCOMU->FldTagCaption(1) : $this->PTO_INCOMU->FldTagValue(1));
+		$arwrk[] = array($this->PTO_INCOMU->FldTagValue(2), $this->PTO_INCOMU->FldTagCaption(2) <> "" ? $this->PTO_INCOMU->FldTagCaption(2) : $this->PTO_INCOMU->FldTagValue(2));
+		array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+		$this->PTO_INCOMU->EditValue = $arwrk;
 
 		// OBS_punt_inco
 		$this->OBS_punt_inco->EditAttrs["class"] = "form-control";
 		$this->OBS_punt_inco->EditCustomAttributes = "";
-		$this->OBS_punt_inco->EditValue = $this->OBS_punt_inco->CurrentValue;
-		$this->OBS_punt_inco->ViewCustomAttributes = "";
+		$this->OBS_punt_inco->EditValue = ew_HtmlEncode($this->OBS_punt_inco->CurrentValue);
+		$this->OBS_punt_inco->PlaceHolder = ew_RemoveHtml($this->OBS_punt_inco->FldCaption());
 
 		// OBS_ENLACE
 		$this->OBS_ENLACE->EditAttrs["class"] = "form-control";
@@ -1164,38 +1419,34 @@ class cview_e_y_n extends cTable {
 		// NUM_Novedad
 		$this->NUM_Novedad->EditAttrs["class"] = "form-control";
 		$this->NUM_Novedad->EditCustomAttributes = "";
-		$this->NUM_Novedad->EditValue = $this->NUM_Novedad->CurrentValue;
-		$this->NUM_Novedad->ViewCustomAttributes = "";
+		$this->NUM_Novedad->EditValue = ew_HtmlEncode($this->NUM_Novedad->CurrentValue);
+		$this->NUM_Novedad->PlaceHolder = ew_RemoveHtml($this->NUM_Novedad->FldCaption());
 
 		// Nom_Per_Evacu
 		$this->Nom_Per_Evacu->EditAttrs["class"] = "form-control";
 		$this->Nom_Per_Evacu->EditCustomAttributes = "";
-		$this->Nom_Per_Evacu->EditValue = $this->Nom_Per_Evacu->CurrentValue;
-		$this->Nom_Per_Evacu->ViewCustomAttributes = "";
+		$this->Nom_Per_Evacu->EditValue = ew_HtmlEncode($this->Nom_Per_Evacu->CurrentValue);
+		$this->Nom_Per_Evacu->PlaceHolder = ew_RemoveHtml($this->Nom_Per_Evacu->FldCaption());
 
 		// Nom_Otro_Per_Evacu
 		$this->Nom_Otro_Per_Evacu->EditAttrs["class"] = "form-control";
 		$this->Nom_Otro_Per_Evacu->EditCustomAttributes = "";
-		$this->Nom_Otro_Per_Evacu->EditValue = $this->Nom_Otro_Per_Evacu->CurrentValue;
-		$this->Nom_Otro_Per_Evacu->ViewCustomAttributes = "";
+		$this->Nom_Otro_Per_Evacu->EditValue = ew_HtmlEncode($this->Nom_Otro_Per_Evacu->CurrentValue);
+		$this->Nom_Otro_Per_Evacu->PlaceHolder = ew_RemoveHtml($this->Nom_Otro_Per_Evacu->FldCaption());
 
 		// CC_Otro_Per_Evacu
 		$this->CC_Otro_Per_Evacu->EditAttrs["class"] = "form-control";
 		$this->CC_Otro_Per_Evacu->EditCustomAttributes = "";
-		$this->CC_Otro_Per_Evacu->EditValue = $this->CC_Otro_Per_Evacu->CurrentValue;
-		$this->CC_Otro_Per_Evacu->ViewCustomAttributes = "";
+		$this->CC_Otro_Per_Evacu->EditValue = ew_HtmlEncode($this->CC_Otro_Per_Evacu->CurrentValue);
+		$this->CC_Otro_Per_Evacu->PlaceHolder = ew_RemoveHtml($this->CC_Otro_Per_Evacu->FldCaption());
 
 		// Cargo_Per_EVA
 		$this->Cargo_Per_EVA->EditAttrs["class"] = "form-control";
 		$this->Cargo_Per_EVA->EditCustomAttributes = "";
-		$this->Cargo_Per_EVA->EditValue = $this->Cargo_Per_EVA->CurrentValue;
-		$this->Cargo_Per_EVA->ViewCustomAttributes = "";
 
 		// Motivo_Eva
 		$this->Motivo_Eva->EditAttrs["class"] = "form-control";
 		$this->Motivo_Eva->EditCustomAttributes = "";
-		$this->Motivo_Eva->EditValue = $this->Motivo_Eva->CurrentValue;
-		$this->Motivo_Eva->ViewCustomAttributes = "";
 
 		// OBS_EVA
 		$this->OBS_EVA->EditAttrs["class"] = "form-control";
@@ -1206,68 +1457,72 @@ class cview_e_y_n extends cTable {
 		// NOM_PE
 		$this->NOM_PE->EditAttrs["class"] = "form-control";
 		$this->NOM_PE->EditCustomAttributes = "";
-		$this->NOM_PE->EditValue = $this->NOM_PE->CurrentValue;
-		$this->NOM_PE->ViewCustomAttributes = "";
 
 		// Otro_Nom_PE
 		$this->Otro_Nom_PE->EditAttrs["class"] = "form-control";
 		$this->Otro_Nom_PE->EditCustomAttributes = "";
-		$this->Otro_Nom_PE->EditValue = $this->Otro_Nom_PE->CurrentValue;
-		$this->Otro_Nom_PE->ViewCustomAttributes = "";
+		$this->Otro_Nom_PE->EditValue = ew_HtmlEncode($this->Otro_Nom_PE->CurrentValue);
+		$this->Otro_Nom_PE->PlaceHolder = ew_RemoveHtml($this->Otro_Nom_PE->FldCaption());
 
 		// NOM_CAPATAZ
 		$this->NOM_CAPATAZ->EditAttrs["class"] = "form-control";
 		$this->NOM_CAPATAZ->EditCustomAttributes = "";
-		$this->NOM_CAPATAZ->EditValue = $this->NOM_CAPATAZ->CurrentValue;
-		$this->NOM_CAPATAZ->ViewCustomAttributes = "";
+		$this->NOM_CAPATAZ->EditValue = ew_HtmlEncode($this->NOM_CAPATAZ->CurrentValue);
+		$this->NOM_CAPATAZ->PlaceHolder = ew_RemoveHtml($this->NOM_CAPATAZ->FldCaption());
 
 		// Otro_Nom_Capata
 		$this->Otro_Nom_Capata->EditAttrs["class"] = "form-control";
 		$this->Otro_Nom_Capata->EditCustomAttributes = "";
-		$this->Otro_Nom_Capata->EditValue = $this->Otro_Nom_Capata->CurrentValue;
-		$this->Otro_Nom_Capata->ViewCustomAttributes = "";
+		$this->Otro_Nom_Capata->EditValue = ew_HtmlEncode($this->Otro_Nom_Capata->CurrentValue);
+		$this->Otro_Nom_Capata->PlaceHolder = ew_RemoveHtml($this->Otro_Nom_Capata->FldCaption());
 
 		// Otro_CC_Capata
 		$this->Otro_CC_Capata->EditAttrs["class"] = "form-control";
 		$this->Otro_CC_Capata->EditCustomAttributes = "";
-		$this->Otro_CC_Capata->EditValue = $this->Otro_CC_Capata->CurrentValue;
-		$this->Otro_CC_Capata->ViewCustomAttributes = "";
+		$this->Otro_CC_Capata->EditValue = ew_HtmlEncode($this->Otro_CC_Capata->CurrentValue);
+		$this->Otro_CC_Capata->PlaceHolder = ew_RemoveHtml($this->Otro_CC_Capata->FldCaption());
 
 		// Muncipio
 		$this->Muncipio->EditAttrs["class"] = "form-control";
 		$this->Muncipio->EditCustomAttributes = "";
-		$this->Muncipio->EditValue = $this->Muncipio->CurrentValue;
-		$this->Muncipio->ViewCustomAttributes = "";
-
-		// Departamento
-		$this->Departamento->EditAttrs["class"] = "form-control";
-		$this->Departamento->EditCustomAttributes = "";
-		$this->Departamento->EditValue = $this->Departamento->CurrentValue;
-		$this->Departamento->ViewCustomAttributes = "";
+		$this->Muncipio->EditValue = ew_HtmlEncode($this->Muncipio->CurrentValue);
+		$this->Muncipio->PlaceHolder = ew_RemoveHtml($this->Muncipio->FldCaption());
 
 		// F_llegada
 		$this->F_llegada->EditAttrs["class"] = "form-control";
 		$this->F_llegada->EditCustomAttributes = "";
-		$this->F_llegada->EditValue = $this->F_llegada->CurrentValue;
-		$this->F_llegada->ViewCustomAttributes = "";
+		$arwrk = array();
+		$arwrk[] = array($this->F_llegada->FldTagValue(1), $this->F_llegada->FldTagCaption(1) <> "" ? $this->F_llegada->FldTagCaption(1) : $this->F_llegada->FldTagValue(1));
+		$arwrk[] = array($this->F_llegada->FldTagValue(2), $this->F_llegada->FldTagCaption(2) <> "" ? $this->F_llegada->FldTagCaption(2) : $this->F_llegada->FldTagValue(2));
+		array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+		$this->F_llegada->EditValue = $arwrk;
 
 		// Fecha
 		$this->Fecha->EditAttrs["class"] = "form-control";
 		$this->Fecha->EditCustomAttributes = "";
-		$this->Fecha->EditValue = $this->Fecha->CurrentValue;
-		$this->Fecha->ViewCustomAttributes = "";
+		$this->Fecha->EditValue = ew_HtmlEncode($this->Fecha->CurrentValue);
+		$this->Fecha->PlaceHolder = ew_RemoveHtml($this->Fecha->FldCaption());
 
 		// Modificado
 		$this->Modificado->EditAttrs["class"] = "form-control";
 		$this->Modificado->EditCustomAttributes = "";
-		$this->Modificado->EditValue = ew_HtmlEncode($this->Modificado->CurrentValue);
-		$this->Modificado->PlaceHolder = ew_RemoveHtml($this->Modificado->FldCaption());
+		$arwrk = array();
+		$arwrk[] = array($this->Modificado->FldTagValue(1), $this->Modificado->FldTagCaption(1) <> "" ? $this->Modificado->FldTagCaption(1) : $this->Modificado->FldTagValue(1));
+		$arwrk[] = array($this->Modificado->FldTagValue(2), $this->Modificado->FldTagCaption(2) <> "" ? $this->Modificado->FldTagCaption(2) : $this->Modificado->FldTagValue(2));
+		array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+		$this->Modificado->EditValue = $arwrk;
 
 		// llave_2
 		$this->llave_2->EditAttrs["class"] = "form-control";
 		$this->llave_2->EditCustomAttributes = "";
 		$this->llave_2->EditValue = $this->llave_2->CurrentValue;
 		$this->llave_2->ViewCustomAttributes = "";
+
+		// departamento
+		$this->departamento->EditAttrs["class"] = "form-control";
+		$this->departamento->EditCustomAttributes = "";
+		$this->departamento->EditValue = ew_HtmlEncode($this->departamento->CurrentValue);
+		$this->departamento->PlaceHolder = ew_RemoveHtml($this->departamento->FldCaption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -1324,10 +1579,10 @@ class cview_e_y_n extends cTable {
 					if ($this->Otro_Nom_Capata->Exportable) $Doc->ExportCaption($this->Otro_Nom_Capata);
 					if ($this->Otro_CC_Capata->Exportable) $Doc->ExportCaption($this->Otro_CC_Capata);
 					if ($this->Muncipio->Exportable) $Doc->ExportCaption($this->Muncipio);
-					if ($this->Departamento->Exportable) $Doc->ExportCaption($this->Departamento);
 					if ($this->F_llegada->Exportable) $Doc->ExportCaption($this->F_llegada);
 					if ($this->Fecha->Exportable) $Doc->ExportCaption($this->Fecha);
 					if ($this->Modificado->Exportable) $Doc->ExportCaption($this->Modificado);
+					if ($this->departamento->Exportable) $Doc->ExportCaption($this->departamento);
 				} else {
 					if ($this->ID_Formulario->Exportable) $Doc->ExportCaption($this->ID_Formulario);
 					if ($this->F_Sincron->Exportable) $Doc->ExportCaption($this->F_Sincron);
@@ -1357,10 +1612,10 @@ class cview_e_y_n extends cTable {
 					if ($this->Otro_Nom_Capata->Exportable) $Doc->ExportCaption($this->Otro_Nom_Capata);
 					if ($this->Otro_CC_Capata->Exportable) $Doc->ExportCaption($this->Otro_CC_Capata);
 					if ($this->Muncipio->Exportable) $Doc->ExportCaption($this->Muncipio);
-					if ($this->Departamento->Exportable) $Doc->ExportCaption($this->Departamento);
 					if ($this->F_llegada->Exportable) $Doc->ExportCaption($this->F_llegada);
 					if ($this->Fecha->Exportable) $Doc->ExportCaption($this->Fecha);
 					if ($this->Modificado->Exportable) $Doc->ExportCaption($this->Modificado);
+					if ($this->departamento->Exportable) $Doc->ExportCaption($this->departamento);
 				}
 				$Doc->EndExportRow();
 			}
@@ -1420,10 +1675,10 @@ class cview_e_y_n extends cTable {
 						if ($this->Otro_Nom_Capata->Exportable) $Doc->ExportField($this->Otro_Nom_Capata);
 						if ($this->Otro_CC_Capata->Exportable) $Doc->ExportField($this->Otro_CC_Capata);
 						if ($this->Muncipio->Exportable) $Doc->ExportField($this->Muncipio);
-						if ($this->Departamento->Exportable) $Doc->ExportField($this->Departamento);
 						if ($this->F_llegada->Exportable) $Doc->ExportField($this->F_llegada);
 						if ($this->Fecha->Exportable) $Doc->ExportField($this->Fecha);
 						if ($this->Modificado->Exportable) $Doc->ExportField($this->Modificado);
+						if ($this->departamento->Exportable) $Doc->ExportField($this->departamento);
 					} else {
 						if ($this->ID_Formulario->Exportable) $Doc->ExportField($this->ID_Formulario);
 						if ($this->F_Sincron->Exportable) $Doc->ExportField($this->F_Sincron);
@@ -1453,10 +1708,10 @@ class cview_e_y_n extends cTable {
 						if ($this->Otro_Nom_Capata->Exportable) $Doc->ExportField($this->Otro_Nom_Capata);
 						if ($this->Otro_CC_Capata->Exportable) $Doc->ExportField($this->Otro_CC_Capata);
 						if ($this->Muncipio->Exportable) $Doc->ExportField($this->Muncipio);
-						if ($this->Departamento->Exportable) $Doc->ExportField($this->Departamento);
 						if ($this->F_llegada->Exportable) $Doc->ExportField($this->F_llegada);
 						if ($this->Fecha->Exportable) $Doc->ExportField($this->Fecha);
 						if ($this->Modificado->Exportable) $Doc->ExportField($this->Modificado);
+						if ($this->departamento->Exportable) $Doc->ExportField($this->departamento);
 					}
 					$Doc->EndExportRow();
 				}

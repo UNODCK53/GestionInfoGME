@@ -38,7 +38,7 @@ class cgrafica_movimientos extends cTable {
 		$this->BasicSearch = new cBasicSearch($this->TableVar);
 
 		// Punto
-		$this->Punto = new cField('grafica_movimientos', 'grafica_movimientos', 'x_Punto', 'Punto', '`Punto`', '`Punto`', 200, -1, FALSE, '`Punto`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->Punto = new cField('grafica_movimientos', 'grafica_movimientos', 'x_Punto', 'Punto', '`Punto`', '`Punto`', 201, -1, FALSE, '`Punto`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['Punto'] = &$this->Punto;
 
 		// Fecha_ultimo_movimiento
@@ -538,7 +538,36 @@ class cgrafica_movimientos extends cTable {
 		// Dias_desde_ultimo_movimiento
 		// Punto
 
-		$this->Punto->ViewValue = $this->Punto->CurrentValue;
+		if (strval($this->Punto->CurrentValue) <> "") {
+			$sFilterWrk = "`Punto`" . ew_SearchString("=", $this->Punto->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_movimientos`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_movimientos`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Punto` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Punto->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Punto->ViewValue = $this->Punto->CurrentValue;
+			}
+		} else {
+			$this->Punto->ViewValue = NULL;
+		}
 		$this->Punto->ViewCustomAttributes = "";
 
 		// Fecha_ultimo_movimiento
@@ -578,8 +607,6 @@ class cgrafica_movimientos extends cTable {
 		// Punto
 		$this->Punto->EditAttrs["class"] = "form-control";
 		$this->Punto->EditCustomAttributes = "";
-		$this->Punto->EditValue = ew_HtmlEncode($this->Punto->CurrentValue);
-		$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
 
 		// Fecha_ultimo_movimiento
 		$this->Fecha_ultimo_movimiento->EditAttrs["class"] = "form-control";

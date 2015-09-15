@@ -444,11 +444,11 @@ class cview_e_y_n_delete extends cview_e_y_n {
 		$this->Otro_Nom_Capata->setDbValue($rs->fields('Otro_Nom_Capata'));
 		$this->Otro_CC_Capata->setDbValue($rs->fields('Otro_CC_Capata'));
 		$this->Muncipio->setDbValue($rs->fields('Muncipio'));
-		$this->Departamento->setDbValue($rs->fields('Departamento'));
 		$this->F_llegada->setDbValue($rs->fields('F_llegada'));
 		$this->Fecha->setDbValue($rs->fields('Fecha'));
 		$this->Modificado->setDbValue($rs->fields('Modificado'));
 		$this->llave_2->setDbValue($rs->fields('llave_2'));
+		$this->departamento->setDbValue($rs->fields('departamento'));
 	}
 
 	// Load DbValue from recordset
@@ -483,11 +483,11 @@ class cview_e_y_n_delete extends cview_e_y_n {
 		$this->Otro_Nom_Capata->DbValue = $row['Otro_Nom_Capata'];
 		$this->Otro_CC_Capata->DbValue = $row['Otro_CC_Capata'];
 		$this->Muncipio->DbValue = $row['Muncipio'];
-		$this->Departamento->DbValue = $row['Departamento'];
 		$this->F_llegada->DbValue = $row['F_llegada'];
 		$this->Fecha->DbValue = $row['Fecha'];
 		$this->Modificado->DbValue = $row['Modificado'];
 		$this->llave_2->DbValue = $row['llave_2'];
+		$this->departamento->DbValue = $row['departamento'];
 	}
 
 	// Render row values based on field settings
@@ -529,13 +529,14 @@ class cview_e_y_n_delete extends cview_e_y_n {
 		// Otro_Nom_Capata
 		// Otro_CC_Capata
 		// Muncipio
-		// Departamento
 		// F_llegada
 		// Fecha
 		// Modificado
 		// llave_2
 
 		$this->llave_2->CellCssStyle = "white-space: nowrap;";
+
+		// departamento
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 			// ID_Formulario
@@ -548,7 +549,36 @@ class cview_e_y_n_delete extends cview_e_y_n {
 			$this->F_Sincron->ViewCustomAttributes = "";
 
 			// USUARIO
-			$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+			if (strval($this->USUARIO->CurrentValue) <> "") {
+				$sFilterWrk = "`USUARIO`" . ew_SearchString("=", $this->USUARIO->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->USUARIO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `USUARIO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->USUARIO->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+				}
+			} else {
+				$this->USUARIO->ViewValue = NULL;
+			}
 			$this->USUARIO->ViewCustomAttributes = "";
 
 			// Cargo_gme
@@ -556,7 +586,36 @@ class cview_e_y_n_delete extends cview_e_y_n {
 			$this->Cargo_gme->ViewCustomAttributes = "";
 
 			// NOM_GE
-			$this->NOM_GE->ViewValue = $this->NOM_GE->CurrentValue;
+			if (strval($this->NOM_GE->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_GE`" . ew_SearchString("=", $this->NOM_GE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_GE`, `NOM_GE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_GE`, `NOM_GE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_GE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_GE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_GE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_GE->ViewValue = $this->NOM_GE->CurrentValue;
+				}
+			} else {
+				$this->NOM_GE->ViewValue = NULL;
+			}
 			$this->NOM_GE->ViewCustomAttributes = "";
 
 			// Otro_PGE
@@ -568,11 +627,45 @@ class cview_e_y_n_delete extends cview_e_y_n {
 			$this->Otro_CC_PGE->ViewCustomAttributes = "";
 
 			// TIPO_INFORME
-			$this->TIPO_INFORME->ViewValue = $this->TIPO_INFORME->CurrentValue;
+			if (strval($this->TIPO_INFORME->CurrentValue) <> "") {
+				$sFilterWrk = "`label`" . ew_SearchString("=", $this->TIPO_INFORME->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='informe'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->TIPO_INFORME, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->TIPO_INFORME->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->TIPO_INFORME->ViewValue = $this->TIPO_INFORME->CurrentValue;
+				}
+			} else {
+				$this->TIPO_INFORME->ViewValue = NULL;
+			}
 			$this->TIPO_INFORME->ViewCustomAttributes = "";
 
 			// FECHA_NOVEDAD
 			$this->FECHA_NOVEDAD->ViewValue = $this->FECHA_NOVEDAD->CurrentValue;
+			$this->FECHA_NOVEDAD->ViewValue = ew_FormatDateTime($this->FECHA_NOVEDAD->ViewValue, 5);
 			$this->FECHA_NOVEDAD->ViewCustomAttributes = "";
 
 			// DIA
@@ -588,7 +681,20 @@ class cview_e_y_n_delete extends cview_e_y_n {
 			$this->Num_Evacua->ViewCustomAttributes = "";
 
 			// PTO_INCOMU
-			$this->PTO_INCOMU->ViewValue = $this->PTO_INCOMU->CurrentValue;
+			if (strval($this->PTO_INCOMU->CurrentValue) <> "") {
+				switch ($this->PTO_INCOMU->CurrentValue) {
+					case $this->PTO_INCOMU->FldTagValue(1):
+						$this->PTO_INCOMU->ViewValue = $this->PTO_INCOMU->FldTagCaption(1) <> "" ? $this->PTO_INCOMU->FldTagCaption(1) : $this->PTO_INCOMU->CurrentValue;
+						break;
+					case $this->PTO_INCOMU->FldTagValue(2):
+						$this->PTO_INCOMU->ViewValue = $this->PTO_INCOMU->FldTagCaption(2) <> "" ? $this->PTO_INCOMU->FldTagCaption(2) : $this->PTO_INCOMU->CurrentValue;
+						break;
+					default:
+						$this->PTO_INCOMU->ViewValue = $this->PTO_INCOMU->CurrentValue;
+				}
+			} else {
+				$this->PTO_INCOMU->ViewValue = NULL;
+			}
 			$this->PTO_INCOMU->ViewCustomAttributes = "";
 
 			// OBS_punt_inco
@@ -616,11 +722,77 @@ class cview_e_y_n_delete extends cview_e_y_n {
 			$this->CC_Otro_Per_Evacu->ViewCustomAttributes = "";
 
 			// Cargo_Per_EVA
-			$this->Cargo_Per_EVA->ViewValue = $this->Cargo_Per_EVA->CurrentValue;
+			if (strval($this->Cargo_Per_EVA->CurrentValue) <> "") {
+				$sFilterWrk = "`label`" . ew_SearchString("=", $this->Cargo_Per_EVA->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='cargo'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Cargo_Per_EVA, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Cargo_Per_EVA->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Cargo_Per_EVA->ViewValue = $this->Cargo_Per_EVA->CurrentValue;
+				}
+			} else {
+				$this->Cargo_Per_EVA->ViewValue = NULL;
+			}
 			$this->Cargo_Per_EVA->ViewCustomAttributes = "";
 
 			// Motivo_Eva
-			$this->Motivo_Eva->ViewValue = $this->Motivo_Eva->CurrentValue;
+			if (strval($this->Motivo_Eva->CurrentValue) <> "") {
+				$sFilterWrk = "`label`" . ew_SearchString("=", $this->Motivo_Eva->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='motivo'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Motivo_Eva, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Motivo_Eva->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Motivo_Eva->ViewValue = $this->Motivo_Eva->CurrentValue;
+				}
+			} else {
+				$this->Motivo_Eva->ViewValue = NULL;
+			}
 			$this->Motivo_Eva->ViewCustomAttributes = "";
 
 			// OBS_EVA
@@ -628,7 +800,36 @@ class cview_e_y_n_delete extends cview_e_y_n {
 			$this->OBS_EVA->ViewCustomAttributes = "";
 
 			// NOM_PE
-			$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+			if (strval($this->NOM_PE->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_PE`" . ew_SearchString("=", $this->NOM_PE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_PE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+				}
+			} else {
+				$this->NOM_PE->ViewValue = NULL;
+			}
 			$this->NOM_PE->ViewCustomAttributes = "";
 
 			// Otro_Nom_PE
@@ -651,12 +852,21 @@ class cview_e_y_n_delete extends cview_e_y_n {
 			$this->Muncipio->ViewValue = $this->Muncipio->CurrentValue;
 			$this->Muncipio->ViewCustomAttributes = "";
 
-			// Departamento
-			$this->Departamento->ViewValue = $this->Departamento->CurrentValue;
-			$this->Departamento->ViewCustomAttributes = "";
-
 			// F_llegada
-			$this->F_llegada->ViewValue = $this->F_llegada->CurrentValue;
+			if (strval($this->F_llegada->CurrentValue) <> "") {
+				switch ($this->F_llegada->CurrentValue) {
+					case $this->F_llegada->FldTagValue(1):
+						$this->F_llegada->ViewValue = $this->F_llegada->FldTagCaption(1) <> "" ? $this->F_llegada->FldTagCaption(1) : $this->F_llegada->CurrentValue;
+						break;
+					case $this->F_llegada->FldTagValue(2):
+						$this->F_llegada->ViewValue = $this->F_llegada->FldTagCaption(2) <> "" ? $this->F_llegada->FldTagCaption(2) : $this->F_llegada->CurrentValue;
+						break;
+					default:
+						$this->F_llegada->ViewValue = $this->F_llegada->CurrentValue;
+				}
+			} else {
+				$this->F_llegada->ViewValue = NULL;
+			}
 			$this->F_llegada->ViewCustomAttributes = "";
 
 			// Fecha
@@ -664,8 +874,25 @@ class cview_e_y_n_delete extends cview_e_y_n {
 			$this->Fecha->ViewCustomAttributes = "";
 
 			// Modificado
-			$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+			if (strval($this->Modificado->CurrentValue) <> "") {
+				switch ($this->Modificado->CurrentValue) {
+					case $this->Modificado->FldTagValue(1):
+						$this->Modificado->ViewValue = $this->Modificado->FldTagCaption(1) <> "" ? $this->Modificado->FldTagCaption(1) : $this->Modificado->CurrentValue;
+						break;
+					case $this->Modificado->FldTagValue(2):
+						$this->Modificado->ViewValue = $this->Modificado->FldTagCaption(2) <> "" ? $this->Modificado->FldTagCaption(2) : $this->Modificado->CurrentValue;
+						break;
+					default:
+						$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+				}
+			} else {
+				$this->Modificado->ViewValue = NULL;
+			}
 			$this->Modificado->ViewCustomAttributes = "";
+
+			// departamento
+			$this->departamento->ViewValue = $this->departamento->CurrentValue;
+			$this->departamento->ViewCustomAttributes = "";
 
 			// ID_Formulario
 			$this->ID_Formulario->LinkCustomAttributes = "";
@@ -807,11 +1034,6 @@ class cview_e_y_n_delete extends cview_e_y_n {
 			$this->Muncipio->HrefValue = "";
 			$this->Muncipio->TooltipValue = "";
 
-			// Departamento
-			$this->Departamento->LinkCustomAttributes = "";
-			$this->Departamento->HrefValue = "";
-			$this->Departamento->TooltipValue = "";
-
 			// F_llegada
 			$this->F_llegada->LinkCustomAttributes = "";
 			$this->F_llegada->HrefValue = "";
@@ -826,6 +1048,11 @@ class cview_e_y_n_delete extends cview_e_y_n {
 			$this->Modificado->LinkCustomAttributes = "";
 			$this->Modificado->HrefValue = "";
 			$this->Modificado->TooltipValue = "";
+
+			// departamento
+			$this->departamento->LinkCustomAttributes = "";
+			$this->departamento->HrefValue = "";
+			$this->departamento->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -1032,8 +1259,14 @@ fview_e_y_ndelete.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fview_e_y_ndelete.Lists["x_USUARIO"] = {"LinkField":"x_USUARIO","Ajax":null,"AutoFill":false,"DisplayFields":["x_USUARIO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_e_y_ndelete.Lists["x_NOM_GE"] = {"LinkField":"x_NOM_GE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_GE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_e_y_ndelete.Lists["x_TIPO_INFORME"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_e_y_ndelete.Lists["x_Cargo_Per_EVA"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_e_y_ndelete.Lists["x_Motivo_Eva"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_e_y_ndelete.Lists["x_NOM_PE"] = {"LinkField":"x_NOM_PE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
@@ -1159,9 +1392,6 @@ $view_e_y_n_delete->ShowMessage();
 <?php if ($view_e_y_n->Muncipio->Visible) { // Muncipio ?>
 		<th><span id="elh_view_e_y_n_Muncipio" class="view_e_y_n_Muncipio"><?php echo $view_e_y_n->Muncipio->FldCaption() ?></span></th>
 <?php } ?>
-<?php if ($view_e_y_n->Departamento->Visible) { // Departamento ?>
-		<th><span id="elh_view_e_y_n_Departamento" class="view_e_y_n_Departamento"><?php echo $view_e_y_n->Departamento->FldCaption() ?></span></th>
-<?php } ?>
 <?php if ($view_e_y_n->F_llegada->Visible) { // F_llegada ?>
 		<th><span id="elh_view_e_y_n_F_llegada" class="view_e_y_n_F_llegada"><?php echo $view_e_y_n->F_llegada->FldCaption() ?></span></th>
 <?php } ?>
@@ -1170,6 +1400,9 @@ $view_e_y_n_delete->ShowMessage();
 <?php } ?>
 <?php if ($view_e_y_n->Modificado->Visible) { // Modificado ?>
 		<th><span id="elh_view_e_y_n_Modificado" class="view_e_y_n_Modificado"><?php echo $view_e_y_n->Modificado->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($view_e_y_n->departamento->Visible) { // departamento ?>
+		<th><span id="elh_view_e_y_n_departamento" class="view_e_y_n_departamento"><?php echo $view_e_y_n->departamento->FldCaption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
@@ -1416,14 +1649,6 @@ while (!$view_e_y_n_delete->Recordset->EOF) {
 </span>
 </td>
 <?php } ?>
-<?php if ($view_e_y_n->Departamento->Visible) { // Departamento ?>
-		<td<?php echo $view_e_y_n->Departamento->CellAttributes() ?>>
-<span id="el<?php echo $view_e_y_n_delete->RowCnt ?>_view_e_y_n_Departamento" class="view_e_y_n_Departamento">
-<span<?php echo $view_e_y_n->Departamento->ViewAttributes() ?>>
-<?php echo $view_e_y_n->Departamento->ListViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($view_e_y_n->F_llegada->Visible) { // F_llegada ?>
 		<td<?php echo $view_e_y_n->F_llegada->CellAttributes() ?>>
 <span id="el<?php echo $view_e_y_n_delete->RowCnt ?>_view_e_y_n_F_llegada" class="view_e_y_n_F_llegada">
@@ -1445,6 +1670,14 @@ while (!$view_e_y_n_delete->Recordset->EOF) {
 <span id="el<?php echo $view_e_y_n_delete->RowCnt ?>_view_e_y_n_Modificado" class="view_e_y_n_Modificado">
 <span<?php echo $view_e_y_n->Modificado->ViewAttributes() ?>>
 <?php echo $view_e_y_n->Modificado->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($view_e_y_n->departamento->Visible) { // departamento ?>
+		<td<?php echo $view_e_y_n->departamento->CellAttributes() ?>>
+<span id="el<?php echo $view_e_y_n_delete->RowCnt ?>_view_e_y_n_departamento" class="view_e_y_n_departamento">
+<span<?php echo $view_e_y_n->departamento->ViewAttributes() ?>>
+<?php echo $view_e_y_n->departamento->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

@@ -13,6 +13,7 @@ class cfuerza extends cTable {
 	var $Fase;
 	var $_23_del_punto;
 	var $Punto;
+	var $Profesional_especializado;
 
 	//
 	// Table class constructor
@@ -64,6 +65,10 @@ class cfuerza extends cTable {
 		// Punto
 		$this->Punto = new cField('fuerza', 'fuerza', 'x_Punto', 'Punto', '`Punto`', '`Punto`', 200, -1, FALSE, '`Punto`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['Punto'] = &$this->Punto;
+
+		// Profesional_especializado
+		$this->Profesional_especializado = new cField('fuerza', 'fuerza', 'x_Profesional_especializado', 'Profesional_especializado', '`Profesional_especializado`', '`Profesional_especializado`', 200, -1, FALSE, '`Profesional_especializado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['Profesional_especializado'] = &$this->Profesional_especializado;
 	}
 
 	// Multiple column sort
@@ -551,6 +556,7 @@ class cfuerza extends cTable {
 		$this->Fase->setDbValue($rs->fields('Fase'));
 		$this->_23_del_punto->setDbValue($rs->fields('#_del_punto'));
 		$this->Punto->setDbValue($rs->fields('Punto'));
+		$this->Profesional_especializado->setDbValue($rs->fields('Profesional_especializado'));
 	}
 
 	// Render list row values
@@ -567,6 +573,7 @@ class cfuerza extends cTable {
 		// Fase
 		// #_del_punto
 		// Punto
+		// Profesional_especializado
 		// Fuerza
 
 		if (strval($this->Fuerza->CurrentValue) <> "") {
@@ -640,6 +647,38 @@ class cfuerza extends cTable {
 		$this->Punto->ViewValue = $this->Punto->CurrentValue;
 		$this->Punto->ViewCustomAttributes = "";
 
+		// Profesional_especializado
+		if (strval($this->Profesional_especializado->CurrentValue) <> "") {
+			switch ($this->Profesional_especializado->CurrentValue) {
+				case $this->Profesional_especializado->FldTagValue(1):
+					$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(1) <> "" ? $this->Profesional_especializado->FldTagCaption(1) : $this->Profesional_especializado->CurrentValue;
+					break;
+				case $this->Profesional_especializado->FldTagValue(2):
+					$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(2) <> "" ? $this->Profesional_especializado->FldTagCaption(2) : $this->Profesional_especializado->CurrentValue;
+					break;
+				case $this->Profesional_especializado->FldTagValue(3):
+					$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(3) <> "" ? $this->Profesional_especializado->FldTagCaption(3) : $this->Profesional_especializado->CurrentValue;
+					break;
+				case $this->Profesional_especializado->FldTagValue(4):
+					$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(4) <> "" ? $this->Profesional_especializado->FldTagCaption(4) : $this->Profesional_especializado->CurrentValue;
+					break;
+				case $this->Profesional_especializado->FldTagValue(5):
+					$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(5) <> "" ? $this->Profesional_especializado->FldTagCaption(5) : $this->Profesional_especializado->CurrentValue;
+					break;
+				case $this->Profesional_especializado->FldTagValue(6):
+					$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(6) <> "" ? $this->Profesional_especializado->FldTagCaption(6) : $this->Profesional_especializado->CurrentValue;
+					break;
+				case $this->Profesional_especializado->FldTagValue(7):
+					$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(7) <> "" ? $this->Profesional_especializado->FldTagCaption(7) : $this->Profesional_especializado->CurrentValue;
+					break;
+				default:
+					$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->CurrentValue;
+			}
+		} else {
+			$this->Profesional_especializado->ViewValue = NULL;
+		}
+		$this->Profesional_especializado->ViewCustomAttributes = "";
+
 		// Fuerza
 		$this->Fuerza->LinkCustomAttributes = "";
 		$this->Fuerza->HrefValue = "";
@@ -670,6 +709,11 @@ class cfuerza extends cTable {
 		$this->Punto->HrefValue = "";
 		$this->Punto->TooltipValue = "";
 
+		// Profesional_especializado
+		$this->Profesional_especializado->LinkCustomAttributes = "";
+		$this->Profesional_especializado->HrefValue = "";
+		$this->Profesional_especializado->TooltipValue = "";
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -684,72 +728,78 @@ class cfuerza extends cTable {
 		// Fuerza
 		$this->Fuerza->EditAttrs["class"] = "form-control";
 		$this->Fuerza->EditCustomAttributes = "";
-		if (strval($this->Fuerza->CurrentValue) <> "") {
-			switch ($this->Fuerza->CurrentValue) {
-				case $this->Fuerza->FldTagValue(1):
-					$this->Fuerza->EditValue = $this->Fuerza->FldTagCaption(1) <> "" ? $this->Fuerza->FldTagCaption(1) : $this->Fuerza->CurrentValue;
-					break;
-				case $this->Fuerza->FldTagValue(2):
-					$this->Fuerza->EditValue = $this->Fuerza->FldTagCaption(2) <> "" ? $this->Fuerza->FldTagCaption(2) : $this->Fuerza->CurrentValue;
-					break;
-				case $this->Fuerza->FldTagValue(3):
-					$this->Fuerza->EditValue = $this->Fuerza->FldTagCaption(3) <> "" ? $this->Fuerza->FldTagCaption(3) : $this->Fuerza->CurrentValue;
-					break;
-				default:
-					$this->Fuerza->EditValue = $this->Fuerza->CurrentValue;
-			}
-		} else {
-			$this->Fuerza->EditValue = NULL;
-		}
-		$this->Fuerza->ViewCustomAttributes = "";
+		$arwrk = array();
+		$arwrk[] = array($this->Fuerza->FldTagValue(1), $this->Fuerza->FldTagCaption(1) <> "" ? $this->Fuerza->FldTagCaption(1) : $this->Fuerza->FldTagValue(1));
+		$arwrk[] = array($this->Fuerza->FldTagValue(2), $this->Fuerza->FldTagCaption(2) <> "" ? $this->Fuerza->FldTagCaption(2) : $this->Fuerza->FldTagValue(2));
+		$arwrk[] = array($this->Fuerza->FldTagValue(3), $this->Fuerza->FldTagCaption(3) <> "" ? $this->Fuerza->FldTagCaption(3) : $this->Fuerza->FldTagValue(3));
+		array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+		$this->Fuerza->EditValue = $arwrk;
 
 		// Estado
 		$this->Estado->EditAttrs["class"] = "form-control";
 		$this->Estado->EditCustomAttributes = "";
-		if (strval($this->Estado->CurrentValue) <> "") {
-			switch ($this->Estado->CurrentValue) {
-				case $this->Estado->FldTagValue(1):
-					$this->Estado->EditValue = $this->Estado->FldTagCaption(1) <> "" ? $this->Estado->FldTagCaption(1) : $this->Estado->CurrentValue;
-					break;
-				case $this->Estado->FldTagValue(2):
-					$this->Estado->EditValue = $this->Estado->FldTagCaption(2) <> "" ? $this->Estado->FldTagCaption(2) : $this->Estado->CurrentValue;
-					break;
-				default:
-					$this->Estado->EditValue = $this->Estado->CurrentValue;
-			}
-		} else {
-			$this->Estado->EditValue = NULL;
-		}
-		$this->Estado->ViewCustomAttributes = "";
+		$arwrk = array();
+		$arwrk[] = array($this->Estado->FldTagValue(1), $this->Estado->FldTagCaption(1) <> "" ? $this->Estado->FldTagCaption(1) : $this->Estado->FldTagValue(1));
+		$arwrk[] = array($this->Estado->FldTagValue(2), $this->Estado->FldTagCaption(2) <> "" ? $this->Estado->FldTagCaption(2) : $this->Estado->FldTagValue(2));
+		array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+		$this->Estado->EditValue = $arwrk;
 
 		// Año
 		$this->AF1o->EditAttrs["class"] = "form-control";
 		$this->AF1o->EditCustomAttributes = "";
-		$this->AF1o->EditValue = ew_HtmlEncode($this->AF1o->CurrentValue);
-		$this->AF1o->PlaceHolder = ew_RemoveHtml($this->AF1o->FldCaption());
+		$this->AF1o->EditValue = $this->AF1o->CurrentValue;
+		$this->AF1o->ViewCustomAttributes = "";
 
 		// Fase
 		$this->Fase->EditAttrs["class"] = "form-control";
 		$this->Fase->EditCustomAttributes = "";
-		$arwrk = array();
-		$arwrk[] = array($this->Fase->FldTagValue(1), $this->Fase->FldTagCaption(1) <> "" ? $this->Fase->FldTagCaption(1) : $this->Fase->FldTagValue(1));
-		$arwrk[] = array($this->Fase->FldTagValue(2), $this->Fase->FldTagCaption(2) <> "" ? $this->Fase->FldTagCaption(2) : $this->Fase->FldTagValue(2));
-		$arwrk[] = array($this->Fase->FldTagValue(3), $this->Fase->FldTagCaption(3) <> "" ? $this->Fase->FldTagCaption(3) : $this->Fase->FldTagValue(3));
-		$arwrk[] = array($this->Fase->FldTagValue(4), $this->Fase->FldTagCaption(4) <> "" ? $this->Fase->FldTagCaption(4) : $this->Fase->FldTagValue(4));
-		array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
-		$this->Fase->EditValue = $arwrk;
+		if (strval($this->Fase->CurrentValue) <> "") {
+			switch ($this->Fase->CurrentValue) {
+				case $this->Fase->FldTagValue(1):
+					$this->Fase->EditValue = $this->Fase->FldTagCaption(1) <> "" ? $this->Fase->FldTagCaption(1) : $this->Fase->CurrentValue;
+					break;
+				case $this->Fase->FldTagValue(2):
+					$this->Fase->EditValue = $this->Fase->FldTagCaption(2) <> "" ? $this->Fase->FldTagCaption(2) : $this->Fase->CurrentValue;
+					break;
+				case $this->Fase->FldTagValue(3):
+					$this->Fase->EditValue = $this->Fase->FldTagCaption(3) <> "" ? $this->Fase->FldTagCaption(3) : $this->Fase->CurrentValue;
+					break;
+				case $this->Fase->FldTagValue(4):
+					$this->Fase->EditValue = $this->Fase->FldTagCaption(4) <> "" ? $this->Fase->FldTagCaption(4) : $this->Fase->CurrentValue;
+					break;
+				default:
+					$this->Fase->EditValue = $this->Fase->CurrentValue;
+			}
+		} else {
+			$this->Fase->EditValue = NULL;
+		}
+		$this->Fase->ViewCustomAttributes = "";
 
 		// #_del_punto
 		$this->_23_del_punto->EditAttrs["class"] = "form-control";
 		$this->_23_del_punto->EditCustomAttributes = "";
-		$this->_23_del_punto->EditValue = ew_HtmlEncode($this->_23_del_punto->CurrentValue);
-		$this->_23_del_punto->PlaceHolder = ew_RemoveHtml($this->_23_del_punto->FldCaption());
+		$this->_23_del_punto->EditValue = $this->_23_del_punto->CurrentValue;
+		$this->_23_del_punto->ViewCustomAttributes = "";
 
 		// Punto
 		$this->Punto->EditAttrs["class"] = "form-control";
 		$this->Punto->EditCustomAttributes = "";
 		$this->Punto->EditValue = $this->Punto->CurrentValue;
 		$this->Punto->ViewCustomAttributes = "";
+
+		// Profesional_especializado
+		$this->Profesional_especializado->EditAttrs["class"] = "form-control";
+		$this->Profesional_especializado->EditCustomAttributes = "";
+		$arwrk = array();
+		$arwrk[] = array($this->Profesional_especializado->FldTagValue(1), $this->Profesional_especializado->FldTagCaption(1) <> "" ? $this->Profesional_especializado->FldTagCaption(1) : $this->Profesional_especializado->FldTagValue(1));
+		$arwrk[] = array($this->Profesional_especializado->FldTagValue(2), $this->Profesional_especializado->FldTagCaption(2) <> "" ? $this->Profesional_especializado->FldTagCaption(2) : $this->Profesional_especializado->FldTagValue(2));
+		$arwrk[] = array($this->Profesional_especializado->FldTagValue(3), $this->Profesional_especializado->FldTagCaption(3) <> "" ? $this->Profesional_especializado->FldTagCaption(3) : $this->Profesional_especializado->FldTagValue(3));
+		$arwrk[] = array($this->Profesional_especializado->FldTagValue(4), $this->Profesional_especializado->FldTagCaption(4) <> "" ? $this->Profesional_especializado->FldTagCaption(4) : $this->Profesional_especializado->FldTagValue(4));
+		$arwrk[] = array($this->Profesional_especializado->FldTagValue(5), $this->Profesional_especializado->FldTagCaption(5) <> "" ? $this->Profesional_especializado->FldTagCaption(5) : $this->Profesional_especializado->FldTagValue(5));
+		$arwrk[] = array($this->Profesional_especializado->FldTagValue(6), $this->Profesional_especializado->FldTagCaption(6) <> "" ? $this->Profesional_especializado->FldTagCaption(6) : $this->Profesional_especializado->FldTagValue(6));
+		$arwrk[] = array($this->Profesional_especializado->FldTagValue(7), $this->Profesional_especializado->FldTagCaption(7) <> "" ? $this->Profesional_especializado->FldTagCaption(7) : $this->Profesional_especializado->FldTagValue(7));
+		array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+		$this->Profesional_especializado->EditValue = $arwrk;
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -784,6 +834,7 @@ class cfuerza extends cTable {
 					if ($this->Fase->Exportable) $Doc->ExportCaption($this->Fase);
 					if ($this->_23_del_punto->Exportable) $Doc->ExportCaption($this->_23_del_punto);
 					if ($this->Punto->Exportable) $Doc->ExportCaption($this->Punto);
+					if ($this->Profesional_especializado->Exportable) $Doc->ExportCaption($this->Profesional_especializado);
 				} else {
 					if ($this->Fuerza->Exportable) $Doc->ExportCaption($this->Fuerza);
 					if ($this->Estado->Exportable) $Doc->ExportCaption($this->Estado);
@@ -791,6 +842,7 @@ class cfuerza extends cTable {
 					if ($this->Fase->Exportable) $Doc->ExportCaption($this->Fase);
 					if ($this->_23_del_punto->Exportable) $Doc->ExportCaption($this->_23_del_punto);
 					if ($this->Punto->Exportable) $Doc->ExportCaption($this->Punto);
+					if ($this->Profesional_especializado->Exportable) $Doc->ExportCaption($this->Profesional_especializado);
 				}
 				$Doc->EndExportRow();
 			}
@@ -828,6 +880,7 @@ class cfuerza extends cTable {
 						if ($this->Fase->Exportable) $Doc->ExportField($this->Fase);
 						if ($this->_23_del_punto->Exportable) $Doc->ExportField($this->_23_del_punto);
 						if ($this->Punto->Exportable) $Doc->ExportField($this->Punto);
+						if ($this->Profesional_especializado->Exportable) $Doc->ExportField($this->Profesional_especializado);
 					} else {
 						if ($this->Fuerza->Exportable) $Doc->ExportField($this->Fuerza);
 						if ($this->Estado->Exportable) $Doc->ExportField($this->Estado);
@@ -835,6 +888,7 @@ class cfuerza extends cTable {
 						if ($this->Fase->Exportable) $Doc->ExportField($this->Fase);
 						if ($this->_23_del_punto->Exportable) $Doc->ExportField($this->_23_del_punto);
 						if ($this->Punto->Exportable) $Doc->ExportField($this->Punto);
+						if ($this->Profesional_especializado->Exportable) $Doc->ExportField($this->Profesional_especializado);
 					}
 					$Doc->EndExportRow();
 				}

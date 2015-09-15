@@ -670,6 +670,7 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 		if (!$Security->CanSearch()) return "";
 		$this->BuildSearchSql($sWhere, $this->Punto, $Default, FALSE); // Punto
 		$this->BuildSearchSql($sWhere, $this->Total_general, $Default, FALSE); // Total_general
+		$this->BuildSearchSql($sWhere, $this->Dia_sin_novedad_especial, $Default, FALSE); // Dia_sin_novedad_especial
 		$this->BuildSearchSql($sWhere, $this->_1_Apoyo_zonal_sin_punto_asignado, $Default, FALSE); // 1_Apoyo_zonal_sin_punto_asignado
 		$this->BuildSearchSql($sWhere, $this->_1_Descanso_en_dia_habil, $Default, FALSE); // 1_Descanso_en_dia_habil
 		$this->BuildSearchSql($sWhere, $this->_1_Descanso_festivo_dominical, $Default, FALSE); // 1_Descanso_festivo_dominical
@@ -717,6 +718,7 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 		if (!$Default && $this->Command == "search") {
 			$this->Punto->AdvancedSearch->Save(); // Punto
 			$this->Total_general->AdvancedSearch->Save(); // Total_general
+			$this->Dia_sin_novedad_especial->AdvancedSearch->Save(); // Dia_sin_novedad_especial
 			$this->_1_Apoyo_zonal_sin_punto_asignado->AdvancedSearch->Save(); // 1_Apoyo_zonal_sin_punto_asignado
 			$this->_1_Descanso_en_dia_habil->AdvancedSearch->Save(); // 1_Descanso_en_dia_habil
 			$this->_1_Descanso_festivo_dominical->AdvancedSearch->Save(); // 1_Descanso_festivo_dominical
@@ -814,6 +816,8 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 		if ($this->Punto->AdvancedSearch->IssetSession())
 			return TRUE;
 		if ($this->Total_general->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->Dia_sin_novedad_especial->AdvancedSearch->IssetSession())
 			return TRUE;
 		if ($this->_1_Apoyo_zonal_sin_punto_asignado->AdvancedSearch->IssetSession())
 			return TRUE;
@@ -916,6 +920,7 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 	function ResetAdvancedSearchParms() {
 		$this->Punto->AdvancedSearch->UnsetSession();
 		$this->Total_general->AdvancedSearch->UnsetSession();
+		$this->Dia_sin_novedad_especial->AdvancedSearch->UnsetSession();
 		$this->_1_Apoyo_zonal_sin_punto_asignado->AdvancedSearch->UnsetSession();
 		$this->_1_Descanso_en_dia_habil->AdvancedSearch->UnsetSession();
 		$this->_1_Descanso_festivo_dominical->AdvancedSearch->UnsetSession();
@@ -964,6 +969,7 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 		// Restore advanced search values
 		$this->Punto->AdvancedSearch->Load();
 		$this->Total_general->AdvancedSearch->Load();
+		$this->Dia_sin_novedad_especial->AdvancedSearch->Load();
 		$this->_1_Apoyo_zonal_sin_punto_asignado->AdvancedSearch->Load();
 		$this->_1_Descanso_en_dia_habil->AdvancedSearch->Load();
 		$this->_1_Descanso_festivo_dominical->AdvancedSearch->Load();
@@ -1017,6 +1023,7 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 			$this->CurrentOrderType = @$_GET["ordertype"];
 			$this->UpdateSort($this->Punto, $bCtrl); // Punto
 			$this->UpdateSort($this->Total_general, $bCtrl); // Total_general
+			$this->UpdateSort($this->Dia_sin_novedad_especial, $bCtrl); // Dia_sin_novedad_especial
 			$this->UpdateSort($this->_1_Apoyo_zonal_sin_punto_asignado, $bCtrl); // 1_Apoyo_zonal_sin_punto_asignado
 			$this->UpdateSort($this->_1_Descanso_en_dia_habil, $bCtrl); // 1_Descanso_en_dia_habil
 			$this->UpdateSort($this->_1_Descanso_festivo_dominical, $bCtrl); // 1_Descanso_festivo_dominical
@@ -1090,6 +1097,7 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 				$this->setSessionOrderBy($sOrderBy);
 				$this->Punto->setSort("");
 				$this->Total_general->setSort("");
+				$this->Dia_sin_novedad_especial->setSort("");
 				$this->_1_Apoyo_zonal_sin_punto_asignado->setSort("");
 				$this->_1_Descanso_en_dia_habil->setSort("");
 				$this->_1_Descanso_festivo_dominical->setSort("");
@@ -1372,6 +1380,10 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 		if ($this->Total_general->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->Total_general->AdvancedSearch->SearchOperator = @$_GET["z_Total_general"];
 
+		// Dia_sin_novedad_especial
+		$this->Dia_sin_novedad_especial->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Dia_sin_novedad_especial"]);
+		if ($this->Dia_sin_novedad_especial->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Dia_sin_novedad_especial->AdvancedSearch->SearchOperator = @$_GET["z_Dia_sin_novedad_especial"];
 		// 1_Apoyo_zonal_sin_punto_asignado
 		$this->_1_Apoyo_zonal_sin_punto_asignado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x__1_Apoyo_zonal_sin_punto_asignado"]);
 		if ($this->_1_Apoyo_zonal_sin_punto_asignado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
@@ -1616,6 +1628,7 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 		$this->Row_Selected($row);
 		$this->Punto->setDbValue($rs->fields('Punto'));
 		$this->Total_general->setDbValue($rs->fields('Total_general'));
+		$this->Dia_sin_novedad_especial->setDbValue($rs->fields('Dia_sin_novedad_especial'));
 		$this->_1_Apoyo_zonal_sin_punto_asignado->setDbValue($rs->fields('1_Apoyo_zonal_sin_punto_asignado'));
 		$this->_1_Descanso_en_dia_habil->setDbValue($rs->fields('1_Descanso_en_dia_habil'));
 		$this->_1_Descanso_festivo_dominical->setDbValue($rs->fields('1_Descanso_festivo_dominical'));
@@ -1663,6 +1676,7 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 		$row = is_array($rs) ? $rs : $rs->fields;
 		$this->Punto->DbValue = $row['Punto'];
 		$this->Total_general->DbValue = $row['Total_general'];
+		$this->Dia_sin_novedad_especial->DbValue = $row['Dia_sin_novedad_especial'];
 		$this->_1_Apoyo_zonal_sin_punto_asignado->DbValue = $row['1_Apoyo_zonal_sin_punto_asignado'];
 		$this->_1_Descanso_en_dia_habil->DbValue = $row['1_Descanso_en_dia_habil'];
 		$this->_1_Descanso_festivo_dominical->DbValue = $row['1_Descanso_festivo_dominical'];
@@ -1734,6 +1748,10 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 		$this->CopyUrl = $this->GetCopyUrl();
 		$this->InlineCopyUrl = $this->GetInlineCopyUrl();
 		$this->DeleteUrl = $this->GetDeleteUrl();
+
+		// Convert decimal values if posted back
+		if ($this->Dia_sin_novedad_especial->FormValue == $this->Dia_sin_novedad_especial->CurrentValue && is_numeric(ew_StrToFloat($this->Dia_sin_novedad_especial->CurrentValue)))
+			$this->Dia_sin_novedad_especial->CurrentValue = ew_StrToFloat($this->Dia_sin_novedad_especial->CurrentValue);
 
 		// Convert decimal values if posted back
 		if ($this->_1_Apoyo_zonal_sin_punto_asignado->FormValue == $this->_1_Apoyo_zonal_sin_punto_asignado->CurrentValue && is_numeric(ew_StrToFloat($this->_1_Apoyo_zonal_sin_punto_asignado->CurrentValue)))
@@ -1940,13 +1958,45 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 			// Punto
-			$this->Punto->ViewValue = $this->Punto->CurrentValue;
+			if (strval($this->Punto->CurrentValue) <> "") {
+				$sFilterWrk = "`Punto`" . ew_SearchString("=", $this->Punto->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_capacidad_efectiva`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_capacidad_efectiva`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Punto` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Punto->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Punto->ViewValue = $this->Punto->CurrentValue;
+				}
+			} else {
+				$this->Punto->ViewValue = NULL;
+			}
 			$this->Punto->ViewCustomAttributes = "";
 
 			// Total_general
 			$this->Total_general->ViewValue = $this->Total_general->CurrentValue;
 			$this->Total_general->ViewCustomAttributes = "";
 
+			// Dia_sin_novedad_especial
+			$this->Dia_sin_novedad_especial->ViewValue = $this->Dia_sin_novedad_especial->CurrentValue;
+			$this->Dia_sin_novedad_especial->ViewCustomAttributes = "";
 			// 1_Apoyo_zonal_sin_punto_asignado
 			$this->_1_Apoyo_zonal_sin_punto_asignado->ViewValue = $this->_1_Apoyo_zonal_sin_punto_asignado->CurrentValue;
 			$this->_1_Apoyo_zonal_sin_punto_asignado->ViewCustomAttributes = "";
@@ -2113,6 +2163,10 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 			$this->Total_general->HrefValue = "";
 			$this->Total_general->TooltipValue = "";
 
+			// Dia_sin_novedad_especial
+			$this->Dia_sin_novedad_especial->LinkCustomAttributes = "";
+			$this->Dia_sin_novedad_especial->HrefValue = "";
+			$this->Dia_sin_novedad_especial->TooltipValue = "";
 			// 1_Apoyo_zonal_sin_punto_asignado
 			$this->_1_Apoyo_zonal_sin_punto_asignado->LinkCustomAttributes = "";
 			$this->_1_Apoyo_zonal_sin_punto_asignado->HrefValue = "";
@@ -2312,8 +2366,30 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 			// Punto
 			$this->Punto->EditAttrs["class"] = "form-control";
 			$this->Punto->EditCustomAttributes = "";
-			$this->Punto->EditValue = ew_HtmlEncode($this->Punto->AdvancedSearch->SearchValue);
-			$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_capacidad_efectiva`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_capacidad_efectiva`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Punto` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Punto->EditValue = $arwrk;
 
 			// Total_general
 			$this->Total_general->EditAttrs["class"] = "form-control";
@@ -2321,6 +2397,11 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 			$this->Total_general->EditValue = ew_HtmlEncode($this->Total_general->AdvancedSearch->SearchValue);
 			$this->Total_general->PlaceHolder = ew_RemoveHtml($this->Total_general->FldCaption());
 
+			// Dia_sin_novedad_especial
+			$this->Dia_sin_novedad_especial->EditAttrs["class"] = "form-control";
+			$this->Dia_sin_novedad_especial->EditCustomAttributes = "";
+			$this->Dia_sin_novedad_especial->EditValue = ew_HtmlEncode($this->Dia_sin_novedad_especial->AdvancedSearch->SearchValue);
+			$this->Dia_sin_novedad_especial->PlaceHolder = ew_RemoveHtml($this->Dia_sin_novedad_especial->FldCaption());
 			// 1_Apoyo_zonal_sin_punto_asignado
 			$this->_1_Apoyo_zonal_sin_punto_asignado->EditAttrs["class"] = "form-control";
 			$this->_1_Apoyo_zonal_sin_punto_asignado->EditCustomAttributes = "";
@@ -2593,6 +2674,7 @@ class cgrafica_capacidad_efectiva_list extends cgrafica_capacidad_efectiva {
 	function LoadAdvancedSearch() {
 		$this->Punto->AdvancedSearch->Load();
 		$this->Total_general->AdvancedSearch->Load();
+		$this->Dia_sin_novedad_especial->AdvancedSearch->Load();
 		$this->_1_Apoyo_zonal_sin_punto_asignado->AdvancedSearch->Load();
 		$this->_1_Descanso_en_dia_habil->AdvancedSearch->Load();
 		$this->_1_Descanso_festivo_dominical->AdvancedSearch->Load();
@@ -2953,8 +3035,9 @@ fgrafica_capacidad_efectivalist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fgrafica_capacidad_efectivalist.Lists["x_Punto"] = {"LinkField":"x_Punto","Ajax":null,"AutoFill":false,"DisplayFields":["x_Punto","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 var fgrafica_capacidad_efectivalistsrch = new ew_Form("fgrafica_capacidad_efectivalistsrch");
 
 // Validate function for search
@@ -2990,6 +3073,7 @@ fgrafica_capacidad_efectivalistsrch.ValidateRequired = false; // No JavaScript v
 <?php } ?>
 
 // Dynamic selection lists
+fgrafica_capacidad_efectivalistsrch.Lists["x_Punto"] = {"LinkField":"x_Punto","Ajax":null,"AutoFill":false,"DisplayFields":["x_Punto","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 </script>
 <script type="text/javascript">
 
@@ -3001,17 +3085,55 @@ fgrafica_capacidad_efectivalistsrch.ValidateRequired = false; // No JavaScript v
 <?php if ($grafica_capacidad_efectiva->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-<?php if ($grafica_capacidad_efectiva_list->TotalRecs > 0 && $grafica_capacidad_efectiva_list->ExportOptions->Visible()) { ?>
-<?php $grafica_capacidad_efectiva_list->ExportOptions->Render("body") ?>
-<?php } ?>
-<?php if ($grafica_capacidad_efectiva_list->SearchOptions->Visible()) { ?>
-<?php $grafica_capacidad_efectiva_list->SearchOptions->Render("body") ?>
-<?php } ?>
 <?php if ($grafica_capacidad_efectiva->Export == "") { ?>
 <?php echo $Language->SelectionForm(); ?>
 <?php } ?>
 <div class="clearfix"></div>
 </div>
+<?php } ?>
+<div class="ewToolbar">
+<H2> Capacidad Efectiva</h2>
+<p>La siguiente tabla contiene las situaciónes especiales principales reportadas en los informes diarios</p>
+
+<hr>
+<table>
+	<tr>
+		<td>
+			<?php if ($grafica_capacidad_efectiva_list->TotalRecs > 0 && $grafica_capacidad_efectiva_list->ExportOptions->Visible()) { ?>
+
+			<?php $grafica_capacidad_efectiva_list->ExportOptions->Render("body") ?>
+			<?php } ?>
+
+		</td>
+		<td>
+			Si desea exportar la tabla en formato excel haga click en el siguiente icono 
+		</td>	
+	</tr>	
+</table> 
+
+<hr>
+
+</div>
+<?php if ($grafica_capacidad_efectiva->Export == "") { ?>
+
+<div>
+<br>
+<table>
+	<tr>
+		<td>
+			<?php if ($grafica_capacidad_efectiva_list->SearchOptions->Visible()) { ?>
+			<?php $grafica_capacidad_efectiva_list->SearchOptions->Render("body") ?>
+			<?php } ?>
+		</td>
+		<td>
+			Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente
+		</td>	
+	</tr>
+</table>
+<br>
+</div>
+
+<hr>
 <?php } ?>
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
@@ -3044,7 +3166,7 @@ $grafica_capacidad_efectiva_list->RenderOtherOptions();
 <?php if ($Security->CanSearch()) { ?>
 <?php if ($grafica_capacidad_efectiva->Export == "" && $grafica_capacidad_efectiva->CurrentAction == "") { ?>
 <form name="fgrafica_capacidad_efectivalistsrch" id="fgrafica_capacidad_efectivalistsrch" class="form-inline ewForm" action="<?php echo ew_CurrentPage() ?>">
-<?php $SearchPanelClass = ($grafica_capacidad_efectiva_list->SearchWhere <> "") ? " in" : " in"; ?>
+<?php $SearchPanelClass = ($grafica_capacidad_efectiva_list->SearchWhere <> "") ? " " : " "; ?>
 <div id="fgrafica_capacidad_efectivalistsrch_SearchPanel" class="ewSearchPanel collapse<?php echo $SearchPanelClass ?>">
 <input type="hidden" name="cmd" value="search">
 <input type="hidden" name="t" value="grafica_capacidad_efectiva">
@@ -3060,20 +3182,44 @@ $grafica_capacidad_efectiva->RowType = EW_ROWTYPE_SEARCH;
 $grafica_capacidad_efectiva->ResetAttrs();
 $grafica_capacidad_efectiva_list->RenderRow();
 ?>
-<div id="xsr_1" class="ewRow">
-<?php if ($grafica_capacidad_efectiva->Punto->Visible) { // Punto ?>
-	<div id="xsc_Punto" class="ewCell form-group">
-		<label for="x_Punto" class="ewSearchCaption ewLabel"><?php echo $grafica_capacidad_efectiva->Punto->FldCaption() ?></label>
+<br>
+<table>
+	<tr>
+		<td>
+			<label for="x_Punto" class="ewSearchCaption ewLabel"><?php echo $grafica_capacidad_efectiva->Punto->FldCaption() ?></label>
 		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_capacidad_efectiva->Punto->PlaceHolder) ?>" value="<?php echo $grafica_capacidad_efectiva->Punto->EditValue ?>"<?php echo $grafica_capacidad_efectiva->Punto->EditAttributes() ?>>
-</span>
-	</div>
-<?php } ?>
-</div>
-<div id="xsr_2" class="ewRow">
-	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-</div>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_Punto" id="x_Punto" name="x_Punto"<?php echo $grafica_capacidad_efectiva->Punto->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_capacidad_efectiva->Punto->EditValue)) {
+					$arwrk = $grafica_capacidad_efectiva->Punto->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_capacidad_efectiva->Punto->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_capacidad_efectivalistsrch.Lists["x_Punto"].Options = <?php echo (is_array($grafica_capacidad_efectiva->Punto->EditValue)) ? ew_ArrayToJson($grafica_capacidad_efectiva->Punto->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
+	</tr>
+	
+</table>
+<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+
 	</div>
 </div>
 </form>
@@ -3183,6 +3329,15 @@ $grafica_capacidad_efectiva_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
+<?php if ($grafica_capacidad_efectiva->Dia_sin_novedad_especial->Visible) { // Dia_sin_novedad_especial ?>
+	<?php if ($grafica_capacidad_efectiva->SortUrl($grafica_capacidad_efectiva->Dia_sin_novedad_especial) == "") { ?>
+		<th data-name="Dia_sin_novedad_especial"><div id="elh_grafica_capacidad_efectiva_Dia_sin_novedad_especial" class="grafica_capacidad_efectiva_Dia_sin_novedad_especial"><div class="ewTableHeaderCaption"><?php echo $grafica_capacidad_efectiva->Dia_sin_novedad_especial->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Dia_sin_novedad_especial"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_capacidad_efectiva->SortUrl($grafica_capacidad_efectiva->Dia_sin_novedad_especial) ?>',2);"><div id="elh_grafica_capacidad_efectiva_Dia_sin_novedad_especial" class="grafica_capacidad_efectiva_Dia_sin_novedad_especial">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_capacidad_efectiva->Dia_sin_novedad_especial->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_capacidad_efectiva->Dia_sin_novedad_especial->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_capacidad_efectiva->Dia_sin_novedad_especial->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>	
 <?php if ($grafica_capacidad_efectiva->_1_Apoyo_zonal_sin_punto_asignado->Visible) { // 1_Apoyo_zonal_sin_punto_asignado ?>
 	<?php if ($grafica_capacidad_efectiva->SortUrl($grafica_capacidad_efectiva->_1_Apoyo_zonal_sin_punto_asignado) == "") { ?>
 		<th data-name="_1_Apoyo_zonal_sin_punto_asignado"><div id="elh_grafica_capacidad_efectiva__1_Apoyo_zonal_sin_punto_asignado" class="grafica_capacidad_efectiva__1_Apoyo_zonal_sin_punto_asignado"><div class="ewTableHeaderCaption"><?php echo $grafica_capacidad_efectiva->_1_Apoyo_zonal_sin_punto_asignado->FldCaption() ?></div></div></th>
@@ -3609,6 +3764,12 @@ $grafica_capacidad_efectiva_list->ListOptions->Render("body", "left", $grafica_c
 		<td data-name="Total_general"<?php echo $grafica_capacidad_efectiva->Total_general->CellAttributes() ?>>
 <span<?php echo $grafica_capacidad_efectiva->Total_general->ViewAttributes() ?>>
 <?php echo $grafica_capacidad_efectiva->Total_general->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($grafica_capacidad_efectiva->Dia_sin_novedad_especial->Visible) { // Dia_sin_novedad_especial ?>
+		<td data-name="Dia_sin_novedad_especial"<?php echo $grafica_capacidad_efectiva->Dia_sin_novedad_especial->CellAttributes() ?>>
+<span<?php echo $grafica_capacidad_efectiva->Dia_sin_novedad_especial->ViewAttributes() ?>>
+<?php echo $grafica_capacidad_efectiva->Dia_sin_novedad_especial->ListViewValue() ?></span>
 </td>
 	<?php } ?>
 	<?php if ($grafica_capacidad_efectiva->_1_Apoyo_zonal_sin_punto_asignado->Visible) { // 1_Apoyo_zonal_sin_punto_asignado ?>

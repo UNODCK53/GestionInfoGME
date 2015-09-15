@@ -429,6 +429,8 @@ class cfuerza_add extends cfuerza {
 		$this->_23_del_punto->OldValue = $this->_23_del_punto->CurrentValue;
 		$this->Punto->CurrentValue = NULL;
 		$this->Punto->OldValue = $this->Punto->CurrentValue;
+		$this->Profesional_especializado->CurrentValue = NULL;
+		$this->Profesional_especializado->OldValue = $this->Profesional_especializado->CurrentValue;
 	}
 
 	// Load form values
@@ -454,6 +456,9 @@ class cfuerza_add extends cfuerza {
 		if (!$this->Punto->FldIsDetailKey) {
 			$this->Punto->setFormValue($objForm->GetValue("x_Punto"));
 		}
+		if (!$this->Profesional_especializado->FldIsDetailKey) {
+			$this->Profesional_especializado->setFormValue($objForm->GetValue("x_Profesional_especializado"));
+		}
 	}
 
 	// Restore form values
@@ -466,6 +471,7 @@ class cfuerza_add extends cfuerza {
 		$this->Fase->CurrentValue = $this->Fase->FormValue;
 		$this->_23_del_punto->CurrentValue = $this->_23_del_punto->FormValue;
 		$this->Punto->CurrentValue = $this->Punto->FormValue;
+		$this->Profesional_especializado->CurrentValue = $this->Profesional_especializado->FormValue;
 	}
 
 	// Load row based on key values
@@ -503,6 +509,7 @@ class cfuerza_add extends cfuerza {
 		$this->Fase->setDbValue($rs->fields('Fase'));
 		$this->_23_del_punto->setDbValue($rs->fields('#_del_punto'));
 		$this->Punto->setDbValue($rs->fields('Punto'));
+		$this->Profesional_especializado->setDbValue($rs->fields('Profesional_especializado'));
 	}
 
 	// Load DbValue from recordset
@@ -515,6 +522,7 @@ class cfuerza_add extends cfuerza {
 		$this->Fase->DbValue = $row['Fase'];
 		$this->_23_del_punto->DbValue = $row['#_del_punto'];
 		$this->Punto->DbValue = $row['Punto'];
+		$this->Profesional_especializado->DbValue = $row['Profesional_especializado'];
 	}
 
 	// Load old record
@@ -556,6 +564,7 @@ class cfuerza_add extends cfuerza {
 		// Fase
 		// #_del_punto
 		// Punto
+		// Profesional_especializado
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -631,6 +640,38 @@ class cfuerza_add extends cfuerza {
 			$this->Punto->ViewValue = $this->Punto->CurrentValue;
 			$this->Punto->ViewCustomAttributes = "";
 
+			// Profesional_especializado
+			if (strval($this->Profesional_especializado->CurrentValue) <> "") {
+				switch ($this->Profesional_especializado->CurrentValue) {
+					case $this->Profesional_especializado->FldTagValue(1):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(1) <> "" ? $this->Profesional_especializado->FldTagCaption(1) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(2):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(2) <> "" ? $this->Profesional_especializado->FldTagCaption(2) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(3):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(3) <> "" ? $this->Profesional_especializado->FldTagCaption(3) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(4):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(4) <> "" ? $this->Profesional_especializado->FldTagCaption(4) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(5):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(5) <> "" ? $this->Profesional_especializado->FldTagCaption(5) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(6):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(6) <> "" ? $this->Profesional_especializado->FldTagCaption(6) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(7):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(7) <> "" ? $this->Profesional_especializado->FldTagCaption(7) : $this->Profesional_especializado->CurrentValue;
+						break;
+					default:
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->CurrentValue;
+				}
+			} else {
+				$this->Profesional_especializado->ViewValue = NULL;
+			}
+			$this->Profesional_especializado->ViewCustomAttributes = "";
+
 			// Fuerza
 			$this->Fuerza->LinkCustomAttributes = "";
 			$this->Fuerza->HrefValue = "";
@@ -660,6 +701,11 @@ class cfuerza_add extends cfuerza {
 			$this->Punto->LinkCustomAttributes = "";
 			$this->Punto->HrefValue = "";
 			$this->Punto->TooltipValue = "";
+
+			// Profesional_especializado
+			$this->Profesional_especializado->LinkCustomAttributes = "";
+			$this->Profesional_especializado->HrefValue = "";
+			$this->Profesional_especializado->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_ADD) { // Add row
 
 			// Fuerza
@@ -710,6 +756,20 @@ class cfuerza_add extends cfuerza {
 			$this->Punto->EditValue = ew_HtmlEncode($this->Punto->CurrentValue);
 			$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
 
+			// Profesional_especializado
+			$this->Profesional_especializado->EditAttrs["class"] = "form-control";
+			$this->Profesional_especializado->EditCustomAttributes = "";
+			$arwrk = array();
+			$arwrk[] = array($this->Profesional_especializado->FldTagValue(1), $this->Profesional_especializado->FldTagCaption(1) <> "" ? $this->Profesional_especializado->FldTagCaption(1) : $this->Profesional_especializado->FldTagValue(1));
+			$arwrk[] = array($this->Profesional_especializado->FldTagValue(2), $this->Profesional_especializado->FldTagCaption(2) <> "" ? $this->Profesional_especializado->FldTagCaption(2) : $this->Profesional_especializado->FldTagValue(2));
+			$arwrk[] = array($this->Profesional_especializado->FldTagValue(3), $this->Profesional_especializado->FldTagCaption(3) <> "" ? $this->Profesional_especializado->FldTagCaption(3) : $this->Profesional_especializado->FldTagValue(3));
+			$arwrk[] = array($this->Profesional_especializado->FldTagValue(4), $this->Profesional_especializado->FldTagCaption(4) <> "" ? $this->Profesional_especializado->FldTagCaption(4) : $this->Profesional_especializado->FldTagValue(4));
+			$arwrk[] = array($this->Profesional_especializado->FldTagValue(5), $this->Profesional_especializado->FldTagCaption(5) <> "" ? $this->Profesional_especializado->FldTagCaption(5) : $this->Profesional_especializado->FldTagValue(5));
+			$arwrk[] = array($this->Profesional_especializado->FldTagValue(6), $this->Profesional_especializado->FldTagCaption(6) <> "" ? $this->Profesional_especializado->FldTagCaption(6) : $this->Profesional_especializado->FldTagValue(6));
+			$arwrk[] = array($this->Profesional_especializado->FldTagValue(7), $this->Profesional_especializado->FldTagCaption(7) <> "" ? $this->Profesional_especializado->FldTagCaption(7) : $this->Profesional_especializado->FldTagValue(7));
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+			$this->Profesional_especializado->EditValue = $arwrk;
+
 			// Edit refer script
 			// Fuerza
 
@@ -729,6 +789,9 @@ class cfuerza_add extends cfuerza {
 
 			// Punto
 			$this->Punto->HrefValue = "";
+
+			// Profesional_especializado
+			$this->Profesional_especializado->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -771,6 +834,9 @@ class cfuerza_add extends cfuerza {
 		}
 		if (!$this->Punto->FldIsDetailKey && !is_null($this->Punto->FormValue) && $this->Punto->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->Punto->FldCaption(), $this->Punto->ReqErrMsg));
+		}
+		if (!$this->Profesional_especializado->FldIsDetailKey && !is_null($this->Profesional_especializado->FormValue) && $this->Profesional_especializado->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->Profesional_especializado->FldCaption(), $this->Profesional_especializado->ReqErrMsg));
 		}
 
 		// Return validate result
@@ -823,6 +889,9 @@ class cfuerza_add extends cfuerza {
 
 		// Punto
 		$this->Punto->SetDbValueDef($rsnew, $this->Punto->CurrentValue, "", FALSE);
+
+		// Profesional_especializado
+		$this->Profesional_especializado->SetDbValueDef($rsnew, $this->Profesional_especializado->CurrentValue, "", FALSE);
 
 		// Call Row Inserting event
 		$rs = ($rsold == NULL) ? NULL : $rsold->fields;
@@ -1020,6 +1089,9 @@ ffuerzaadd.Validate = function() {
 			elm = this.GetElements("x" + infix + "_Punto");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
 				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $fuerza->Punto->FldCaption(), $fuerza->Punto->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_Profesional_especializado");
+			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $fuerza->Profesional_especializado->FldCaption(), $fuerza->Profesional_especializado->ReqErrMsg)) ?>");
 
 			// Set up row object
 			ew_ElementsToRow(fobj);
@@ -1072,8 +1144,6 @@ ffuerzaadd.ValidateRequired = false;
 <?php
 $fuerza_add->ShowMessage();
 ?>
-<?php echo "Si el Punto ya ha sido ingresado, revise los datos o en su defecto edite la información en la pestaña 'Edit'<br>"?>
-
 <form name="ffuerzaadd" id="ffuerzaadd" class="form-horizontal ewForm ewAddForm" action="<?php echo ew_CurrentPage() ?>" method="post">
 <?php if ($fuerza_add->CheckToken) { ?>
 <input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $fuerza_add->Token ?>">
@@ -1140,7 +1210,7 @@ if (is_array($fuerza->Estado->EditValue)) {
 		<label id="elh_fuerza_AF1o" for="x_AF1o" class="col-sm-2 control-label ewLabel"><?php echo $fuerza->AF1o->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $fuerza->AF1o->CellAttributes() ?>>
 <span id="el_fuerza_AF1o">
-<input type="text" data-field="x_AF1o" onChange="Punto(this)" name="x_AF1o" id="x_AF1o" size="30" placeholder="<?php echo ew_HtmlEncode($fuerza->AF1o->PlaceHolder) ?>" value="<?php echo $fuerza->AF1o->EditValue ?>"<?php echo $fuerza->AF1o->EditAttributes() ?>>
+<input type="text" data-field="x_AF1o" name="x_AF1o" id="x_AF1o" size="30" placeholder="<?php echo ew_HtmlEncode($fuerza->AF1o->PlaceHolder) ?>" value="<?php echo $fuerza->AF1o->EditValue ?>"<?php echo $fuerza->AF1o->EditAttributes() ?>>
 </span>
 <?php echo $fuerza->AF1o->CustomMsg ?></div></div>
 	</div>
@@ -1150,7 +1220,7 @@ if (is_array($fuerza->Estado->EditValue)) {
 		<label id="elh_fuerza_Fase" for="x_Fase" class="col-sm-2 control-label ewLabel"><?php echo $fuerza->Fase->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $fuerza->Fase->CellAttributes() ?>>
 <span id="el_fuerza_Fase">
-<select data-field="x_Fase" id="x_Fase" onChange="Punto(this)" name="x_Fase"<?php echo $fuerza->Fase->EditAttributes() ?>>
+<select data-field="x_Fase" id="x_Fase" name="x_Fase"<?php echo $fuerza->Fase->EditAttributes() ?>>
 <?php
 if (is_array($fuerza->Fase->EditValue)) {
 	$arwrk = $fuerza->Fase->EditValue;
@@ -1177,7 +1247,7 @@ if (is_array($fuerza->Fase->EditValue)) {
 		<label id="elh_fuerza__23_del_punto" for="x__23_del_punto" class="col-sm-2 control-label ewLabel"><?php echo $fuerza->_23_del_punto->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $fuerza->_23_del_punto->CellAttributes() ?>>
 <span id="el_fuerza__23_del_punto">
-<input type="text" data-field="x__23_del_punto" onChange="Punto(this)"name="x__23_del_punto" id="x__23_del_punto" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($fuerza->_23_del_punto->PlaceHolder) ?>" value="<?php echo $fuerza->_23_del_punto->EditValue ?>"<?php echo $fuerza->_23_del_punto->EditAttributes() ?>>
+<input type="text" data-field="x__23_del_punto" name="x__23_del_punto" id="x__23_del_punto" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($fuerza->_23_del_punto->PlaceHolder) ?>" value="<?php echo $fuerza->_23_del_punto->EditValue ?>"<?php echo $fuerza->_23_del_punto->EditAttributes() ?>>
 </span>
 <?php echo $fuerza->_23_del_punto->CustomMsg ?></div></div>
 	</div>
@@ -1187,9 +1257,36 @@ if (is_array($fuerza->Fase->EditValue)) {
 		<label id="elh_fuerza_Punto" for="x_Punto" class="col-sm-2 control-label ewLabel"><?php echo $fuerza->Punto->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $fuerza->Punto->CellAttributes() ?>>
 <span id="el_fuerza_Punto">
-<input type="text" data-field="x_Punto" name="x_Punto" readonly id="x_Punto" size="30" maxlength="6" placeholder="<?php echo ew_HtmlEncode($fuerza->Punto->PlaceHolder) ?>" value="<?php echo $fuerza->Punto->EditValue ?>"<?php echo $fuerza->Punto->EditAttributes() ?>>
+<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="30" maxlength="6" placeholder="<?php echo ew_HtmlEncode($fuerza->Punto->PlaceHolder) ?>" value="<?php echo $fuerza->Punto->EditValue ?>"<?php echo $fuerza->Punto->EditAttributes() ?>>
 </span>
 <?php echo $fuerza->Punto->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($fuerza->Profesional_especializado->Visible) { // Profesional_especializado ?>
+	<div id="r_Profesional_especializado" class="form-group">
+		<label id="elh_fuerza_Profesional_especializado" for="x_Profesional_especializado" class="col-sm-2 control-label ewLabel"><?php echo $fuerza->Profesional_especializado->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<div class="col-sm-10"><div<?php echo $fuerza->Profesional_especializado->CellAttributes() ?>>
+<span id="el_fuerza_Profesional_especializado">
+<select data-field="x_Profesional_especializado" id="x_Profesional_especializado" name="x_Profesional_especializado"<?php echo $fuerza->Profesional_especializado->EditAttributes() ?>>
+<?php
+if (is_array($fuerza->Profesional_especializado->EditValue)) {
+	$arwrk = $fuerza->Profesional_especializado->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($fuerza->Profesional_especializado->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+</span>
+<?php echo $fuerza->Profesional_especializado->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div>
@@ -1199,31 +1296,6 @@ if (is_array($fuerza->Fase->EditValue)) {
 	</div>
 </div>
 </form>
-<script type="text/javascript">
-function Punto(x) {
-	año=document.getElementById("x_AF1o").value;
-	fase=document.getElementById("x_Fase").value;
-	num=document.getElementById("x__23_del_punto").value;
-	if(año.length==4){
-			año=año.substring(2, 4);
-		}else if(año.length==2){
-			año=año;
-		}else{
-			alert("Verifique que el año ingresado este en el siguiente formato 2015 o 15 ");
-			document.getElementById("x_AF1o").value="";
-	}
-	if(x.id=="x__23_del_punto" && num.length!=2 && x.value != '00'){
-			alert("EL consecutivo debetener dos digitos. Ej: 05 o 22 ");
-			document.getElementById("x__23_del_punto").value="";
-			document.getElementById("x_Punto").value="";
-		}
-	if(año!="" && fase!="" && num!="00" && num.length==2 ){
-		document.getElementById("x_Punto").value=año+fase+num;
-	}else
-	document.getElementById("x_Punto").value="";
-	
-}
-</script>
 <script type="text/javascript">
 ffuerzaadd.Init();
 </script>

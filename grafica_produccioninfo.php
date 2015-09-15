@@ -10,6 +10,8 @@ class cgrafica_produccion extends cTable {
 	var $GME_Activos;
 	var $Total_erradicado;
 	var $fecha;
+	var $aF1o;
+	var $fase;
 
 	//
 	// Table class constructor
@@ -49,8 +51,16 @@ class cgrafica_produccion extends cTable {
 
 		// fecha
 		$this->fecha = new cField('grafica_produccion', 'grafica_produccion', 'x_fecha', 'fecha', '`fecha`', 'DATE_FORMAT(`fecha`, \'%d/%m/%Y\')', 133, 7, FALSE, '`fecha`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->fecha->FldDefaultErrMsg = str_replace("%s", "/", $Language->Phrase("IncorrectDateDMY"));
+		$this->fecha->FldDefaultErrMsg = str_replace("%s", "/", $Language->Phrase("IncorrectDateYMD"));
 		$this->fields['fecha'] = &$this->fecha;
+
+		// año
+		$this->aF1o = new cField('grafica_produccion', 'grafica_produccion', 'x_aF1o', 'año', '`año`', '`año`', 200, -1, FALSE, '`año`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['año'] = &$this->aF1o;
+
+		// fase
+		$this->fase = new cField('grafica_produccion', 'grafica_produccion', 'x_fase', 'fase', '`fase`', '`fase`', 200, -1, FALSE, '`fase`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['fase'] = &$this->fase;
 	}
 
 	// Multiple column sort
@@ -525,6 +535,8 @@ class cgrafica_produccion extends cTable {
 		$this->GME_Activos->setDbValue($rs->fields('GME_Activos'));
 		$this->Total_erradicado->setDbValue($rs->fields('Total_erradicado'));
 		$this->fecha->setDbValue($rs->fields('fecha'));
+		$this->aF1o->setDbValue($rs->fields('año'));
+		$this->fase->setDbValue($rs->fields('fase'));
 	}
 
 	// Render list row values
@@ -538,9 +550,40 @@ class cgrafica_produccion extends cTable {
 		// GME_Activos
 		// Total_erradicado
 		// fecha
+		// año
+		// fase
 		// GME_Activos
 
-		$this->GME_Activos->ViewValue = $this->GME_Activos->CurrentValue;
+		if (strval($this->GME_Activos->CurrentValue) <> "") {
+			$sFilterWrk = "`GME_Activos`" . ew_SearchString("=", $this->GME_Activos->CurrentValue, EW_DATATYPE_NUMBER);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `GME_Activos`, `GME_Activos` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_produccion`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `GME_Activos`, `GME_Activos` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_produccion`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->GME_Activos, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `GME_Activos` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->GME_Activos->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->GME_Activos->ViewValue = $this->GME_Activos->CurrentValue;
+			}
+		} else {
+			$this->GME_Activos->ViewValue = NULL;
+		}
 		$this->GME_Activos->ViewCustomAttributes = "";
 
 		// Total_erradicado
@@ -551,6 +594,72 @@ class cgrafica_produccion extends cTable {
 		$this->fecha->ViewValue = $this->fecha->CurrentValue;
 		$this->fecha->ViewValue = ew_FormatDateTime($this->fecha->ViewValue, 7);
 		$this->fecha->ViewCustomAttributes = "";
+
+		// año
+		if (strval($this->aF1o->CurrentValue) <> "") {
+			$sFilterWrk = "`año`" . ew_SearchString("=", $this->aF1o->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_produccion`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_produccion`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->aF1o, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `año` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->aF1o->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->aF1o->ViewValue = $this->aF1o->CurrentValue;
+			}
+		} else {
+			$this->aF1o->ViewValue = NULL;
+		}
+		$this->aF1o->ViewCustomAttributes = "";
+
+		// fase
+		if (strval($this->fase->CurrentValue) <> "") {
+			$sFilterWrk = "`fase`" . ew_SearchString("=", $this->fase->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_produccion`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_produccion`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->fase, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `fase` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->fase->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->fase->ViewValue = $this->fase->CurrentValue;
+			}
+		} else {
+			$this->fase->ViewValue = NULL;
+		}
+		$this->fase->ViewCustomAttributes = "";
 
 		// GME_Activos
 		$this->GME_Activos->LinkCustomAttributes = "";
@@ -567,6 +676,16 @@ class cgrafica_produccion extends cTable {
 		$this->fecha->HrefValue = "";
 		$this->fecha->TooltipValue = "";
 
+		// año
+		$this->aF1o->LinkCustomAttributes = "";
+		$this->aF1o->HrefValue = "";
+		$this->aF1o->TooltipValue = "";
+
+		// fase
+		$this->fase->LinkCustomAttributes = "";
+		$this->fase->HrefValue = "";
+		$this->fase->TooltipValue = "";
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -581,21 +700,26 @@ class cgrafica_produccion extends cTable {
 		// GME_Activos
 		$this->GME_Activos->EditAttrs["class"] = "form-control";
 		$this->GME_Activos->EditCustomAttributes = "";
-		$this->GME_Activos->EditValue = ew_HtmlEncode($this->GME_Activos->CurrentValue);
-		$this->GME_Activos->PlaceHolder = ew_RemoveHtml($this->GME_Activos->FldCaption());
 
 		// Total_erradicado
 		$this->Total_erradicado->EditAttrs["class"] = "form-control";
 		$this->Total_erradicado->EditCustomAttributes = "";
 		$this->Total_erradicado->EditValue = ew_HtmlEncode($this->Total_erradicado->CurrentValue);
 		$this->Total_erradicado->PlaceHolder = ew_RemoveHtml($this->Total_erradicado->FldCaption());
-		if (strval($this->Total_erradicado->EditValue) <> "" && is_numeric($this->Total_erradicado->EditValue)) $this->Total_erradicado->EditValue = ew_FormatNumber($this->Total_erradicado->EditValue, -2, -1, -2, 0);
 
 		// fecha
 		$this->fecha->EditAttrs["class"] = "form-control";
 		$this->fecha->EditCustomAttributes = "";
 		$this->fecha->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->fecha->CurrentValue, 7));
 		$this->fecha->PlaceHolder = ew_RemoveHtml($this->fecha->FldCaption());
+
+		// año
+		$this->aF1o->EditAttrs["class"] = "form-control";
+		$this->aF1o->EditCustomAttributes = "";
+
+		// fase
+		$this->fase->EditAttrs["class"] = "form-control";
+		$this->fase->EditCustomAttributes = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -627,10 +751,14 @@ class cgrafica_produccion extends cTable {
 					if ($this->GME_Activos->Exportable) $Doc->ExportCaption($this->GME_Activos);
 					if ($this->Total_erradicado->Exportable) $Doc->ExportCaption($this->Total_erradicado);
 					if ($this->fecha->Exportable) $Doc->ExportCaption($this->fecha);
+					if ($this->aF1o->Exportable) $Doc->ExportCaption($this->aF1o);
+					if ($this->fase->Exportable) $Doc->ExportCaption($this->fase);
 				} else {
 					if ($this->GME_Activos->Exportable) $Doc->ExportCaption($this->GME_Activos);
 					if ($this->Total_erradicado->Exportable) $Doc->ExportCaption($this->Total_erradicado);
 					if ($this->fecha->Exportable) $Doc->ExportCaption($this->fecha);
+					if ($this->aF1o->Exportable) $Doc->ExportCaption($this->aF1o);
+					if ($this->fase->Exportable) $Doc->ExportCaption($this->fase);
 				}
 				$Doc->EndExportRow();
 			}
@@ -665,10 +793,14 @@ class cgrafica_produccion extends cTable {
 						if ($this->GME_Activos->Exportable) $Doc->ExportField($this->GME_Activos);
 						if ($this->Total_erradicado->Exportable) $Doc->ExportField($this->Total_erradicado);
 						if ($this->fecha->Exportable) $Doc->ExportField($this->fecha);
+						if ($this->aF1o->Exportable) $Doc->ExportField($this->aF1o);
+						if ($this->fase->Exportable) $Doc->ExportField($this->fase);
 					} else {
 						if ($this->GME_Activos->Exportable) $Doc->ExportField($this->GME_Activos);
 						if ($this->Total_erradicado->Exportable) $Doc->ExportField($this->Total_erradicado);
 						if ($this->fecha->Exportable) $Doc->ExportField($this->fecha);
+						if ($this->aF1o->Exportable) $Doc->ExportField($this->aF1o);
+						if ($this->fase->Exportable) $Doc->ExportField($this->fase);
 					}
 					$Doc->EndExportRow();
 				}

@@ -568,23 +568,168 @@ class cgrafica_accidentes_trabajo extends cTable {
 		// Total_Evacuados
 		// Profesional_especializado
 
-		$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->CurrentValue;
+		if (strval($this->Profesional_especializado->CurrentValue) <> "") {
+			$sFilterWrk = "`Profesional_especializado`" . ew_SearchString("=", $this->Profesional_especializado->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Profesional_especializado`, `Profesional_especializado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_accidentes_trabajo`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Profesional_especializado`, `Profesional_especializado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_accidentes_trabajo`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Profesional_especializado, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Profesional_especializado` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Profesional_especializado->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->CurrentValue;
+			}
+		} else {
+			$this->Profesional_especializado->ViewValue = NULL;
+		}
 		$this->Profesional_especializado->ViewCustomAttributes = "";
 
 		// Punto
-		$this->Punto->ViewValue = $this->Punto->CurrentValue;
+		if (strval($this->Punto->CurrentValue) <> "") {
+			$sFilterWrk = "`Punto`" . ew_SearchString("=", $this->Punto->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_accidentes_trabajo`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_accidentes_trabajo`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Punto` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Punto->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Punto->ViewValue = $this->Punto->CurrentValue;
+			}
+		} else {
+			$this->Punto->ViewValue = NULL;
+		}
 		$this->Punto->ViewCustomAttributes = "";
 
 		// Cargo_Afectado
-		$this->Cargo_Afectado->ViewValue = $this->Cargo_Afectado->CurrentValue;
+		if (strval($this->Cargo_Afectado->CurrentValue) <> "") {
+			$sFilterWrk = "`Cargo_Afectado`" . ew_SearchString("=", $this->Cargo_Afectado->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Cargo_Afectado`, `Cargo_Afectado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_accidentes_trabajo`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Cargo_Afectado`, `Cargo_Afectado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_accidentes_trabajo`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Cargo_Afectado, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Cargo_Afectado` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Cargo_Afectado->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Cargo_Afectado->ViewValue = $this->Cargo_Afectado->CurrentValue;
+			}
+		} else {
+			$this->Cargo_Afectado->ViewValue = NULL;
+		}
 		$this->Cargo_Afectado->ViewCustomAttributes = "";
 
 		// Tipo_incidente
-		$this->Tipo_incidente->ViewValue = $this->Tipo_incidente->CurrentValue;
+		if (strval($this->Tipo_incidente->CurrentValue) <> "") {
+			$sFilterWrk = "`Tipo_incidente`" . ew_SearchString("=", $this->Tipo_incidente->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Tipo_incidente`, `Tipo_incidente` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_accidentes_trabajo`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Tipo_incidente`, `Tipo_incidente` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_accidentes_trabajo`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Tipo_incidente, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Tipo_incidente` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Tipo_incidente->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Tipo_incidente->ViewValue = $this->Tipo_incidente->CurrentValue;
+			}
+		} else {
+			$this->Tipo_incidente->ViewValue = NULL;
+		}
 		$this->Tipo_incidente->ViewCustomAttributes = "";
 
 		// Evacuado
-		$this->Evacuado->ViewValue = $this->Evacuado->CurrentValue;
+		if (strval($this->Evacuado->CurrentValue) <> "") {
+			$sFilterWrk = "`Evacuado`" . ew_SearchString("=", $this->Evacuado->CurrentValue, EW_DATATYPE_NUMBER);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Evacuado`, `Evacuado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_accidentes_trabajo`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Evacuado`, `Evacuado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_accidentes_trabajo`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Evacuado, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Evacuado` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Evacuado->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Evacuado->ViewValue = $this->Evacuado->CurrentValue;
+			}
+		} else {
+			$this->Evacuado->ViewValue = NULL;
+		}
 		$this->Evacuado->ViewCustomAttributes = "";
 
 		// No_evacuado
@@ -644,33 +789,22 @@ class cgrafica_accidentes_trabajo extends cTable {
 		// Profesional_especializado
 		$this->Profesional_especializado->EditAttrs["class"] = "form-control";
 		$this->Profesional_especializado->EditCustomAttributes = "";
-		$this->Profesional_especializado->EditValue = ew_HtmlEncode($this->Profesional_especializado->CurrentValue);
-		$this->Profesional_especializado->PlaceHolder = ew_RemoveHtml($this->Profesional_especializado->FldCaption());
 
 		// Punto
 		$this->Punto->EditAttrs["class"] = "form-control";
 		$this->Punto->EditCustomAttributes = "";
-		$this->Punto->EditValue = ew_HtmlEncode($this->Punto->CurrentValue);
-		$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
 
 		// Cargo_Afectado
 		$this->Cargo_Afectado->EditAttrs["class"] = "form-control";
 		$this->Cargo_Afectado->EditCustomAttributes = "";
-		$this->Cargo_Afectado->EditValue = ew_HtmlEncode($this->Cargo_Afectado->CurrentValue);
-		$this->Cargo_Afectado->PlaceHolder = ew_RemoveHtml($this->Cargo_Afectado->FldCaption());
 
 		// Tipo_incidente
 		$this->Tipo_incidente->EditAttrs["class"] = "form-control";
 		$this->Tipo_incidente->EditCustomAttributes = "";
-		$this->Tipo_incidente->EditValue = ew_HtmlEncode($this->Tipo_incidente->CurrentValue);
-		$this->Tipo_incidente->PlaceHolder = ew_RemoveHtml($this->Tipo_incidente->FldCaption());
 
 		// Evacuado
 		$this->Evacuado->EditAttrs["class"] = "form-control";
 		$this->Evacuado->EditCustomAttributes = "";
-		$this->Evacuado->EditValue = ew_HtmlEncode($this->Evacuado->CurrentValue);
-		$this->Evacuado->PlaceHolder = ew_RemoveHtml($this->Evacuado->FldCaption());
-		if (strval($this->Evacuado->EditValue) <> "" && is_numeric($this->Evacuado->EditValue)) $this->Evacuado->EditValue = ew_FormatNumber($this->Evacuado->EditValue, -2, -1, -2, 0);
 
 		// No_evacuado
 		$this->No_evacuado->EditAttrs["class"] = "form-control";

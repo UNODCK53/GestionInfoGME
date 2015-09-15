@@ -7,11 +7,17 @@ $grafica_retiro_personal = NULL;
 // Table class for grafica_retiro_personal
 //
 class cgrafica_retiro_personal extends cTable {
+	var $Punto;
+	var $Departamento;
+	var $Municipio;
+	var $CC_Evacuado;
+	var $Evacuado;
 	var $Cargo_Per_EVA;
 	var $Motivo_Eva;
+	var $Fecha_llegada_del_evacuado;
 	var $Profesional_especializado;
-	var $Punto;
-	var $Evacuado;
+	var $OBS_EVA;
+	var $Fecha_de_Novedad;
 	var $AF1o;
 	var $Fase;
 
@@ -41,6 +47,26 @@ class cgrafica_retiro_personal extends cTable {
 		$this->UserIDAllowSecurity = 0; // User ID Allow
 		$this->BasicSearch = new cBasicSearch($this->TableVar);
 
+		// Punto
+		$this->Punto = new cField('grafica_retiro_personal', 'grafica_retiro_personal', 'x_Punto', 'Punto', '`Punto`', '`Punto`', 201, -1, FALSE, '`Punto`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['Punto'] = &$this->Punto;
+
+		// Departamento
+		$this->Departamento = new cField('grafica_retiro_personal', 'grafica_retiro_personal', 'x_Departamento', 'Departamento', '`Departamento`', '`Departamento`', 200, -1, FALSE, '`Departamento`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['Departamento'] = &$this->Departamento;
+
+		// Municipio
+		$this->Municipio = new cField('grafica_retiro_personal', 'grafica_retiro_personal', 'x_Municipio', 'Municipio', '`Municipio`', '`Municipio`', 201, -1, FALSE, '`Municipio`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['Municipio'] = &$this->Municipio;
+
+		// CC_Evacuado
+		$this->CC_Evacuado = new cField('grafica_retiro_personal', 'grafica_retiro_personal', 'x_CC_Evacuado', 'CC_Evacuado', '`CC_Evacuado`', '`CC_Evacuado`', 200, -1, FALSE, '`CC_Evacuado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['CC_Evacuado'] = &$this->CC_Evacuado;
+
+		// Evacuado
+		$this->Evacuado = new cField('grafica_retiro_personal', 'grafica_retiro_personal', 'x_Evacuado', 'Evacuado', '`Evacuado`', '`Evacuado`', 201, -1, FALSE, '`Evacuado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['Evacuado'] = &$this->Evacuado;
+
 		// Cargo_Per_EVA
 		$this->Cargo_Per_EVA = new cField('grafica_retiro_personal', 'grafica_retiro_personal', 'x_Cargo_Per_EVA', 'Cargo_Per_EVA', '`Cargo_Per_EVA`', '`Cargo_Per_EVA`', 201, -1, FALSE, '`Cargo_Per_EVA`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['Cargo_Per_EVA'] = &$this->Cargo_Per_EVA;
@@ -49,17 +75,21 @@ class cgrafica_retiro_personal extends cTable {
 		$this->Motivo_Eva = new cField('grafica_retiro_personal', 'grafica_retiro_personal', 'x_Motivo_Eva', 'Motivo_Eva', '`Motivo_Eva`', '`Motivo_Eva`', 201, -1, FALSE, '`Motivo_Eva`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['Motivo_Eva'] = &$this->Motivo_Eva;
 
+		// Fecha_llegada_del_evacuado
+		$this->Fecha_llegada_del_evacuado = new cField('grafica_retiro_personal', 'grafica_retiro_personal', 'x_Fecha_llegada_del_evacuado', 'Fecha_llegada_del_evacuado', '`Fecha_llegada_del_evacuado`', '`Fecha_llegada_del_evacuado`', 200, -1, FALSE, '`Fecha_llegada_del_evacuado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['Fecha_llegada_del_evacuado'] = &$this->Fecha_llegada_del_evacuado;
+
 		// Profesional_especializado
 		$this->Profesional_especializado = new cField('grafica_retiro_personal', 'grafica_retiro_personal', 'x_Profesional_especializado', 'Profesional_especializado', '`Profesional_especializado`', '`Profesional_especializado`', 201, -1, FALSE, '`Profesional_especializado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['Profesional_especializado'] = &$this->Profesional_especializado;
 
-		// Punto
-		$this->Punto = new cField('grafica_retiro_personal', 'grafica_retiro_personal', 'x_Punto', 'Punto', '`Punto`', '`Punto`', 201, -1, FALSE, '`Punto`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->fields['Punto'] = &$this->Punto;
+		// OBS_EVA
+		$this->OBS_EVA = new cField('grafica_retiro_personal', 'grafica_retiro_personal', 'x_OBS_EVA', 'OBS_EVA', '`OBS_EVA`', '`OBS_EVA`', 201, -1, FALSE, '`OBS_EVA`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['OBS_EVA'] = &$this->OBS_EVA;
 
-		// Evacuado
-		$this->Evacuado = new cField('grafica_retiro_personal', 'grafica_retiro_personal', 'x_Evacuado', 'Evacuado', '`Evacuado`', '`Evacuado`', 201, -1, FALSE, '`Evacuado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->fields['Evacuado'] = &$this->Evacuado;
+		// Fecha_de_Novedad
+		$this->Fecha_de_Novedad = new cField('grafica_retiro_personal', 'grafica_retiro_personal', 'x_Fecha_de_Novedad', 'Fecha_de_Novedad', '`Fecha_de_Novedad`', '`Fecha_de_Novedad`', 200, -1, FALSE, '`Fecha_de_Novedad`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['Fecha_de_Novedad'] = &$this->Fecha_de_Novedad;
 
 		// Año
 		$this->AF1o = new cField('grafica_retiro_personal', 'grafica_retiro_personal', 'x_AF1o', 'Año', '`Año`', '`Año`', 200, -1, FALSE, '`Año`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
@@ -539,11 +569,17 @@ class cgrafica_retiro_personal extends cTable {
 
 	// Load row values from recordset
 	function LoadListRowValues(&$rs) {
+		$this->Punto->setDbValue($rs->fields('Punto'));
+		$this->Departamento->setDbValue($rs->fields('Departamento'));
+		$this->Municipio->setDbValue($rs->fields('Municipio'));
+		$this->CC_Evacuado->setDbValue($rs->fields('CC_Evacuado'));
+		$this->Evacuado->setDbValue($rs->fields('Evacuado'));
 		$this->Cargo_Per_EVA->setDbValue($rs->fields('Cargo_Per_EVA'));
 		$this->Motivo_Eva->setDbValue($rs->fields('Motivo_Eva'));
+		$this->Fecha_llegada_del_evacuado->setDbValue($rs->fields('Fecha_llegada_del_evacuado'));
 		$this->Profesional_especializado->setDbValue($rs->fields('Profesional_especializado'));
-		$this->Punto->setDbValue($rs->fields('Punto'));
-		$this->Evacuado->setDbValue($rs->fields('Evacuado'));
+		$this->OBS_EVA->setDbValue($rs->fields('OBS_EVA'));
+		$this->Fecha_de_Novedad->setDbValue($rs->fields('Fecha_de_Novedad'));
 		$this->AF1o->setDbValue($rs->fields('Año'));
 		$this->Fase->setDbValue($rs->fields('Fase'));
 	}
@@ -556,41 +592,241 @@ class cgrafica_retiro_personal extends cTable {
 		$this->Row_Rendering();
 
    // Common render codes
+		// Punto
+		// Departamento
+		// Municipio
+		// CC_Evacuado
+		// Evacuado
 		// Cargo_Per_EVA
 		// Motivo_Eva
+		// Fecha_llegada_del_evacuado
 		// Profesional_especializado
-		// Punto
-		// Evacuado
+		// OBS_EVA
+		// Fecha_de_Novedad
 		// Año
 		// Fase
-		// Cargo_Per_EVA
-
-		$this->Cargo_Per_EVA->ViewValue = $this->Cargo_Per_EVA->CurrentValue;
-		$this->Cargo_Per_EVA->ViewCustomAttributes = "";
-
-		// Motivo_Eva
-		$this->Motivo_Eva->ViewValue = $this->Motivo_Eva->CurrentValue;
-		$this->Motivo_Eva->ViewCustomAttributes = "";
-
-		// Profesional_especializado
-		$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->CurrentValue;
-		$this->Profesional_especializado->ViewCustomAttributes = "";
-
 		// Punto
-		$this->Punto->ViewValue = $this->Punto->CurrentValue;
+
+		if (strval($this->Punto->CurrentValue) <> "") {
+			$sFilterWrk = "`Punto`" . ew_SearchString("=", $this->Punto->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_retiro_personal`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_retiro_personal`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Punto` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Punto->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Punto->ViewValue = $this->Punto->CurrentValue;
+			}
+		} else {
+			$this->Punto->ViewValue = NULL;
+		}
 		$this->Punto->ViewCustomAttributes = "";
+
+		// Departamento
+		$this->Departamento->ViewValue = $this->Departamento->CurrentValue;
+		$this->Departamento->ViewCustomAttributes = "";
+
+		// Municipio
+		$this->Municipio->ViewValue = $this->Municipio->CurrentValue;
+		$this->Municipio->ViewCustomAttributes = "";
+
+		// CC_Evacuado
+		$this->CC_Evacuado->ViewValue = $this->CC_Evacuado->CurrentValue;
+		$this->CC_Evacuado->ViewCustomAttributes = "";
 
 		// Evacuado
 		$this->Evacuado->ViewValue = $this->Evacuado->CurrentValue;
 		$this->Evacuado->ViewCustomAttributes = "";
 
+		// Cargo_Per_EVA
+		$this->Cargo_Per_EVA->ViewValue = $this->Cargo_Per_EVA->CurrentValue;
+		$this->Cargo_Per_EVA->ViewCustomAttributes = "";
+
+		// Motivo_Eva
+		if (strval($this->Motivo_Eva->CurrentValue) <> "") {
+			$sFilterWrk = "`Motivo_Eva`" . ew_SearchString("=", $this->Motivo_Eva->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Motivo_Eva`, `Motivo_Eva` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_retiro_personal`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Motivo_Eva`, `Motivo_Eva` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_retiro_personal`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Motivo_Eva, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Motivo_Eva` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Motivo_Eva->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Motivo_Eva->ViewValue = $this->Motivo_Eva->CurrentValue;
+			}
+		} else {
+			$this->Motivo_Eva->ViewValue = NULL;
+		}
+		$this->Motivo_Eva->ViewCustomAttributes = "";
+
+		// Fecha_llegada_del_evacuado
+		$this->Fecha_llegada_del_evacuado->ViewValue = $this->Fecha_llegada_del_evacuado->CurrentValue;
+		$this->Fecha_llegada_del_evacuado->ViewCustomAttributes = "";
+
+		// Profesional_especializado
+		if (strval($this->Profesional_especializado->CurrentValue) <> "") {
+			$sFilterWrk = "`Profesional_especializado`" . ew_SearchString("=", $this->Profesional_especializado->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Profesional_especializado`, `Profesional_especializado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_retiro_personal`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Profesional_especializado`, `Profesional_especializado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_retiro_personal`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Profesional_especializado, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Profesional_especializado` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Profesional_especializado->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->CurrentValue;
+			}
+		} else {
+			$this->Profesional_especializado->ViewValue = NULL;
+		}
+		$this->Profesional_especializado->ViewCustomAttributes = "";
+
+		// OBS_EVA
+		$this->OBS_EVA->ViewValue = $this->OBS_EVA->CurrentValue;
+		$this->OBS_EVA->ViewCustomAttributes = "";
+
+		// Fecha_de_Novedad
+		$this->Fecha_de_Novedad->ViewValue = $this->Fecha_de_Novedad->CurrentValue;
+		$this->Fecha_de_Novedad->ViewCustomAttributes = "";
+
 		// Año
-		$this->AF1o->ViewValue = $this->AF1o->CurrentValue;
+		if (strval($this->AF1o->CurrentValue) <> "") {
+			$sFilterWrk = "`Año`" . ew_SearchString("=", $this->AF1o->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Año`, `Año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_retiro_personal`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Año`, `Año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_retiro_personal`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->AF1o, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Año` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->AF1o->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->AF1o->ViewValue = $this->AF1o->CurrentValue;
+			}
+		} else {
+			$this->AF1o->ViewValue = NULL;
+		}
 		$this->AF1o->ViewCustomAttributes = "";
 
 		// Fase
-		$this->Fase->ViewValue = $this->Fase->CurrentValue;
+		if (strval($this->Fase->CurrentValue) <> "") {
+			$sFilterWrk = "`Fase`" . ew_SearchString("=", $this->Fase->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Fase`, `Fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_retiro_personal`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Fase`, `Fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_retiro_personal`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Fase, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Fase` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Fase->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Fase->ViewValue = $this->Fase->CurrentValue;
+			}
+		} else {
+			$this->Fase->ViewValue = NULL;
+		}
 		$this->Fase->ViewCustomAttributes = "";
+
+		// Punto
+		$this->Punto->LinkCustomAttributes = "";
+		$this->Punto->HrefValue = "";
+		$this->Punto->TooltipValue = "";
+
+		// Departamento
+		$this->Departamento->LinkCustomAttributes = "";
+		$this->Departamento->HrefValue = "";
+		$this->Departamento->TooltipValue = "";
+
+		// Municipio
+		$this->Municipio->LinkCustomAttributes = "";
+		$this->Municipio->HrefValue = "";
+		$this->Municipio->TooltipValue = "";
+
+		// CC_Evacuado
+		$this->CC_Evacuado->LinkCustomAttributes = "";
+		$this->CC_Evacuado->HrefValue = "";
+		$this->CC_Evacuado->TooltipValue = "";
+
+		// Evacuado
+		$this->Evacuado->LinkCustomAttributes = "";
+		$this->Evacuado->HrefValue = "";
+		$this->Evacuado->TooltipValue = "";
 
 		// Cargo_Per_EVA
 		$this->Cargo_Per_EVA->LinkCustomAttributes = "";
@@ -602,20 +838,25 @@ class cgrafica_retiro_personal extends cTable {
 		$this->Motivo_Eva->HrefValue = "";
 		$this->Motivo_Eva->TooltipValue = "";
 
+		// Fecha_llegada_del_evacuado
+		$this->Fecha_llegada_del_evacuado->LinkCustomAttributes = "";
+		$this->Fecha_llegada_del_evacuado->HrefValue = "";
+		$this->Fecha_llegada_del_evacuado->TooltipValue = "";
+
 		// Profesional_especializado
 		$this->Profesional_especializado->LinkCustomAttributes = "";
 		$this->Profesional_especializado->HrefValue = "";
 		$this->Profesional_especializado->TooltipValue = "";
 
-		// Punto
-		$this->Punto->LinkCustomAttributes = "";
-		$this->Punto->HrefValue = "";
-		$this->Punto->TooltipValue = "";
+		// OBS_EVA
+		$this->OBS_EVA->LinkCustomAttributes = "";
+		$this->OBS_EVA->HrefValue = "";
+		$this->OBS_EVA->TooltipValue = "";
 
-		// Evacuado
-		$this->Evacuado->LinkCustomAttributes = "";
-		$this->Evacuado->HrefValue = "";
-		$this->Evacuado->TooltipValue = "";
+		// Fecha_de_Novedad
+		$this->Fecha_de_Novedad->LinkCustomAttributes = "";
+		$this->Fecha_de_Novedad->HrefValue = "";
+		$this->Fecha_de_Novedad->TooltipValue = "";
 
 		// Año
 		$this->AF1o->LinkCustomAttributes = "";
@@ -638,6 +879,34 @@ class cgrafica_retiro_personal extends cTable {
 		// Call Row Rendering event
 		$this->Row_Rendering();
 
+		// Punto
+		$this->Punto->EditAttrs["class"] = "form-control";
+		$this->Punto->EditCustomAttributes = "";
+
+		// Departamento
+		$this->Departamento->EditAttrs["class"] = "form-control";
+		$this->Departamento->EditCustomAttributes = "";
+		$this->Departamento->EditValue = ew_HtmlEncode($this->Departamento->CurrentValue);
+		$this->Departamento->PlaceHolder = ew_RemoveHtml($this->Departamento->FldCaption());
+
+		// Municipio
+		$this->Municipio->EditAttrs["class"] = "form-control";
+		$this->Municipio->EditCustomAttributes = "";
+		$this->Municipio->EditValue = ew_HtmlEncode($this->Municipio->CurrentValue);
+		$this->Municipio->PlaceHolder = ew_RemoveHtml($this->Municipio->FldCaption());
+
+		// CC_Evacuado
+		$this->CC_Evacuado->EditAttrs["class"] = "form-control";
+		$this->CC_Evacuado->EditCustomAttributes = "";
+		$this->CC_Evacuado->EditValue = ew_HtmlEncode($this->CC_Evacuado->CurrentValue);
+		$this->CC_Evacuado->PlaceHolder = ew_RemoveHtml($this->CC_Evacuado->FldCaption());
+
+		// Evacuado
+		$this->Evacuado->EditAttrs["class"] = "form-control";
+		$this->Evacuado->EditCustomAttributes = "";
+		$this->Evacuado->EditValue = ew_HtmlEncode($this->Evacuado->CurrentValue);
+		$this->Evacuado->PlaceHolder = ew_RemoveHtml($this->Evacuado->FldCaption());
+
 		// Cargo_Per_EVA
 		$this->Cargo_Per_EVA->EditAttrs["class"] = "form-control";
 		$this->Cargo_Per_EVA->EditCustomAttributes = "";
@@ -647,38 +916,36 @@ class cgrafica_retiro_personal extends cTable {
 		// Motivo_Eva
 		$this->Motivo_Eva->EditAttrs["class"] = "form-control";
 		$this->Motivo_Eva->EditCustomAttributes = "";
-		$this->Motivo_Eva->EditValue = ew_HtmlEncode($this->Motivo_Eva->CurrentValue);
-		$this->Motivo_Eva->PlaceHolder = ew_RemoveHtml($this->Motivo_Eva->FldCaption());
+
+		// Fecha_llegada_del_evacuado
+		$this->Fecha_llegada_del_evacuado->EditAttrs["class"] = "form-control";
+		$this->Fecha_llegada_del_evacuado->EditCustomAttributes = "";
+		$this->Fecha_llegada_del_evacuado->EditValue = ew_HtmlEncode($this->Fecha_llegada_del_evacuado->CurrentValue);
+		$this->Fecha_llegada_del_evacuado->PlaceHolder = ew_RemoveHtml($this->Fecha_llegada_del_evacuado->FldCaption());
 
 		// Profesional_especializado
 		$this->Profesional_especializado->EditAttrs["class"] = "form-control";
 		$this->Profesional_especializado->EditCustomAttributes = "";
-		$this->Profesional_especializado->EditValue = ew_HtmlEncode($this->Profesional_especializado->CurrentValue);
-		$this->Profesional_especializado->PlaceHolder = ew_RemoveHtml($this->Profesional_especializado->FldCaption());
 
-		// Punto
-		$this->Punto->EditAttrs["class"] = "form-control";
-		$this->Punto->EditCustomAttributes = "";
-		$this->Punto->EditValue = ew_HtmlEncode($this->Punto->CurrentValue);
-		$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
+		// OBS_EVA
+		$this->OBS_EVA->EditAttrs["class"] = "form-control";
+		$this->OBS_EVA->EditCustomAttributes = "";
+		$this->OBS_EVA->EditValue = ew_HtmlEncode($this->OBS_EVA->CurrentValue);
+		$this->OBS_EVA->PlaceHolder = ew_RemoveHtml($this->OBS_EVA->FldCaption());
 
-		// Evacuado
-		$this->Evacuado->EditAttrs["class"] = "form-control";
-		$this->Evacuado->EditCustomAttributes = "";
-		$this->Evacuado->EditValue = ew_HtmlEncode($this->Evacuado->CurrentValue);
-		$this->Evacuado->PlaceHolder = ew_RemoveHtml($this->Evacuado->FldCaption());
+		// Fecha_de_Novedad
+		$this->Fecha_de_Novedad->EditAttrs["class"] = "form-control";
+		$this->Fecha_de_Novedad->EditCustomAttributes = "";
+		$this->Fecha_de_Novedad->EditValue = ew_HtmlEncode($this->Fecha_de_Novedad->CurrentValue);
+		$this->Fecha_de_Novedad->PlaceHolder = ew_RemoveHtml($this->Fecha_de_Novedad->FldCaption());
 
 		// Año
 		$this->AF1o->EditAttrs["class"] = "form-control";
 		$this->AF1o->EditCustomAttributes = "";
-		$this->AF1o->EditValue = ew_HtmlEncode($this->AF1o->CurrentValue);
-		$this->AF1o->PlaceHolder = ew_RemoveHtml($this->AF1o->FldCaption());
 
 		// Fase
 		$this->Fase->EditAttrs["class"] = "form-control";
 		$this->Fase->EditCustomAttributes = "";
-		$this->Fase->EditValue = ew_HtmlEncode($this->Fase->CurrentValue);
-		$this->Fase->PlaceHolder = ew_RemoveHtml($this->Fase->FldCaption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -707,19 +974,31 @@ class cgrafica_retiro_personal extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
+					if ($this->Punto->Exportable) $Doc->ExportCaption($this->Punto);
+					if ($this->Departamento->Exportable) $Doc->ExportCaption($this->Departamento);
+					if ($this->Municipio->Exportable) $Doc->ExportCaption($this->Municipio);
+					if ($this->CC_Evacuado->Exportable) $Doc->ExportCaption($this->CC_Evacuado);
+					if ($this->Evacuado->Exportable) $Doc->ExportCaption($this->Evacuado);
 					if ($this->Cargo_Per_EVA->Exportable) $Doc->ExportCaption($this->Cargo_Per_EVA);
 					if ($this->Motivo_Eva->Exportable) $Doc->ExportCaption($this->Motivo_Eva);
+					if ($this->Fecha_llegada_del_evacuado->Exportable) $Doc->ExportCaption($this->Fecha_llegada_del_evacuado);
 					if ($this->Profesional_especializado->Exportable) $Doc->ExportCaption($this->Profesional_especializado);
-					if ($this->Punto->Exportable) $Doc->ExportCaption($this->Punto);
-					if ($this->Evacuado->Exportable) $Doc->ExportCaption($this->Evacuado);
+					if ($this->OBS_EVA->Exportable) $Doc->ExportCaption($this->OBS_EVA);
+					if ($this->Fecha_de_Novedad->Exportable) $Doc->ExportCaption($this->Fecha_de_Novedad);
 					if ($this->AF1o->Exportable) $Doc->ExportCaption($this->AF1o);
 					if ($this->Fase->Exportable) $Doc->ExportCaption($this->Fase);
 				} else {
+					if ($this->Punto->Exportable) $Doc->ExportCaption($this->Punto);
+					if ($this->Departamento->Exportable) $Doc->ExportCaption($this->Departamento);
+					if ($this->Municipio->Exportable) $Doc->ExportCaption($this->Municipio);
+					if ($this->CC_Evacuado->Exportable) $Doc->ExportCaption($this->CC_Evacuado);
+					if ($this->Evacuado->Exportable) $Doc->ExportCaption($this->Evacuado);
 					if ($this->Cargo_Per_EVA->Exportable) $Doc->ExportCaption($this->Cargo_Per_EVA);
 					if ($this->Motivo_Eva->Exportable) $Doc->ExportCaption($this->Motivo_Eva);
+					if ($this->Fecha_llegada_del_evacuado->Exportable) $Doc->ExportCaption($this->Fecha_llegada_del_evacuado);
 					if ($this->Profesional_especializado->Exportable) $Doc->ExportCaption($this->Profesional_especializado);
-					if ($this->Punto->Exportable) $Doc->ExportCaption($this->Punto);
-					if ($this->Evacuado->Exportable) $Doc->ExportCaption($this->Evacuado);
+					if ($this->OBS_EVA->Exportable) $Doc->ExportCaption($this->OBS_EVA);
+					if ($this->Fecha_de_Novedad->Exportable) $Doc->ExportCaption($this->Fecha_de_Novedad);
 					if ($this->AF1o->Exportable) $Doc->ExportCaption($this->AF1o);
 					if ($this->Fase->Exportable) $Doc->ExportCaption($this->Fase);
 				}
@@ -753,19 +1032,31 @@ class cgrafica_retiro_personal extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
+						if ($this->Punto->Exportable) $Doc->ExportField($this->Punto);
+						if ($this->Departamento->Exportable) $Doc->ExportField($this->Departamento);
+						if ($this->Municipio->Exportable) $Doc->ExportField($this->Municipio);
+						if ($this->CC_Evacuado->Exportable) $Doc->ExportField($this->CC_Evacuado);
+						if ($this->Evacuado->Exportable) $Doc->ExportField($this->Evacuado);
 						if ($this->Cargo_Per_EVA->Exportable) $Doc->ExportField($this->Cargo_Per_EVA);
 						if ($this->Motivo_Eva->Exportable) $Doc->ExportField($this->Motivo_Eva);
+						if ($this->Fecha_llegada_del_evacuado->Exportable) $Doc->ExportField($this->Fecha_llegada_del_evacuado);
 						if ($this->Profesional_especializado->Exportable) $Doc->ExportField($this->Profesional_especializado);
-						if ($this->Punto->Exportable) $Doc->ExportField($this->Punto);
-						if ($this->Evacuado->Exportable) $Doc->ExportField($this->Evacuado);
+						if ($this->OBS_EVA->Exportable) $Doc->ExportField($this->OBS_EVA);
+						if ($this->Fecha_de_Novedad->Exportable) $Doc->ExportField($this->Fecha_de_Novedad);
 						if ($this->AF1o->Exportable) $Doc->ExportField($this->AF1o);
 						if ($this->Fase->Exportable) $Doc->ExportField($this->Fase);
 					} else {
+						if ($this->Punto->Exportable) $Doc->ExportField($this->Punto);
+						if ($this->Departamento->Exportable) $Doc->ExportField($this->Departamento);
+						if ($this->Municipio->Exportable) $Doc->ExportField($this->Municipio);
+						if ($this->CC_Evacuado->Exportable) $Doc->ExportField($this->CC_Evacuado);
+						if ($this->Evacuado->Exportable) $Doc->ExportField($this->Evacuado);
 						if ($this->Cargo_Per_EVA->Exportable) $Doc->ExportField($this->Cargo_Per_EVA);
 						if ($this->Motivo_Eva->Exportable) $Doc->ExportField($this->Motivo_Eva);
+						if ($this->Fecha_llegada_del_evacuado->Exportable) $Doc->ExportField($this->Fecha_llegada_del_evacuado);
 						if ($this->Profesional_especializado->Exportable) $Doc->ExportField($this->Profesional_especializado);
-						if ($this->Punto->Exportable) $Doc->ExportField($this->Punto);
-						if ($this->Evacuado->Exportable) $Doc->ExportField($this->Evacuado);
+						if ($this->OBS_EVA->Exportable) $Doc->ExportField($this->OBS_EVA);
+						if ($this->Fecha_de_Novedad->Exportable) $Doc->ExportField($this->Fecha_de_Novedad);
 						if ($this->AF1o->Exportable) $Doc->ExportField($this->AF1o);
 						if ($this->Fase->Exportable) $Doc->ExportField($this->Fase);
 					}

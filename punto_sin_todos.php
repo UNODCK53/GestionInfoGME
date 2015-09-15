@@ -10,7 +10,6 @@ function valores ($ano,$fase) {
 		mysql_select_db($base_datos,$db);
 		
 			echo '<option value="">Seleccione uno:</option>';
-			echo '<option value="99">Todos los puntos de erradicación</option>';
 			$sql=mysql_query("select (CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_PE ELSE NOM_PE END ) as NOM_PE FROM gestioninfogme.info_diario WHERE SUBSTR(`FECHA_REPORT`,1,4)=".$ano." and `FASE`='".$fase."' group by (CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_PE ELSE NOM_PE END )order by (CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_PE ELSE NOM_PE END )  asc");
 			while($row=mysql_fetch_array($sql))
 				{

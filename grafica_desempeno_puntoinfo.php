@@ -579,7 +579,36 @@ class cgrafica_desempeno_punto extends cTable {
 		// Total_erradicacion
 		// Punto
 
-		$this->Punto->ViewValue = $this->Punto->CurrentValue;
+		if (strval($this->Punto->CurrentValue) <> "") {
+			$sFilterWrk = "`Punto`" . ew_SearchString("=", $this->Punto->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_desempeno_punto`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_desempeno_punto`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Punto` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Punto->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Punto->ViewValue = $this->Punto->CurrentValue;
+			}
+		} else {
+			$this->Punto->ViewValue = NULL;
+		}
 		$this->Punto->ViewCustomAttributes = "";
 
 		// Dias_contratados
@@ -664,8 +693,6 @@ class cgrafica_desempeno_punto extends cTable {
 		// Punto
 		$this->Punto->EditAttrs["class"] = "form-control";
 		$this->Punto->EditCustomAttributes = "";
-		$this->Punto->EditValue = ew_HtmlEncode($this->Punto->CurrentValue);
-		$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
 
 		// Dias_contratados
 		$this->Dias_contratados->EditAttrs["class"] = "form-control";

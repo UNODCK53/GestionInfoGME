@@ -9,6 +9,7 @@ $grafica_capacidad_efectiva = NULL;
 class cgrafica_capacidad_efectiva extends cTable {
 	var $Punto;
 	var $Total_general;
+	var $Dia_sin_novedad_especial;
 	var $_1_Apoyo_zonal_sin_punto_asignado;
 	var $_1_Descanso_en_dia_habil;
 	var $_1_Descanso_festivo_dominical;
@@ -83,6 +84,11 @@ class cgrafica_capacidad_efectiva extends cTable {
 		$this->Total_general = new cField('grafica_capacidad_efectiva', 'grafica_capacidad_efectiva', 'x_Total_general', 'Total_general', '`Total_general`', '`Total_general`', 20, -1, FALSE, '`Total_general`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->Total_general->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['Total_general'] = &$this->Total_general;
+
+		// Dia_sin_novedad_especial
+		$this->Dia_sin_novedad_especial = new cField('grafica_capacidad_efectiva', 'grafica_capacidad_efectiva', 'x_Dia_sin_novedad_especial', 'Dia_sin_novedad_especial', '`Dia_sin_novedad_especial`', '`Dia_sin_novedad_especial`', 131, -1, FALSE, '`Dia_sin_novedad_especial`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->Dia_sin_novedad_especial->FldDefaultErrMsg = $Language->Phrase("IncorrectFloat");
+		$this->fields['Dia_sin_novedad_especial'] = &$this->Dia_sin_novedad_especial;
 
 		// 1_Apoyo_zonal_sin_punto_asignado
 		$this->_1_Apoyo_zonal_sin_punto_asignado = new cField('grafica_capacidad_efectiva', 'grafica_capacidad_efectiva', 'x__1_Apoyo_zonal_sin_punto_asignado', '1_Apoyo_zonal_sin_punto_asignado', '`1_Apoyo_zonal_sin_punto_asignado`', '`1_Apoyo_zonal_sin_punto_asignado`', 131, -1, FALSE, '`1_Apoyo_zonal_sin_punto_asignado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
@@ -751,6 +757,7 @@ class cgrafica_capacidad_efectiva extends cTable {
 	function LoadListRowValues(&$rs) {
 		$this->Punto->setDbValue($rs->fields('Punto'));
 		$this->Total_general->setDbValue($rs->fields('Total_general'));
+		$this->Dia_sin_novedad_especial->setDbValue($rs->fields('Dia_sin_novedad_especial'));
 		$this->_1_Apoyo_zonal_sin_punto_asignado->setDbValue($rs->fields('1_Apoyo_zonal_sin_punto_asignado'));
 		$this->_1_Descanso_en_dia_habil->setDbValue($rs->fields('1_Descanso_en_dia_habil'));
 		$this->_1_Descanso_festivo_dominical->setDbValue($rs->fields('1_Descanso_festivo_dominical'));
@@ -802,6 +809,7 @@ class cgrafica_capacidad_efectiva extends cTable {
    // Common render codes
 		// Punto
 		// Total_general
+		// Dia_sin_novedad_especial
 		// 1_Apoyo_zonal_sin_punto_asignado
 		// 1_Descanso_en_dia_habil
 		// 1_Descanso_festivo_dominical
@@ -843,12 +851,45 @@ class cgrafica_capacidad_efectiva extends cTable {
 		// 4_Zona_sin_cultivos
 		// Punto
 
-		$this->Punto->ViewValue = $this->Punto->CurrentValue;
+		if (strval($this->Punto->CurrentValue) <> "") {
+			$sFilterWrk = "`Punto`" . ew_SearchString("=", $this->Punto->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_capacidad_efectiva`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_capacidad_efectiva`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Punto` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Punto->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Punto->ViewValue = $this->Punto->CurrentValue;
+			}
+		} else {
+			$this->Punto->ViewValue = NULL;
+		}
 		$this->Punto->ViewCustomAttributes = "";
 
 		// Total_general
 		$this->Total_general->ViewValue = $this->Total_general->CurrentValue;
 		$this->Total_general->ViewCustomAttributes = "";
+
+		// Dia_sin_novedad_especial
+		$this->Dia_sin_novedad_especial->ViewValue = $this->Dia_sin_novedad_especial->CurrentValue;
+		$this->Dia_sin_novedad_especial->ViewCustomAttributes = "";
 
 		// 1_Apoyo_zonal_sin_punto_asignado
 		$this->_1_Apoyo_zonal_sin_punto_asignado->ViewValue = $this->_1_Apoyo_zonal_sin_punto_asignado->CurrentValue;
@@ -1015,6 +1056,11 @@ class cgrafica_capacidad_efectiva extends cTable {
 		$this->Total_general->LinkCustomAttributes = "";
 		$this->Total_general->HrefValue = "";
 		$this->Total_general->TooltipValue = "";
+
+		// Dia_sin_novedad_especial
+		$this->Dia_sin_novedad_especial->LinkCustomAttributes = "";
+		$this->Dia_sin_novedad_especial->HrefValue = "";
+		$this->Dia_sin_novedad_especial->TooltipValue = "";
 
 		// 1_Apoyo_zonal_sin_punto_asignado
 		$this->_1_Apoyo_zonal_sin_punto_asignado->LinkCustomAttributes = "";
@@ -1225,14 +1271,19 @@ class cgrafica_capacidad_efectiva extends cTable {
 		// Punto
 		$this->Punto->EditAttrs["class"] = "form-control";
 		$this->Punto->EditCustomAttributes = "";
-		$this->Punto->EditValue = ew_HtmlEncode($this->Punto->CurrentValue);
-		$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
 
 		// Total_general
 		$this->Total_general->EditAttrs["class"] = "form-control";
 		$this->Total_general->EditCustomAttributes = "";
 		$this->Total_general->EditValue = ew_HtmlEncode($this->Total_general->CurrentValue);
 		$this->Total_general->PlaceHolder = ew_RemoveHtml($this->Total_general->FldCaption());
+
+		// Dia_sin_novedad_especial
+		$this->Dia_sin_novedad_especial->EditAttrs["class"] = "form-control";
+		$this->Dia_sin_novedad_especial->EditCustomAttributes = "";
+		$this->Dia_sin_novedad_especial->EditValue = ew_HtmlEncode($this->Dia_sin_novedad_especial->CurrentValue);
+		$this->Dia_sin_novedad_especial->PlaceHolder = ew_RemoveHtml($this->Dia_sin_novedad_especial->FldCaption());
+		if (strval($this->Dia_sin_novedad_especial->EditValue) <> "" && is_numeric($this->Dia_sin_novedad_especial->EditValue)) $this->Dia_sin_novedad_especial->EditValue = ew_FormatNumber($this->Dia_sin_novedad_especial->EditValue, -2, -1, -2, 0);
 
 		// 1_Apoyo_zonal_sin_punto_asignado
 		$this->_1_Apoyo_zonal_sin_punto_asignado->EditAttrs["class"] = "form-control";
@@ -1536,6 +1587,7 @@ class cgrafica_capacidad_efectiva extends cTable {
 				if ($ExportPageType == "view") {
 					if ($this->Punto->Exportable) $Doc->ExportCaption($this->Punto);
 					if ($this->Total_general->Exportable) $Doc->ExportCaption($this->Total_general);
+					if ($this->Dia_sin_novedad_especial->Exportable) $Doc->ExportCaption($this->Dia_sin_novedad_especial);
 					if ($this->_1_Apoyo_zonal_sin_punto_asignado->Exportable) $Doc->ExportCaption($this->_1_Apoyo_zonal_sin_punto_asignado);
 					if ($this->_1_Descanso_en_dia_habil->Exportable) $Doc->ExportCaption($this->_1_Descanso_en_dia_habil);
 					if ($this->_1_Descanso_festivo_dominical->Exportable) $Doc->ExportCaption($this->_1_Descanso_festivo_dominical);
@@ -1578,6 +1630,7 @@ class cgrafica_capacidad_efectiva extends cTable {
 				} else {
 					if ($this->Punto->Exportable) $Doc->ExportCaption($this->Punto);
 					if ($this->Total_general->Exportable) $Doc->ExportCaption($this->Total_general);
+					if ($this->Dia_sin_novedad_especial->Exportable) $Doc->ExportCaption($this->Dia_sin_novedad_especial);
 					if ($this->_1_Apoyo_zonal_sin_punto_asignado->Exportable) $Doc->ExportCaption($this->_1_Apoyo_zonal_sin_punto_asignado);
 					if ($this->_1_Descanso_en_dia_habil->Exportable) $Doc->ExportCaption($this->_1_Descanso_en_dia_habil);
 					if ($this->_1_Descanso_festivo_dominical->Exportable) $Doc->ExportCaption($this->_1_Descanso_festivo_dominical);
@@ -1650,6 +1703,7 @@ class cgrafica_capacidad_efectiva extends cTable {
 					if ($ExportPageType == "view") {
 						if ($this->Punto->Exportable) $Doc->ExportField($this->Punto);
 						if ($this->Total_general->Exportable) $Doc->ExportField($this->Total_general);
+						if ($this->Dia_sin_novedad_especial->Exportable) $Doc->ExportField($this->Dia_sin_novedad_especial);
 						if ($this->_1_Apoyo_zonal_sin_punto_asignado->Exportable) $Doc->ExportField($this->_1_Apoyo_zonal_sin_punto_asignado);
 						if ($this->_1_Descanso_en_dia_habil->Exportable) $Doc->ExportField($this->_1_Descanso_en_dia_habil);
 						if ($this->_1_Descanso_festivo_dominical->Exportable) $Doc->ExportField($this->_1_Descanso_festivo_dominical);
@@ -1692,6 +1746,7 @@ class cgrafica_capacidad_efectiva extends cTable {
 					} else {
 						if ($this->Punto->Exportable) $Doc->ExportField($this->Punto);
 						if ($this->Total_general->Exportable) $Doc->ExportField($this->Total_general);
+						if ($this->Dia_sin_novedad_especial->Exportable) $Doc->ExportField($this->Dia_sin_novedad_especial);
 						if ($this->_1_Apoyo_zonal_sin_punto_asignado->Exportable) $Doc->ExportField($this->_1_Apoyo_zonal_sin_punto_asignado);
 						if ($this->_1_Descanso_en_dia_habil->Exportable) $Doc->ExportField($this->_1_Descanso_en_dia_habil);
 						if ($this->_1_Descanso_festivo_dominical->Exportable) $Doc->ExportField($this->_1_Descanso_festivo_dominical);

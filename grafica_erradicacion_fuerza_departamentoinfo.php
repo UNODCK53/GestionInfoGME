@@ -7,17 +7,17 @@ $grafica_erradicacion_fuerza_departamento = NULL;
 // Table class for grafica_erradicacion_fuerza_departamento
 //
 class cgrafica_erradicacion_fuerza_departamento extends cTable {
-	var $fuerza;
 	var $Departamento;
 	var $Muncipio;
-	var $Punto;
 	var $aF1o;
 	var $fase;
-	var $Profesional_especializado;
 	var $Ha_Coca;
 	var $Ha_Amapola;
 	var $Ha_Marihuana;
 	var $Total_erradicado;
+	var $fuerza;
+	var $Punto;
+	var $Profesional_especializado;
 
 	//
 	// Table class constructor
@@ -45,10 +45,6 @@ class cgrafica_erradicacion_fuerza_departamento extends cTable {
 		$this->UserIDAllowSecurity = 0; // User ID Allow
 		$this->BasicSearch = new cBasicSearch($this->TableVar);
 
-		// fuerza
-		$this->fuerza = new cField('grafica_erradicacion_fuerza_departamento', 'grafica_erradicacion_fuerza_departamento', 'x_fuerza', 'fuerza', '`fuerza`', '`fuerza`', 200, -1, FALSE, '`fuerza`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->fields['fuerza'] = &$this->fuerza;
-
 		// Departamento
 		$this->Departamento = new cField('grafica_erradicacion_fuerza_departamento', 'grafica_erradicacion_fuerza_departamento', 'x_Departamento', 'Departamento', '`Departamento`', '`Departamento`', 200, -1, FALSE, '`Departamento`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['Departamento'] = &$this->Departamento;
@@ -56,10 +52,6 @@ class cgrafica_erradicacion_fuerza_departamento extends cTable {
 		// Muncipio
 		$this->Muncipio = new cField('grafica_erradicacion_fuerza_departamento', 'grafica_erradicacion_fuerza_departamento', 'x_Muncipio', 'Muncipio', '`Muncipio`', '`Muncipio`', 201, -1, FALSE, '`Muncipio`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['Muncipio'] = &$this->Muncipio;
-
-		// Punto
-		$this->Punto = new cField('grafica_erradicacion_fuerza_departamento', 'grafica_erradicacion_fuerza_departamento', 'x_Punto', 'Punto', '`Punto`', '`Punto`', 201, -1, FALSE, '`Punto`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->fields['Punto'] = &$this->Punto;
 
 		// año
 		$this->aF1o = new cField('grafica_erradicacion_fuerza_departamento', 'grafica_erradicacion_fuerza_departamento', 'x_aF1o', 'año', '`año`', '`año`', 18, -1, FALSE, '`año`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
@@ -69,10 +61,6 @@ class cgrafica_erradicacion_fuerza_departamento extends cTable {
 		// fase
 		$this->fase = new cField('grafica_erradicacion_fuerza_departamento', 'grafica_erradicacion_fuerza_departamento', 'x_fase', 'fase', '`fase`', '`fase`', 201, -1, FALSE, '`fase`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['fase'] = &$this->fase;
-
-		// Profesional_especializado
-		$this->Profesional_especializado = new cField('grafica_erradicacion_fuerza_departamento', 'grafica_erradicacion_fuerza_departamento', 'x_Profesional_especializado', 'Profesional_especializado', '`Profesional_especializado`', '`Profesional_especializado`', 201, -1, FALSE, '`Profesional_especializado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->fields['Profesional_especializado'] = &$this->Profesional_especializado;
 
 		// Ha_Coca
 		$this->Ha_Coca = new cField('grafica_erradicacion_fuerza_departamento', 'grafica_erradicacion_fuerza_departamento', 'x_Ha_Coca', 'Ha_Coca', '`Ha_Coca`', '`Ha_Coca`', 131, -1, FALSE, '`Ha_Coca`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
@@ -93,6 +81,18 @@ class cgrafica_erradicacion_fuerza_departamento extends cTable {
 		$this->Total_erradicado = new cField('grafica_erradicacion_fuerza_departamento', 'grafica_erradicacion_fuerza_departamento', 'x_Total_erradicado', 'Total_erradicado', '`Total_erradicado`', '`Total_erradicado`', 131, -1, FALSE, '`Total_erradicado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->Total_erradicado->FldDefaultErrMsg = $Language->Phrase("IncorrectFloat");
 		$this->fields['Total_erradicado'] = &$this->Total_erradicado;
+
+		// fuerza
+		$this->fuerza = new cField('grafica_erradicacion_fuerza_departamento', 'grafica_erradicacion_fuerza_departamento', 'x_fuerza', 'fuerza', '`fuerza`', '`fuerza`', 200, -1, FALSE, '`fuerza`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['fuerza'] = &$this->fuerza;
+
+		// Punto
+		$this->Punto = new cField('grafica_erradicacion_fuerza_departamento', 'grafica_erradicacion_fuerza_departamento', 'x_Punto', 'Punto', '`Punto`', '`Punto`', 201, -1, FALSE, '`Punto`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['Punto'] = &$this->Punto;
+
+		// Profesional_especializado
+		$this->Profesional_especializado = new cField('grafica_erradicacion_fuerza_departamento', 'grafica_erradicacion_fuerza_departamento', 'x_Profesional_especializado', 'Profesional_especializado', '`Profesional_especializado`', '`Profesional_especializado`', 201, -1, FALSE, '`Profesional_especializado`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['Profesional_especializado'] = &$this->Profesional_especializado;
 	}
 
 	// Multiple column sort
@@ -564,17 +564,17 @@ class cgrafica_erradicacion_fuerza_departamento extends cTable {
 
 	// Load row values from recordset
 	function LoadListRowValues(&$rs) {
-		$this->fuerza->setDbValue($rs->fields('fuerza'));
 		$this->Departamento->setDbValue($rs->fields('Departamento'));
 		$this->Muncipio->setDbValue($rs->fields('Muncipio'));
-		$this->Punto->setDbValue($rs->fields('Punto'));
 		$this->aF1o->setDbValue($rs->fields('año'));
 		$this->fase->setDbValue($rs->fields('fase'));
-		$this->Profesional_especializado->setDbValue($rs->fields('Profesional_especializado'));
 		$this->Ha_Coca->setDbValue($rs->fields('Ha_Coca'));
 		$this->Ha_Amapola->setDbValue($rs->fields('Ha_Amapola'));
 		$this->Ha_Marihuana->setDbValue($rs->fields('Ha_Marihuana'));
 		$this->Total_erradicado->setDbValue($rs->fields('Total_erradicado'));
+		$this->fuerza->setDbValue($rs->fields('fuerza'));
+		$this->Punto->setDbValue($rs->fields('Punto'));
+		$this->Profesional_especializado->setDbValue($rs->fields('Profesional_especializado'));
 	}
 
 	// Render list row values
@@ -585,45 +585,149 @@ class cgrafica_erradicacion_fuerza_departamento extends cTable {
 		$this->Row_Rendering();
 
    // Common render codes
-		// fuerza
 		// Departamento
 		// Muncipio
-		// Punto
 		// año
 		// fase
-		// Profesional_especializado
 		// Ha_Coca
 		// Ha_Amapola
 		// Ha_Marihuana
 		// Total_erradicado
 		// fuerza
-
-		$this->fuerza->ViewValue = $this->fuerza->CurrentValue;
-		$this->fuerza->ViewCustomAttributes = "";
-
+		// Punto
+		// Profesional_especializado
 		// Departamento
-		$this->Departamento->ViewValue = $this->Departamento->CurrentValue;
+
+		if (strval($this->Departamento->CurrentValue) <> "") {
+			$sFilterWrk = "`Departamento`" . ew_SearchString("=", $this->Departamento->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Departamento`, `Departamento` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Departamento`, `Departamento` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Departamento, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Departamento` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Departamento->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Departamento->ViewValue = $this->Departamento->CurrentValue;
+			}
+		} else {
+			$this->Departamento->ViewValue = NULL;
+		}
 		$this->Departamento->ViewCustomAttributes = "";
 
 		// Muncipio
-		$this->Muncipio->ViewValue = $this->Muncipio->CurrentValue;
+		if (strval($this->Muncipio->CurrentValue) <> "") {
+			$sFilterWrk = "`Muncipio`" . ew_SearchString("=", $this->Muncipio->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Muncipio`, `Muncipio` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Muncipio`, `Muncipio` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Muncipio, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Muncipio` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Muncipio->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Muncipio->ViewValue = $this->Muncipio->CurrentValue;
+			}
+		} else {
+			$this->Muncipio->ViewValue = NULL;
+		}
 		$this->Muncipio->ViewCustomAttributes = "";
 
-		// Punto
-		$this->Punto->ViewValue = $this->Punto->CurrentValue;
-		$this->Punto->ViewCustomAttributes = "";
-
 		// año
-		$this->aF1o->ViewValue = $this->aF1o->CurrentValue;
+		if (strval($this->aF1o->CurrentValue) <> "") {
+			$sFilterWrk = "`año`" . ew_SearchString("=", $this->aF1o->CurrentValue, EW_DATATYPE_NUMBER);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->aF1o, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `año` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->aF1o->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->aF1o->ViewValue = $this->aF1o->CurrentValue;
+			}
+		} else {
+			$this->aF1o->ViewValue = NULL;
+		}
 		$this->aF1o->ViewCustomAttributes = "";
 
 		// fase
-		$this->fase->ViewValue = $this->fase->CurrentValue;
-		$this->fase->ViewCustomAttributes = "";
+		if (strval($this->fase->CurrentValue) <> "") {
+			$sFilterWrk = "`fase`" . ew_SearchString("=", $this->fase->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
 
-		// Profesional_especializado
-		$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->CurrentValue;
-		$this->Profesional_especializado->ViewCustomAttributes = "";
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->fase, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `fase` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->fase->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->fase->ViewValue = $this->fase->CurrentValue;
+			}
+		} else {
+			$this->fase->ViewValue = NULL;
+		}
+		$this->fase->ViewCustomAttributes = "";
 
 		// Ha_Coca
 		$this->Ha_Coca->ViewValue = $this->Ha_Coca->CurrentValue;
@@ -642,9 +746,16 @@ class cgrafica_erradicacion_fuerza_departamento extends cTable {
 		$this->Total_erradicado->ViewCustomAttributes = "";
 
 		// fuerza
-		$this->fuerza->LinkCustomAttributes = "";
-		$this->fuerza->HrefValue = "";
-		$this->fuerza->TooltipValue = "";
+		$this->fuerza->ViewValue = $this->fuerza->CurrentValue;
+		$this->fuerza->ViewCustomAttributes = "";
+
+		// Punto
+		$this->Punto->ViewValue = $this->Punto->CurrentValue;
+		$this->Punto->ViewCustomAttributes = "";
+
+		// Profesional_especializado
+		$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->CurrentValue;
+		$this->Profesional_especializado->ViewCustomAttributes = "";
 
 		// Departamento
 		$this->Departamento->LinkCustomAttributes = "";
@@ -656,11 +767,6 @@ class cgrafica_erradicacion_fuerza_departamento extends cTable {
 		$this->Muncipio->HrefValue = "";
 		$this->Muncipio->TooltipValue = "";
 
-		// Punto
-		$this->Punto->LinkCustomAttributes = "";
-		$this->Punto->HrefValue = "";
-		$this->Punto->TooltipValue = "";
-
 		// año
 		$this->aF1o->LinkCustomAttributes = "";
 		$this->aF1o->HrefValue = "";
@@ -670,11 +776,6 @@ class cgrafica_erradicacion_fuerza_departamento extends cTable {
 		$this->fase->LinkCustomAttributes = "";
 		$this->fase->HrefValue = "";
 		$this->fase->TooltipValue = "";
-
-		// Profesional_especializado
-		$this->Profesional_especializado->LinkCustomAttributes = "";
-		$this->Profesional_especializado->HrefValue = "";
-		$this->Profesional_especializado->TooltipValue = "";
 
 		// Ha_Coca
 		$this->Ha_Coca->LinkCustomAttributes = "";
@@ -696,6 +797,21 @@ class cgrafica_erradicacion_fuerza_departamento extends cTable {
 		$this->Total_erradicado->HrefValue = "";
 		$this->Total_erradicado->TooltipValue = "";
 
+		// fuerza
+		$this->fuerza->LinkCustomAttributes = "";
+		$this->fuerza->HrefValue = "";
+		$this->fuerza->TooltipValue = "";
+
+		// Punto
+		$this->Punto->LinkCustomAttributes = "";
+		$this->Punto->HrefValue = "";
+		$this->Punto->TooltipValue = "";
+
+		// Profesional_especializado
+		$this->Profesional_especializado->LinkCustomAttributes = "";
+		$this->Profesional_especializado->HrefValue = "";
+		$this->Profesional_especializado->TooltipValue = "";
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -707,47 +823,21 @@ class cgrafica_erradicacion_fuerza_departamento extends cTable {
 		// Call Row Rendering event
 		$this->Row_Rendering();
 
-		// fuerza
-		$this->fuerza->EditAttrs["class"] = "form-control";
-		$this->fuerza->EditCustomAttributes = "";
-		$this->fuerza->EditValue = ew_HtmlEncode($this->fuerza->CurrentValue);
-		$this->fuerza->PlaceHolder = ew_RemoveHtml($this->fuerza->FldCaption());
-
 		// Departamento
 		$this->Departamento->EditAttrs["class"] = "form-control";
 		$this->Departamento->EditCustomAttributes = "";
-		$this->Departamento->EditValue = ew_HtmlEncode($this->Departamento->CurrentValue);
-		$this->Departamento->PlaceHolder = ew_RemoveHtml($this->Departamento->FldCaption());
 
 		// Muncipio
 		$this->Muncipio->EditAttrs["class"] = "form-control";
 		$this->Muncipio->EditCustomAttributes = "";
-		$this->Muncipio->EditValue = ew_HtmlEncode($this->Muncipio->CurrentValue);
-		$this->Muncipio->PlaceHolder = ew_RemoveHtml($this->Muncipio->FldCaption());
-
-		// Punto
-		$this->Punto->EditAttrs["class"] = "form-control";
-		$this->Punto->EditCustomAttributes = "";
-		$this->Punto->EditValue = ew_HtmlEncode($this->Punto->CurrentValue);
-		$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
 
 		// año
 		$this->aF1o->EditAttrs["class"] = "form-control";
 		$this->aF1o->EditCustomAttributes = "";
-		$this->aF1o->EditValue = ew_HtmlEncode($this->aF1o->CurrentValue);
-		$this->aF1o->PlaceHolder = ew_RemoveHtml($this->aF1o->FldCaption());
 
 		// fase
 		$this->fase->EditAttrs["class"] = "form-control";
 		$this->fase->EditCustomAttributes = "";
-		$this->fase->EditValue = ew_HtmlEncode($this->fase->CurrentValue);
-		$this->fase->PlaceHolder = ew_RemoveHtml($this->fase->FldCaption());
-
-		// Profesional_especializado
-		$this->Profesional_especializado->EditAttrs["class"] = "form-control";
-		$this->Profesional_especializado->EditCustomAttributes = "";
-		$this->Profesional_especializado->EditValue = ew_HtmlEncode($this->Profesional_especializado->CurrentValue);
-		$this->Profesional_especializado->PlaceHolder = ew_RemoveHtml($this->Profesional_especializado->FldCaption());
 
 		// Ha_Coca
 		$this->Ha_Coca->EditAttrs["class"] = "form-control";
@@ -777,6 +867,24 @@ class cgrafica_erradicacion_fuerza_departamento extends cTable {
 		$this->Total_erradicado->PlaceHolder = ew_RemoveHtml($this->Total_erradicado->FldCaption());
 		if (strval($this->Total_erradicado->EditValue) <> "" && is_numeric($this->Total_erradicado->EditValue)) $this->Total_erradicado->EditValue = ew_FormatNumber($this->Total_erradicado->EditValue, -2, -1, -2, 0);
 
+		// fuerza
+		$this->fuerza->EditAttrs["class"] = "form-control";
+		$this->fuerza->EditCustomAttributes = "";
+		$this->fuerza->EditValue = ew_HtmlEncode($this->fuerza->CurrentValue);
+		$this->fuerza->PlaceHolder = ew_RemoveHtml($this->fuerza->FldCaption());
+
+		// Punto
+		$this->Punto->EditAttrs["class"] = "form-control";
+		$this->Punto->EditCustomAttributes = "";
+		$this->Punto->EditValue = ew_HtmlEncode($this->Punto->CurrentValue);
+		$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
+
+		// Profesional_especializado
+		$this->Profesional_especializado->EditAttrs["class"] = "form-control";
+		$this->Profesional_especializado->EditCustomAttributes = "";
+		$this->Profesional_especializado->EditValue = ew_HtmlEncode($this->Profesional_especializado->CurrentValue);
+		$this->Profesional_especializado->PlaceHolder = ew_RemoveHtml($this->Profesional_especializado->FldCaption());
+
 		// Call Row Rendered event
 		$this->Row_Rendered();
 	}
@@ -804,29 +912,27 @@ class cgrafica_erradicacion_fuerza_departamento extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
-					if ($this->fuerza->Exportable) $Doc->ExportCaption($this->fuerza);
 					if ($this->Departamento->Exportable) $Doc->ExportCaption($this->Departamento);
 					if ($this->Muncipio->Exportable) $Doc->ExportCaption($this->Muncipio);
-					if ($this->Punto->Exportable) $Doc->ExportCaption($this->Punto);
 					if ($this->aF1o->Exportable) $Doc->ExportCaption($this->aF1o);
 					if ($this->fase->Exportable) $Doc->ExportCaption($this->fase);
-					if ($this->Profesional_especializado->Exportable) $Doc->ExportCaption($this->Profesional_especializado);
 					if ($this->Ha_Coca->Exportable) $Doc->ExportCaption($this->Ha_Coca);
 					if ($this->Ha_Amapola->Exportable) $Doc->ExportCaption($this->Ha_Amapola);
 					if ($this->Ha_Marihuana->Exportable) $Doc->ExportCaption($this->Ha_Marihuana);
 					if ($this->Total_erradicado->Exportable) $Doc->ExportCaption($this->Total_erradicado);
+					if ($this->fuerza->Exportable) $Doc->ExportCaption($this->fuerza);
+					if ($this->Punto->Exportable) $Doc->ExportCaption($this->Punto);
+					if ($this->Profesional_especializado->Exportable) $Doc->ExportCaption($this->Profesional_especializado);
 				} else {
-					if ($this->fuerza->Exportable) $Doc->ExportCaption($this->fuerza);
 					if ($this->Departamento->Exportable) $Doc->ExportCaption($this->Departamento);
 					if ($this->Muncipio->Exportable) $Doc->ExportCaption($this->Muncipio);
-					if ($this->Punto->Exportable) $Doc->ExportCaption($this->Punto);
 					if ($this->aF1o->Exportable) $Doc->ExportCaption($this->aF1o);
 					if ($this->fase->Exportable) $Doc->ExportCaption($this->fase);
-					if ($this->Profesional_especializado->Exportable) $Doc->ExportCaption($this->Profesional_especializado);
 					if ($this->Ha_Coca->Exportable) $Doc->ExportCaption($this->Ha_Coca);
 					if ($this->Ha_Amapola->Exportable) $Doc->ExportCaption($this->Ha_Amapola);
 					if ($this->Ha_Marihuana->Exportable) $Doc->ExportCaption($this->Ha_Marihuana);
 					if ($this->Total_erradicado->Exportable) $Doc->ExportCaption($this->Total_erradicado);
+					if ($this->fuerza->Exportable) $Doc->ExportCaption($this->fuerza);
 				}
 				$Doc->EndExportRow();
 			}
@@ -858,29 +964,27 @@ class cgrafica_erradicacion_fuerza_departamento extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
-						if ($this->fuerza->Exportable) $Doc->ExportField($this->fuerza);
 						if ($this->Departamento->Exportable) $Doc->ExportField($this->Departamento);
 						if ($this->Muncipio->Exportable) $Doc->ExportField($this->Muncipio);
-						if ($this->Punto->Exportable) $Doc->ExportField($this->Punto);
 						if ($this->aF1o->Exportable) $Doc->ExportField($this->aF1o);
 						if ($this->fase->Exportable) $Doc->ExportField($this->fase);
-						if ($this->Profesional_especializado->Exportable) $Doc->ExportField($this->Profesional_especializado);
 						if ($this->Ha_Coca->Exportable) $Doc->ExportField($this->Ha_Coca);
 						if ($this->Ha_Amapola->Exportable) $Doc->ExportField($this->Ha_Amapola);
 						if ($this->Ha_Marihuana->Exportable) $Doc->ExportField($this->Ha_Marihuana);
 						if ($this->Total_erradicado->Exportable) $Doc->ExportField($this->Total_erradicado);
+						if ($this->fuerza->Exportable) $Doc->ExportField($this->fuerza);
+						if ($this->Punto->Exportable) $Doc->ExportField($this->Punto);
+						if ($this->Profesional_especializado->Exportable) $Doc->ExportField($this->Profesional_especializado);
 					} else {
-						if ($this->fuerza->Exportable) $Doc->ExportField($this->fuerza);
 						if ($this->Departamento->Exportable) $Doc->ExportField($this->Departamento);
 						if ($this->Muncipio->Exportable) $Doc->ExportField($this->Muncipio);
-						if ($this->Punto->Exportable) $Doc->ExportField($this->Punto);
 						if ($this->aF1o->Exportable) $Doc->ExportField($this->aF1o);
 						if ($this->fase->Exportable) $Doc->ExportField($this->fase);
-						if ($this->Profesional_especializado->Exportable) $Doc->ExportField($this->Profesional_especializado);
 						if ($this->Ha_Coca->Exportable) $Doc->ExportField($this->Ha_Coca);
 						if ($this->Ha_Amapola->Exportable) $Doc->ExportField($this->Ha_Amapola);
 						if ($this->Ha_Marihuana->Exportable) $Doc->ExportField($this->Ha_Marihuana);
 						if ($this->Total_erradicado->Exportable) $Doc->ExportField($this->Total_erradicado);
+						if ($this->fuerza->Exportable) $Doc->ExportField($this->fuerza);
 					}
 					$Doc->EndExportRow();
 				}

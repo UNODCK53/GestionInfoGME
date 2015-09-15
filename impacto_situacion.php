@@ -4,6 +4,10 @@ $ano =$_GET['ano'];
 $fase =$_GET['fase'];
 $punto =$_GET['punto'];
 $profesional =$_GET['profesional'];
+$ano =2015;
+$fase ='03';
+$punto ='150306';
+$profesional =99;
 
 valores($ano,$fase,$punto,$profesional);
 function valores ($ano,$fase,$punto,$profesional) {
@@ -16,27 +20,27 @@ function valores ($ano,$fase,$punto,$profesional) {
 	$puntos="";
 	$profesionales="";
 	}elseif($fase==99 && $punto==99 && $profesional==99 && $ano != 99){
-	$años=" and SUBSTR(`FECHA_REPORT`,7,4)=".$ano;
+	$años=" and SUBSTR(`FECHA_REPORT`,1,4)=".$ano;
 	$fases="";
 	$puntos="";
 	$profesionales="";
 	}elseif($fase!==99 && $punto==99 && $profesional==99 && $ano != 99){
-	$años=" and SUBSTR(`FECHA_REPORT`,7,4)=".$ano;
+	$años=" and SUBSTR(`FECHA_REPORT`,1,4)=".$ano;
 	$fases=" and `FASE`='".$fase."'";
 	$puntos="";
 	$profesionales="";
 	}elseif($fase!==99 && $punto!=99 && $profesional==99 && $ano != 99){
-	$años=" and SUBSTR(`FECHA_REPORT`,7,4)=".$ano;
+	$años=" and SUBSTR(`FECHA_REPORT`,1,4)=".$ano;
 	$fases=" and `FASE`='".$fase."'";
 	$puntos=" and (CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_PE ELSE NOM_PE END )='".$punto."'";
 	$profesionales="";
 	}elseif($fase!==99 && $punto==99 && $profesional!=99 && $ano != 99){
-	$años=" and SUBSTR(`FECHA_REPORT`,7,4)=".$ano;
+	$años=" and SUBSTR(`FECHA_REPORT`,1,4)=".$ano;
 	$fases=" and `FASE`='".$fase."'";
 	$puntos=" ";
 	$profesionales="  and `NOM_PGE`='".$profesional."'";
 	}elseif($fase!==99 && $punto!=99 && $profesional!=99 && $ano != 99){
-	$años=" and SUBSTR(`FECHA_REPORT`,7,4)=".$ano;
+	$años=" and SUBSTR(`FECHA_REPORT`,1,4)=".$ano;
 	$fases=" and `FASE`='".$fase."'";
 	$puntos=" and (CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_PE ELSE NOM_PE END )='".$punto."'";
 	$profesionales="  and `NOM_PGE`='".$profesional."'";

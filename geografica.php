@@ -2,25 +2,24 @@
 <?php 	
 $ano =$_GET['ano'];
 $fase =$_GET['fase'];
-
 valores($ano,$fase);
 function valores ($ano,$fase) {
 	include ("coneccion.php");
 	mysql_select_db($base_datos,$db);
 
 	if($ano==99){
-			$deptos=mysql_query("SELECT Departamento FROM gestioninfogme.info_diario where Departamento is not null group by Departamento ORDER BY Departamento");//sql que trae los departamentos con erradicacion en el historico
+			$deptos=mysql_query("SELECT Departamento FROM gestioninfogme.info_diario where Departamento is not null and (T_erradi) >0 group by Departamento ORDER BY Departamento");//sql que trae los departamentos con erradicacion en el historico
 			
-			$muni=mysql_query("SELECT Departamento,Muncipio FROM gestioninfogme.info_diario where Departamento is not null group by concat(Departamento,Muncipio) ORDER BY Departamento,Muncipio asc");//sql que trae los municipio con erradicacion en el historico
+			$muni=mysql_query("SELECT Muncipio FROM gestioninfogme.info_diario where Departamento is not null and (T_erradi) >0 group by Muncipio ORDER BY Muncipio asc");//sql que trae los municipio con erradicacion en el historico
 			
-			$ha = mysql_query("select Departamento,Muncipio,(CASE WHEN Ha_Coca>0 then Ha_Coca else 0 end ) as Ha_Coca,(CASE WHEN Ha_Amapola>0 then Ha_Amapola else 0 end ) as Ha_Amapola,(CASE WHEN Ha_Marihuana>0 then Ha_Marihuana else 0 end ) as Ha_Marihuana from (SELECT Departamento,Muncipio,CAST(sum(Ha_Coca) AS DECIMAL(4,2))as Ha_Coca,CAST(sum(Ha_Amapola) AS DECIMAL(4,2))as Ha_Amapola,CAST(sum(Ha_Marihuana) AS DECIMAL(4,2))as Ha_Marihuana,CAST(sum(T_erradi) AS DECIMAL(4,2))as T_erradi FROM gestioninfogme.info_diario where Departamento is not null group by concat(Departamento,Muncipio) ORDER BY Departamento,Muncipio asc) as todo");//sql que trae los departamentos,municipios, total erradicado y la desagrgacion por tipo de cultivo
+			$ha = mysql_query("select Departamento,Muncipio,(CASE WHEN Ha_Coca>0 then Ha_Coca else 0 end ) as Ha_Coca,(CASE WHEN Ha_Amapola>0 then Ha_Amapola else 0 end ) as Ha_Amapola,(CASE WHEN Ha_Marihuana>0 then Ha_Marihuana else 0 end ) as Ha_Marihuana from (SELECT Departamento,Muncipio,sum(Ha_Coca) as Ha_Coca,sum(Ha_Amapola) as Ha_Amapola,sum(Ha_Marihuana) as Ha_Marihuana,sum(T_erradi) as T_erradi FROM gestioninfogme.info_diario where Departamento is not null and (T_erradi) >0 group by concat(Departamento,Muncipio) ORDER BY Departamento,Muncipio asc) as todo");//sql que trae los departamentos,municipios, total erradicado y la desagrgacion por tipo de cultivo
 			
 			//dos sql que traen el numero total de departamentos
-			$num_deptos = mysql_query("select count(Departamento) from (SELECT Departamento FROM gestioninfogme.info_diario group by Departamento) as depto ");
+			$num_deptos = mysql_query("select count(Departamento) from (SELECT Departamento FROM gestioninfogme.info_diario where Departamento is not null and (T_erradi) >0 group by Departamento) as depto ");
 			$num_deptos_dato= mysql_result($num_deptos, 0);
 			
 			//dos sql que traen el numero total de municipios
-			$num_muni = mysql_query("select count(Muncipio) from (SELECT Departamento,Muncipio FROM gestioninfogme.info_diario group by concat(Departamento,Muncipio) ORDER BY Departamento,Muncipio asc)as mun");
+			$num_muni = mysql_query("select count(Muncipio) from (SELECT Muncipio FROM gestioninfogme.info_diario where Departamento is not null and (T_erradi) >0 group by Muncipio ORDER BY Muncipio asc)as mun");
 			$num_muni_dato= mysql_result($num_muni, 0);
 			
 			//crea un arreglo 'deptos_array' con los departamentos a partir del sql a la base
@@ -58,7 +57,6 @@ function valores ($ano,$fase) {
 				for ($j = 0; $j < $num_muni_dato; $j++) {//ciclo en el vector municipio, la variable $j representa la posicion del municipio
 					$suma2=0;
 					$d=$deptos_array[$i].$muni_array[$j];//variable $d que concatenga el departamento y el municipio para compararlo con el vector 'ha_concat_array'
-					
 					
 					if (in_array($d, $ha_concat_array)) {// busca la concatencaion del departamento($i) y municipio($j) en el vector 'ha_concat_array' si lo encuentra ingresa al condicional
 						
@@ -109,18 +107,19 @@ function valores ($ano,$fase) {
 				
 			}	
 		}elseif($fase==99 && $ano != 99){//codigo que filtra por año
-			$deptos=mysql_query("SELECT Departamento FROM gestioninfogme.info_diario where Departamento is not null and SUBSTR(`FECHA_REPORT`,7,4)=".$ano." group by Departamento ORDER BY Departamento");//sql que trae los departamentos con erradicacion en el historico
+			$deptos=mysql_query("SELECT Departamento FROM gestioninfogme.info_diario where Departamento is not null and (T_erradi) >0 and SUBSTR(`FECHA_REPORT`,1,4)=".$ano." group by Departamento ORDER BY Departamento");//sql que trae los departamentos con erradicacion en el historico
 			
-			$muni=mysql_query("SELECT Departamento,Muncipio FROM gestioninfogme.info_diario where Departamento is not null and SUBSTR(`FECHA_REPORT`,7,4)=".$ano." group by concat(Departamento,Muncipio) ORDER BY Departamento,Muncipio asc");//sql que trae los municipio con erradicacion en el historico
+			$muni=mysql_query("SELECT Muncipio FROM gestioninfogme.info_diario where Departamento is not null and (T_erradi) >0 and SUBSTR(`FECHA_REPORT`,1,4)=".$ano." group by Muncipio ORDER BY Muncipio asc");//sql que trae los municipio con erradicacion en el historico
 			
-			$ha = mysql_query("select Departamento,Muncipio,(CASE WHEN Ha_Coca>0 then Ha_Coca else 0 end ) as Ha_Coca,(CASE WHEN Ha_Amapola>0 then Ha_Amapola else 0 end ) as Ha_Amapola,(CASE WHEN Ha_Marihuana>0 then Ha_Marihuana else 0 end ) as Ha_Marihuana from (SELECT Departamento,Muncipio,CAST(sum(Ha_Coca) AS DECIMAL(4,2))as Ha_Coca,CAST(sum(Ha_Amapola) AS DECIMAL(4,2))as Ha_Amapola,CAST(sum(Ha_Marihuana) AS DECIMAL(4,2))as Ha_Marihuana,CAST(sum(T_erradi) AS DECIMAL(4,2))as T_erradi FROM gestioninfogme.info_diario where Departamento is not null and SUBSTR(`FECHA_REPORT`,7,4)=".$ano." group by concat(Departamento,Muncipio) ORDER BY Departamento,Muncipio asc) as todo");//sql que trae los departamentos,municipios, total erradicado y la desagrgacion por tipo de cultivo
+			$ha = mysql_query("select Departamento,Muncipio,(CASE WHEN Ha_Coca>0 then Ha_Coca else 0 end ) as Ha_Coca,(CASE WHEN Ha_Amapola>0 then Ha_Amapola else 0 end ) as Ha_Amapola,(CASE WHEN Ha_Marihuana>0 then Ha_Marihuana else 0 end ) as Ha_Marihuana from (SELECT Departamento,Muncipio,sum(Ha_Coca) as Ha_Coca,sum(Ha_Amapola) as Ha_Amapola,sum(Ha_Marihuana) as Ha_Marihuana,sum(T_erradi) as T_erradi FROM gestioninfogme.info_diario where Departamento is not null and (T_erradi) >0  and SUBSTR(`FECHA_REPORT`,1,4)=".$ano." group by concat(Departamento,Muncipio) ORDER BY Departamento,Muncipio asc) as todo");//sql que trae los departamentos,municipios, total erradicado y la desagrgacion por tipo de cultivo
+					
 			
 			//dos sql que traen el numero total de departamentos
-			$num_deptos = mysql_query("select count(Departamento) from (SELECT Departamento FROM gestioninfogme.info_diario WHERE SUBSTR(`FECHA_REPORT`,7,4)=".$ano." group by Departamento) as depto ");
+			$num_deptos = mysql_query("select count(Departamento) from (SELECT Departamento FROM gestioninfogme.info_diario WHERE SUBSTR(`FECHA_REPORT`,1,4)=".$ano." and (T_erradi) >0 group by Departamento) as depto ");
 			$num_deptos_dato= mysql_result($num_deptos, 0);
 			
 			//dos sql que traen el numero total de municipios
-			$num_muni = mysql_query("select count(Muncipio) from (SELECT Departamento,Muncipio FROM gestioninfogme.info_diario WHERE SUBSTR(`FECHA_REPORT`,7,4)=".$ano." group by concat(Departamento,Muncipio) ORDER BY Departamento,Muncipio asc)as mun");
+			$num_muni = mysql_query("select count(Muncipio) from (SELECT Muncipio FROM gestioninfogme.info_diario WHERE SUBSTR(`FECHA_REPORT`,1,4)=".$ano." and (T_erradi) >0 group by Muncipio ORDER BY Muncipio asc)as mun");
 			$num_muni_dato= mysql_result($num_muni, 0);
 			
 			//crea un arreglo 'deptos_array' con los departamentos a partir del sql a la base
@@ -209,18 +208,18 @@ function valores ($ano,$fase) {
 				
 			}
 		}else{//codigo que filtra por año y fase
-			$deptos=mysql_query("SELECT Departamento FROM gestioninfogme.info_diario where Departamento is not null and SUBSTR(`FECHA_REPORT`,7,4)=".$ano." and `FASE`='".$fase."' group by Departamento ORDER BY Departamento");//sql que trae los departamentos con erradicacion para una fase de un año espesifico
+			$deptos=mysql_query("SELECT Departamento FROM gestioninfogme.info_diario where Departamento is not null and (T_erradi) >0 and SUBSTR(`FECHA_REPORT`,1,4)=".$ano." and `FASE`='".$fase."' group by Departamento ORDER BY Departamento");//sql que trae los departamentos con erradicacion para una fase de un año espesifico
 			
-			$muni=mysql_query("SELECT Departamento,Muncipio FROM gestioninfogme.info_diario where Departamento is not null and SUBSTR(`FECHA_REPORT`,7,4)=".$ano." and `FASE`='".$fase."' group by concat(Departamento,Muncipio) ORDER BY Departamento,Muncipio asc");//sql que trae los municipio con erradicacion para una fase de un año espesifico
+			$muni=mysql_query("SELECT Muncipio FROM gestioninfogme.info_diario where Departamento is not null and (T_erradi) >0 and SUBSTR(`FECHA_REPORT`,1,4)=".$ano." and `FASE`='".$fase."' group by Muncipio ORDER BY Muncipio asc");//sql que trae los municipio con erradicacion para una fase de un año espesifico
 			
-			$ha = mysql_query("select Departamento,Muncipio,(CASE WHEN Ha_Coca>0 then Ha_Coca else 0 end ) as Ha_Coca,(CASE WHEN Ha_Amapola>0 then Ha_Amapola else 0 end ) as Ha_Amapola,(CASE WHEN Ha_Marihuana>0 then Ha_Marihuana else 0 end ) as Ha_Marihuana from (SELECT Departamento,Muncipio,CAST(sum(Ha_Coca) AS DECIMAL(4,2))as Ha_Coca,CAST(sum(Ha_Amapola) AS DECIMAL(4,2))as Ha_Amapola,CAST(sum(Ha_Marihuana) AS DECIMAL(4,2))as Ha_Marihuana,CAST(sum(T_erradi) AS DECIMAL(4,2))as T_erradi FROM gestioninfogme.info_diario where Departamento is not null and SUBSTR(`FECHA_REPORT`,7,4)=".$ano." and `FASE`='".$fase."' group by concat(Departamento,Muncipio) ORDER BY Departamento,Muncipio asc) as todo");//sql que trae los departamentos,municipios, total erradicado y la desagrgacion por tipo de cultivo
+			$ha = mysql_query("select Departamento,Muncipio,(CASE WHEN Ha_Coca>0 then Ha_Coca else 0 end ) as Ha_Coca,(CASE WHEN Ha_Amapola>0 then Ha_Amapola else 0 end ) as Ha_Amapola,(CASE WHEN Ha_Marihuana>0 then Ha_Marihuana else 0 end ) as Ha_Marihuana from (SELECT Departamento,Muncipio,sum(Ha_Coca) as Ha_Coca,sum(Ha_Amapola) as Ha_Amapola,sum(Ha_Marihuana) as Ha_Marihuana,sum(T_erradi) as T_erradi FROM gestioninfogme.info_diario where Departamento is not null and (T_erradi) >0 and SUBSTR(`FECHA_REPORT`,1,4)=".$ano." and `FASE`='".$fase."' group by concat(Departamento,Muncipio) ORDER BY Departamento,Muncipio asc) as todo");//sql que trae los departamentos,municipios, total erradicado y la desagrgacion por tipo de cultivo
 			
 			//dos sql que traen el numero total de departamentos
-			$num_deptos = mysql_query("select count(Departamento) from (SELECT Departamento FROM gestioninfogme.info_diario WHERE SUBSTR(`FECHA_REPORT`,7,4)=".$ano." and `FASE`='".$fase."' group by Departamento) as depto ");
+			$num_deptos = mysql_query("select count(Departamento) from (SELECT Departamento FROM gestioninfogme.info_diario WHERE SUBSTR(`FECHA_REPORT`,1,4)=".$ano." and (T_erradi) >0 and `FASE`='".$fase."' group by Departamento) as depto ");
 			$num_deptos_dato= mysql_result($num_deptos, 0);
 			
 			//dos sql que traen el numero total de municipios
-			$num_muni = mysql_query("select count(Muncipio) from (SELECT Departamento,Muncipio FROM gestioninfogme.info_diario WHERE SUBSTR(`FECHA_REPORT`,7,4)=".$ano." and `FASE`='".$fase."' group by concat(Departamento,Muncipio) ORDER BY Departamento,Muncipio asc)as mun");
+			$num_muni = mysql_query("select count(Muncipio) from (SELECT Muncipio FROM gestioninfogme.info_diario WHERE SUBSTR(`FECHA_REPORT`,1,4)=".$ano." and (T_erradi) >0 and `FASE`='".$fase."' group by Muncipio ORDER BY Muncipio asc)as mun");
 			$num_muni_dato= mysql_result($num_muni, 0);
 			
 			//crea un arreglo 'deptos_array' con los departamentos a partir del sql a la base

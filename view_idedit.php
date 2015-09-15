@@ -384,7 +384,11 @@ class cview_id_edit extends cview_id {
 		}
 
 		// Render the record
-		$this->RowType = EW_ROWTYPE_EDIT; // Render as Edit
+		if ($this->CurrentAction == "F") { // Confirm page
+			$this->RowType = EW_ROWTYPE_VIEW; // Render as View
+		} else {
+			$this->RowType = EW_ROWTYPE_EDIT; // Render as Edit
+		}
 		$this->ResetAttrs();
 		$this->RenderRow();
 	}
@@ -509,9 +513,6 @@ class cview_id_edit extends cview_id {
 		}
 		if (!$this->T_erradi->FldIsDetailKey) {
 			$this->T_erradi->setFormValue($objForm->GetValue("x_T_erradi"));
-		}
-		if (!$this->LATITUD_sector->FldIsDetailKey) {
-			$this->LATITUD_sector->setFormValue($objForm->GetValue("x_LATITUD_sector"));
 		}
 		if (!$this->GRA_LAT_Sector->FldIsDetailKey) {
 			$this->GRA_LAT_Sector->setFormValue($objForm->GetValue("x_GRA_LAT_Sector"));
@@ -657,9 +658,6 @@ class cview_id_edit extends cview_id {
 		if (!$this->_3_Operaciones_de_seguridad->FldIsDetailKey) {
 			$this->_3_Operaciones_de_seguridad->setFormValue($objForm->GetValue("x__3_Operaciones_de_seguridad"));
 		}
-		if (!$this->LATITUD_segurid->FldIsDetailKey) {
-			$this->LATITUD_segurid->setFormValue($objForm->GetValue("x_LATITUD_segurid"));
-		}
 		if (!$this->GRA_LAT_segurid->FldIsDetailKey) {
 			$this->GRA_LAT_segurid->setFormValue($objForm->GetValue("x_GRA_LAT_segurid"));
 		}
@@ -757,7 +755,6 @@ class cview_id_edit extends cview_id {
 		$this->Ha_Amapola->CurrentValue = $this->Ha_Amapola->FormValue;
 		$this->Ha_Marihuana->CurrentValue = $this->Ha_Marihuana->FormValue;
 		$this->T_erradi->CurrentValue = $this->T_erradi->FormValue;
-		$this->LATITUD_sector->CurrentValue = $this->LATITUD_sector->FormValue;
 		$this->GRA_LAT_Sector->CurrentValue = $this->GRA_LAT_Sector->FormValue;
 		$this->MIN_LAT_Sector->CurrentValue = $this->MIN_LAT_Sector->FormValue;
 		$this->SEG_LAT_Sector->CurrentValue = $this->SEG_LAT_Sector->FormValue;
@@ -806,7 +803,6 @@ class cview_id_edit extends cview_id {
 		$this->_3_MAP_No_controlada->CurrentValue = $this->_3_MAP_No_controlada->FormValue;
 		$this->_3_MUSE->CurrentValue = $this->_3_MUSE->FormValue;
 		$this->_3_Operaciones_de_seguridad->CurrentValue = $this->_3_Operaciones_de_seguridad->FormValue;
-		$this->LATITUD_segurid->CurrentValue = $this->LATITUD_segurid->FormValue;
 		$this->GRA_LAT_segurid->CurrentValue = $this->GRA_LAT_segurid->FormValue;
 		$this->MIN_LAT_segurid->CurrentValue = $this->MIN_LAT_segurid->FormValue;
 		$this->SEG_LAT_segurid->CurrentValue = $this->SEG_LAT_segurid->FormValue;
@@ -1396,7 +1392,36 @@ class cview_id_edit extends cview_id {
 			$this->F_Sincron->ViewCustomAttributes = "";
 
 			// USUARIO
-			$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+			if (strval($this->USUARIO->CurrentValue) <> "") {
+				$sFilterWrk = "`USUARIO`" . ew_SearchString("=", $this->USUARIO->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->USUARIO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `USUARIO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->USUARIO->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+				}
+			} else {
+				$this->USUARIO->ViewValue = NULL;
+			}
 			$this->USUARIO->ViewCustomAttributes = "";
 
 			// Cargo_gme
@@ -1404,7 +1429,36 @@ class cview_id_edit extends cview_id {
 			$this->Cargo_gme->ViewCustomAttributes = "";
 
 			// NOM_PE
-			$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+			if (strval($this->NOM_PE->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_PE`" . ew_SearchString("=", $this->NOM_PE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_PE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+				}
+			} else {
+				$this->NOM_PE->ViewValue = NULL;
+			}
 			$this->NOM_PE->ViewCustomAttributes = "";
 
 			// Otro_PE
@@ -1412,7 +1466,36 @@ class cview_id_edit extends cview_id {
 			$this->Otro_PE->ViewCustomAttributes = "";
 
 			// NOM_PGE
-			$this->NOM_PGE->ViewValue = $this->NOM_PGE->CurrentValue;
+			if (strval($this->NOM_PGE->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_PGE`" . ew_SearchString("=", $this->NOM_PGE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PGE`, `NOM_PGE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PGE`, `NOM_PGE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PGE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PGE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_PGE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_PGE->ViewValue = $this->NOM_PGE->CurrentValue;
+				}
+			} else {
+				$this->NOM_PGE->ViewValue = NULL;
+			}
 			$this->NOM_PGE->ViewCustomAttributes = "";
 
 			// Otro_NOM_PGE
@@ -1424,11 +1507,45 @@ class cview_id_edit extends cview_id {
 			$this->Otro_CC_PGE->ViewCustomAttributes = "";
 
 			// TIPO_INFORME
-			$this->TIPO_INFORME->ViewValue = $this->TIPO_INFORME->CurrentValue;
+			if (strval($this->TIPO_INFORME->CurrentValue) <> "") {
+				$sFilterWrk = "`label`" . ew_SearchString("=", $this->TIPO_INFORME->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='informe'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->TIPO_INFORME, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->TIPO_INFORME->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->TIPO_INFORME->ViewValue = $this->TIPO_INFORME->CurrentValue;
+				}
+			} else {
+				$this->TIPO_INFORME->ViewValue = NULL;
+			}
 			$this->TIPO_INFORME->ViewCustomAttributes = "";
 
 			// FECHA_REPORT
 			$this->FECHA_REPORT->ViewValue = $this->FECHA_REPORT->CurrentValue;
+			$this->FECHA_REPORT->ViewValue = ew_FormatDateTime($this->FECHA_REPORT->ViewValue, 5);
 			$this->FECHA_REPORT->ViewCustomAttributes = "";
 
 			// DIA
@@ -1448,7 +1565,40 @@ class cview_id_edit extends cview_id {
 			$this->Muncipio->ViewCustomAttributes = "";
 
 			// TEMA
-			$this->TEMA->ViewValue = $this->TEMA->CurrentValue;
+			if (strval($this->TEMA->CurrentValue) <> "") {
+				$sFilterWrk = "`label`" . ew_SearchString("=", $this->TEMA->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='tema'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->TEMA, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->TEMA->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->TEMA->ViewValue = $this->TEMA->CurrentValue;
+				}
+			} else {
+				$this->TEMA->ViewValue = NULL;
+			}
 			$this->TEMA->ViewCustomAttributes = "";
 
 			// Otro_Tema
@@ -1460,7 +1610,40 @@ class cview_id_edit extends cview_id {
 			$this->OBSERVACION->ViewCustomAttributes = "";
 
 			// FUERZA
-			$this->FUERZA->ViewValue = $this->FUERZA->CurrentValue;
+			if (strval($this->FUERZA->CurrentValue) <> "") {
+				$sFilterWrk = "`label`" . ew_SearchString("=", $this->FUERZA->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='fp'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->FUERZA, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->FUERZA->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->FUERZA->ViewValue = $this->FUERZA->CurrentValue;
+				}
+			} else {
+				$this->FUERZA->ViewValue = NULL;
+			}
 			$this->FUERZA->ViewCustomAttributes = "";
 
 			// NOM_VDA
@@ -1760,15 +1943,86 @@ class cview_id_edit extends cview_id {
 			$this->NUM_Poli->ViewCustomAttributes = "";
 
 			// AÑO
-			$this->AD1O->ViewValue = $this->AD1O->CurrentValue;
+			if (strval($this->AD1O->CurrentValue) <> "") {
+				$sFilterWrk = "`AÑO`" . ew_SearchString("=", $this->AD1O->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `AÑO`, `AÑO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `AÑO`, `AÑO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->AD1O, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `AÑO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->AD1O->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->AD1O->ViewValue = $this->AD1O->CurrentValue;
+				}
+			} else {
+				$this->AD1O->ViewValue = NULL;
+			}
 			$this->AD1O->ViewCustomAttributes = "";
 
 			// FASE
-			$this->FASE->ViewValue = $this->FASE->CurrentValue;
+			if (strval($this->FASE->CurrentValue) <> "") {
+				$sFilterWrk = "`FASE`" . ew_SearchString("=", $this->FASE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `FASE`, `FASE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `FASE`, `FASE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->FASE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `FASE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->FASE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->FASE->ViewValue = $this->FASE->CurrentValue;
+				}
+			} else {
+				$this->FASE->ViewValue = NULL;
+			}
 			$this->FASE->ViewCustomAttributes = "";
 
 			// Modificado
-			$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+			if (strval($this->Modificado->CurrentValue) <> "") {
+				switch ($this->Modificado->CurrentValue) {
+					case $this->Modificado->FldTagValue(1):
+						$this->Modificado->ViewValue = $this->Modificado->FldTagCaption(1) <> "" ? $this->Modificado->FldTagCaption(1) : $this->Modificado->CurrentValue;
+						break;
+					case $this->Modificado->FldTagValue(2):
+						$this->Modificado->ViewValue = $this->Modificado->FldTagCaption(2) <> "" ? $this->Modificado->FldTagCaption(2) : $this->Modificado->CurrentValue;
+						break;
+					default:
+						$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+				}
+			} else {
+				$this->Modificado->ViewValue = NULL;
+			}
 			$this->Modificado->ViewCustomAttributes = "";
 
 			// llave
@@ -1890,11 +2144,6 @@ class cview_id_edit extends cview_id {
 			$this->T_erradi->LinkCustomAttributes = "";
 			$this->T_erradi->HrefValue = "";
 			$this->T_erradi->TooltipValue = "";
-
-			// LATITUD_sector
-			$this->LATITUD_sector->LinkCustomAttributes = "";
-			$this->LATITUD_sector->HrefValue = "";
-			$this->LATITUD_sector->TooltipValue = "";
 
 			// GRA_LAT_Sector
 			$this->GRA_LAT_Sector->LinkCustomAttributes = "";
@@ -2136,11 +2385,6 @@ class cview_id_edit extends cview_id {
 			$this->_3_Operaciones_de_seguridad->HrefValue = "";
 			$this->_3_Operaciones_de_seguridad->TooltipValue = "";
 
-			// LATITUD_segurid
-			$this->LATITUD_segurid->LinkCustomAttributes = "";
-			$this->LATITUD_segurid->HrefValue = "";
-			$this->LATITUD_segurid->TooltipValue = "";
-
 			// GRA_LAT_segurid
 			$this->GRA_LAT_segurid->LinkCustomAttributes = "";
 			$this->GRA_LAT_segurid->HrefValue = "";
@@ -2268,7 +2512,36 @@ class cview_id_edit extends cview_id {
 			// USUARIO
 			$this->USUARIO->EditAttrs["class"] = "form-control";
 			$this->USUARIO->EditCustomAttributes = "";
-			$this->USUARIO->EditValue = $this->USUARIO->CurrentValue;
+			if (strval($this->USUARIO->CurrentValue) <> "") {
+				$sFilterWrk = "`USUARIO`" . ew_SearchString("=", $this->USUARIO->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->USUARIO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `USUARIO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->USUARIO->EditValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->USUARIO->EditValue = $this->USUARIO->CurrentValue;
+				}
+			} else {
+				$this->USUARIO->EditValue = NULL;
+			}
 			$this->USUARIO->ViewCustomAttributes = "";
 
 			// Cargo_gme
@@ -2280,80 +2553,176 @@ class cview_id_edit extends cview_id {
 			// NOM_PE
 			$this->NOM_PE->EditAttrs["class"] = "form-control";
 			$this->NOM_PE->EditCustomAttributes = "";
-			$this->NOM_PE->EditValue = $this->NOM_PE->CurrentValue;
-			$this->NOM_PE->ViewCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->NOM_PE->EditValue = $arwrk;
 
 			// Otro_PE
 			$this->Otro_PE->EditAttrs["class"] = "form-control";
 			$this->Otro_PE->EditCustomAttributes = "";
-			$this->Otro_PE->EditValue = $this->Otro_PE->CurrentValue;
-			$this->Otro_PE->ViewCustomAttributes = "";
+			$this->Otro_PE->EditValue = ew_HtmlEncode($this->Otro_PE->CurrentValue);
+			$this->Otro_PE->PlaceHolder = ew_RemoveHtml($this->Otro_PE->FldCaption());
 
 			// NOM_PGE
 			$this->NOM_PGE->EditAttrs["class"] = "form-control";
 			$this->NOM_PGE->EditCustomAttributes = "";
-			$this->NOM_PGE->EditValue = $this->NOM_PGE->CurrentValue;
-			$this->NOM_PGE->ViewCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PGE`, `NOM_PGE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PGE`, `NOM_PGE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PGE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PGE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->NOM_PGE->EditValue = $arwrk;
 
 			// Otro_NOM_PGE
 			$this->Otro_NOM_PGE->EditAttrs["class"] = "form-control";
 			$this->Otro_NOM_PGE->EditCustomAttributes = "";
-			$this->Otro_NOM_PGE->EditValue = $this->Otro_NOM_PGE->CurrentValue;
-			$this->Otro_NOM_PGE->ViewCustomAttributes = "";
+			$this->Otro_NOM_PGE->EditValue = ew_HtmlEncode($this->Otro_NOM_PGE->CurrentValue);
+			$this->Otro_NOM_PGE->PlaceHolder = ew_RemoveHtml($this->Otro_NOM_PGE->FldCaption());
 
 			// Otro_CC_PGE
 			$this->Otro_CC_PGE->EditAttrs["class"] = "form-control";
 			$this->Otro_CC_PGE->EditCustomAttributes = "";
-			$this->Otro_CC_PGE->EditValue = $this->Otro_CC_PGE->CurrentValue;
-			$this->Otro_CC_PGE->ViewCustomAttributes = "";
+			$this->Otro_CC_PGE->EditValue = ew_HtmlEncode($this->Otro_CC_PGE->CurrentValue);
+			$this->Otro_CC_PGE->PlaceHolder = ew_RemoveHtml($this->Otro_CC_PGE->FldCaption());
 
 			// TIPO_INFORME
 			$this->TIPO_INFORME->EditAttrs["class"] = "form-control";
 			$this->TIPO_INFORME->EditCustomAttributes = "";
-			$this->TIPO_INFORME->EditValue = $this->TIPO_INFORME->CurrentValue;
-			$this->TIPO_INFORME->ViewCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='informe'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->TIPO_INFORME, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->TIPO_INFORME->EditValue = $arwrk;
 
 			// FECHA_REPORT
 			$this->FECHA_REPORT->EditAttrs["class"] = "form-control";
 			$this->FECHA_REPORT->EditCustomAttributes = "";
-			$this->FECHA_REPORT->EditValue = $this->FECHA_REPORT->CurrentValue;
-			$this->FECHA_REPORT->ViewCustomAttributes = "";
+			$this->FECHA_REPORT->EditValue = ew_HtmlEncode($this->FECHA_REPORT->CurrentValue);
+			$this->FECHA_REPORT->PlaceHolder = ew_RemoveHtml($this->FECHA_REPORT->FldCaption());
 
 			// DIA
 			$this->DIA->EditAttrs["class"] = "form-control";
 			$this->DIA->EditCustomAttributes = "";
-			$this->DIA->EditValue = $this->DIA->CurrentValue;
-			$this->DIA->ViewCustomAttributes = "";
+			$this->DIA->EditValue = ew_HtmlEncode($this->DIA->CurrentValue);
+			$this->DIA->PlaceHolder = ew_RemoveHtml($this->DIA->FldCaption());
 
 			// MES
 			$this->MES->EditAttrs["class"] = "form-control";
 			$this->MES->EditCustomAttributes = "";
-			$this->MES->EditValue = $this->MES->CurrentValue;
-			$this->MES->ViewCustomAttributes = "";
+			$this->MES->EditValue = ew_HtmlEncode($this->MES->CurrentValue);
+			$this->MES->PlaceHolder = ew_RemoveHtml($this->MES->FldCaption());
 
 			// Departamento
 			$this->Departamento->EditAttrs["class"] = "form-control";
 			$this->Departamento->EditCustomAttributes = "";
-			$this->Departamento->EditValue = $this->Departamento->CurrentValue;
-			$this->Departamento->ViewCustomAttributes = "";
+			$this->Departamento->EditValue = ew_HtmlEncode($this->Departamento->CurrentValue);
+			$this->Departamento->PlaceHolder = ew_RemoveHtml($this->Departamento->FldCaption());
 
 			// Muncipio
 			$this->Muncipio->EditAttrs["class"] = "form-control";
 			$this->Muncipio->EditCustomAttributes = "";
-			$this->Muncipio->EditValue = $this->Muncipio->CurrentValue;
-			$this->Muncipio->ViewCustomAttributes = "";
+			$this->Muncipio->EditValue = ew_HtmlEncode($this->Muncipio->CurrentValue);
+			$this->Muncipio->PlaceHolder = ew_RemoveHtml($this->Muncipio->FldCaption());
 
 			// TEMA
 			$this->TEMA->EditAttrs["class"] = "form-control";
 			$this->TEMA->EditCustomAttributes = "";
-			$this->TEMA->EditValue = $this->TEMA->CurrentValue;
-			$this->TEMA->ViewCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='tema'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->TEMA, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->TEMA->EditValue = $arwrk;
 
 			// Otro_Tema
 			$this->Otro_Tema->EditAttrs["class"] = "form-control";
 			$this->Otro_Tema->EditCustomAttributes = "";
-			$this->Otro_Tema->EditValue = $this->Otro_Tema->CurrentValue;
-			$this->Otro_Tema->ViewCustomAttributes = "";
+			$this->Otro_Tema->EditValue = ew_HtmlEncode($this->Otro_Tema->CurrentValue);
+			$this->Otro_Tema->PlaceHolder = ew_RemoveHtml($this->Otro_Tema->FldCaption());
 
 			// OBSERVACION
 			$this->OBSERVACION->EditAttrs["class"] = "form-control";
@@ -2364,470 +2733,585 @@ class cview_id_edit extends cview_id {
 			// FUERZA
 			$this->FUERZA->EditAttrs["class"] = "form-control";
 			$this->FUERZA->EditCustomAttributes = "";
-			$this->FUERZA->EditValue = ew_HtmlEncode($this->FUERZA->CurrentValue);
-			$this->FUERZA->PlaceHolder = ew_RemoveHtml($this->FUERZA->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='fp'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->FUERZA, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->FUERZA->EditValue = $arwrk;
 
 			// NOM_VDA
 			$this->NOM_VDA->EditAttrs["class"] = "form-control";
 			$this->NOM_VDA->EditCustomAttributes = "";
-			$this->NOM_VDA->EditValue = $this->NOM_VDA->CurrentValue;
-			$this->NOM_VDA->ViewCustomAttributes = "";
+			$this->NOM_VDA->EditValue = ew_HtmlEncode($this->NOM_VDA->CurrentValue);
+			$this->NOM_VDA->PlaceHolder = ew_RemoveHtml($this->NOM_VDA->FldCaption());
 
 			// Ha_Coca
 			$this->Ha_Coca->EditAttrs["class"] = "form-control";
 			$this->Ha_Coca->EditCustomAttributes = "";
-			$this->Ha_Coca->EditValue = $this->Ha_Coca->CurrentValue;
-			$this->Ha_Coca->ViewCustomAttributes = "";
+			$this->Ha_Coca->EditValue = ew_HtmlEncode($this->Ha_Coca->CurrentValue);
+			$this->Ha_Coca->PlaceHolder = ew_RemoveHtml($this->Ha_Coca->FldCaption());
+			if (strval($this->Ha_Coca->EditValue) <> "" && is_numeric($this->Ha_Coca->EditValue)) $this->Ha_Coca->EditValue = ew_FormatNumber($this->Ha_Coca->EditValue, -2, -1, -2, 0);
 
 			// Ha_Amapola
 			$this->Ha_Amapola->EditAttrs["class"] = "form-control";
 			$this->Ha_Amapola->EditCustomAttributes = "";
-			$this->Ha_Amapola->EditValue = $this->Ha_Amapola->CurrentValue;
-			$this->Ha_Amapola->ViewCustomAttributes = "";
+			$this->Ha_Amapola->EditValue = ew_HtmlEncode($this->Ha_Amapola->CurrentValue);
+			$this->Ha_Amapola->PlaceHolder = ew_RemoveHtml($this->Ha_Amapola->FldCaption());
+			if (strval($this->Ha_Amapola->EditValue) <> "" && is_numeric($this->Ha_Amapola->EditValue)) $this->Ha_Amapola->EditValue = ew_FormatNumber($this->Ha_Amapola->EditValue, -2, -1, -2, 0);
 
 			// Ha_Marihuana
 			$this->Ha_Marihuana->EditAttrs["class"] = "form-control";
 			$this->Ha_Marihuana->EditCustomAttributes = "";
-			$this->Ha_Marihuana->EditValue = $this->Ha_Marihuana->CurrentValue;
-			$this->Ha_Marihuana->ViewCustomAttributes = "";
+			$this->Ha_Marihuana->EditValue = ew_HtmlEncode($this->Ha_Marihuana->CurrentValue);
+			$this->Ha_Marihuana->PlaceHolder = ew_RemoveHtml($this->Ha_Marihuana->FldCaption());
+			if (strval($this->Ha_Marihuana->EditValue) <> "" && is_numeric($this->Ha_Marihuana->EditValue)) $this->Ha_Marihuana->EditValue = ew_FormatNumber($this->Ha_Marihuana->EditValue, -2, -1, -2, 0);
 
 			// T_erradi
 			$this->T_erradi->EditAttrs["class"] = "form-control";
 			$this->T_erradi->EditCustomAttributes = "";
-			$this->T_erradi->EditValue = $this->T_erradi->CurrentValue;
-			$this->T_erradi->ViewCustomAttributes = "";
-
-			// LATITUD_sector
-			$this->LATITUD_sector->EditAttrs["class"] = "form-control";
-			$this->LATITUD_sector->EditCustomAttributes = "";
-			$this->LATITUD_sector->EditValue = $this->LATITUD_sector->CurrentValue;
-			$this->LATITUD_sector->ViewCustomAttributes = "";
+			$this->T_erradi->EditValue = ew_HtmlEncode($this->T_erradi->CurrentValue);
+			$this->T_erradi->PlaceHolder = ew_RemoveHtml($this->T_erradi->FldCaption());
+			if (strval($this->T_erradi->EditValue) <> "" && is_numeric($this->T_erradi->EditValue)) $this->T_erradi->EditValue = ew_FormatNumber($this->T_erradi->EditValue, -2, -1, -2, 0);
 
 			// GRA_LAT_Sector
 			$this->GRA_LAT_Sector->EditAttrs["class"] = "form-control";
 			$this->GRA_LAT_Sector->EditCustomAttributes = "";
-			$this->GRA_LAT_Sector->EditValue = $this->GRA_LAT_Sector->CurrentValue;
-			$this->GRA_LAT_Sector->ViewCustomAttributes = "";
+			$this->GRA_LAT_Sector->EditValue = ew_HtmlEncode($this->GRA_LAT_Sector->CurrentValue);
+			$this->GRA_LAT_Sector->PlaceHolder = ew_RemoveHtml($this->GRA_LAT_Sector->FldCaption());
 
 			// MIN_LAT_Sector
 			$this->MIN_LAT_Sector->EditAttrs["class"] = "form-control";
 			$this->MIN_LAT_Sector->EditCustomAttributes = "";
-			$this->MIN_LAT_Sector->EditValue = $this->MIN_LAT_Sector->CurrentValue;
-			$this->MIN_LAT_Sector->ViewCustomAttributes = "";
+			$this->MIN_LAT_Sector->EditValue = ew_HtmlEncode($this->MIN_LAT_Sector->CurrentValue);
+			$this->MIN_LAT_Sector->PlaceHolder = ew_RemoveHtml($this->MIN_LAT_Sector->FldCaption());
 
 			// SEG_LAT_Sector
 			$this->SEG_LAT_Sector->EditAttrs["class"] = "form-control";
 			$this->SEG_LAT_Sector->EditCustomAttributes = "";
-			$this->SEG_LAT_Sector->EditValue = $this->SEG_LAT_Sector->CurrentValue;
-			$this->SEG_LAT_Sector->ViewCustomAttributes = "";
+			$this->SEG_LAT_Sector->EditValue = ew_HtmlEncode($this->SEG_LAT_Sector->CurrentValue);
+			$this->SEG_LAT_Sector->PlaceHolder = ew_RemoveHtml($this->SEG_LAT_Sector->FldCaption());
+			if (strval($this->SEG_LAT_Sector->EditValue) <> "" && is_numeric($this->SEG_LAT_Sector->EditValue)) $this->SEG_LAT_Sector->EditValue = ew_FormatNumber($this->SEG_LAT_Sector->EditValue, -2, -1, -2, 0);
 
 			// GRA_LONG_Sector
 			$this->GRA_LONG_Sector->EditAttrs["class"] = "form-control";
 			$this->GRA_LONG_Sector->EditCustomAttributes = "";
-			$this->GRA_LONG_Sector->EditValue = $this->GRA_LONG_Sector->CurrentValue;
-			$this->GRA_LONG_Sector->ViewCustomAttributes = "";
+			$this->GRA_LONG_Sector->EditValue = ew_HtmlEncode($this->GRA_LONG_Sector->CurrentValue);
+			$this->GRA_LONG_Sector->PlaceHolder = ew_RemoveHtml($this->GRA_LONG_Sector->FldCaption());
 
 			// MIN_LONG_Sector
 			$this->MIN_LONG_Sector->EditAttrs["class"] = "form-control";
 			$this->MIN_LONG_Sector->EditCustomAttributes = "";
-			$this->MIN_LONG_Sector->EditValue = $this->MIN_LONG_Sector->CurrentValue;
-			$this->MIN_LONG_Sector->ViewCustomAttributes = "";
+			$this->MIN_LONG_Sector->EditValue = ew_HtmlEncode($this->MIN_LONG_Sector->CurrentValue);
+			$this->MIN_LONG_Sector->PlaceHolder = ew_RemoveHtml($this->MIN_LONG_Sector->FldCaption());
 
 			// SEG_LONG_Sector
 			$this->SEG_LONG_Sector->EditAttrs["class"] = "form-control";
 			$this->SEG_LONG_Sector->EditCustomAttributes = "";
-			$this->SEG_LONG_Sector->EditValue = $this->SEG_LONG_Sector->CurrentValue;
-			$this->SEG_LONG_Sector->ViewCustomAttributes = "";
+			$this->SEG_LONG_Sector->EditValue = ew_HtmlEncode($this->SEG_LONG_Sector->CurrentValue);
+			$this->SEG_LONG_Sector->PlaceHolder = ew_RemoveHtml($this->SEG_LONG_Sector->FldCaption());
+			if (strval($this->SEG_LONG_Sector->EditValue) <> "" && is_numeric($this->SEG_LONG_Sector->EditValue)) $this->SEG_LONG_Sector->EditValue = ew_FormatNumber($this->SEG_LONG_Sector->EditValue, -2, -1, -2, 0);
 
 			// Ini_Jorna
 			$this->Ini_Jorna->EditAttrs["class"] = "form-control";
 			$this->Ini_Jorna->EditCustomAttributes = "";
-			$this->Ini_Jorna->EditValue = $this->Ini_Jorna->CurrentValue;
-			$this->Ini_Jorna->ViewCustomAttributes = "";
+			$this->Ini_Jorna->EditValue = ew_HtmlEncode($this->Ini_Jorna->CurrentValue);
+			$this->Ini_Jorna->PlaceHolder = ew_RemoveHtml($this->Ini_Jorna->FldCaption());
 
 			// Fin_Jorna
 			$this->Fin_Jorna->EditAttrs["class"] = "form-control";
 			$this->Fin_Jorna->EditCustomAttributes = "";
-			$this->Fin_Jorna->EditValue = $this->Fin_Jorna->CurrentValue;
-			$this->Fin_Jorna->ViewCustomAttributes = "";
+			$this->Fin_Jorna->EditValue = ew_HtmlEncode($this->Fin_Jorna->CurrentValue);
+			$this->Fin_Jorna->PlaceHolder = ew_RemoveHtml($this->Fin_Jorna->FldCaption());
 
 			// Situ_Especial
 			$this->Situ_Especial->EditAttrs["class"] = "form-control";
 			$this->Situ_Especial->EditCustomAttributes = "";
-			$this->Situ_Especial->EditValue = $this->Situ_Especial->CurrentValue;
-			$this->Situ_Especial->ViewCustomAttributes = "";
+			$this->Situ_Especial->EditValue = ew_HtmlEncode($this->Situ_Especial->CurrentValue);
+			$this->Situ_Especial->PlaceHolder = ew_RemoveHtml($this->Situ_Especial->FldCaption());
 
 			// Adm_GME
 			$this->Adm_GME->EditAttrs["class"] = "form-control";
 			$this->Adm_GME->EditCustomAttributes = "";
-			$this->Adm_GME->EditValue = $this->Adm_GME->CurrentValue;
-			$this->Adm_GME->ViewCustomAttributes = "";
+			$this->Adm_GME->EditValue = ew_HtmlEncode($this->Adm_GME->CurrentValue);
+			$this->Adm_GME->PlaceHolder = ew_RemoveHtml($this->Adm_GME->FldCaption());
+			if (strval($this->Adm_GME->EditValue) <> "" && is_numeric($this->Adm_GME->EditValue)) $this->Adm_GME->EditValue = ew_FormatNumber($this->Adm_GME->EditValue, -2, -1, -2, 0);
 
 			// 1_Abastecimiento
 			$this->_1_Abastecimiento->EditAttrs["class"] = "form-control";
 			$this->_1_Abastecimiento->EditCustomAttributes = "";
-			$this->_1_Abastecimiento->EditValue = $this->_1_Abastecimiento->CurrentValue;
-			$this->_1_Abastecimiento->ViewCustomAttributes = "";
+			$this->_1_Abastecimiento->EditValue = ew_HtmlEncode($this->_1_Abastecimiento->CurrentValue);
+			$this->_1_Abastecimiento->PlaceHolder = ew_RemoveHtml($this->_1_Abastecimiento->FldCaption());
+			if (strval($this->_1_Abastecimiento->EditValue) <> "" && is_numeric($this->_1_Abastecimiento->EditValue)) $this->_1_Abastecimiento->EditValue = ew_FormatNumber($this->_1_Abastecimiento->EditValue, -2, -1, -2, 0);
 
 			// 1_Acompanamiento_firma_GME
 			$this->_1_Acompanamiento_firma_GME->EditAttrs["class"] = "form-control";
 			$this->_1_Acompanamiento_firma_GME->EditCustomAttributes = "";
-			$this->_1_Acompanamiento_firma_GME->EditValue = $this->_1_Acompanamiento_firma_GME->CurrentValue;
-			$this->_1_Acompanamiento_firma_GME->ViewCustomAttributes = "";
+			$this->_1_Acompanamiento_firma_GME->EditValue = ew_HtmlEncode($this->_1_Acompanamiento_firma_GME->CurrentValue);
+			$this->_1_Acompanamiento_firma_GME->PlaceHolder = ew_RemoveHtml($this->_1_Acompanamiento_firma_GME->FldCaption());
+			if (strval($this->_1_Acompanamiento_firma_GME->EditValue) <> "" && is_numeric($this->_1_Acompanamiento_firma_GME->EditValue)) $this->_1_Acompanamiento_firma_GME->EditValue = ew_FormatNumber($this->_1_Acompanamiento_firma_GME->EditValue, -2, -1, -2, 0);
 
 			// 1_Apoyo_zonal_sin_punto_asignado
 			$this->_1_Apoyo_zonal_sin_punto_asignado->EditAttrs["class"] = "form-control";
 			$this->_1_Apoyo_zonal_sin_punto_asignado->EditCustomAttributes = "";
-			$this->_1_Apoyo_zonal_sin_punto_asignado->EditValue = $this->_1_Apoyo_zonal_sin_punto_asignado->CurrentValue;
-			$this->_1_Apoyo_zonal_sin_punto_asignado->ViewCustomAttributes = "";
+			$this->_1_Apoyo_zonal_sin_punto_asignado->EditValue = ew_HtmlEncode($this->_1_Apoyo_zonal_sin_punto_asignado->CurrentValue);
+			$this->_1_Apoyo_zonal_sin_punto_asignado->PlaceHolder = ew_RemoveHtml($this->_1_Apoyo_zonal_sin_punto_asignado->FldCaption());
+			if (strval($this->_1_Apoyo_zonal_sin_punto_asignado->EditValue) <> "" && is_numeric($this->_1_Apoyo_zonal_sin_punto_asignado->EditValue)) $this->_1_Apoyo_zonal_sin_punto_asignado->EditValue = ew_FormatNumber($this->_1_Apoyo_zonal_sin_punto_asignado->EditValue, -2, -1, -2, 0);
 
 			// 1_Descanso_en_dia_habil
 			$this->_1_Descanso_en_dia_habil->EditAttrs["class"] = "form-control";
 			$this->_1_Descanso_en_dia_habil->EditCustomAttributes = "";
-			$this->_1_Descanso_en_dia_habil->EditValue = $this->_1_Descanso_en_dia_habil->CurrentValue;
-			$this->_1_Descanso_en_dia_habil->ViewCustomAttributes = "";
+			$this->_1_Descanso_en_dia_habil->EditValue = ew_HtmlEncode($this->_1_Descanso_en_dia_habil->CurrentValue);
+			$this->_1_Descanso_en_dia_habil->PlaceHolder = ew_RemoveHtml($this->_1_Descanso_en_dia_habil->FldCaption());
+			if (strval($this->_1_Descanso_en_dia_habil->EditValue) <> "" && is_numeric($this->_1_Descanso_en_dia_habil->EditValue)) $this->_1_Descanso_en_dia_habil->EditValue = ew_FormatNumber($this->_1_Descanso_en_dia_habil->EditValue, -2, -1, -2, 0);
 
 			// 1_Descanso_festivo_dominical
 			$this->_1_Descanso_festivo_dominical->EditAttrs["class"] = "form-control";
 			$this->_1_Descanso_festivo_dominical->EditCustomAttributes = "";
-			$this->_1_Descanso_festivo_dominical->EditValue = $this->_1_Descanso_festivo_dominical->CurrentValue;
-			$this->_1_Descanso_festivo_dominical->ViewCustomAttributes = "";
+			$this->_1_Descanso_festivo_dominical->EditValue = ew_HtmlEncode($this->_1_Descanso_festivo_dominical->CurrentValue);
+			$this->_1_Descanso_festivo_dominical->PlaceHolder = ew_RemoveHtml($this->_1_Descanso_festivo_dominical->FldCaption());
+			if (strval($this->_1_Descanso_festivo_dominical->EditValue) <> "" && is_numeric($this->_1_Descanso_festivo_dominical->EditValue)) $this->_1_Descanso_festivo_dominical->EditValue = ew_FormatNumber($this->_1_Descanso_festivo_dominical->EditValue, -2, -1, -2, 0);
 
 			// 1_Dia_compensatorio
 			$this->_1_Dia_compensatorio->EditAttrs["class"] = "form-control";
 			$this->_1_Dia_compensatorio->EditCustomAttributes = "";
-			$this->_1_Dia_compensatorio->EditValue = $this->_1_Dia_compensatorio->CurrentValue;
-			$this->_1_Dia_compensatorio->ViewCustomAttributes = "";
+			$this->_1_Dia_compensatorio->EditValue = ew_HtmlEncode($this->_1_Dia_compensatorio->CurrentValue);
+			$this->_1_Dia_compensatorio->PlaceHolder = ew_RemoveHtml($this->_1_Dia_compensatorio->FldCaption());
+			if (strval($this->_1_Dia_compensatorio->EditValue) <> "" && is_numeric($this->_1_Dia_compensatorio->EditValue)) $this->_1_Dia_compensatorio->EditValue = ew_FormatNumber($this->_1_Dia_compensatorio->EditValue, -2, -1, -2, 0);
 
 			// 1_Erradicacion_en_dia_festivo
 			$this->_1_Erradicacion_en_dia_festivo->EditAttrs["class"] = "form-control";
 			$this->_1_Erradicacion_en_dia_festivo->EditCustomAttributes = "";
-			$this->_1_Erradicacion_en_dia_festivo->EditValue = $this->_1_Erradicacion_en_dia_festivo->CurrentValue;
-			$this->_1_Erradicacion_en_dia_festivo->ViewCustomAttributes = "";
+			$this->_1_Erradicacion_en_dia_festivo->EditValue = ew_HtmlEncode($this->_1_Erradicacion_en_dia_festivo->CurrentValue);
+			$this->_1_Erradicacion_en_dia_festivo->PlaceHolder = ew_RemoveHtml($this->_1_Erradicacion_en_dia_festivo->FldCaption());
+			if (strval($this->_1_Erradicacion_en_dia_festivo->EditValue) <> "" && is_numeric($this->_1_Erradicacion_en_dia_festivo->EditValue)) $this->_1_Erradicacion_en_dia_festivo->EditValue = ew_FormatNumber($this->_1_Erradicacion_en_dia_festivo->EditValue, -2, -1, -2, 0);
 
 			// 1_Espera_helicoptero_Helistar
 			$this->_1_Espera_helicoptero_Helistar->EditAttrs["class"] = "form-control";
 			$this->_1_Espera_helicoptero_Helistar->EditCustomAttributes = "";
-			$this->_1_Espera_helicoptero_Helistar->EditValue = $this->_1_Espera_helicoptero_Helistar->CurrentValue;
-			$this->_1_Espera_helicoptero_Helistar->ViewCustomAttributes = "";
+			$this->_1_Espera_helicoptero_Helistar->EditValue = ew_HtmlEncode($this->_1_Espera_helicoptero_Helistar->CurrentValue);
+			$this->_1_Espera_helicoptero_Helistar->PlaceHolder = ew_RemoveHtml($this->_1_Espera_helicoptero_Helistar->FldCaption());
+			if (strval($this->_1_Espera_helicoptero_Helistar->EditValue) <> "" && is_numeric($this->_1_Espera_helicoptero_Helistar->EditValue)) $this->_1_Espera_helicoptero_Helistar->EditValue = ew_FormatNumber($this->_1_Espera_helicoptero_Helistar->EditValue, -2, -1, -2, 0);
 
 			// 1_Extraccion
 			$this->_1_Extraccion->EditAttrs["class"] = "form-control";
 			$this->_1_Extraccion->EditCustomAttributes = "";
-			$this->_1_Extraccion->EditValue = $this->_1_Extraccion->CurrentValue;
-			$this->_1_Extraccion->ViewCustomAttributes = "";
+			$this->_1_Extraccion->EditValue = ew_HtmlEncode($this->_1_Extraccion->CurrentValue);
+			$this->_1_Extraccion->PlaceHolder = ew_RemoveHtml($this->_1_Extraccion->FldCaption());
+			if (strval($this->_1_Extraccion->EditValue) <> "" && is_numeric($this->_1_Extraccion->EditValue)) $this->_1_Extraccion->EditValue = ew_FormatNumber($this->_1_Extraccion->EditValue, -2, -1, -2, 0);
 
 			// 1_Firma_contrato_GME
 			$this->_1_Firma_contrato_GME->EditAttrs["class"] = "form-control";
 			$this->_1_Firma_contrato_GME->EditCustomAttributes = "";
-			$this->_1_Firma_contrato_GME->EditValue = $this->_1_Firma_contrato_GME->CurrentValue;
-			$this->_1_Firma_contrato_GME->ViewCustomAttributes = "";
+			$this->_1_Firma_contrato_GME->EditValue = ew_HtmlEncode($this->_1_Firma_contrato_GME->CurrentValue);
+			$this->_1_Firma_contrato_GME->PlaceHolder = ew_RemoveHtml($this->_1_Firma_contrato_GME->FldCaption());
+			if (strval($this->_1_Firma_contrato_GME->EditValue) <> "" && is_numeric($this->_1_Firma_contrato_GME->EditValue)) $this->_1_Firma_contrato_GME->EditValue = ew_FormatNumber($this->_1_Firma_contrato_GME->EditValue, -2, -1, -2, 0);
 
 			// 1_Induccion_Apoyo_Zonal
 			$this->_1_Induccion_Apoyo_Zonal->EditAttrs["class"] = "form-control";
 			$this->_1_Induccion_Apoyo_Zonal->EditCustomAttributes = "";
-			$this->_1_Induccion_Apoyo_Zonal->EditValue = $this->_1_Induccion_Apoyo_Zonal->CurrentValue;
-			$this->_1_Induccion_Apoyo_Zonal->ViewCustomAttributes = "";
+			$this->_1_Induccion_Apoyo_Zonal->EditValue = ew_HtmlEncode($this->_1_Induccion_Apoyo_Zonal->CurrentValue);
+			$this->_1_Induccion_Apoyo_Zonal->PlaceHolder = ew_RemoveHtml($this->_1_Induccion_Apoyo_Zonal->FldCaption());
+			if (strval($this->_1_Induccion_Apoyo_Zonal->EditValue) <> "" && is_numeric($this->_1_Induccion_Apoyo_Zonal->EditValue)) $this->_1_Induccion_Apoyo_Zonal->EditValue = ew_FormatNumber($this->_1_Induccion_Apoyo_Zonal->EditValue, -2, -1, -2, 0);
 
 			// 1_Insercion
 			$this->_1_Insercion->EditAttrs["class"] = "form-control";
 			$this->_1_Insercion->EditCustomAttributes = "";
-			$this->_1_Insercion->EditValue = $this->_1_Insercion->CurrentValue;
-			$this->_1_Insercion->ViewCustomAttributes = "";
+			$this->_1_Insercion->EditValue = ew_HtmlEncode($this->_1_Insercion->CurrentValue);
+			$this->_1_Insercion->PlaceHolder = ew_RemoveHtml($this->_1_Insercion->FldCaption());
+			if (strval($this->_1_Insercion->EditValue) <> "" && is_numeric($this->_1_Insercion->EditValue)) $this->_1_Insercion->EditValue = ew_FormatNumber($this->_1_Insercion->EditValue, -2, -1, -2, 0);
 
 			// 1_Llegada_GME_a_su_lugar_de_Origen_fin_fase
 			$this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->EditAttrs["class"] = "form-control";
 			$this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->EditCustomAttributes = "";
-			$this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->EditValue = $this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->CurrentValue;
-			$this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->ViewCustomAttributes = "";
+			$this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->EditValue = ew_HtmlEncode($this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->CurrentValue);
+			$this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->PlaceHolder = ew_RemoveHtml($this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->FldCaption());
+			if (strval($this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->EditValue) <> "" && is_numeric($this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->EditValue)) $this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->EditValue = ew_FormatNumber($this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->EditValue, -2, -1, -2, 0);
 
 			// 1_Novedad_apoyo_zonal
 			$this->_1_Novedad_apoyo_zonal->EditAttrs["class"] = "form-control";
 			$this->_1_Novedad_apoyo_zonal->EditCustomAttributes = "";
-			$this->_1_Novedad_apoyo_zonal->EditValue = $this->_1_Novedad_apoyo_zonal->CurrentValue;
-			$this->_1_Novedad_apoyo_zonal->ViewCustomAttributes = "";
+			$this->_1_Novedad_apoyo_zonal->EditValue = ew_HtmlEncode($this->_1_Novedad_apoyo_zonal->CurrentValue);
+			$this->_1_Novedad_apoyo_zonal->PlaceHolder = ew_RemoveHtml($this->_1_Novedad_apoyo_zonal->FldCaption());
+			if (strval($this->_1_Novedad_apoyo_zonal->EditValue) <> "" && is_numeric($this->_1_Novedad_apoyo_zonal->EditValue)) $this->_1_Novedad_apoyo_zonal->EditValue = ew_FormatNumber($this->_1_Novedad_apoyo_zonal->EditValue, -2, -1, -2, 0);
 
 			// 1_Novedad_enfermero
 			$this->_1_Novedad_enfermero->EditAttrs["class"] = "form-control";
 			$this->_1_Novedad_enfermero->EditCustomAttributes = "";
-			$this->_1_Novedad_enfermero->EditValue = $this->_1_Novedad_enfermero->CurrentValue;
-			$this->_1_Novedad_enfermero->ViewCustomAttributes = "";
+			$this->_1_Novedad_enfermero->EditValue = ew_HtmlEncode($this->_1_Novedad_enfermero->CurrentValue);
+			$this->_1_Novedad_enfermero->PlaceHolder = ew_RemoveHtml($this->_1_Novedad_enfermero->FldCaption());
+			if (strval($this->_1_Novedad_enfermero->EditValue) <> "" && is_numeric($this->_1_Novedad_enfermero->EditValue)) $this->_1_Novedad_enfermero->EditValue = ew_FormatNumber($this->_1_Novedad_enfermero->EditValue, -2, -1, -2, 0);
 
 			// 1_Punto_fuera_del_area_de_erradicacion
 			$this->_1_Punto_fuera_del_area_de_erradicacion->EditAttrs["class"] = "form-control";
 			$this->_1_Punto_fuera_del_area_de_erradicacion->EditCustomAttributes = "";
-			$this->_1_Punto_fuera_del_area_de_erradicacion->EditValue = $this->_1_Punto_fuera_del_area_de_erradicacion->CurrentValue;
-			$this->_1_Punto_fuera_del_area_de_erradicacion->ViewCustomAttributes = "";
+			$this->_1_Punto_fuera_del_area_de_erradicacion->EditValue = ew_HtmlEncode($this->_1_Punto_fuera_del_area_de_erradicacion->CurrentValue);
+			$this->_1_Punto_fuera_del_area_de_erradicacion->PlaceHolder = ew_RemoveHtml($this->_1_Punto_fuera_del_area_de_erradicacion->FldCaption());
+			if (strval($this->_1_Punto_fuera_del_area_de_erradicacion->EditValue) <> "" && is_numeric($this->_1_Punto_fuera_del_area_de_erradicacion->EditValue)) $this->_1_Punto_fuera_del_area_de_erradicacion->EditValue = ew_FormatNumber($this->_1_Punto_fuera_del_area_de_erradicacion->EditValue, -2, -1, -2, 0);
 
 			// 1_Transporte_bus
 			$this->_1_Transporte_bus->EditAttrs["class"] = "form-control";
 			$this->_1_Transporte_bus->EditCustomAttributes = "";
-			$this->_1_Transporte_bus->EditValue = $this->_1_Transporte_bus->CurrentValue;
-			$this->_1_Transporte_bus->ViewCustomAttributes = "";
+			$this->_1_Transporte_bus->EditValue = ew_HtmlEncode($this->_1_Transporte_bus->CurrentValue);
+			$this->_1_Transporte_bus->PlaceHolder = ew_RemoveHtml($this->_1_Transporte_bus->FldCaption());
+			if (strval($this->_1_Transporte_bus->EditValue) <> "" && is_numeric($this->_1_Transporte_bus->EditValue)) $this->_1_Transporte_bus->EditValue = ew_FormatNumber($this->_1_Transporte_bus->EditValue, -2, -1, -2, 0);
 
 			// 1_Traslado_apoyo_zonal
 			$this->_1_Traslado_apoyo_zonal->EditAttrs["class"] = "form-control";
 			$this->_1_Traslado_apoyo_zonal->EditCustomAttributes = "";
-			$this->_1_Traslado_apoyo_zonal->EditValue = $this->_1_Traslado_apoyo_zonal->CurrentValue;
-			$this->_1_Traslado_apoyo_zonal->ViewCustomAttributes = "";
+			$this->_1_Traslado_apoyo_zonal->EditValue = ew_HtmlEncode($this->_1_Traslado_apoyo_zonal->CurrentValue);
+			$this->_1_Traslado_apoyo_zonal->PlaceHolder = ew_RemoveHtml($this->_1_Traslado_apoyo_zonal->FldCaption());
+			if (strval($this->_1_Traslado_apoyo_zonal->EditValue) <> "" && is_numeric($this->_1_Traslado_apoyo_zonal->EditValue)) $this->_1_Traslado_apoyo_zonal->EditValue = ew_FormatNumber($this->_1_Traslado_apoyo_zonal->EditValue, -2, -1, -2, 0);
 
 			// 1_Traslado_area_vivac
 			$this->_1_Traslado_area_vivac->EditAttrs["class"] = "form-control";
 			$this->_1_Traslado_area_vivac->EditCustomAttributes = "";
-			$this->_1_Traslado_area_vivac->EditValue = $this->_1_Traslado_area_vivac->CurrentValue;
-			$this->_1_Traslado_area_vivac->ViewCustomAttributes = "";
+			$this->_1_Traslado_area_vivac->EditValue = ew_HtmlEncode($this->_1_Traslado_area_vivac->CurrentValue);
+			$this->_1_Traslado_area_vivac->PlaceHolder = ew_RemoveHtml($this->_1_Traslado_area_vivac->FldCaption());
+			if (strval($this->_1_Traslado_area_vivac->EditValue) <> "" && is_numeric($this->_1_Traslado_area_vivac->EditValue)) $this->_1_Traslado_area_vivac->EditValue = ew_FormatNumber($this->_1_Traslado_area_vivac->EditValue, -2, -1, -2, 0);
 
 			// Adm_Fuerza
 			$this->Adm_Fuerza->EditAttrs["class"] = "form-control";
 			$this->Adm_Fuerza->EditCustomAttributes = "";
-			$this->Adm_Fuerza->EditValue = $this->Adm_Fuerza->CurrentValue;
-			$this->Adm_Fuerza->ViewCustomAttributes = "";
+			$this->Adm_Fuerza->EditValue = ew_HtmlEncode($this->Adm_Fuerza->CurrentValue);
+			$this->Adm_Fuerza->PlaceHolder = ew_RemoveHtml($this->Adm_Fuerza->FldCaption());
+			if (strval($this->Adm_Fuerza->EditValue) <> "" && is_numeric($this->Adm_Fuerza->EditValue)) $this->Adm_Fuerza->EditValue = ew_FormatNumber($this->Adm_Fuerza->EditValue, -2, -1, -2, 0);
 
 			// 2_A_la_espera_definicion_nuevo_punto_FP
 			$this->_2_A_la_espera_definicion_nuevo_punto_FP->EditAttrs["class"] = "form-control";
 			$this->_2_A_la_espera_definicion_nuevo_punto_FP->EditCustomAttributes = "";
-			$this->_2_A_la_espera_definicion_nuevo_punto_FP->EditValue = $this->_2_A_la_espera_definicion_nuevo_punto_FP->CurrentValue;
-			$this->_2_A_la_espera_definicion_nuevo_punto_FP->ViewCustomAttributes = "";
+			$this->_2_A_la_espera_definicion_nuevo_punto_FP->EditValue = ew_HtmlEncode($this->_2_A_la_espera_definicion_nuevo_punto_FP->CurrentValue);
+			$this->_2_A_la_espera_definicion_nuevo_punto_FP->PlaceHolder = ew_RemoveHtml($this->_2_A_la_espera_definicion_nuevo_punto_FP->FldCaption());
+			if (strval($this->_2_A_la_espera_definicion_nuevo_punto_FP->EditValue) <> "" && is_numeric($this->_2_A_la_espera_definicion_nuevo_punto_FP->EditValue)) $this->_2_A_la_espera_definicion_nuevo_punto_FP->EditValue = ew_FormatNumber($this->_2_A_la_espera_definicion_nuevo_punto_FP->EditValue, -2, -1, -2, 0);
 
 			// 2_Espera_helicoptero_FP_de_seguridad
 			$this->_2_Espera_helicoptero_FP_de_seguridad->EditAttrs["class"] = "form-control";
 			$this->_2_Espera_helicoptero_FP_de_seguridad->EditCustomAttributes = "";
-			$this->_2_Espera_helicoptero_FP_de_seguridad->EditValue = $this->_2_Espera_helicoptero_FP_de_seguridad->CurrentValue;
-			$this->_2_Espera_helicoptero_FP_de_seguridad->ViewCustomAttributes = "";
+			$this->_2_Espera_helicoptero_FP_de_seguridad->EditValue = ew_HtmlEncode($this->_2_Espera_helicoptero_FP_de_seguridad->CurrentValue);
+			$this->_2_Espera_helicoptero_FP_de_seguridad->PlaceHolder = ew_RemoveHtml($this->_2_Espera_helicoptero_FP_de_seguridad->FldCaption());
+			if (strval($this->_2_Espera_helicoptero_FP_de_seguridad->EditValue) <> "" && is_numeric($this->_2_Espera_helicoptero_FP_de_seguridad->EditValue)) $this->_2_Espera_helicoptero_FP_de_seguridad->EditValue = ew_FormatNumber($this->_2_Espera_helicoptero_FP_de_seguridad->EditValue, -2, -1, -2, 0);
 
 			// 2_Espera_helicoptero_FP_que_abastece
 			$this->_2_Espera_helicoptero_FP_que_abastece->EditAttrs["class"] = "form-control";
 			$this->_2_Espera_helicoptero_FP_que_abastece->EditCustomAttributes = "";
-			$this->_2_Espera_helicoptero_FP_que_abastece->EditValue = $this->_2_Espera_helicoptero_FP_que_abastece->CurrentValue;
-			$this->_2_Espera_helicoptero_FP_que_abastece->ViewCustomAttributes = "";
+			$this->_2_Espera_helicoptero_FP_que_abastece->EditValue = ew_HtmlEncode($this->_2_Espera_helicoptero_FP_que_abastece->CurrentValue);
+			$this->_2_Espera_helicoptero_FP_que_abastece->PlaceHolder = ew_RemoveHtml($this->_2_Espera_helicoptero_FP_que_abastece->FldCaption());
+			if (strval($this->_2_Espera_helicoptero_FP_que_abastece->EditValue) <> "" && is_numeric($this->_2_Espera_helicoptero_FP_que_abastece->EditValue)) $this->_2_Espera_helicoptero_FP_que_abastece->EditValue = ew_FormatNumber($this->_2_Espera_helicoptero_FP_que_abastece->EditValue, -2, -1, -2, 0);
 
 			// 2_Induccion_FP
 			$this->_2_Induccion_FP->EditAttrs["class"] = "form-control";
 			$this->_2_Induccion_FP->EditCustomAttributes = "";
-			$this->_2_Induccion_FP->EditValue = $this->_2_Induccion_FP->CurrentValue;
-			$this->_2_Induccion_FP->ViewCustomAttributes = "";
+			$this->_2_Induccion_FP->EditValue = ew_HtmlEncode($this->_2_Induccion_FP->CurrentValue);
+			$this->_2_Induccion_FP->PlaceHolder = ew_RemoveHtml($this->_2_Induccion_FP->FldCaption());
+			if (strval($this->_2_Induccion_FP->EditValue) <> "" && is_numeric($this->_2_Induccion_FP->EditValue)) $this->_2_Induccion_FP->EditValue = ew_FormatNumber($this->_2_Induccion_FP->EditValue, -2, -1, -2, 0);
 
 			// 2_Novedad_canino_o_del_grupo_de_deteccion
 			$this->_2_Novedad_canino_o_del_grupo_de_deteccion->EditAttrs["class"] = "form-control";
 			$this->_2_Novedad_canino_o_del_grupo_de_deteccion->EditCustomAttributes = "";
-			$this->_2_Novedad_canino_o_del_grupo_de_deteccion->EditValue = $this->_2_Novedad_canino_o_del_grupo_de_deteccion->CurrentValue;
-			$this->_2_Novedad_canino_o_del_grupo_de_deteccion->ViewCustomAttributes = "";
+			$this->_2_Novedad_canino_o_del_grupo_de_deteccion->EditValue = ew_HtmlEncode($this->_2_Novedad_canino_o_del_grupo_de_deteccion->CurrentValue);
+			$this->_2_Novedad_canino_o_del_grupo_de_deteccion->PlaceHolder = ew_RemoveHtml($this->_2_Novedad_canino_o_del_grupo_de_deteccion->FldCaption());
+			if (strval($this->_2_Novedad_canino_o_del_grupo_de_deteccion->EditValue) <> "" && is_numeric($this->_2_Novedad_canino_o_del_grupo_de_deteccion->EditValue)) $this->_2_Novedad_canino_o_del_grupo_de_deteccion->EditValue = ew_FormatNumber($this->_2_Novedad_canino_o_del_grupo_de_deteccion->EditValue, -2, -1, -2, 0);
 
 			// 2_Problemas_fuerza_publica
 			$this->_2_Problemas_fuerza_publica->EditAttrs["class"] = "form-control";
 			$this->_2_Problemas_fuerza_publica->EditCustomAttributes = "";
-			$this->_2_Problemas_fuerza_publica->EditValue = $this->_2_Problemas_fuerza_publica->CurrentValue;
-			$this->_2_Problemas_fuerza_publica->ViewCustomAttributes = "";
+			$this->_2_Problemas_fuerza_publica->EditValue = ew_HtmlEncode($this->_2_Problemas_fuerza_publica->CurrentValue);
+			$this->_2_Problemas_fuerza_publica->PlaceHolder = ew_RemoveHtml($this->_2_Problemas_fuerza_publica->FldCaption());
+			if (strval($this->_2_Problemas_fuerza_publica->EditValue) <> "" && is_numeric($this->_2_Problemas_fuerza_publica->EditValue)) $this->_2_Problemas_fuerza_publica->EditValue = ew_FormatNumber($this->_2_Problemas_fuerza_publica->EditValue, -2, -1, -2, 0);
 
 			// 2_Sin_seguridad
 			$this->_2_Sin_seguridad->EditAttrs["class"] = "form-control";
 			$this->_2_Sin_seguridad->EditCustomAttributes = "";
-			$this->_2_Sin_seguridad->EditValue = $this->_2_Sin_seguridad->CurrentValue;
-			$this->_2_Sin_seguridad->ViewCustomAttributes = "";
+			$this->_2_Sin_seguridad->EditValue = ew_HtmlEncode($this->_2_Sin_seguridad->CurrentValue);
+			$this->_2_Sin_seguridad->PlaceHolder = ew_RemoveHtml($this->_2_Sin_seguridad->FldCaption());
+			if (strval($this->_2_Sin_seguridad->EditValue) <> "" && is_numeric($this->_2_Sin_seguridad->EditValue)) $this->_2_Sin_seguridad->EditValue = ew_FormatNumber($this->_2_Sin_seguridad->EditValue, -2, -1, -2, 0);
 
 			// Sit_Seguridad
 			$this->Sit_Seguridad->EditAttrs["class"] = "form-control";
 			$this->Sit_Seguridad->EditCustomAttributes = "";
-			$this->Sit_Seguridad->EditValue = $this->Sit_Seguridad->CurrentValue;
-			$this->Sit_Seguridad->ViewCustomAttributes = "";
+			$this->Sit_Seguridad->EditValue = ew_HtmlEncode($this->Sit_Seguridad->CurrentValue);
+			$this->Sit_Seguridad->PlaceHolder = ew_RemoveHtml($this->Sit_Seguridad->FldCaption());
+			if (strval($this->Sit_Seguridad->EditValue) <> "" && is_numeric($this->Sit_Seguridad->EditValue)) $this->Sit_Seguridad->EditValue = ew_FormatNumber($this->Sit_Seguridad->EditValue, -2, -1, -2, 0);
 
 			// 3_AEI_controlado
 			$this->_3_AEI_controlado->EditAttrs["class"] = "form-control";
 			$this->_3_AEI_controlado->EditCustomAttributes = "";
-			$this->_3_AEI_controlado->EditValue = $this->_3_AEI_controlado->CurrentValue;
-			$this->_3_AEI_controlado->ViewCustomAttributes = "";
+			$this->_3_AEI_controlado->EditValue = ew_HtmlEncode($this->_3_AEI_controlado->CurrentValue);
+			$this->_3_AEI_controlado->PlaceHolder = ew_RemoveHtml($this->_3_AEI_controlado->FldCaption());
+			if (strval($this->_3_AEI_controlado->EditValue) <> "" && is_numeric($this->_3_AEI_controlado->EditValue)) $this->_3_AEI_controlado->EditValue = ew_FormatNumber($this->_3_AEI_controlado->EditValue, -2, -1, -2, 0);
 
 			// 3_AEI_no_controlado
 			$this->_3_AEI_no_controlado->EditAttrs["class"] = "form-control";
 			$this->_3_AEI_no_controlado->EditCustomAttributes = "";
-			$this->_3_AEI_no_controlado->EditValue = $this->_3_AEI_no_controlado->CurrentValue;
-			$this->_3_AEI_no_controlado->ViewCustomAttributes = "";
+			$this->_3_AEI_no_controlado->EditValue = ew_HtmlEncode($this->_3_AEI_no_controlado->CurrentValue);
+			$this->_3_AEI_no_controlado->PlaceHolder = ew_RemoveHtml($this->_3_AEI_no_controlado->FldCaption());
+			if (strval($this->_3_AEI_no_controlado->EditValue) <> "" && is_numeric($this->_3_AEI_no_controlado->EditValue)) $this->_3_AEI_no_controlado->EditValue = ew_FormatNumber($this->_3_AEI_no_controlado->EditValue, -2, -1, -2, 0);
 
 			// 3_Bloqueo_parcial_de_la_comunidad
 			$this->_3_Bloqueo_parcial_de_la_comunidad->EditAttrs["class"] = "form-control";
 			$this->_3_Bloqueo_parcial_de_la_comunidad->EditCustomAttributes = "";
-			$this->_3_Bloqueo_parcial_de_la_comunidad->EditValue = $this->_3_Bloqueo_parcial_de_la_comunidad->CurrentValue;
-			$this->_3_Bloqueo_parcial_de_la_comunidad->ViewCustomAttributes = "";
+			$this->_3_Bloqueo_parcial_de_la_comunidad->EditValue = ew_HtmlEncode($this->_3_Bloqueo_parcial_de_la_comunidad->CurrentValue);
+			$this->_3_Bloqueo_parcial_de_la_comunidad->PlaceHolder = ew_RemoveHtml($this->_3_Bloqueo_parcial_de_la_comunidad->FldCaption());
+			if (strval($this->_3_Bloqueo_parcial_de_la_comunidad->EditValue) <> "" && is_numeric($this->_3_Bloqueo_parcial_de_la_comunidad->EditValue)) $this->_3_Bloqueo_parcial_de_la_comunidad->EditValue = ew_FormatNumber($this->_3_Bloqueo_parcial_de_la_comunidad->EditValue, -2, -1, -2, 0);
 
 			// 3_Bloqueo_total_de_la_comunidad
 			$this->_3_Bloqueo_total_de_la_comunidad->EditAttrs["class"] = "form-control";
 			$this->_3_Bloqueo_total_de_la_comunidad->EditCustomAttributes = "";
-			$this->_3_Bloqueo_total_de_la_comunidad->EditValue = $this->_3_Bloqueo_total_de_la_comunidad->CurrentValue;
-			$this->_3_Bloqueo_total_de_la_comunidad->ViewCustomAttributes = "";
+			$this->_3_Bloqueo_total_de_la_comunidad->EditValue = ew_HtmlEncode($this->_3_Bloqueo_total_de_la_comunidad->CurrentValue);
+			$this->_3_Bloqueo_total_de_la_comunidad->PlaceHolder = ew_RemoveHtml($this->_3_Bloqueo_total_de_la_comunidad->FldCaption());
+			if (strval($this->_3_Bloqueo_total_de_la_comunidad->EditValue) <> "" && is_numeric($this->_3_Bloqueo_total_de_la_comunidad->EditValue)) $this->_3_Bloqueo_total_de_la_comunidad->EditValue = ew_FormatNumber($this->_3_Bloqueo_total_de_la_comunidad->EditValue, -2, -1, -2, 0);
 
 			// 3_Combate
 			$this->_3_Combate->EditAttrs["class"] = "form-control";
 			$this->_3_Combate->EditCustomAttributes = "";
-			$this->_3_Combate->EditValue = $this->_3_Combate->CurrentValue;
-			$this->_3_Combate->ViewCustomAttributes = "";
+			$this->_3_Combate->EditValue = ew_HtmlEncode($this->_3_Combate->CurrentValue);
+			$this->_3_Combate->PlaceHolder = ew_RemoveHtml($this->_3_Combate->FldCaption());
+			if (strval($this->_3_Combate->EditValue) <> "" && is_numeric($this->_3_Combate->EditValue)) $this->_3_Combate->EditValue = ew_FormatNumber($this->_3_Combate->EditValue, -2, -1, -2, 0);
 
 			// 3_Hostigamiento
 			$this->_3_Hostigamiento->EditAttrs["class"] = "form-control";
 			$this->_3_Hostigamiento->EditCustomAttributes = "";
-			$this->_3_Hostigamiento->EditValue = $this->_3_Hostigamiento->CurrentValue;
-			$this->_3_Hostigamiento->ViewCustomAttributes = "";
+			$this->_3_Hostigamiento->EditValue = ew_HtmlEncode($this->_3_Hostigamiento->CurrentValue);
+			$this->_3_Hostigamiento->PlaceHolder = ew_RemoveHtml($this->_3_Hostigamiento->FldCaption());
+			if (strval($this->_3_Hostigamiento->EditValue) <> "" && is_numeric($this->_3_Hostigamiento->EditValue)) $this->_3_Hostigamiento->EditValue = ew_FormatNumber($this->_3_Hostigamiento->EditValue, -2, -1, -2, 0);
 
 			// 3_MAP_Controlada
 			$this->_3_MAP_Controlada->EditAttrs["class"] = "form-control";
 			$this->_3_MAP_Controlada->EditCustomAttributes = "";
-			$this->_3_MAP_Controlada->EditValue = $this->_3_MAP_Controlada->CurrentValue;
-			$this->_3_MAP_Controlada->ViewCustomAttributes = "";
+			$this->_3_MAP_Controlada->EditValue = ew_HtmlEncode($this->_3_MAP_Controlada->CurrentValue);
+			$this->_3_MAP_Controlada->PlaceHolder = ew_RemoveHtml($this->_3_MAP_Controlada->FldCaption());
+			if (strval($this->_3_MAP_Controlada->EditValue) <> "" && is_numeric($this->_3_MAP_Controlada->EditValue)) $this->_3_MAP_Controlada->EditValue = ew_FormatNumber($this->_3_MAP_Controlada->EditValue, -2, -1, -2, 0);
 
 			// 3_MAP_No_controlada
 			$this->_3_MAP_No_controlada->EditAttrs["class"] = "form-control";
 			$this->_3_MAP_No_controlada->EditCustomAttributes = "";
-			$this->_3_MAP_No_controlada->EditValue = $this->_3_MAP_No_controlada->CurrentValue;
-			$this->_3_MAP_No_controlada->ViewCustomAttributes = "";
+			$this->_3_MAP_No_controlada->EditValue = ew_HtmlEncode($this->_3_MAP_No_controlada->CurrentValue);
+			$this->_3_MAP_No_controlada->PlaceHolder = ew_RemoveHtml($this->_3_MAP_No_controlada->FldCaption());
+			if (strval($this->_3_MAP_No_controlada->EditValue) <> "" && is_numeric($this->_3_MAP_No_controlada->EditValue)) $this->_3_MAP_No_controlada->EditValue = ew_FormatNumber($this->_3_MAP_No_controlada->EditValue, -2, -1, -2, 0);
 
 			// 3_MUSE
 			$this->_3_MUSE->EditAttrs["class"] = "form-control";
 			$this->_3_MUSE->EditCustomAttributes = "";
-			$this->_3_MUSE->EditValue = $this->_3_MUSE->CurrentValue;
-			$this->_3_MUSE->ViewCustomAttributes = "";
+			$this->_3_MUSE->EditValue = ew_HtmlEncode($this->_3_MUSE->CurrentValue);
+			$this->_3_MUSE->PlaceHolder = ew_RemoveHtml($this->_3_MUSE->FldCaption());
+			if (strval($this->_3_MUSE->EditValue) <> "" && is_numeric($this->_3_MUSE->EditValue)) $this->_3_MUSE->EditValue = ew_FormatNumber($this->_3_MUSE->EditValue, -2, -1, -2, 0);
 
 			// 3_Operaciones_de_seguridad
 			$this->_3_Operaciones_de_seguridad->EditAttrs["class"] = "form-control";
 			$this->_3_Operaciones_de_seguridad->EditCustomAttributes = "";
-			$this->_3_Operaciones_de_seguridad->EditValue = $this->_3_Operaciones_de_seguridad->CurrentValue;
-			$this->_3_Operaciones_de_seguridad->ViewCustomAttributes = "";
-
-			// LATITUD_segurid
-			$this->LATITUD_segurid->EditAttrs["class"] = "form-control";
-			$this->LATITUD_segurid->EditCustomAttributes = "";
-			$this->LATITUD_segurid->EditValue = $this->LATITUD_segurid->CurrentValue;
-			$this->LATITUD_segurid->ViewCustomAttributes = "";
+			$this->_3_Operaciones_de_seguridad->EditValue = ew_HtmlEncode($this->_3_Operaciones_de_seguridad->CurrentValue);
+			$this->_3_Operaciones_de_seguridad->PlaceHolder = ew_RemoveHtml($this->_3_Operaciones_de_seguridad->FldCaption());
+			if (strval($this->_3_Operaciones_de_seguridad->EditValue) <> "" && is_numeric($this->_3_Operaciones_de_seguridad->EditValue)) $this->_3_Operaciones_de_seguridad->EditValue = ew_FormatNumber($this->_3_Operaciones_de_seguridad->EditValue, -2, -1, -2, 0);
 
 			// GRA_LAT_segurid
 			$this->GRA_LAT_segurid->EditAttrs["class"] = "form-control";
 			$this->GRA_LAT_segurid->EditCustomAttributes = "";
-			$this->GRA_LAT_segurid->EditValue = $this->GRA_LAT_segurid->CurrentValue;
-			$this->GRA_LAT_segurid->ViewCustomAttributes = "";
+			$this->GRA_LAT_segurid->EditValue = ew_HtmlEncode($this->GRA_LAT_segurid->CurrentValue);
+			$this->GRA_LAT_segurid->PlaceHolder = ew_RemoveHtml($this->GRA_LAT_segurid->FldCaption());
 
 			// MIN_LAT_segurid
 			$this->MIN_LAT_segurid->EditAttrs["class"] = "form-control";
 			$this->MIN_LAT_segurid->EditCustomAttributes = "";
-			$this->MIN_LAT_segurid->EditValue = $this->MIN_LAT_segurid->CurrentValue;
-			$this->MIN_LAT_segurid->ViewCustomAttributes = "";
+			$this->MIN_LAT_segurid->EditValue = ew_HtmlEncode($this->MIN_LAT_segurid->CurrentValue);
+			$this->MIN_LAT_segurid->PlaceHolder = ew_RemoveHtml($this->MIN_LAT_segurid->FldCaption());
 
 			// SEG_LAT_segurid
 			$this->SEG_LAT_segurid->EditAttrs["class"] = "form-control";
 			$this->SEG_LAT_segurid->EditCustomAttributes = "";
-			$this->SEG_LAT_segurid->EditValue = $this->SEG_LAT_segurid->CurrentValue;
-			$this->SEG_LAT_segurid->ViewCustomAttributes = "";
+			$this->SEG_LAT_segurid->EditValue = ew_HtmlEncode($this->SEG_LAT_segurid->CurrentValue);
+			$this->SEG_LAT_segurid->PlaceHolder = ew_RemoveHtml($this->SEG_LAT_segurid->FldCaption());
+			if (strval($this->SEG_LAT_segurid->EditValue) <> "" && is_numeric($this->SEG_LAT_segurid->EditValue)) $this->SEG_LAT_segurid->EditValue = ew_FormatNumber($this->SEG_LAT_segurid->EditValue, -2, -1, -2, 0);
 
 			// GRA_LONG_seguri
 			$this->GRA_LONG_seguri->EditAttrs["class"] = "form-control";
 			$this->GRA_LONG_seguri->EditCustomAttributes = "";
-			$this->GRA_LONG_seguri->EditValue = $this->GRA_LONG_seguri->CurrentValue;
-			$this->GRA_LONG_seguri->ViewCustomAttributes = "";
+			$this->GRA_LONG_seguri->EditValue = ew_HtmlEncode($this->GRA_LONG_seguri->CurrentValue);
+			$this->GRA_LONG_seguri->PlaceHolder = ew_RemoveHtml($this->GRA_LONG_seguri->FldCaption());
 
 			// MIN_LONG_seguri
 			$this->MIN_LONG_seguri->EditAttrs["class"] = "form-control";
 			$this->MIN_LONG_seguri->EditCustomAttributes = "";
-			$this->MIN_LONG_seguri->EditValue = $this->MIN_LONG_seguri->CurrentValue;
-			$this->MIN_LONG_seguri->ViewCustomAttributes = "";
+			$this->MIN_LONG_seguri->EditValue = ew_HtmlEncode($this->MIN_LONG_seguri->CurrentValue);
+			$this->MIN_LONG_seguri->PlaceHolder = ew_RemoveHtml($this->MIN_LONG_seguri->FldCaption());
 
 			// SEG_LONG_seguri
 			$this->SEG_LONG_seguri->EditAttrs["class"] = "form-control";
 			$this->SEG_LONG_seguri->EditCustomAttributes = "";
-			$this->SEG_LONG_seguri->EditValue = $this->SEG_LONG_seguri->CurrentValue;
-			$this->SEG_LONG_seguri->ViewCustomAttributes = "";
+			$this->SEG_LONG_seguri->EditValue = ew_HtmlEncode($this->SEG_LONG_seguri->CurrentValue);
+			$this->SEG_LONG_seguri->PlaceHolder = ew_RemoveHtml($this->SEG_LONG_seguri->FldCaption());
+			if (strval($this->SEG_LONG_seguri->EditValue) <> "" && is_numeric($this->SEG_LONG_seguri->EditValue)) $this->SEG_LONG_seguri->EditValue = ew_FormatNumber($this->SEG_LONG_seguri->EditValue, -2, -1, -2, 0);
 
 			// Novedad
 			$this->Novedad->EditAttrs["class"] = "form-control";
 			$this->Novedad->EditCustomAttributes = "";
-			$this->Novedad->EditValue = $this->Novedad->CurrentValue;
-			$this->Novedad->ViewCustomAttributes = "";
+			$this->Novedad->EditValue = ew_HtmlEncode($this->Novedad->CurrentValue);
+			$this->Novedad->PlaceHolder = ew_RemoveHtml($this->Novedad->FldCaption());
+			if (strval($this->Novedad->EditValue) <> "" && is_numeric($this->Novedad->EditValue)) $this->Novedad->EditValue = ew_FormatNumber($this->Novedad->EditValue, -2, -1, -2, 0);
 
 			// 4_Epidemia
 			$this->_4_Epidemia->EditAttrs["class"] = "form-control";
 			$this->_4_Epidemia->EditCustomAttributes = "";
-			$this->_4_Epidemia->EditValue = $this->_4_Epidemia->CurrentValue;
-			$this->_4_Epidemia->ViewCustomAttributes = "";
+			$this->_4_Epidemia->EditValue = ew_HtmlEncode($this->_4_Epidemia->CurrentValue);
+			$this->_4_Epidemia->PlaceHolder = ew_RemoveHtml($this->_4_Epidemia->FldCaption());
+			if (strval($this->_4_Epidemia->EditValue) <> "" && is_numeric($this->_4_Epidemia->EditValue)) $this->_4_Epidemia->EditValue = ew_FormatNumber($this->_4_Epidemia->EditValue, -2, -1, -2, 0);
 
 			// 4_Novedad_climatologica
 			$this->_4_Novedad_climatologica->EditAttrs["class"] = "form-control";
 			$this->_4_Novedad_climatologica->EditCustomAttributes = "";
-			$this->_4_Novedad_climatologica->EditValue = $this->_4_Novedad_climatologica->CurrentValue;
-			$this->_4_Novedad_climatologica->ViewCustomAttributes = "";
+			$this->_4_Novedad_climatologica->EditValue = ew_HtmlEncode($this->_4_Novedad_climatologica->CurrentValue);
+			$this->_4_Novedad_climatologica->PlaceHolder = ew_RemoveHtml($this->_4_Novedad_climatologica->FldCaption());
+			if (strval($this->_4_Novedad_climatologica->EditValue) <> "" && is_numeric($this->_4_Novedad_climatologica->EditValue)) $this->_4_Novedad_climatologica->EditValue = ew_FormatNumber($this->_4_Novedad_climatologica->EditValue, -2, -1, -2, 0);
 
 			// 4_Registro_de_cultivos
 			$this->_4_Registro_de_cultivos->EditAttrs["class"] = "form-control";
 			$this->_4_Registro_de_cultivos->EditCustomAttributes = "";
-			$this->_4_Registro_de_cultivos->EditValue = $this->_4_Registro_de_cultivos->CurrentValue;
-			$this->_4_Registro_de_cultivos->ViewCustomAttributes = "";
+			$this->_4_Registro_de_cultivos->EditValue = ew_HtmlEncode($this->_4_Registro_de_cultivos->CurrentValue);
+			$this->_4_Registro_de_cultivos->PlaceHolder = ew_RemoveHtml($this->_4_Registro_de_cultivos->FldCaption());
+			if (strval($this->_4_Registro_de_cultivos->EditValue) <> "" && is_numeric($this->_4_Registro_de_cultivos->EditValue)) $this->_4_Registro_de_cultivos->EditValue = ew_FormatNumber($this->_4_Registro_de_cultivos->EditValue, -2, -1, -2, 0);
 
 			// 4_Zona_con_cultivos_muy_dispersos
 			$this->_4_Zona_con_cultivos_muy_dispersos->EditAttrs["class"] = "form-control";
 			$this->_4_Zona_con_cultivos_muy_dispersos->EditCustomAttributes = "";
-			$this->_4_Zona_con_cultivos_muy_dispersos->EditValue = $this->_4_Zona_con_cultivos_muy_dispersos->CurrentValue;
-			$this->_4_Zona_con_cultivos_muy_dispersos->ViewCustomAttributes = "";
+			$this->_4_Zona_con_cultivos_muy_dispersos->EditValue = ew_HtmlEncode($this->_4_Zona_con_cultivos_muy_dispersos->CurrentValue);
+			$this->_4_Zona_con_cultivos_muy_dispersos->PlaceHolder = ew_RemoveHtml($this->_4_Zona_con_cultivos_muy_dispersos->FldCaption());
+			if (strval($this->_4_Zona_con_cultivos_muy_dispersos->EditValue) <> "" && is_numeric($this->_4_Zona_con_cultivos_muy_dispersos->EditValue)) $this->_4_Zona_con_cultivos_muy_dispersos->EditValue = ew_FormatNumber($this->_4_Zona_con_cultivos_muy_dispersos->EditValue, -2, -1, -2, 0);
 
 			// 4_Zona_de_cruce_de_rios_caudalosos
 			$this->_4_Zona_de_cruce_de_rios_caudalosos->EditAttrs["class"] = "form-control";
 			$this->_4_Zona_de_cruce_de_rios_caudalosos->EditCustomAttributes = "";
-			$this->_4_Zona_de_cruce_de_rios_caudalosos->EditValue = $this->_4_Zona_de_cruce_de_rios_caudalosos->CurrentValue;
-			$this->_4_Zona_de_cruce_de_rios_caudalosos->ViewCustomAttributes = "";
+			$this->_4_Zona_de_cruce_de_rios_caudalosos->EditValue = ew_HtmlEncode($this->_4_Zona_de_cruce_de_rios_caudalosos->CurrentValue);
+			$this->_4_Zona_de_cruce_de_rios_caudalosos->PlaceHolder = ew_RemoveHtml($this->_4_Zona_de_cruce_de_rios_caudalosos->FldCaption());
+			if (strval($this->_4_Zona_de_cruce_de_rios_caudalosos->EditValue) <> "" && is_numeric($this->_4_Zona_de_cruce_de_rios_caudalosos->EditValue)) $this->_4_Zona_de_cruce_de_rios_caudalosos->EditValue = ew_FormatNumber($this->_4_Zona_de_cruce_de_rios_caudalosos->EditValue, -2, -1, -2, 0);
 
 			// 4_Zona_sin_cultivos
 			$this->_4_Zona_sin_cultivos->EditAttrs["class"] = "form-control";
 			$this->_4_Zona_sin_cultivos->EditCustomAttributes = "";
-			$this->_4_Zona_sin_cultivos->EditValue = $this->_4_Zona_sin_cultivos->CurrentValue;
-			$this->_4_Zona_sin_cultivos->ViewCustomAttributes = "";
+			$this->_4_Zona_sin_cultivos->EditValue = ew_HtmlEncode($this->_4_Zona_sin_cultivos->CurrentValue);
+			$this->_4_Zona_sin_cultivos->PlaceHolder = ew_RemoveHtml($this->_4_Zona_sin_cultivos->FldCaption());
+			if (strval($this->_4_Zona_sin_cultivos->EditValue) <> "" && is_numeric($this->_4_Zona_sin_cultivos->EditValue)) $this->_4_Zona_sin_cultivos->EditValue = ew_FormatNumber($this->_4_Zona_sin_cultivos->EditValue, -2, -1, -2, 0);
 
 			// Num_Erra_Salen
 			$this->Num_Erra_Salen->EditAttrs["class"] = "form-control";
 			$this->Num_Erra_Salen->EditCustomAttributes = "";
-			$this->Num_Erra_Salen->EditValue = $this->Num_Erra_Salen->CurrentValue;
-			$this->Num_Erra_Salen->ViewCustomAttributes = "";
+			$this->Num_Erra_Salen->EditValue = ew_HtmlEncode($this->Num_Erra_Salen->CurrentValue);
+			$this->Num_Erra_Salen->PlaceHolder = ew_RemoveHtml($this->Num_Erra_Salen->FldCaption());
 
 			// Num_Erra_Quedan
 			$this->Num_Erra_Quedan->EditAttrs["class"] = "form-control";
 			$this->Num_Erra_Quedan->EditCustomAttributes = "";
-			$this->Num_Erra_Quedan->EditValue = $this->Num_Erra_Quedan->CurrentValue;
-			$this->Num_Erra_Quedan->ViewCustomAttributes = "";
+			$this->Num_Erra_Quedan->EditValue = ew_HtmlEncode($this->Num_Erra_Quedan->CurrentValue);
+			$this->Num_Erra_Quedan->PlaceHolder = ew_RemoveHtml($this->Num_Erra_Quedan->FldCaption());
 
 			// No_ENFERMERO
 			$this->No_ENFERMERO->EditAttrs["class"] = "form-control";
 			$this->No_ENFERMERO->EditCustomAttributes = "";
-			$this->No_ENFERMERO->EditValue = $this->No_ENFERMERO->CurrentValue;
-			$this->No_ENFERMERO->ViewCustomAttributes = "";
+			$this->No_ENFERMERO->EditValue = ew_HtmlEncode($this->No_ENFERMERO->CurrentValue);
+			$this->No_ENFERMERO->PlaceHolder = ew_RemoveHtml($this->No_ENFERMERO->FldCaption());
 
 			// NUM_FP
 			$this->NUM_FP->EditAttrs["class"] = "form-control";
 			$this->NUM_FP->EditCustomAttributes = "";
-			$this->NUM_FP->EditValue = $this->NUM_FP->CurrentValue;
-			$this->NUM_FP->ViewCustomAttributes = "";
+			$this->NUM_FP->EditValue = ew_HtmlEncode($this->NUM_FP->CurrentValue);
+			$this->NUM_FP->PlaceHolder = ew_RemoveHtml($this->NUM_FP->FldCaption());
 
 			// NUM_Perso_EVA
 			$this->NUM_Perso_EVA->EditAttrs["class"] = "form-control";
 			$this->NUM_Perso_EVA->EditCustomAttributes = "";
-			$this->NUM_Perso_EVA->EditValue = $this->NUM_Perso_EVA->CurrentValue;
-			$this->NUM_Perso_EVA->ViewCustomAttributes = "";
+			$this->NUM_Perso_EVA->EditValue = ew_HtmlEncode($this->NUM_Perso_EVA->CurrentValue);
+			$this->NUM_Perso_EVA->PlaceHolder = ew_RemoveHtml($this->NUM_Perso_EVA->FldCaption());
 
 			// NUM_Poli
 			$this->NUM_Poli->EditAttrs["class"] = "form-control";
 			$this->NUM_Poli->EditCustomAttributes = "";
-			$this->NUM_Poli->EditValue = $this->NUM_Poli->CurrentValue;
-			$this->NUM_Poli->ViewCustomAttributes = "";
+			$this->NUM_Poli->EditValue = ew_HtmlEncode($this->NUM_Poli->CurrentValue);
+			$this->NUM_Poli->PlaceHolder = ew_RemoveHtml($this->NUM_Poli->FldCaption());
 
 			// AÑO
 			$this->AD1O->EditAttrs["class"] = "form-control";
 			$this->AD1O->EditCustomAttributes = "";
-			$this->AD1O->EditValue = $this->AD1O->CurrentValue;
-			$this->AD1O->ViewCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `AÑO`, `AÑO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `AÑO`, `AÑO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->AD1O, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `AÑO` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->AD1O->EditValue = $arwrk;
 
 			// FASE
 			$this->FASE->EditAttrs["class"] = "form-control";
 			$this->FASE->EditCustomAttributes = "";
-			$this->FASE->EditValue = $this->FASE->CurrentValue;
-			$this->FASE->ViewCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `FASE`, `FASE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `FASE`, `FASE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_id`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->FASE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `FASE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->FASE->EditValue = $arwrk;
 
 			// Modificado
 			$this->Modificado->EditAttrs["class"] = "form-control";
 			$this->Modificado->EditCustomAttributes = "";
-			$this->Modificado->EditValue = $this->Modificado->CurrentValue;
-			$this->Modificado->ViewCustomAttributes = "";
+			$arwrk = array();
+			$arwrk[] = array($this->Modificado->FldTagValue(1), $this->Modificado->FldTagCaption(1) <> "" ? $this->Modificado->FldTagCaption(1) : $this->Modificado->FldTagValue(1));
+			$arwrk[] = array($this->Modificado->FldTagValue(2), $this->Modificado->FldTagCaption(2) <> "" ? $this->Modificado->FldTagCaption(2) : $this->Modificado->FldTagValue(2));
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+			$this->Modificado->EditValue = $arwrk;
 
 			// Edit refer script
 			// llave
@@ -2902,9 +3386,6 @@ class cview_id_edit extends cview_id {
 
 			// T_erradi
 			$this->T_erradi->HrefValue = "";
-
-			// LATITUD_sector
-			$this->LATITUD_sector->HrefValue = "";
 
 			// GRA_LAT_Sector
 			$this->GRA_LAT_Sector->HrefValue = "";
@@ -3050,9 +3531,6 @@ class cview_id_edit extends cview_id {
 			// 3_Operaciones_de_seguridad
 			$this->_3_Operaciones_de_seguridad->HrefValue = "";
 
-			// LATITUD_segurid
-			$this->LATITUD_segurid->HrefValue = "";
-
 			// GRA_LAT_segurid
 			$this->GRA_LAT_segurid->HrefValue = "";
 
@@ -3140,6 +3618,210 @@ class cview_id_edit extends cview_id {
 		// Check if validation required
 		if (!EW_SERVER_VALIDATE)
 			return ($gsFormError == "");
+		if (!ew_CheckNumber($this->Ha_Coca->FormValue)) {
+			ew_AddMessage($gsFormError, $this->Ha_Coca->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->Ha_Amapola->FormValue)) {
+			ew_AddMessage($gsFormError, $this->Ha_Amapola->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->Ha_Marihuana->FormValue)) {
+			ew_AddMessage($gsFormError, $this->Ha_Marihuana->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->T_erradi->FormValue)) {
+			ew_AddMessage($gsFormError, $this->T_erradi->FldErrMsg());
+		}
+		if (!ew_CheckInteger($this->GRA_LAT_Sector->FormValue)) {
+			ew_AddMessage($gsFormError, $this->GRA_LAT_Sector->FldErrMsg());
+		}
+		if (!ew_CheckInteger($this->MIN_LAT_Sector->FormValue)) {
+			ew_AddMessage($gsFormError, $this->MIN_LAT_Sector->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->SEG_LAT_Sector->FormValue)) {
+			ew_AddMessage($gsFormError, $this->SEG_LAT_Sector->FldErrMsg());
+		}
+		if (!ew_CheckInteger($this->GRA_LONG_Sector->FormValue)) {
+			ew_AddMessage($gsFormError, $this->GRA_LONG_Sector->FldErrMsg());
+		}
+		if (!ew_CheckInteger($this->MIN_LONG_Sector->FormValue)) {
+			ew_AddMessage($gsFormError, $this->MIN_LONG_Sector->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->SEG_LONG_Sector->FormValue)) {
+			ew_AddMessage($gsFormError, $this->SEG_LONG_Sector->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->Adm_GME->FormValue)) {
+			ew_AddMessage($gsFormError, $this->Adm_GME->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Abastecimiento->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Abastecimiento->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Acompanamiento_firma_GME->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Acompanamiento_firma_GME->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Apoyo_zonal_sin_punto_asignado->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Apoyo_zonal_sin_punto_asignado->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Descanso_en_dia_habil->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Descanso_en_dia_habil->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Descanso_festivo_dominical->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Descanso_festivo_dominical->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Dia_compensatorio->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Dia_compensatorio->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Erradicacion_en_dia_festivo->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Erradicacion_en_dia_festivo->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Espera_helicoptero_Helistar->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Espera_helicoptero_Helistar->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Extraccion->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Extraccion->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Firma_contrato_GME->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Firma_contrato_GME->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Induccion_Apoyo_Zonal->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Induccion_Apoyo_Zonal->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Insercion->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Insercion->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Novedad_apoyo_zonal->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Novedad_apoyo_zonal->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Novedad_enfermero->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Novedad_enfermero->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Punto_fuera_del_area_de_erradicacion->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Punto_fuera_del_area_de_erradicacion->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Transporte_bus->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Transporte_bus->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Traslado_apoyo_zonal->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Traslado_apoyo_zonal->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_1_Traslado_area_vivac->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_1_Traslado_area_vivac->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->Adm_Fuerza->FormValue)) {
+			ew_AddMessage($gsFormError, $this->Adm_Fuerza->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_2_A_la_espera_definicion_nuevo_punto_FP->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_2_A_la_espera_definicion_nuevo_punto_FP->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_2_Espera_helicoptero_FP_de_seguridad->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_2_Espera_helicoptero_FP_de_seguridad->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_2_Espera_helicoptero_FP_que_abastece->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_2_Espera_helicoptero_FP_que_abastece->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_2_Induccion_FP->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_2_Induccion_FP->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_2_Novedad_canino_o_del_grupo_de_deteccion->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_2_Novedad_canino_o_del_grupo_de_deteccion->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_2_Problemas_fuerza_publica->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_2_Problemas_fuerza_publica->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_2_Sin_seguridad->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_2_Sin_seguridad->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->Sit_Seguridad->FormValue)) {
+			ew_AddMessage($gsFormError, $this->Sit_Seguridad->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_3_AEI_controlado->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_3_AEI_controlado->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_3_AEI_no_controlado->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_3_AEI_no_controlado->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_3_Bloqueo_parcial_de_la_comunidad->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_3_Bloqueo_parcial_de_la_comunidad->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_3_Bloqueo_total_de_la_comunidad->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_3_Bloqueo_total_de_la_comunidad->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_3_Combate->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_3_Combate->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_3_Hostigamiento->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_3_Hostigamiento->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_3_MAP_Controlada->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_3_MAP_Controlada->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_3_MAP_No_controlada->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_3_MAP_No_controlada->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_3_MUSE->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_3_MUSE->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_3_Operaciones_de_seguridad->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_3_Operaciones_de_seguridad->FldErrMsg());
+		}
+		if (!ew_CheckInteger($this->GRA_LAT_segurid->FormValue)) {
+			ew_AddMessage($gsFormError, $this->GRA_LAT_segurid->FldErrMsg());
+		}
+		if (!ew_CheckInteger($this->MIN_LAT_segurid->FormValue)) {
+			ew_AddMessage($gsFormError, $this->MIN_LAT_segurid->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->SEG_LAT_segurid->FormValue)) {
+			ew_AddMessage($gsFormError, $this->SEG_LAT_segurid->FldErrMsg());
+		}
+		if (!ew_CheckInteger($this->GRA_LONG_seguri->FormValue)) {
+			ew_AddMessage($gsFormError, $this->GRA_LONG_seguri->FldErrMsg());
+		}
+		if (!ew_CheckInteger($this->MIN_LONG_seguri->FormValue)) {
+			ew_AddMessage($gsFormError, $this->MIN_LONG_seguri->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->SEG_LONG_seguri->FormValue)) {
+			ew_AddMessage($gsFormError, $this->SEG_LONG_seguri->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->Novedad->FormValue)) {
+			ew_AddMessage($gsFormError, $this->Novedad->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_4_Epidemia->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_4_Epidemia->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_4_Novedad_climatologica->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_4_Novedad_climatologica->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_4_Registro_de_cultivos->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_4_Registro_de_cultivos->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_4_Zona_con_cultivos_muy_dispersos->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_4_Zona_con_cultivos_muy_dispersos->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_4_Zona_de_cruce_de_rios_caudalosos->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_4_Zona_de_cruce_de_rios_caudalosos->FldErrMsg());
+		}
+		if (!ew_CheckNumber($this->_4_Zona_sin_cultivos->FormValue)) {
+			ew_AddMessage($gsFormError, $this->_4_Zona_sin_cultivos->FldErrMsg());
+		}
+		if (!ew_CheckInteger($this->Num_Erra_Salen->FormValue)) {
+			ew_AddMessage($gsFormError, $this->Num_Erra_Salen->FldErrMsg());
+		}
+		if (!ew_CheckInteger($this->Num_Erra_Quedan->FormValue)) {
+			ew_AddMessage($gsFormError, $this->Num_Erra_Quedan->FldErrMsg());
+		}
+		if (!ew_CheckInteger($this->NUM_FP->FormValue)) {
+			ew_AddMessage($gsFormError, $this->NUM_FP->FldErrMsg());
+		}
+		if (!ew_CheckInteger($this->NUM_Perso_EVA->FormValue)) {
+			ew_AddMessage($gsFormError, $this->NUM_Perso_EVA->FldErrMsg());
+		}
+		if (!ew_CheckInteger($this->NUM_Poli->FormValue)) {
+			ew_AddMessage($gsFormError, $this->NUM_Poli->FldErrMsg());
+		}
+		if (!$this->Modificado->FldIsDetailKey && !is_null($this->Modificado->FormValue) && $this->Modificado->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->Modificado->FldCaption(), $this->Modificado->ReqErrMsg));
+		}
 
 		// Return validate result
 		$ValidateForm = ($gsFormError == "");
@@ -3173,11 +3855,275 @@ class cview_id_edit extends cview_id {
 			$this->LoadDbValues($rsold);
 			$rsnew = array();
 
+			// NOM_PE
+			$this->NOM_PE->SetDbValueDef($rsnew, $this->NOM_PE->CurrentValue, NULL, $this->NOM_PE->ReadOnly);
+
+			// Otro_PE
+			$this->Otro_PE->SetDbValueDef($rsnew, $this->Otro_PE->CurrentValue, NULL, $this->Otro_PE->ReadOnly);
+
+			// NOM_PGE
+			$this->NOM_PGE->SetDbValueDef($rsnew, $this->NOM_PGE->CurrentValue, NULL, $this->NOM_PGE->ReadOnly);
+
+			// Otro_NOM_PGE
+			$this->Otro_NOM_PGE->SetDbValueDef($rsnew, $this->Otro_NOM_PGE->CurrentValue, NULL, $this->Otro_NOM_PGE->ReadOnly);
+
+			// Otro_CC_PGE
+			$this->Otro_CC_PGE->SetDbValueDef($rsnew, $this->Otro_CC_PGE->CurrentValue, NULL, $this->Otro_CC_PGE->ReadOnly);
+
+			// TIPO_INFORME
+			$this->TIPO_INFORME->SetDbValueDef($rsnew, $this->TIPO_INFORME->CurrentValue, NULL, $this->TIPO_INFORME->ReadOnly);
+
+			// FECHA_REPORT
+			$this->FECHA_REPORT->SetDbValueDef($rsnew, $this->FECHA_REPORT->CurrentValue, NULL, $this->FECHA_REPORT->ReadOnly);
+
+			// DIA
+			$this->DIA->SetDbValueDef($rsnew, $this->DIA->CurrentValue, NULL, $this->DIA->ReadOnly);
+
+			// MES
+			$this->MES->SetDbValueDef($rsnew, $this->MES->CurrentValue, NULL, $this->MES->ReadOnly);
+
+			// Departamento
+			$this->Departamento->SetDbValueDef($rsnew, $this->Departamento->CurrentValue, NULL, $this->Departamento->ReadOnly);
+
+			// Muncipio
+			$this->Muncipio->SetDbValueDef($rsnew, $this->Muncipio->CurrentValue, NULL, $this->Muncipio->ReadOnly);
+
+			// TEMA
+			$this->TEMA->SetDbValueDef($rsnew, $this->TEMA->CurrentValue, NULL, $this->TEMA->ReadOnly);
+
+			// Otro_Tema
+			$this->Otro_Tema->SetDbValueDef($rsnew, $this->Otro_Tema->CurrentValue, NULL, $this->Otro_Tema->ReadOnly);
+
 			// OBSERVACION
 			$this->OBSERVACION->SetDbValueDef($rsnew, $this->OBSERVACION->CurrentValue, NULL, $this->OBSERVACION->ReadOnly);
 
 			// FUERZA
 			$this->FUERZA->SetDbValueDef($rsnew, $this->FUERZA->CurrentValue, NULL, $this->FUERZA->ReadOnly);
+
+			// NOM_VDA
+			$this->NOM_VDA->SetDbValueDef($rsnew, $this->NOM_VDA->CurrentValue, NULL, $this->NOM_VDA->ReadOnly);
+
+			// Ha_Coca
+			$this->Ha_Coca->SetDbValueDef($rsnew, $this->Ha_Coca->CurrentValue, 0, $this->Ha_Coca->ReadOnly);
+
+			// Ha_Amapola
+			$this->Ha_Amapola->SetDbValueDef($rsnew, $this->Ha_Amapola->CurrentValue, 0, $this->Ha_Amapola->ReadOnly);
+
+			// Ha_Marihuana
+			$this->Ha_Marihuana->SetDbValueDef($rsnew, $this->Ha_Marihuana->CurrentValue, 0, $this->Ha_Marihuana->ReadOnly);
+
+			// T_erradi
+			$this->T_erradi->SetDbValueDef($rsnew, $this->T_erradi->CurrentValue, NULL, $this->T_erradi->ReadOnly);
+
+			// GRA_LAT_Sector
+			$this->GRA_LAT_Sector->SetDbValueDef($rsnew, $this->GRA_LAT_Sector->CurrentValue, NULL, $this->GRA_LAT_Sector->ReadOnly);
+
+			// MIN_LAT_Sector
+			$this->MIN_LAT_Sector->SetDbValueDef($rsnew, $this->MIN_LAT_Sector->CurrentValue, NULL, $this->MIN_LAT_Sector->ReadOnly);
+
+			// SEG_LAT_Sector
+			$this->SEG_LAT_Sector->SetDbValueDef($rsnew, $this->SEG_LAT_Sector->CurrentValue, 0, $this->SEG_LAT_Sector->ReadOnly);
+
+			// GRA_LONG_Sector
+			$this->GRA_LONG_Sector->SetDbValueDef($rsnew, $this->GRA_LONG_Sector->CurrentValue, NULL, $this->GRA_LONG_Sector->ReadOnly);
+
+			// MIN_LONG_Sector
+			$this->MIN_LONG_Sector->SetDbValueDef($rsnew, $this->MIN_LONG_Sector->CurrentValue, NULL, $this->MIN_LONG_Sector->ReadOnly);
+
+			// SEG_LONG_Sector
+			$this->SEG_LONG_Sector->SetDbValueDef($rsnew, $this->SEG_LONG_Sector->CurrentValue, 0, $this->SEG_LONG_Sector->ReadOnly);
+
+			// Ini_Jorna
+			$this->Ini_Jorna->SetDbValueDef($rsnew, $this->Ini_Jorna->CurrentValue, NULL, $this->Ini_Jorna->ReadOnly);
+
+			// Fin_Jorna
+			$this->Fin_Jorna->SetDbValueDef($rsnew, $this->Fin_Jorna->CurrentValue, NULL, $this->Fin_Jorna->ReadOnly);
+
+			// Situ_Especial
+			$this->Situ_Especial->SetDbValueDef($rsnew, $this->Situ_Especial->CurrentValue, NULL, $this->Situ_Especial->ReadOnly);
+
+			// Adm_GME
+			$this->Adm_GME->SetDbValueDef($rsnew, $this->Adm_GME->CurrentValue, NULL, $this->Adm_GME->ReadOnly);
+
+			// 1_Abastecimiento
+			$this->_1_Abastecimiento->SetDbValueDef($rsnew, $this->_1_Abastecimiento->CurrentValue, NULL, $this->_1_Abastecimiento->ReadOnly);
+
+			// 1_Acompanamiento_firma_GME
+			$this->_1_Acompanamiento_firma_GME->SetDbValueDef($rsnew, $this->_1_Acompanamiento_firma_GME->CurrentValue, NULL, $this->_1_Acompanamiento_firma_GME->ReadOnly);
+
+			// 1_Apoyo_zonal_sin_punto_asignado
+			$this->_1_Apoyo_zonal_sin_punto_asignado->SetDbValueDef($rsnew, $this->_1_Apoyo_zonal_sin_punto_asignado->CurrentValue, NULL, $this->_1_Apoyo_zonal_sin_punto_asignado->ReadOnly);
+
+			// 1_Descanso_en_dia_habil
+			$this->_1_Descanso_en_dia_habil->SetDbValueDef($rsnew, $this->_1_Descanso_en_dia_habil->CurrentValue, NULL, $this->_1_Descanso_en_dia_habil->ReadOnly);
+
+			// 1_Descanso_festivo_dominical
+			$this->_1_Descanso_festivo_dominical->SetDbValueDef($rsnew, $this->_1_Descanso_festivo_dominical->CurrentValue, NULL, $this->_1_Descanso_festivo_dominical->ReadOnly);
+
+			// 1_Dia_compensatorio
+			$this->_1_Dia_compensatorio->SetDbValueDef($rsnew, $this->_1_Dia_compensatorio->CurrentValue, NULL, $this->_1_Dia_compensatorio->ReadOnly);
+
+			// 1_Erradicacion_en_dia_festivo
+			$this->_1_Erradicacion_en_dia_festivo->SetDbValueDef($rsnew, $this->_1_Erradicacion_en_dia_festivo->CurrentValue, NULL, $this->_1_Erradicacion_en_dia_festivo->ReadOnly);
+
+			// 1_Espera_helicoptero_Helistar
+			$this->_1_Espera_helicoptero_Helistar->SetDbValueDef($rsnew, $this->_1_Espera_helicoptero_Helistar->CurrentValue, NULL, $this->_1_Espera_helicoptero_Helistar->ReadOnly);
+
+			// 1_Extraccion
+			$this->_1_Extraccion->SetDbValueDef($rsnew, $this->_1_Extraccion->CurrentValue, NULL, $this->_1_Extraccion->ReadOnly);
+
+			// 1_Firma_contrato_GME
+			$this->_1_Firma_contrato_GME->SetDbValueDef($rsnew, $this->_1_Firma_contrato_GME->CurrentValue, NULL, $this->_1_Firma_contrato_GME->ReadOnly);
+
+			// 1_Induccion_Apoyo_Zonal
+			$this->_1_Induccion_Apoyo_Zonal->SetDbValueDef($rsnew, $this->_1_Induccion_Apoyo_Zonal->CurrentValue, NULL, $this->_1_Induccion_Apoyo_Zonal->ReadOnly);
+
+			// 1_Insercion
+			$this->_1_Insercion->SetDbValueDef($rsnew, $this->_1_Insercion->CurrentValue, NULL, $this->_1_Insercion->ReadOnly);
+
+			// 1_Llegada_GME_a_su_lugar_de_Origen_fin_fase
+			$this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->SetDbValueDef($rsnew, $this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->CurrentValue, NULL, $this->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->ReadOnly);
+
+			// 1_Novedad_apoyo_zonal
+			$this->_1_Novedad_apoyo_zonal->SetDbValueDef($rsnew, $this->_1_Novedad_apoyo_zonal->CurrentValue, NULL, $this->_1_Novedad_apoyo_zonal->ReadOnly);
+
+			// 1_Novedad_enfermero
+			$this->_1_Novedad_enfermero->SetDbValueDef($rsnew, $this->_1_Novedad_enfermero->CurrentValue, NULL, $this->_1_Novedad_enfermero->ReadOnly);
+
+			// 1_Punto_fuera_del_area_de_erradicacion
+			$this->_1_Punto_fuera_del_area_de_erradicacion->SetDbValueDef($rsnew, $this->_1_Punto_fuera_del_area_de_erradicacion->CurrentValue, NULL, $this->_1_Punto_fuera_del_area_de_erradicacion->ReadOnly);
+
+			// 1_Transporte_bus
+			$this->_1_Transporte_bus->SetDbValueDef($rsnew, $this->_1_Transporte_bus->CurrentValue, NULL, $this->_1_Transporte_bus->ReadOnly);
+
+			// 1_Traslado_apoyo_zonal
+			$this->_1_Traslado_apoyo_zonal->SetDbValueDef($rsnew, $this->_1_Traslado_apoyo_zonal->CurrentValue, NULL, $this->_1_Traslado_apoyo_zonal->ReadOnly);
+
+			// 1_Traslado_area_vivac
+			$this->_1_Traslado_area_vivac->SetDbValueDef($rsnew, $this->_1_Traslado_area_vivac->CurrentValue, NULL, $this->_1_Traslado_area_vivac->ReadOnly);
+
+			// Adm_Fuerza
+			$this->Adm_Fuerza->SetDbValueDef($rsnew, $this->Adm_Fuerza->CurrentValue, NULL, $this->Adm_Fuerza->ReadOnly);
+
+			// 2_A_la_espera_definicion_nuevo_punto_FP
+			$this->_2_A_la_espera_definicion_nuevo_punto_FP->SetDbValueDef($rsnew, $this->_2_A_la_espera_definicion_nuevo_punto_FP->CurrentValue, NULL, $this->_2_A_la_espera_definicion_nuevo_punto_FP->ReadOnly);
+
+			// 2_Espera_helicoptero_FP_de_seguridad
+			$this->_2_Espera_helicoptero_FP_de_seguridad->SetDbValueDef($rsnew, $this->_2_Espera_helicoptero_FP_de_seguridad->CurrentValue, NULL, $this->_2_Espera_helicoptero_FP_de_seguridad->ReadOnly);
+
+			// 2_Espera_helicoptero_FP_que_abastece
+			$this->_2_Espera_helicoptero_FP_que_abastece->SetDbValueDef($rsnew, $this->_2_Espera_helicoptero_FP_que_abastece->CurrentValue, NULL, $this->_2_Espera_helicoptero_FP_que_abastece->ReadOnly);
+
+			// 2_Induccion_FP
+			$this->_2_Induccion_FP->SetDbValueDef($rsnew, $this->_2_Induccion_FP->CurrentValue, NULL, $this->_2_Induccion_FP->ReadOnly);
+
+			// 2_Novedad_canino_o_del_grupo_de_deteccion
+			$this->_2_Novedad_canino_o_del_grupo_de_deteccion->SetDbValueDef($rsnew, $this->_2_Novedad_canino_o_del_grupo_de_deteccion->CurrentValue, NULL, $this->_2_Novedad_canino_o_del_grupo_de_deteccion->ReadOnly);
+
+			// 2_Problemas_fuerza_publica
+			$this->_2_Problemas_fuerza_publica->SetDbValueDef($rsnew, $this->_2_Problemas_fuerza_publica->CurrentValue, NULL, $this->_2_Problemas_fuerza_publica->ReadOnly);
+
+			// 2_Sin_seguridad
+			$this->_2_Sin_seguridad->SetDbValueDef($rsnew, $this->_2_Sin_seguridad->CurrentValue, NULL, $this->_2_Sin_seguridad->ReadOnly);
+
+			// Sit_Seguridad
+			$this->Sit_Seguridad->SetDbValueDef($rsnew, $this->Sit_Seguridad->CurrentValue, NULL, $this->Sit_Seguridad->ReadOnly);
+
+			// 3_AEI_controlado
+			$this->_3_AEI_controlado->SetDbValueDef($rsnew, $this->_3_AEI_controlado->CurrentValue, NULL, $this->_3_AEI_controlado->ReadOnly);
+
+			// 3_AEI_no_controlado
+			$this->_3_AEI_no_controlado->SetDbValueDef($rsnew, $this->_3_AEI_no_controlado->CurrentValue, NULL, $this->_3_AEI_no_controlado->ReadOnly);
+
+			// 3_Bloqueo_parcial_de_la_comunidad
+			$this->_3_Bloqueo_parcial_de_la_comunidad->SetDbValueDef($rsnew, $this->_3_Bloqueo_parcial_de_la_comunidad->CurrentValue, NULL, $this->_3_Bloqueo_parcial_de_la_comunidad->ReadOnly);
+
+			// 3_Bloqueo_total_de_la_comunidad
+			$this->_3_Bloqueo_total_de_la_comunidad->SetDbValueDef($rsnew, $this->_3_Bloqueo_total_de_la_comunidad->CurrentValue, NULL, $this->_3_Bloqueo_total_de_la_comunidad->ReadOnly);
+
+			// 3_Combate
+			$this->_3_Combate->SetDbValueDef($rsnew, $this->_3_Combate->CurrentValue, NULL, $this->_3_Combate->ReadOnly);
+
+			// 3_Hostigamiento
+			$this->_3_Hostigamiento->SetDbValueDef($rsnew, $this->_3_Hostigamiento->CurrentValue, NULL, $this->_3_Hostigamiento->ReadOnly);
+
+			// 3_MAP_Controlada
+			$this->_3_MAP_Controlada->SetDbValueDef($rsnew, $this->_3_MAP_Controlada->CurrentValue, NULL, $this->_3_MAP_Controlada->ReadOnly);
+
+			// 3_MAP_No_controlada
+			$this->_3_MAP_No_controlada->SetDbValueDef($rsnew, $this->_3_MAP_No_controlada->CurrentValue, NULL, $this->_3_MAP_No_controlada->ReadOnly);
+
+			// 3_MUSE
+			$this->_3_MUSE->SetDbValueDef($rsnew, $this->_3_MUSE->CurrentValue, NULL, $this->_3_MUSE->ReadOnly);
+
+			// 3_Operaciones_de_seguridad
+			$this->_3_Operaciones_de_seguridad->SetDbValueDef($rsnew, $this->_3_Operaciones_de_seguridad->CurrentValue, NULL, $this->_3_Operaciones_de_seguridad->ReadOnly);
+
+			// GRA_LAT_segurid
+			$this->GRA_LAT_segurid->SetDbValueDef($rsnew, $this->GRA_LAT_segurid->CurrentValue, NULL, $this->GRA_LAT_segurid->ReadOnly);
+
+			// MIN_LAT_segurid
+			$this->MIN_LAT_segurid->SetDbValueDef($rsnew, $this->MIN_LAT_segurid->CurrentValue, NULL, $this->MIN_LAT_segurid->ReadOnly);
+
+			// SEG_LAT_segurid
+			$this->SEG_LAT_segurid->SetDbValueDef($rsnew, $this->SEG_LAT_segurid->CurrentValue, 0, $this->SEG_LAT_segurid->ReadOnly);
+
+			// GRA_LONG_seguri
+			$this->GRA_LONG_seguri->SetDbValueDef($rsnew, $this->GRA_LONG_seguri->CurrentValue, NULL, $this->GRA_LONG_seguri->ReadOnly);
+
+			// MIN_LONG_seguri
+			$this->MIN_LONG_seguri->SetDbValueDef($rsnew, $this->MIN_LONG_seguri->CurrentValue, NULL, $this->MIN_LONG_seguri->ReadOnly);
+
+			// SEG_LONG_seguri
+			$this->SEG_LONG_seguri->SetDbValueDef($rsnew, $this->SEG_LONG_seguri->CurrentValue, 0, $this->SEG_LONG_seguri->ReadOnly);
+
+			// Novedad
+			$this->Novedad->SetDbValueDef($rsnew, $this->Novedad->CurrentValue, NULL, $this->Novedad->ReadOnly);
+
+			// 4_Epidemia
+			$this->_4_Epidemia->SetDbValueDef($rsnew, $this->_4_Epidemia->CurrentValue, NULL, $this->_4_Epidemia->ReadOnly);
+
+			// 4_Novedad_climatologica
+			$this->_4_Novedad_climatologica->SetDbValueDef($rsnew, $this->_4_Novedad_climatologica->CurrentValue, NULL, $this->_4_Novedad_climatologica->ReadOnly);
+
+			// 4_Registro_de_cultivos
+			$this->_4_Registro_de_cultivos->SetDbValueDef($rsnew, $this->_4_Registro_de_cultivos->CurrentValue, NULL, $this->_4_Registro_de_cultivos->ReadOnly);
+
+			// 4_Zona_con_cultivos_muy_dispersos
+			$this->_4_Zona_con_cultivos_muy_dispersos->SetDbValueDef($rsnew, $this->_4_Zona_con_cultivos_muy_dispersos->CurrentValue, NULL, $this->_4_Zona_con_cultivos_muy_dispersos->ReadOnly);
+
+			// 4_Zona_de_cruce_de_rios_caudalosos
+			$this->_4_Zona_de_cruce_de_rios_caudalosos->SetDbValueDef($rsnew, $this->_4_Zona_de_cruce_de_rios_caudalosos->CurrentValue, NULL, $this->_4_Zona_de_cruce_de_rios_caudalosos->ReadOnly);
+
+			// 4_Zona_sin_cultivos
+			$this->_4_Zona_sin_cultivos->SetDbValueDef($rsnew, $this->_4_Zona_sin_cultivos->CurrentValue, NULL, $this->_4_Zona_sin_cultivos->ReadOnly);
+
+			// Num_Erra_Salen
+			$this->Num_Erra_Salen->SetDbValueDef($rsnew, $this->Num_Erra_Salen->CurrentValue, NULL, $this->Num_Erra_Salen->ReadOnly);
+
+			// Num_Erra_Quedan
+			$this->Num_Erra_Quedan->SetDbValueDef($rsnew, $this->Num_Erra_Quedan->CurrentValue, NULL, $this->Num_Erra_Quedan->ReadOnly);
+
+			// No_ENFERMERO
+			$this->No_ENFERMERO->SetDbValueDef($rsnew, $this->No_ENFERMERO->CurrentValue, NULL, $this->No_ENFERMERO->ReadOnly);
+
+			// NUM_FP
+			$this->NUM_FP->SetDbValueDef($rsnew, $this->NUM_FP->CurrentValue, NULL, $this->NUM_FP->ReadOnly);
+
+			// NUM_Perso_EVA
+			$this->NUM_Perso_EVA->SetDbValueDef($rsnew, $this->NUM_Perso_EVA->CurrentValue, NULL, $this->NUM_Perso_EVA->ReadOnly);
+
+			// NUM_Poli
+			$this->NUM_Poli->SetDbValueDef($rsnew, $this->NUM_Poli->CurrentValue, NULL, $this->NUM_Poli->ReadOnly);
+
+			// AÑO
+			$this->AD1O->SetDbValueDef($rsnew, $this->AD1O->CurrentValue, NULL, $this->AD1O->ReadOnly);
+
+			// FASE
+			$this->FASE->SetDbValueDef($rsnew, $this->FASE->CurrentValue, NULL, $this->FASE->ReadOnly);
+
+			// Modificado
+			$this->Modificado->SetDbValueDef($rsnew, $this->Modificado->CurrentValue, "", $this->Modificado->ReadOnly);
 
 			// Call Row Updating event
 			$bUpdateRow = $this->Row_Updating($rsold, $rsnew);
@@ -3334,6 +4280,210 @@ fview_idedit.Validate = function() {
 	for (var i = startcnt; i <= rowcnt; i++) {
 		var infix = ($k[0]) ? String(i) : "";
 		$fobj.data("rowindex", infix);
+			elm = this.GetElements("x" + infix + "_Ha_Coca");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->Ha_Coca->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_Ha_Amapola");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->Ha_Amapola->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_Ha_Marihuana");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->Ha_Marihuana->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_T_erradi");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->T_erradi->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_GRA_LAT_Sector");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->GRA_LAT_Sector->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_MIN_LAT_Sector");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->MIN_LAT_Sector->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_SEG_LAT_Sector");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->SEG_LAT_Sector->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_GRA_LONG_Sector");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->GRA_LONG_Sector->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_MIN_LONG_Sector");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->MIN_LONG_Sector->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_SEG_LONG_Sector");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->SEG_LONG_Sector->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_Adm_GME");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->Adm_GME->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Abastecimiento");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Abastecimiento->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Acompanamiento_firma_GME");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Acompanamiento_firma_GME->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Apoyo_zonal_sin_punto_asignado");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Apoyo_zonal_sin_punto_asignado->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Descanso_en_dia_habil");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Descanso_en_dia_habil->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Descanso_festivo_dominical");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Descanso_festivo_dominical->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Dia_compensatorio");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Dia_compensatorio->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Erradicacion_en_dia_festivo");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Erradicacion_en_dia_festivo->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Espera_helicoptero_Helistar");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Espera_helicoptero_Helistar->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Extraccion");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Extraccion->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Firma_contrato_GME");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Firma_contrato_GME->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Induccion_Apoyo_Zonal");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Induccion_Apoyo_Zonal->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Insercion");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Insercion->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Llegada_GME_a_su_lugar_de_Origen_fin_fase");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Novedad_apoyo_zonal");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Novedad_apoyo_zonal->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Novedad_enfermero");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Novedad_enfermero->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Punto_fuera_del_area_de_erradicacion");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Punto_fuera_del_area_de_erradicacion->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Transporte_bus");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Transporte_bus->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Traslado_apoyo_zonal");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Traslado_apoyo_zonal->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__1_Traslado_area_vivac");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_1_Traslado_area_vivac->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_Adm_Fuerza");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->Adm_Fuerza->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__2_A_la_espera_definicion_nuevo_punto_FP");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_2_A_la_espera_definicion_nuevo_punto_FP->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__2_Espera_helicoptero_FP_de_seguridad");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_2_Espera_helicoptero_FP_de_seguridad->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__2_Espera_helicoptero_FP_que_abastece");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_2_Espera_helicoptero_FP_que_abastece->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__2_Induccion_FP");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_2_Induccion_FP->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__2_Novedad_canino_o_del_grupo_de_deteccion");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_2_Novedad_canino_o_del_grupo_de_deteccion->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__2_Problemas_fuerza_publica");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_2_Problemas_fuerza_publica->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__2_Sin_seguridad");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_2_Sin_seguridad->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_Sit_Seguridad");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->Sit_Seguridad->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__3_AEI_controlado");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_3_AEI_controlado->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__3_AEI_no_controlado");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_3_AEI_no_controlado->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__3_Bloqueo_parcial_de_la_comunidad");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_3_Bloqueo_parcial_de_la_comunidad->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__3_Bloqueo_total_de_la_comunidad");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_3_Bloqueo_total_de_la_comunidad->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__3_Combate");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_3_Combate->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__3_Hostigamiento");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_3_Hostigamiento->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__3_MAP_Controlada");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_3_MAP_Controlada->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__3_MAP_No_controlada");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_3_MAP_No_controlada->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__3_MUSE");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_3_MUSE->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__3_Operaciones_de_seguridad");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_3_Operaciones_de_seguridad->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_GRA_LAT_segurid");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->GRA_LAT_segurid->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_MIN_LAT_segurid");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->MIN_LAT_segurid->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_SEG_LAT_segurid");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->SEG_LAT_segurid->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_GRA_LONG_seguri");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->GRA_LONG_seguri->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_MIN_LONG_seguri");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->MIN_LONG_seguri->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_SEG_LONG_seguri");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->SEG_LONG_seguri->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_Novedad");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->Novedad->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__4_Epidemia");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_4_Epidemia->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__4_Novedad_climatologica");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_4_Novedad_climatologica->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__4_Registro_de_cultivos");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_4_Registro_de_cultivos->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__4_Zona_con_cultivos_muy_dispersos");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_4_Zona_con_cultivos_muy_dispersos->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__4_Zona_de_cruce_de_rios_caudalosos");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_4_Zona_de_cruce_de_rios_caudalosos->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "__4_Zona_sin_cultivos");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->_4_Zona_sin_cultivos->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_Num_Erra_Salen");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->Num_Erra_Salen->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_Num_Erra_Quedan");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->Num_Erra_Quedan->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_NUM_FP");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->NUM_FP->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_NUM_Perso_EVA");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->NUM_Perso_EVA->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_NUM_Poli");
+			if (elm && !ew_CheckInteger(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_id->NUM_Poli->FldErrMsg()) ?>");
+			elm = this.GetElements("x" + infix + "_Modificado");
+			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $view_id->Modificado->FldCaption(), $view_id->Modificado->ReqErrMsg)) ?>");
 
 			// Set up row object
 			ew_ElementsToRow(fobj);
@@ -3370,8 +4520,16 @@ fview_idedit.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fview_idedit.Lists["x_USUARIO"] = {"LinkField":"x_USUARIO","Ajax":null,"AutoFill":false,"DisplayFields":["x_USUARIO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_idedit.Lists["x_NOM_PE"] = {"LinkField":"x_NOM_PE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_idedit.Lists["x_NOM_PGE"] = {"LinkField":"x_NOM_PGE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PGE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_idedit.Lists["x_TIPO_INFORME"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_idedit.Lists["x_TEMA"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_idedit.Lists["x_FUERZA"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_idedit.Lists["x_AD1O"] = {"LinkField":"x_AD1O","Ajax":null,"AutoFill":false,"DisplayFields":["x_AD1O","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_idedit.Lists["x_FASE"] = {"LinkField":"x_FASE","Ajax":null,"AutoFill":false,"DisplayFields":["x_FASE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
@@ -3392,16 +4550,27 @@ $view_id_edit->ShowMessage();
 <?php } ?>
 <input type="hidden" name="t" value="view_id">
 <input type="hidden" name="a_edit" id="a_edit" value="U">
+<?php if ($view_id->CurrentAction == "F") { // Confirm page ?>
+<input type="hidden" name="a_confirm" id="a_confirm" value="F">
+<?php } ?>
 <div>
 <?php if ($view_id->llave->Visible) { // llave ?>
 	<div id="r_llave" class="form-group">
 		<label id="elh_view_id_llave" for="x_llave" class="col-sm-2 control-label ewLabel"><?php echo $view_id->llave->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->llave->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
 <span id="el_view_id_llave">
 <span<?php echo $view_id->llave->ViewAttributes() ?>>
 <p class="form-control-static"><?php echo $view_id->llave->EditValue ?></p></span>
 </span>
 <input type="hidden" data-field="x_llave" name="x_llave" id="x_llave" value="<?php echo ew_HtmlEncode($view_id->llave->CurrentValue) ?>">
+<?php } else { ?>
+<span id="el_view_id_llave">
+<span<?php echo $view_id->llave->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_id->llave->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_llave" name="x_llave" id="x_llave" value="<?php echo ew_HtmlEncode($view_id->llave->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->llave->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3409,11 +4578,19 @@ $view_id_edit->ShowMessage();
 	<div id="r_F_Sincron" class="form-group">
 		<label id="elh_view_id_F_Sincron" for="x_F_Sincron" class="col-sm-2 control-label ewLabel"><?php echo $view_id->F_Sincron->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->F_Sincron->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
 <span id="el_view_id_F_Sincron">
 <span<?php echo $view_id->F_Sincron->ViewAttributes() ?>>
 <p class="form-control-static"><?php echo $view_id->F_Sincron->EditValue ?></p></span>
 </span>
 <input type="hidden" data-field="x_F_Sincron" name="x_F_Sincron" id="x_F_Sincron" value="<?php echo ew_HtmlEncode($view_id->F_Sincron->CurrentValue) ?>">
+<?php } else { ?>
+<span id="el_view_id_F_Sincron">
+<span<?php echo $view_id->F_Sincron->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_id->F_Sincron->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_F_Sincron" name="x_F_Sincron" id="x_F_Sincron" value="<?php echo ew_HtmlEncode($view_id->F_Sincron->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->F_Sincron->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3421,11 +4598,19 @@ $view_id_edit->ShowMessage();
 	<div id="r_USUARIO" class="form-group">
 		<label id="elh_view_id_USUARIO" for="x_USUARIO" class="col-sm-2 control-label ewLabel"><?php echo $view_id->USUARIO->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->USUARIO->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
 <span id="el_view_id_USUARIO">
 <span<?php echo $view_id->USUARIO->ViewAttributes() ?>>
 <p class="form-control-static"><?php echo $view_id->USUARIO->EditValue ?></p></span>
 </span>
 <input type="hidden" data-field="x_USUARIO" name="x_USUARIO" id="x_USUARIO" value="<?php echo ew_HtmlEncode($view_id->USUARIO->CurrentValue) ?>">
+<?php } else { ?>
+<span id="el_view_id_USUARIO">
+<span<?php echo $view_id->USUARIO->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_id->USUARIO->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_USUARIO" name="x_USUARIO" id="x_USUARIO" value="<?php echo ew_HtmlEncode($view_id->USUARIO->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->USUARIO->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3433,11 +4618,19 @@ $view_id_edit->ShowMessage();
 	<div id="r_Cargo_gme" class="form-group">
 		<label id="elh_view_id_Cargo_gme" for="x_Cargo_gme" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Cargo_gme->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Cargo_gme->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
 <span id="el_view_id_Cargo_gme">
 <span<?php echo $view_id->Cargo_gme->ViewAttributes() ?>>
 <p class="form-control-static"><?php echo $view_id->Cargo_gme->EditValue ?></p></span>
 </span>
 <input type="hidden" data-field="x_Cargo_gme" name="x_Cargo_gme" id="x_Cargo_gme" value="<?php echo ew_HtmlEncode($view_id->Cargo_gme->CurrentValue) ?>">
+<?php } else { ?>
+<span id="el_view_id_Cargo_gme">
+<span<?php echo $view_id->Cargo_gme->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_id->Cargo_gme->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Cargo_gme" name="x_Cargo_gme" id="x_Cargo_gme" value="<?php echo ew_HtmlEncode($view_id->Cargo_gme->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Cargo_gme->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3445,11 +4638,37 @@ $view_id_edit->ShowMessage();
 	<div id="r_NOM_PE" class="form-group">
 		<label id="elh_view_id_NOM_PE" for="x_NOM_PE" class="col-sm-2 control-label ewLabel"><?php echo $view_id->NOM_PE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->NOM_PE->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_NOM_PE">
+<select data-field="x_NOM_PE" id="x_NOM_PE" name="x_NOM_PE"<?php echo $view_id->NOM_PE->EditAttributes() ?>>
+<?php
+if (is_array($view_id->NOM_PE->EditValue)) {
+	$arwrk = $view_id->NOM_PE->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_id->NOM_PE->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview_idedit.Lists["x_NOM_PE"].Options = <?php echo (is_array($view_id->NOM_PE->EditValue)) ? ew_ArrayToJson($view_id->NOM_PE->EditValue, 1) : "[]" ?>;
+</script>
+</span>
+<?php } else { ?>
 <span id="el_view_id_NOM_PE">
 <span<?php echo $view_id->NOM_PE->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->NOM_PE->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->NOM_PE->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_NOM_PE" name="x_NOM_PE" id="x_NOM_PE" value="<?php echo ew_HtmlEncode($view_id->NOM_PE->CurrentValue) ?>">
+<input type="hidden" data-field="x_NOM_PE" name="x_NOM_PE" id="x_NOM_PE" value="<?php echo ew_HtmlEncode($view_id->NOM_PE->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->NOM_PE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3457,11 +4676,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Otro_PE" class="form-group">
 		<label id="elh_view_id_Otro_PE" for="x_Otro_PE" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Otro_PE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Otro_PE->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Otro_PE">
+<input type="text" data-field="x_Otro_PE" name="x_Otro_PE" id="x_Otro_PE" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view_id->Otro_PE->PlaceHolder) ?>" value="<?php echo $view_id->Otro_PE->EditValue ?>"<?php echo $view_id->Otro_PE->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Otro_PE">
 <span<?php echo $view_id->Otro_PE->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Otro_PE->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Otro_PE->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Otro_PE" name="x_Otro_PE" id="x_Otro_PE" value="<?php echo ew_HtmlEncode($view_id->Otro_PE->CurrentValue) ?>">
+<input type="hidden" data-field="x_Otro_PE" name="x_Otro_PE" id="x_Otro_PE" value="<?php echo ew_HtmlEncode($view_id->Otro_PE->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Otro_PE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3469,11 +4694,37 @@ $view_id_edit->ShowMessage();
 	<div id="r_NOM_PGE" class="form-group">
 		<label id="elh_view_id_NOM_PGE" for="x_NOM_PGE" class="col-sm-2 control-label ewLabel"><?php echo $view_id->NOM_PGE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->NOM_PGE->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_NOM_PGE">
+<select data-field="x_NOM_PGE" id="x_NOM_PGE" name="x_NOM_PGE"<?php echo $view_id->NOM_PGE->EditAttributes() ?>>
+<?php
+if (is_array($view_id->NOM_PGE->EditValue)) {
+	$arwrk = $view_id->NOM_PGE->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_id->NOM_PGE->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview_idedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view_id->NOM_PGE->EditValue)) ? ew_ArrayToJson($view_id->NOM_PGE->EditValue, 1) : "[]" ?>;
+</script>
+</span>
+<?php } else { ?>
 <span id="el_view_id_NOM_PGE">
 <span<?php echo $view_id->NOM_PGE->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->NOM_PGE->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->NOM_PGE->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_NOM_PGE" name="x_NOM_PGE" id="x_NOM_PGE" value="<?php echo ew_HtmlEncode($view_id->NOM_PGE->CurrentValue) ?>">
+<input type="hidden" data-field="x_NOM_PGE" name="x_NOM_PGE" id="x_NOM_PGE" value="<?php echo ew_HtmlEncode($view_id->NOM_PGE->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->NOM_PGE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3481,11 +4732,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Otro_NOM_PGE" class="form-group">
 		<label id="elh_view_id_Otro_NOM_PGE" for="x_Otro_NOM_PGE" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Otro_NOM_PGE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Otro_NOM_PGE->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Otro_NOM_PGE">
+<input type="text" data-field="x_Otro_NOM_PGE" name="x_Otro_NOM_PGE" id="x_Otro_NOM_PGE" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view_id->Otro_NOM_PGE->PlaceHolder) ?>" value="<?php echo $view_id->Otro_NOM_PGE->EditValue ?>"<?php echo $view_id->Otro_NOM_PGE->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Otro_NOM_PGE">
 <span<?php echo $view_id->Otro_NOM_PGE->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Otro_NOM_PGE->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Otro_NOM_PGE->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Otro_NOM_PGE" name="x_Otro_NOM_PGE" id="x_Otro_NOM_PGE" value="<?php echo ew_HtmlEncode($view_id->Otro_NOM_PGE->CurrentValue) ?>">
+<input type="hidden" data-field="x_Otro_NOM_PGE" name="x_Otro_NOM_PGE" id="x_Otro_NOM_PGE" value="<?php echo ew_HtmlEncode($view_id->Otro_NOM_PGE->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Otro_NOM_PGE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3493,11 +4750,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Otro_CC_PGE" class="form-group">
 		<label id="elh_view_id_Otro_CC_PGE" for="x_Otro_CC_PGE" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Otro_CC_PGE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Otro_CC_PGE->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Otro_CC_PGE">
+<input type="text" data-field="x_Otro_CC_PGE" name="x_Otro_CC_PGE" id="x_Otro_CC_PGE" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view_id->Otro_CC_PGE->PlaceHolder) ?>" value="<?php echo $view_id->Otro_CC_PGE->EditValue ?>"<?php echo $view_id->Otro_CC_PGE->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Otro_CC_PGE">
 <span<?php echo $view_id->Otro_CC_PGE->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Otro_CC_PGE->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Otro_CC_PGE->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Otro_CC_PGE" name="x_Otro_CC_PGE" id="x_Otro_CC_PGE" value="<?php echo ew_HtmlEncode($view_id->Otro_CC_PGE->CurrentValue) ?>">
+<input type="hidden" data-field="x_Otro_CC_PGE" name="x_Otro_CC_PGE" id="x_Otro_CC_PGE" value="<?php echo ew_HtmlEncode($view_id->Otro_CC_PGE->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Otro_CC_PGE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3505,11 +4768,37 @@ $view_id_edit->ShowMessage();
 	<div id="r_TIPO_INFORME" class="form-group">
 		<label id="elh_view_id_TIPO_INFORME" for="x_TIPO_INFORME" class="col-sm-2 control-label ewLabel"><?php echo $view_id->TIPO_INFORME->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->TIPO_INFORME->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_TIPO_INFORME">
+<select data-field="x_TIPO_INFORME" id="x_TIPO_INFORME" name="x_TIPO_INFORME"<?php echo $view_id->TIPO_INFORME->EditAttributes() ?>>
+<?php
+if (is_array($view_id->TIPO_INFORME->EditValue)) {
+	$arwrk = $view_id->TIPO_INFORME->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_id->TIPO_INFORME->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview_idedit.Lists["x_TIPO_INFORME"].Options = <?php echo (is_array($view_id->TIPO_INFORME->EditValue)) ? ew_ArrayToJson($view_id->TIPO_INFORME->EditValue, 1) : "[]" ?>;
+</script>
+</span>
+<?php } else { ?>
 <span id="el_view_id_TIPO_INFORME">
 <span<?php echo $view_id->TIPO_INFORME->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->TIPO_INFORME->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->TIPO_INFORME->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_TIPO_INFORME" name="x_TIPO_INFORME" id="x_TIPO_INFORME" value="<?php echo ew_HtmlEncode($view_id->TIPO_INFORME->CurrentValue) ?>">
+<input type="hidden" data-field="x_TIPO_INFORME" name="x_TIPO_INFORME" id="x_TIPO_INFORME" value="<?php echo ew_HtmlEncode($view_id->TIPO_INFORME->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->TIPO_INFORME->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3517,11 +4806,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_FECHA_REPORT" class="form-group">
 		<label id="elh_view_id_FECHA_REPORT" for="x_FECHA_REPORT" class="col-sm-2 control-label ewLabel"><?php echo $view_id->FECHA_REPORT->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->FECHA_REPORT->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_FECHA_REPORT">
+<input type="text" data-field="x_FECHA_REPORT" name="x_FECHA_REPORT" id="x_FECHA_REPORT" size="30" maxlength="10" placeholder="<?php echo ew_HtmlEncode($view_id->FECHA_REPORT->PlaceHolder) ?>" value="<?php echo $view_id->FECHA_REPORT->EditValue ?>"<?php echo $view_id->FECHA_REPORT->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_FECHA_REPORT">
 <span<?php echo $view_id->FECHA_REPORT->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->FECHA_REPORT->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->FECHA_REPORT->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_FECHA_REPORT" name="x_FECHA_REPORT" id="x_FECHA_REPORT" value="<?php echo ew_HtmlEncode($view_id->FECHA_REPORT->CurrentValue) ?>">
+<input type="hidden" data-field="x_FECHA_REPORT" name="x_FECHA_REPORT" id="x_FECHA_REPORT" value="<?php echo ew_HtmlEncode($view_id->FECHA_REPORT->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->FECHA_REPORT->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3529,11 +4824,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_DIA" class="form-group">
 		<label id="elh_view_id_DIA" for="x_DIA" class="col-sm-2 control-label ewLabel"><?php echo $view_id->DIA->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->DIA->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_DIA">
+<input type="text" data-field="x_DIA" name="x_DIA" id="x_DIA" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($view_id->DIA->PlaceHolder) ?>" value="<?php echo $view_id->DIA->EditValue ?>"<?php echo $view_id->DIA->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_DIA">
 <span<?php echo $view_id->DIA->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->DIA->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->DIA->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_DIA" name="x_DIA" id="x_DIA" value="<?php echo ew_HtmlEncode($view_id->DIA->CurrentValue) ?>">
+<input type="hidden" data-field="x_DIA" name="x_DIA" id="x_DIA" value="<?php echo ew_HtmlEncode($view_id->DIA->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->DIA->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3541,11 +4842,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_MES" class="form-group">
 		<label id="elh_view_id_MES" for="x_MES" class="col-sm-2 control-label ewLabel"><?php echo $view_id->MES->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->MES->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_MES">
+<input type="text" data-field="x_MES" name="x_MES" id="x_MES" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($view_id->MES->PlaceHolder) ?>" value="<?php echo $view_id->MES->EditValue ?>"<?php echo $view_id->MES->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_MES">
 <span<?php echo $view_id->MES->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->MES->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->MES->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_MES" name="x_MES" id="x_MES" value="<?php echo ew_HtmlEncode($view_id->MES->CurrentValue) ?>">
+<input type="hidden" data-field="x_MES" name="x_MES" id="x_MES" value="<?php echo ew_HtmlEncode($view_id->MES->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->MES->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3553,11 +4860,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Departamento" class="form-group">
 		<label id="elh_view_id_Departamento" for="x_Departamento" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Departamento->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Departamento->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Departamento">
+<input type="text" data-field="x_Departamento" name="x_Departamento" id="x_Departamento" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($view_id->Departamento->PlaceHolder) ?>" value="<?php echo $view_id->Departamento->EditValue ?>"<?php echo $view_id->Departamento->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Departamento">
 <span<?php echo $view_id->Departamento->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Departamento->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Departamento->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Departamento" name="x_Departamento" id="x_Departamento" value="<?php echo ew_HtmlEncode($view_id->Departamento->CurrentValue) ?>">
+<input type="hidden" data-field="x_Departamento" name="x_Departamento" id="x_Departamento" value="<?php echo ew_HtmlEncode($view_id->Departamento->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Departamento->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3565,11 +4878,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Muncipio" class="form-group">
 		<label id="elh_view_id_Muncipio" for="x_Muncipio" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Muncipio->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Muncipio->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Muncipio">
+<textarea data-field="x_Muncipio" name="x_Muncipio" id="x_Muncipio" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view_id->Muncipio->PlaceHolder) ?>"<?php echo $view_id->Muncipio->EditAttributes() ?>><?php echo $view_id->Muncipio->EditValue ?></textarea>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Muncipio">
 <span<?php echo $view_id->Muncipio->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Muncipio->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Muncipio->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Muncipio" name="x_Muncipio" id="x_Muncipio" value="<?php echo ew_HtmlEncode($view_id->Muncipio->CurrentValue) ?>">
+<input type="hidden" data-field="x_Muncipio" name="x_Muncipio" id="x_Muncipio" value="<?php echo ew_HtmlEncode($view_id->Muncipio->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Muncipio->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3577,11 +4896,37 @@ $view_id_edit->ShowMessage();
 	<div id="r_TEMA" class="form-group">
 		<label id="elh_view_id_TEMA" for="x_TEMA" class="col-sm-2 control-label ewLabel"><?php echo $view_id->TEMA->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->TEMA->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_TEMA">
+<select data-field="x_TEMA" id="x_TEMA" name="x_TEMA"<?php echo $view_id->TEMA->EditAttributes() ?>>
+<?php
+if (is_array($view_id->TEMA->EditValue)) {
+	$arwrk = $view_id->TEMA->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_id->TEMA->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview_idedit.Lists["x_TEMA"].Options = <?php echo (is_array($view_id->TEMA->EditValue)) ? ew_ArrayToJson($view_id->TEMA->EditValue, 1) : "[]" ?>;
+</script>
+</span>
+<?php } else { ?>
 <span id="el_view_id_TEMA">
 <span<?php echo $view_id->TEMA->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->TEMA->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->TEMA->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_TEMA" name="x_TEMA" id="x_TEMA" value="<?php echo ew_HtmlEncode($view_id->TEMA->CurrentValue) ?>">
+<input type="hidden" data-field="x_TEMA" name="x_TEMA" id="x_TEMA" value="<?php echo ew_HtmlEncode($view_id->TEMA->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->TEMA->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3589,11 +4934,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Otro_Tema" class="form-group">
 		<label id="elh_view_id_Otro_Tema" for="x_Otro_Tema" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Otro_Tema->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Otro_Tema->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Otro_Tema">
+<input type="text" data-field="x_Otro_Tema" name="x_Otro_Tema" id="x_Otro_Tema" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view_id->Otro_Tema->PlaceHolder) ?>" value="<?php echo $view_id->Otro_Tema->EditValue ?>"<?php echo $view_id->Otro_Tema->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Otro_Tema">
 <span<?php echo $view_id->Otro_Tema->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Otro_Tema->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Otro_Tema->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Otro_Tema" name="x_Otro_Tema" id="x_Otro_Tema" value="<?php echo ew_HtmlEncode($view_id->Otro_Tema->CurrentValue) ?>">
+<input type="hidden" data-field="x_Otro_Tema" name="x_Otro_Tema" id="x_Otro_Tema" value="<?php echo ew_HtmlEncode($view_id->Otro_Tema->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Otro_Tema->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3601,9 +4952,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_OBSERVACION" class="form-group">
 		<label id="elh_view_id_OBSERVACION" for="x_OBSERVACION" class="col-sm-2 control-label ewLabel"><?php echo $view_id->OBSERVACION->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->OBSERVACION->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
 <span id="el_view_id_OBSERVACION">
 <textarea data-field="x_OBSERVACION" name="x_OBSERVACION" id="x_OBSERVACION" cols="120" rows="4" placeholder="<?php echo ew_HtmlEncode($view_id->OBSERVACION->PlaceHolder) ?>"<?php echo $view_id->OBSERVACION->EditAttributes() ?>><?php echo $view_id->OBSERVACION->EditValue ?></textarea>
 </span>
+<?php } else { ?>
+<span id="el_view_id_OBSERVACION">
+<span<?php echo $view_id->OBSERVACION->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_id->OBSERVACION->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_OBSERVACION" name="x_OBSERVACION" id="x_OBSERVACION" value="<?php echo ew_HtmlEncode($view_id->OBSERVACION->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->OBSERVACION->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3611,9 +4970,37 @@ $view_id_edit->ShowMessage();
 	<div id="r_FUERZA" class="form-group">
 		<label id="elh_view_id_FUERZA" for="x_FUERZA" class="col-sm-2 control-label ewLabel"><?php echo $view_id->FUERZA->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->FUERZA->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
 <span id="el_view_id_FUERZA">
-<textarea data-field="x_FUERZA" name="x_FUERZA" id="x_FUERZA" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view_id->FUERZA->PlaceHolder) ?>"<?php echo $view_id->FUERZA->EditAttributes() ?>><?php echo $view_id->FUERZA->EditValue ?></textarea>
+<select data-field="x_FUERZA" id="x_FUERZA" name="x_FUERZA"<?php echo $view_id->FUERZA->EditAttributes() ?>>
+<?php
+if (is_array($view_id->FUERZA->EditValue)) {
+	$arwrk = $view_id->FUERZA->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_id->FUERZA->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview_idedit.Lists["x_FUERZA"].Options = <?php echo (is_array($view_id->FUERZA->EditValue)) ? ew_ArrayToJson($view_id->FUERZA->EditValue, 1) : "[]" ?>;
+</script>
 </span>
+<?php } else { ?>
+<span id="el_view_id_FUERZA">
+<span<?php echo $view_id->FUERZA->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_id->FUERZA->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_FUERZA" name="x_FUERZA" id="x_FUERZA" value="<?php echo ew_HtmlEncode($view_id->FUERZA->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->FUERZA->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3621,11 +5008,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_NOM_VDA" class="form-group">
 		<label id="elh_view_id_NOM_VDA" for="x_NOM_VDA" class="col-sm-2 control-label ewLabel"><?php echo $view_id->NOM_VDA->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->NOM_VDA->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_NOM_VDA">
+<input type="text" data-field="x_NOM_VDA" name="x_NOM_VDA" id="x_NOM_VDA" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view_id->NOM_VDA->PlaceHolder) ?>" value="<?php echo $view_id->NOM_VDA->EditValue ?>"<?php echo $view_id->NOM_VDA->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_NOM_VDA">
 <span<?php echo $view_id->NOM_VDA->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->NOM_VDA->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->NOM_VDA->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_NOM_VDA" name="x_NOM_VDA" id="x_NOM_VDA" value="<?php echo ew_HtmlEncode($view_id->NOM_VDA->CurrentValue) ?>">
+<input type="hidden" data-field="x_NOM_VDA" name="x_NOM_VDA" id="x_NOM_VDA" value="<?php echo ew_HtmlEncode($view_id->NOM_VDA->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->NOM_VDA->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3633,11 +5026,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Ha_Coca" class="form-group">
 		<label id="elh_view_id_Ha_Coca" for="x_Ha_Coca" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Ha_Coca->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Ha_Coca->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Ha_Coca">
+<input type="text" data-field="x_Ha_Coca" name="x_Ha_Coca" id="x_Ha_Coca" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->Ha_Coca->PlaceHolder) ?>" value="<?php echo $view_id->Ha_Coca->EditValue ?>"<?php echo $view_id->Ha_Coca->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Ha_Coca">
 <span<?php echo $view_id->Ha_Coca->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Ha_Coca->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Ha_Coca->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Ha_Coca" name="x_Ha_Coca" id="x_Ha_Coca" value="<?php echo ew_HtmlEncode($view_id->Ha_Coca->CurrentValue) ?>">
+<input type="hidden" data-field="x_Ha_Coca" name="x_Ha_Coca" id="x_Ha_Coca" value="<?php echo ew_HtmlEncode($view_id->Ha_Coca->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Ha_Coca->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3645,11 +5044,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Ha_Amapola" class="form-group">
 		<label id="elh_view_id_Ha_Amapola" for="x_Ha_Amapola" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Ha_Amapola->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Ha_Amapola->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Ha_Amapola">
+<input type="text" data-field="x_Ha_Amapola" name="x_Ha_Amapola" id="x_Ha_Amapola" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->Ha_Amapola->PlaceHolder) ?>" value="<?php echo $view_id->Ha_Amapola->EditValue ?>"<?php echo $view_id->Ha_Amapola->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Ha_Amapola">
 <span<?php echo $view_id->Ha_Amapola->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Ha_Amapola->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Ha_Amapola->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Ha_Amapola" name="x_Ha_Amapola" id="x_Ha_Amapola" value="<?php echo ew_HtmlEncode($view_id->Ha_Amapola->CurrentValue) ?>">
+<input type="hidden" data-field="x_Ha_Amapola" name="x_Ha_Amapola" id="x_Ha_Amapola" value="<?php echo ew_HtmlEncode($view_id->Ha_Amapola->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Ha_Amapola->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3657,11 +5062,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Ha_Marihuana" class="form-group">
 		<label id="elh_view_id_Ha_Marihuana" for="x_Ha_Marihuana" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Ha_Marihuana->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Ha_Marihuana->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Ha_Marihuana">
+<input type="text" data-field="x_Ha_Marihuana" name="x_Ha_Marihuana" id="x_Ha_Marihuana" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->Ha_Marihuana->PlaceHolder) ?>" value="<?php echo $view_id->Ha_Marihuana->EditValue ?>"<?php echo $view_id->Ha_Marihuana->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Ha_Marihuana">
 <span<?php echo $view_id->Ha_Marihuana->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Ha_Marihuana->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Ha_Marihuana->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Ha_Marihuana" name="x_Ha_Marihuana" id="x_Ha_Marihuana" value="<?php echo ew_HtmlEncode($view_id->Ha_Marihuana->CurrentValue) ?>">
+<input type="hidden" data-field="x_Ha_Marihuana" name="x_Ha_Marihuana" id="x_Ha_Marihuana" value="<?php echo ew_HtmlEncode($view_id->Ha_Marihuana->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Ha_Marihuana->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3669,35 +5080,35 @@ $view_id_edit->ShowMessage();
 	<div id="r_T_erradi" class="form-group">
 		<label id="elh_view_id_T_erradi" for="x_T_erradi" class="col-sm-2 control-label ewLabel"><?php echo $view_id->T_erradi->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->T_erradi->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_T_erradi">
+<input type="text" data-field="x_T_erradi" name="x_T_erradi" id="x_T_erradi" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->T_erradi->PlaceHolder) ?>" value="<?php echo $view_id->T_erradi->EditValue ?>"<?php echo $view_id->T_erradi->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_T_erradi">
 <span<?php echo $view_id->T_erradi->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->T_erradi->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->T_erradi->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_T_erradi" name="x_T_erradi" id="x_T_erradi" value="<?php echo ew_HtmlEncode($view_id->T_erradi->CurrentValue) ?>">
-<?php echo $view_id->T_erradi->CustomMsg ?></div></div>
-	</div>
+<input type="hidden" data-field="x_T_erradi" name="x_T_erradi" id="x_T_erradi" value="<?php echo ew_HtmlEncode($view_id->T_erradi->FormValue) ?>">
 <?php } ?>
-<?php if ($view_id->LATITUD_sector->Visible) { // LATITUD_sector ?>
-	<div id="r_LATITUD_sector" class="form-group">
-		<label id="elh_view_id_LATITUD_sector" for="x_LATITUD_sector" class="col-sm-2 control-label ewLabel"><?php echo $view_id->LATITUD_sector->FldCaption() ?></label>
-		<div class="col-sm-10"><div<?php echo $view_id->LATITUD_sector->CellAttributes() ?>>
-<span id="el_view_id_LATITUD_sector">
-<span<?php echo $view_id->LATITUD_sector->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->LATITUD_sector->EditValue ?></p></span>
-</span>
-<input type="hidden" data-field="x_LATITUD_sector" name="x_LATITUD_sector" id="x_LATITUD_sector" value="<?php echo ew_HtmlEncode($view_id->LATITUD_sector->CurrentValue) ?>">
-<?php echo $view_id->LATITUD_sector->CustomMsg ?></div></div>
+<?php echo $view_id->T_erradi->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 <?php if ($view_id->GRA_LAT_Sector->Visible) { // GRA_LAT_Sector ?>
 	<div id="r_GRA_LAT_Sector" class="form-group">
 		<label id="elh_view_id_GRA_LAT_Sector" for="x_GRA_LAT_Sector" class="col-sm-2 control-label ewLabel"><?php echo $view_id->GRA_LAT_Sector->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->GRA_LAT_Sector->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_GRA_LAT_Sector">
+<input type="text" data-field="x_GRA_LAT_Sector" name="x_GRA_LAT_Sector" id="x_GRA_LAT_Sector" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->GRA_LAT_Sector->PlaceHolder) ?>" value="<?php echo $view_id->GRA_LAT_Sector->EditValue ?>"<?php echo $view_id->GRA_LAT_Sector->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_GRA_LAT_Sector">
 <span<?php echo $view_id->GRA_LAT_Sector->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->GRA_LAT_Sector->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->GRA_LAT_Sector->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_GRA_LAT_Sector" name="x_GRA_LAT_Sector" id="x_GRA_LAT_Sector" value="<?php echo ew_HtmlEncode($view_id->GRA_LAT_Sector->CurrentValue) ?>">
+<input type="hidden" data-field="x_GRA_LAT_Sector" name="x_GRA_LAT_Sector" id="x_GRA_LAT_Sector" value="<?php echo ew_HtmlEncode($view_id->GRA_LAT_Sector->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->GRA_LAT_Sector->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3705,11 +5116,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_MIN_LAT_Sector" class="form-group">
 		<label id="elh_view_id_MIN_LAT_Sector" for="x_MIN_LAT_Sector" class="col-sm-2 control-label ewLabel"><?php echo $view_id->MIN_LAT_Sector->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->MIN_LAT_Sector->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_MIN_LAT_Sector">
+<input type="text" data-field="x_MIN_LAT_Sector" name="x_MIN_LAT_Sector" id="x_MIN_LAT_Sector" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->MIN_LAT_Sector->PlaceHolder) ?>" value="<?php echo $view_id->MIN_LAT_Sector->EditValue ?>"<?php echo $view_id->MIN_LAT_Sector->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_MIN_LAT_Sector">
 <span<?php echo $view_id->MIN_LAT_Sector->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->MIN_LAT_Sector->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->MIN_LAT_Sector->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_MIN_LAT_Sector" name="x_MIN_LAT_Sector" id="x_MIN_LAT_Sector" value="<?php echo ew_HtmlEncode($view_id->MIN_LAT_Sector->CurrentValue) ?>">
+<input type="hidden" data-field="x_MIN_LAT_Sector" name="x_MIN_LAT_Sector" id="x_MIN_LAT_Sector" value="<?php echo ew_HtmlEncode($view_id->MIN_LAT_Sector->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->MIN_LAT_Sector->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3717,11 +5134,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_SEG_LAT_Sector" class="form-group">
 		<label id="elh_view_id_SEG_LAT_Sector" for="x_SEG_LAT_Sector" class="col-sm-2 control-label ewLabel"><?php echo $view_id->SEG_LAT_Sector->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->SEG_LAT_Sector->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_SEG_LAT_Sector">
+<input type="text" data-field="x_SEG_LAT_Sector" name="x_SEG_LAT_Sector" id="x_SEG_LAT_Sector" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->SEG_LAT_Sector->PlaceHolder) ?>" value="<?php echo $view_id->SEG_LAT_Sector->EditValue ?>"<?php echo $view_id->SEG_LAT_Sector->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_SEG_LAT_Sector">
 <span<?php echo $view_id->SEG_LAT_Sector->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->SEG_LAT_Sector->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->SEG_LAT_Sector->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_SEG_LAT_Sector" name="x_SEG_LAT_Sector" id="x_SEG_LAT_Sector" value="<?php echo ew_HtmlEncode($view_id->SEG_LAT_Sector->CurrentValue) ?>">
+<input type="hidden" data-field="x_SEG_LAT_Sector" name="x_SEG_LAT_Sector" id="x_SEG_LAT_Sector" value="<?php echo ew_HtmlEncode($view_id->SEG_LAT_Sector->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->SEG_LAT_Sector->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3729,11 +5152,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_GRA_LONG_Sector" class="form-group">
 		<label id="elh_view_id_GRA_LONG_Sector" for="x_GRA_LONG_Sector" class="col-sm-2 control-label ewLabel"><?php echo $view_id->GRA_LONG_Sector->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->GRA_LONG_Sector->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_GRA_LONG_Sector">
+<input type="text" data-field="x_GRA_LONG_Sector" name="x_GRA_LONG_Sector" id="x_GRA_LONG_Sector" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->GRA_LONG_Sector->PlaceHolder) ?>" value="<?php echo $view_id->GRA_LONG_Sector->EditValue ?>"<?php echo $view_id->GRA_LONG_Sector->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_GRA_LONG_Sector">
 <span<?php echo $view_id->GRA_LONG_Sector->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->GRA_LONG_Sector->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->GRA_LONG_Sector->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_GRA_LONG_Sector" name="x_GRA_LONG_Sector" id="x_GRA_LONG_Sector" value="<?php echo ew_HtmlEncode($view_id->GRA_LONG_Sector->CurrentValue) ?>">
+<input type="hidden" data-field="x_GRA_LONG_Sector" name="x_GRA_LONG_Sector" id="x_GRA_LONG_Sector" value="<?php echo ew_HtmlEncode($view_id->GRA_LONG_Sector->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->GRA_LONG_Sector->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3741,11 +5170,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_MIN_LONG_Sector" class="form-group">
 		<label id="elh_view_id_MIN_LONG_Sector" for="x_MIN_LONG_Sector" class="col-sm-2 control-label ewLabel"><?php echo $view_id->MIN_LONG_Sector->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->MIN_LONG_Sector->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_MIN_LONG_Sector">
+<input type="text" data-field="x_MIN_LONG_Sector" name="x_MIN_LONG_Sector" id="x_MIN_LONG_Sector" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->MIN_LONG_Sector->PlaceHolder) ?>" value="<?php echo $view_id->MIN_LONG_Sector->EditValue ?>"<?php echo $view_id->MIN_LONG_Sector->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_MIN_LONG_Sector">
 <span<?php echo $view_id->MIN_LONG_Sector->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->MIN_LONG_Sector->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->MIN_LONG_Sector->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_MIN_LONG_Sector" name="x_MIN_LONG_Sector" id="x_MIN_LONG_Sector" value="<?php echo ew_HtmlEncode($view_id->MIN_LONG_Sector->CurrentValue) ?>">
+<input type="hidden" data-field="x_MIN_LONG_Sector" name="x_MIN_LONG_Sector" id="x_MIN_LONG_Sector" value="<?php echo ew_HtmlEncode($view_id->MIN_LONG_Sector->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->MIN_LONG_Sector->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3753,11 +5188,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_SEG_LONG_Sector" class="form-group">
 		<label id="elh_view_id_SEG_LONG_Sector" for="x_SEG_LONG_Sector" class="col-sm-2 control-label ewLabel"><?php echo $view_id->SEG_LONG_Sector->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->SEG_LONG_Sector->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_SEG_LONG_Sector">
+<input type="text" data-field="x_SEG_LONG_Sector" name="x_SEG_LONG_Sector" id="x_SEG_LONG_Sector" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->SEG_LONG_Sector->PlaceHolder) ?>" value="<?php echo $view_id->SEG_LONG_Sector->EditValue ?>"<?php echo $view_id->SEG_LONG_Sector->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_SEG_LONG_Sector">
 <span<?php echo $view_id->SEG_LONG_Sector->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->SEG_LONG_Sector->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->SEG_LONG_Sector->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_SEG_LONG_Sector" name="x_SEG_LONG_Sector" id="x_SEG_LONG_Sector" value="<?php echo ew_HtmlEncode($view_id->SEG_LONG_Sector->CurrentValue) ?>">
+<input type="hidden" data-field="x_SEG_LONG_Sector" name="x_SEG_LONG_Sector" id="x_SEG_LONG_Sector" value="<?php echo ew_HtmlEncode($view_id->SEG_LONG_Sector->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->SEG_LONG_Sector->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3765,11 +5206,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Ini_Jorna" class="form-group">
 		<label id="elh_view_id_Ini_Jorna" for="x_Ini_Jorna" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Ini_Jorna->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Ini_Jorna->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Ini_Jorna">
+<input type="text" data-field="x_Ini_Jorna" name="x_Ini_Jorna" id="x_Ini_Jorna" size="30" maxlength="8" placeholder="<?php echo ew_HtmlEncode($view_id->Ini_Jorna->PlaceHolder) ?>" value="<?php echo $view_id->Ini_Jorna->EditValue ?>"<?php echo $view_id->Ini_Jorna->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Ini_Jorna">
 <span<?php echo $view_id->Ini_Jorna->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Ini_Jorna->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Ini_Jorna->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Ini_Jorna" name="x_Ini_Jorna" id="x_Ini_Jorna" value="<?php echo ew_HtmlEncode($view_id->Ini_Jorna->CurrentValue) ?>">
+<input type="hidden" data-field="x_Ini_Jorna" name="x_Ini_Jorna" id="x_Ini_Jorna" value="<?php echo ew_HtmlEncode($view_id->Ini_Jorna->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Ini_Jorna->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3777,11 +5224,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Fin_Jorna" class="form-group">
 		<label id="elh_view_id_Fin_Jorna" for="x_Fin_Jorna" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Fin_Jorna->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Fin_Jorna->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Fin_Jorna">
+<input type="text" data-field="x_Fin_Jorna" name="x_Fin_Jorna" id="x_Fin_Jorna" size="30" maxlength="8" placeholder="<?php echo ew_HtmlEncode($view_id->Fin_Jorna->PlaceHolder) ?>" value="<?php echo $view_id->Fin_Jorna->EditValue ?>"<?php echo $view_id->Fin_Jorna->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Fin_Jorna">
 <span<?php echo $view_id->Fin_Jorna->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Fin_Jorna->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Fin_Jorna->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Fin_Jorna" name="x_Fin_Jorna" id="x_Fin_Jorna" value="<?php echo ew_HtmlEncode($view_id->Fin_Jorna->CurrentValue) ?>">
+<input type="hidden" data-field="x_Fin_Jorna" name="x_Fin_Jorna" id="x_Fin_Jorna" value="<?php echo ew_HtmlEncode($view_id->Fin_Jorna->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Fin_Jorna->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3789,11 +5242,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Situ_Especial" class="form-group">
 		<label id="elh_view_id_Situ_Especial" for="x_Situ_Especial" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Situ_Especial->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Situ_Especial->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Situ_Especial">
+<input type="text" data-field="x_Situ_Especial" name="x_Situ_Especial" id="x_Situ_Especial" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view_id->Situ_Especial->PlaceHolder) ?>" value="<?php echo $view_id->Situ_Especial->EditValue ?>"<?php echo $view_id->Situ_Especial->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Situ_Especial">
 <span<?php echo $view_id->Situ_Especial->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Situ_Especial->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Situ_Especial->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Situ_Especial" name="x_Situ_Especial" id="x_Situ_Especial" value="<?php echo ew_HtmlEncode($view_id->Situ_Especial->CurrentValue) ?>">
+<input type="hidden" data-field="x_Situ_Especial" name="x_Situ_Especial" id="x_Situ_Especial" value="<?php echo ew_HtmlEncode($view_id->Situ_Especial->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Situ_Especial->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3801,11 +5260,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Adm_GME" class="form-group">
 		<label id="elh_view_id_Adm_GME" for="x_Adm_GME" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Adm_GME->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Adm_GME->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Adm_GME">
+<input type="text" data-field="x_Adm_GME" name="x_Adm_GME" id="x_Adm_GME" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->Adm_GME->PlaceHolder) ?>" value="<?php echo $view_id->Adm_GME->EditValue ?>"<?php echo $view_id->Adm_GME->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Adm_GME">
 <span<?php echo $view_id->Adm_GME->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Adm_GME->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Adm_GME->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Adm_GME" name="x_Adm_GME" id="x_Adm_GME" value="<?php echo ew_HtmlEncode($view_id->Adm_GME->CurrentValue) ?>">
+<input type="hidden" data-field="x_Adm_GME" name="x_Adm_GME" id="x_Adm_GME" value="<?php echo ew_HtmlEncode($view_id->Adm_GME->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Adm_GME->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3813,11 +5278,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Abastecimiento" class="form-group">
 		<label id="elh_view_id__1_Abastecimiento" for="x__1_Abastecimiento" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Abastecimiento->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Abastecimiento->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Abastecimiento">
+<input type="text" data-field="x__1_Abastecimiento" name="x__1_Abastecimiento" id="x__1_Abastecimiento" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Abastecimiento->PlaceHolder) ?>" value="<?php echo $view_id->_1_Abastecimiento->EditValue ?>"<?php echo $view_id->_1_Abastecimiento->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Abastecimiento">
 <span<?php echo $view_id->_1_Abastecimiento->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Abastecimiento->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Abastecimiento->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Abastecimiento" name="x__1_Abastecimiento" id="x__1_Abastecimiento" value="<?php echo ew_HtmlEncode($view_id->_1_Abastecimiento->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Abastecimiento" name="x__1_Abastecimiento" id="x__1_Abastecimiento" value="<?php echo ew_HtmlEncode($view_id->_1_Abastecimiento->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Abastecimiento->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3825,11 +5296,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Acompanamiento_firma_GME" class="form-group">
 		<label id="elh_view_id__1_Acompanamiento_firma_GME" for="x__1_Acompanamiento_firma_GME" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Acompanamiento_firma_GME->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Acompanamiento_firma_GME->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Acompanamiento_firma_GME">
+<input type="text" data-field="x__1_Acompanamiento_firma_GME" name="x__1_Acompanamiento_firma_GME" id="x__1_Acompanamiento_firma_GME" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Acompanamiento_firma_GME->PlaceHolder) ?>" value="<?php echo $view_id->_1_Acompanamiento_firma_GME->EditValue ?>"<?php echo $view_id->_1_Acompanamiento_firma_GME->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Acompanamiento_firma_GME">
 <span<?php echo $view_id->_1_Acompanamiento_firma_GME->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Acompanamiento_firma_GME->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Acompanamiento_firma_GME->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Acompanamiento_firma_GME" name="x__1_Acompanamiento_firma_GME" id="x__1_Acompanamiento_firma_GME" value="<?php echo ew_HtmlEncode($view_id->_1_Acompanamiento_firma_GME->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Acompanamiento_firma_GME" name="x__1_Acompanamiento_firma_GME" id="x__1_Acompanamiento_firma_GME" value="<?php echo ew_HtmlEncode($view_id->_1_Acompanamiento_firma_GME->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Acompanamiento_firma_GME->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3837,11 +5314,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Apoyo_zonal_sin_punto_asignado" class="form-group">
 		<label id="elh_view_id__1_Apoyo_zonal_sin_punto_asignado" for="x__1_Apoyo_zonal_sin_punto_asignado" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Apoyo_zonal_sin_punto_asignado->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Apoyo_zonal_sin_punto_asignado->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Apoyo_zonal_sin_punto_asignado">
+<input type="text" data-field="x__1_Apoyo_zonal_sin_punto_asignado" name="x__1_Apoyo_zonal_sin_punto_asignado" id="x__1_Apoyo_zonal_sin_punto_asignado" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Apoyo_zonal_sin_punto_asignado->PlaceHolder) ?>" value="<?php echo $view_id->_1_Apoyo_zonal_sin_punto_asignado->EditValue ?>"<?php echo $view_id->_1_Apoyo_zonal_sin_punto_asignado->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Apoyo_zonal_sin_punto_asignado">
 <span<?php echo $view_id->_1_Apoyo_zonal_sin_punto_asignado->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Apoyo_zonal_sin_punto_asignado->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Apoyo_zonal_sin_punto_asignado->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Apoyo_zonal_sin_punto_asignado" name="x__1_Apoyo_zonal_sin_punto_asignado" id="x__1_Apoyo_zonal_sin_punto_asignado" value="<?php echo ew_HtmlEncode($view_id->_1_Apoyo_zonal_sin_punto_asignado->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Apoyo_zonal_sin_punto_asignado" name="x__1_Apoyo_zonal_sin_punto_asignado" id="x__1_Apoyo_zonal_sin_punto_asignado" value="<?php echo ew_HtmlEncode($view_id->_1_Apoyo_zonal_sin_punto_asignado->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Apoyo_zonal_sin_punto_asignado->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3849,11 +5332,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Descanso_en_dia_habil" class="form-group">
 		<label id="elh_view_id__1_Descanso_en_dia_habil" for="x__1_Descanso_en_dia_habil" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Descanso_en_dia_habil->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Descanso_en_dia_habil->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Descanso_en_dia_habil">
+<input type="text" data-field="x__1_Descanso_en_dia_habil" name="x__1_Descanso_en_dia_habil" id="x__1_Descanso_en_dia_habil" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Descanso_en_dia_habil->PlaceHolder) ?>" value="<?php echo $view_id->_1_Descanso_en_dia_habil->EditValue ?>"<?php echo $view_id->_1_Descanso_en_dia_habil->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Descanso_en_dia_habil">
 <span<?php echo $view_id->_1_Descanso_en_dia_habil->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Descanso_en_dia_habil->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Descanso_en_dia_habil->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Descanso_en_dia_habil" name="x__1_Descanso_en_dia_habil" id="x__1_Descanso_en_dia_habil" value="<?php echo ew_HtmlEncode($view_id->_1_Descanso_en_dia_habil->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Descanso_en_dia_habil" name="x__1_Descanso_en_dia_habil" id="x__1_Descanso_en_dia_habil" value="<?php echo ew_HtmlEncode($view_id->_1_Descanso_en_dia_habil->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Descanso_en_dia_habil->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3861,11 +5350,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Descanso_festivo_dominical" class="form-group">
 		<label id="elh_view_id__1_Descanso_festivo_dominical" for="x__1_Descanso_festivo_dominical" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Descanso_festivo_dominical->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Descanso_festivo_dominical->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Descanso_festivo_dominical">
+<input type="text" data-field="x__1_Descanso_festivo_dominical" name="x__1_Descanso_festivo_dominical" id="x__1_Descanso_festivo_dominical" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Descanso_festivo_dominical->PlaceHolder) ?>" value="<?php echo $view_id->_1_Descanso_festivo_dominical->EditValue ?>"<?php echo $view_id->_1_Descanso_festivo_dominical->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Descanso_festivo_dominical">
 <span<?php echo $view_id->_1_Descanso_festivo_dominical->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Descanso_festivo_dominical->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Descanso_festivo_dominical->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Descanso_festivo_dominical" name="x__1_Descanso_festivo_dominical" id="x__1_Descanso_festivo_dominical" value="<?php echo ew_HtmlEncode($view_id->_1_Descanso_festivo_dominical->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Descanso_festivo_dominical" name="x__1_Descanso_festivo_dominical" id="x__1_Descanso_festivo_dominical" value="<?php echo ew_HtmlEncode($view_id->_1_Descanso_festivo_dominical->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Descanso_festivo_dominical->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3873,11 +5368,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Dia_compensatorio" class="form-group">
 		<label id="elh_view_id__1_Dia_compensatorio" for="x__1_Dia_compensatorio" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Dia_compensatorio->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Dia_compensatorio->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Dia_compensatorio">
+<input type="text" data-field="x__1_Dia_compensatorio" name="x__1_Dia_compensatorio" id="x__1_Dia_compensatorio" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Dia_compensatorio->PlaceHolder) ?>" value="<?php echo $view_id->_1_Dia_compensatorio->EditValue ?>"<?php echo $view_id->_1_Dia_compensatorio->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Dia_compensatorio">
 <span<?php echo $view_id->_1_Dia_compensatorio->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Dia_compensatorio->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Dia_compensatorio->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Dia_compensatorio" name="x__1_Dia_compensatorio" id="x__1_Dia_compensatorio" value="<?php echo ew_HtmlEncode($view_id->_1_Dia_compensatorio->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Dia_compensatorio" name="x__1_Dia_compensatorio" id="x__1_Dia_compensatorio" value="<?php echo ew_HtmlEncode($view_id->_1_Dia_compensatorio->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Dia_compensatorio->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3885,11 +5386,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Erradicacion_en_dia_festivo" class="form-group">
 		<label id="elh_view_id__1_Erradicacion_en_dia_festivo" for="x__1_Erradicacion_en_dia_festivo" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Erradicacion_en_dia_festivo->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Erradicacion_en_dia_festivo->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Erradicacion_en_dia_festivo">
+<input type="text" data-field="x__1_Erradicacion_en_dia_festivo" name="x__1_Erradicacion_en_dia_festivo" id="x__1_Erradicacion_en_dia_festivo" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Erradicacion_en_dia_festivo->PlaceHolder) ?>" value="<?php echo $view_id->_1_Erradicacion_en_dia_festivo->EditValue ?>"<?php echo $view_id->_1_Erradicacion_en_dia_festivo->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Erradicacion_en_dia_festivo">
 <span<?php echo $view_id->_1_Erradicacion_en_dia_festivo->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Erradicacion_en_dia_festivo->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Erradicacion_en_dia_festivo->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Erradicacion_en_dia_festivo" name="x__1_Erradicacion_en_dia_festivo" id="x__1_Erradicacion_en_dia_festivo" value="<?php echo ew_HtmlEncode($view_id->_1_Erradicacion_en_dia_festivo->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Erradicacion_en_dia_festivo" name="x__1_Erradicacion_en_dia_festivo" id="x__1_Erradicacion_en_dia_festivo" value="<?php echo ew_HtmlEncode($view_id->_1_Erradicacion_en_dia_festivo->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Erradicacion_en_dia_festivo->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3897,11 +5404,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Espera_helicoptero_Helistar" class="form-group">
 		<label id="elh_view_id__1_Espera_helicoptero_Helistar" for="x__1_Espera_helicoptero_Helistar" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Espera_helicoptero_Helistar->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Espera_helicoptero_Helistar->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Espera_helicoptero_Helistar">
+<input type="text" data-field="x__1_Espera_helicoptero_Helistar" name="x__1_Espera_helicoptero_Helistar" id="x__1_Espera_helicoptero_Helistar" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Espera_helicoptero_Helistar->PlaceHolder) ?>" value="<?php echo $view_id->_1_Espera_helicoptero_Helistar->EditValue ?>"<?php echo $view_id->_1_Espera_helicoptero_Helistar->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Espera_helicoptero_Helistar">
 <span<?php echo $view_id->_1_Espera_helicoptero_Helistar->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Espera_helicoptero_Helistar->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Espera_helicoptero_Helistar->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Espera_helicoptero_Helistar" name="x__1_Espera_helicoptero_Helistar" id="x__1_Espera_helicoptero_Helistar" value="<?php echo ew_HtmlEncode($view_id->_1_Espera_helicoptero_Helistar->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Espera_helicoptero_Helistar" name="x__1_Espera_helicoptero_Helistar" id="x__1_Espera_helicoptero_Helistar" value="<?php echo ew_HtmlEncode($view_id->_1_Espera_helicoptero_Helistar->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Espera_helicoptero_Helistar->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3909,11 +5422,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Extraccion" class="form-group">
 		<label id="elh_view_id__1_Extraccion" for="x__1_Extraccion" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Extraccion->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Extraccion->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Extraccion">
+<input type="text" data-field="x__1_Extraccion" name="x__1_Extraccion" id="x__1_Extraccion" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Extraccion->PlaceHolder) ?>" value="<?php echo $view_id->_1_Extraccion->EditValue ?>"<?php echo $view_id->_1_Extraccion->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Extraccion">
 <span<?php echo $view_id->_1_Extraccion->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Extraccion->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Extraccion->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Extraccion" name="x__1_Extraccion" id="x__1_Extraccion" value="<?php echo ew_HtmlEncode($view_id->_1_Extraccion->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Extraccion" name="x__1_Extraccion" id="x__1_Extraccion" value="<?php echo ew_HtmlEncode($view_id->_1_Extraccion->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Extraccion->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3921,11 +5440,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Firma_contrato_GME" class="form-group">
 		<label id="elh_view_id__1_Firma_contrato_GME" for="x__1_Firma_contrato_GME" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Firma_contrato_GME->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Firma_contrato_GME->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Firma_contrato_GME">
+<input type="text" data-field="x__1_Firma_contrato_GME" name="x__1_Firma_contrato_GME" id="x__1_Firma_contrato_GME" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Firma_contrato_GME->PlaceHolder) ?>" value="<?php echo $view_id->_1_Firma_contrato_GME->EditValue ?>"<?php echo $view_id->_1_Firma_contrato_GME->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Firma_contrato_GME">
 <span<?php echo $view_id->_1_Firma_contrato_GME->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Firma_contrato_GME->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Firma_contrato_GME->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Firma_contrato_GME" name="x__1_Firma_contrato_GME" id="x__1_Firma_contrato_GME" value="<?php echo ew_HtmlEncode($view_id->_1_Firma_contrato_GME->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Firma_contrato_GME" name="x__1_Firma_contrato_GME" id="x__1_Firma_contrato_GME" value="<?php echo ew_HtmlEncode($view_id->_1_Firma_contrato_GME->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Firma_contrato_GME->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3933,11 +5458,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Induccion_Apoyo_Zonal" class="form-group">
 		<label id="elh_view_id__1_Induccion_Apoyo_Zonal" for="x__1_Induccion_Apoyo_Zonal" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Induccion_Apoyo_Zonal->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Induccion_Apoyo_Zonal->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Induccion_Apoyo_Zonal">
+<input type="text" data-field="x__1_Induccion_Apoyo_Zonal" name="x__1_Induccion_Apoyo_Zonal" id="x__1_Induccion_Apoyo_Zonal" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Induccion_Apoyo_Zonal->PlaceHolder) ?>" value="<?php echo $view_id->_1_Induccion_Apoyo_Zonal->EditValue ?>"<?php echo $view_id->_1_Induccion_Apoyo_Zonal->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Induccion_Apoyo_Zonal">
 <span<?php echo $view_id->_1_Induccion_Apoyo_Zonal->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Induccion_Apoyo_Zonal->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Induccion_Apoyo_Zonal->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Induccion_Apoyo_Zonal" name="x__1_Induccion_Apoyo_Zonal" id="x__1_Induccion_Apoyo_Zonal" value="<?php echo ew_HtmlEncode($view_id->_1_Induccion_Apoyo_Zonal->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Induccion_Apoyo_Zonal" name="x__1_Induccion_Apoyo_Zonal" id="x__1_Induccion_Apoyo_Zonal" value="<?php echo ew_HtmlEncode($view_id->_1_Induccion_Apoyo_Zonal->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Induccion_Apoyo_Zonal->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3945,11 +5476,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Insercion" class="form-group">
 		<label id="elh_view_id__1_Insercion" for="x__1_Insercion" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Insercion->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Insercion->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Insercion">
+<input type="text" data-field="x__1_Insercion" name="x__1_Insercion" id="x__1_Insercion" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Insercion->PlaceHolder) ?>" value="<?php echo $view_id->_1_Insercion->EditValue ?>"<?php echo $view_id->_1_Insercion->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Insercion">
 <span<?php echo $view_id->_1_Insercion->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Insercion->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Insercion->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Insercion" name="x__1_Insercion" id="x__1_Insercion" value="<?php echo ew_HtmlEncode($view_id->_1_Insercion->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Insercion" name="x__1_Insercion" id="x__1_Insercion" value="<?php echo ew_HtmlEncode($view_id->_1_Insercion->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Insercion->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3957,11 +5494,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Llegada_GME_a_su_lugar_de_Origen_fin_fase" class="form-group">
 		<label id="elh_view_id__1_Llegada_GME_a_su_lugar_de_Origen_fin_fase" for="x__1_Llegada_GME_a_su_lugar_de_Origen_fin_fase" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Llegada_GME_a_su_lugar_de_Origen_fin_fase">
+<input type="text" data-field="x__1_Llegada_GME_a_su_lugar_de_Origen_fin_fase" name="x__1_Llegada_GME_a_su_lugar_de_Origen_fin_fase" id="x__1_Llegada_GME_a_su_lugar_de_Origen_fin_fase" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->PlaceHolder) ?>" value="<?php echo $view_id->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->EditValue ?>"<?php echo $view_id->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Llegada_GME_a_su_lugar_de_Origen_fin_fase">
 <span<?php echo $view_id->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Llegada_GME_a_su_lugar_de_Origen_fin_fase" name="x__1_Llegada_GME_a_su_lugar_de_Origen_fin_fase" id="x__1_Llegada_GME_a_su_lugar_de_Origen_fin_fase" value="<?php echo ew_HtmlEncode($view_id->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Llegada_GME_a_su_lugar_de_Origen_fin_fase" name="x__1_Llegada_GME_a_su_lugar_de_Origen_fin_fase" id="x__1_Llegada_GME_a_su_lugar_de_Origen_fin_fase" value="<?php echo ew_HtmlEncode($view_id->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Llegada_GME_a_su_lugar_de_Origen_fin_fase->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3969,11 +5512,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Novedad_apoyo_zonal" class="form-group">
 		<label id="elh_view_id__1_Novedad_apoyo_zonal" for="x__1_Novedad_apoyo_zonal" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Novedad_apoyo_zonal->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Novedad_apoyo_zonal->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Novedad_apoyo_zonal">
+<input type="text" data-field="x__1_Novedad_apoyo_zonal" name="x__1_Novedad_apoyo_zonal" id="x__1_Novedad_apoyo_zonal" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Novedad_apoyo_zonal->PlaceHolder) ?>" value="<?php echo $view_id->_1_Novedad_apoyo_zonal->EditValue ?>"<?php echo $view_id->_1_Novedad_apoyo_zonal->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Novedad_apoyo_zonal">
 <span<?php echo $view_id->_1_Novedad_apoyo_zonal->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Novedad_apoyo_zonal->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Novedad_apoyo_zonal->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Novedad_apoyo_zonal" name="x__1_Novedad_apoyo_zonal" id="x__1_Novedad_apoyo_zonal" value="<?php echo ew_HtmlEncode($view_id->_1_Novedad_apoyo_zonal->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Novedad_apoyo_zonal" name="x__1_Novedad_apoyo_zonal" id="x__1_Novedad_apoyo_zonal" value="<?php echo ew_HtmlEncode($view_id->_1_Novedad_apoyo_zonal->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Novedad_apoyo_zonal->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3981,11 +5530,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Novedad_enfermero" class="form-group">
 		<label id="elh_view_id__1_Novedad_enfermero" for="x__1_Novedad_enfermero" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Novedad_enfermero->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Novedad_enfermero->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Novedad_enfermero">
+<input type="text" data-field="x__1_Novedad_enfermero" name="x__1_Novedad_enfermero" id="x__1_Novedad_enfermero" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Novedad_enfermero->PlaceHolder) ?>" value="<?php echo $view_id->_1_Novedad_enfermero->EditValue ?>"<?php echo $view_id->_1_Novedad_enfermero->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Novedad_enfermero">
 <span<?php echo $view_id->_1_Novedad_enfermero->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Novedad_enfermero->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Novedad_enfermero->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Novedad_enfermero" name="x__1_Novedad_enfermero" id="x__1_Novedad_enfermero" value="<?php echo ew_HtmlEncode($view_id->_1_Novedad_enfermero->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Novedad_enfermero" name="x__1_Novedad_enfermero" id="x__1_Novedad_enfermero" value="<?php echo ew_HtmlEncode($view_id->_1_Novedad_enfermero->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Novedad_enfermero->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3993,11 +5548,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Punto_fuera_del_area_de_erradicacion" class="form-group">
 		<label id="elh_view_id__1_Punto_fuera_del_area_de_erradicacion" for="x__1_Punto_fuera_del_area_de_erradicacion" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Punto_fuera_del_area_de_erradicacion->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Punto_fuera_del_area_de_erradicacion->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Punto_fuera_del_area_de_erradicacion">
+<input type="text" data-field="x__1_Punto_fuera_del_area_de_erradicacion" name="x__1_Punto_fuera_del_area_de_erradicacion" id="x__1_Punto_fuera_del_area_de_erradicacion" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Punto_fuera_del_area_de_erradicacion->PlaceHolder) ?>" value="<?php echo $view_id->_1_Punto_fuera_del_area_de_erradicacion->EditValue ?>"<?php echo $view_id->_1_Punto_fuera_del_area_de_erradicacion->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Punto_fuera_del_area_de_erradicacion">
 <span<?php echo $view_id->_1_Punto_fuera_del_area_de_erradicacion->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Punto_fuera_del_area_de_erradicacion->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Punto_fuera_del_area_de_erradicacion->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Punto_fuera_del_area_de_erradicacion" name="x__1_Punto_fuera_del_area_de_erradicacion" id="x__1_Punto_fuera_del_area_de_erradicacion" value="<?php echo ew_HtmlEncode($view_id->_1_Punto_fuera_del_area_de_erradicacion->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Punto_fuera_del_area_de_erradicacion" name="x__1_Punto_fuera_del_area_de_erradicacion" id="x__1_Punto_fuera_del_area_de_erradicacion" value="<?php echo ew_HtmlEncode($view_id->_1_Punto_fuera_del_area_de_erradicacion->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Punto_fuera_del_area_de_erradicacion->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4005,11 +5566,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Transporte_bus" class="form-group">
 		<label id="elh_view_id__1_Transporte_bus" for="x__1_Transporte_bus" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Transporte_bus->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Transporte_bus->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Transporte_bus">
+<input type="text" data-field="x__1_Transporte_bus" name="x__1_Transporte_bus" id="x__1_Transporte_bus" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Transporte_bus->PlaceHolder) ?>" value="<?php echo $view_id->_1_Transporte_bus->EditValue ?>"<?php echo $view_id->_1_Transporte_bus->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Transporte_bus">
 <span<?php echo $view_id->_1_Transporte_bus->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Transporte_bus->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Transporte_bus->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Transporte_bus" name="x__1_Transporte_bus" id="x__1_Transporte_bus" value="<?php echo ew_HtmlEncode($view_id->_1_Transporte_bus->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Transporte_bus" name="x__1_Transporte_bus" id="x__1_Transporte_bus" value="<?php echo ew_HtmlEncode($view_id->_1_Transporte_bus->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Transporte_bus->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4017,11 +5584,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Traslado_apoyo_zonal" class="form-group">
 		<label id="elh_view_id__1_Traslado_apoyo_zonal" for="x__1_Traslado_apoyo_zonal" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Traslado_apoyo_zonal->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Traslado_apoyo_zonal->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Traslado_apoyo_zonal">
+<input type="text" data-field="x__1_Traslado_apoyo_zonal" name="x__1_Traslado_apoyo_zonal" id="x__1_Traslado_apoyo_zonal" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Traslado_apoyo_zonal->PlaceHolder) ?>" value="<?php echo $view_id->_1_Traslado_apoyo_zonal->EditValue ?>"<?php echo $view_id->_1_Traslado_apoyo_zonal->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Traslado_apoyo_zonal">
 <span<?php echo $view_id->_1_Traslado_apoyo_zonal->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Traslado_apoyo_zonal->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Traslado_apoyo_zonal->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Traslado_apoyo_zonal" name="x__1_Traslado_apoyo_zonal" id="x__1_Traslado_apoyo_zonal" value="<?php echo ew_HtmlEncode($view_id->_1_Traslado_apoyo_zonal->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Traslado_apoyo_zonal" name="x__1_Traslado_apoyo_zonal" id="x__1_Traslado_apoyo_zonal" value="<?php echo ew_HtmlEncode($view_id->_1_Traslado_apoyo_zonal->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Traslado_apoyo_zonal->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4029,11 +5602,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__1_Traslado_area_vivac" class="form-group">
 		<label id="elh_view_id__1_Traslado_area_vivac" for="x__1_Traslado_area_vivac" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_1_Traslado_area_vivac->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_1_Traslado_area_vivac->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__1_Traslado_area_vivac">
+<input type="text" data-field="x__1_Traslado_area_vivac" name="x__1_Traslado_area_vivac" id="x__1_Traslado_area_vivac" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_1_Traslado_area_vivac->PlaceHolder) ?>" value="<?php echo $view_id->_1_Traslado_area_vivac->EditValue ?>"<?php echo $view_id->_1_Traslado_area_vivac->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__1_Traslado_area_vivac">
 <span<?php echo $view_id->_1_Traslado_area_vivac->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_1_Traslado_area_vivac->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_1_Traslado_area_vivac->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__1_Traslado_area_vivac" name="x__1_Traslado_area_vivac" id="x__1_Traslado_area_vivac" value="<?php echo ew_HtmlEncode($view_id->_1_Traslado_area_vivac->CurrentValue) ?>">
+<input type="hidden" data-field="x__1_Traslado_area_vivac" name="x__1_Traslado_area_vivac" id="x__1_Traslado_area_vivac" value="<?php echo ew_HtmlEncode($view_id->_1_Traslado_area_vivac->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_1_Traslado_area_vivac->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4041,11 +5620,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Adm_Fuerza" class="form-group">
 		<label id="elh_view_id_Adm_Fuerza" for="x_Adm_Fuerza" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Adm_Fuerza->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Adm_Fuerza->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Adm_Fuerza">
+<input type="text" data-field="x_Adm_Fuerza" name="x_Adm_Fuerza" id="x_Adm_Fuerza" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->Adm_Fuerza->PlaceHolder) ?>" value="<?php echo $view_id->Adm_Fuerza->EditValue ?>"<?php echo $view_id->Adm_Fuerza->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Adm_Fuerza">
 <span<?php echo $view_id->Adm_Fuerza->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Adm_Fuerza->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Adm_Fuerza->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Adm_Fuerza" name="x_Adm_Fuerza" id="x_Adm_Fuerza" value="<?php echo ew_HtmlEncode($view_id->Adm_Fuerza->CurrentValue) ?>">
+<input type="hidden" data-field="x_Adm_Fuerza" name="x_Adm_Fuerza" id="x_Adm_Fuerza" value="<?php echo ew_HtmlEncode($view_id->Adm_Fuerza->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Adm_Fuerza->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4053,11 +5638,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__2_A_la_espera_definicion_nuevo_punto_FP" class="form-group">
 		<label id="elh_view_id__2_A_la_espera_definicion_nuevo_punto_FP" for="x__2_A_la_espera_definicion_nuevo_punto_FP" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_2_A_la_espera_definicion_nuevo_punto_FP->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_2_A_la_espera_definicion_nuevo_punto_FP->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__2_A_la_espera_definicion_nuevo_punto_FP">
+<input type="text" data-field="x__2_A_la_espera_definicion_nuevo_punto_FP" name="x__2_A_la_espera_definicion_nuevo_punto_FP" id="x__2_A_la_espera_definicion_nuevo_punto_FP" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_2_A_la_espera_definicion_nuevo_punto_FP->PlaceHolder) ?>" value="<?php echo $view_id->_2_A_la_espera_definicion_nuevo_punto_FP->EditValue ?>"<?php echo $view_id->_2_A_la_espera_definicion_nuevo_punto_FP->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__2_A_la_espera_definicion_nuevo_punto_FP">
 <span<?php echo $view_id->_2_A_la_espera_definicion_nuevo_punto_FP->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_2_A_la_espera_definicion_nuevo_punto_FP->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_2_A_la_espera_definicion_nuevo_punto_FP->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__2_A_la_espera_definicion_nuevo_punto_FP" name="x__2_A_la_espera_definicion_nuevo_punto_FP" id="x__2_A_la_espera_definicion_nuevo_punto_FP" value="<?php echo ew_HtmlEncode($view_id->_2_A_la_espera_definicion_nuevo_punto_FP->CurrentValue) ?>">
+<input type="hidden" data-field="x__2_A_la_espera_definicion_nuevo_punto_FP" name="x__2_A_la_espera_definicion_nuevo_punto_FP" id="x__2_A_la_espera_definicion_nuevo_punto_FP" value="<?php echo ew_HtmlEncode($view_id->_2_A_la_espera_definicion_nuevo_punto_FP->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_2_A_la_espera_definicion_nuevo_punto_FP->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4065,11 +5656,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__2_Espera_helicoptero_FP_de_seguridad" class="form-group">
 		<label id="elh_view_id__2_Espera_helicoptero_FP_de_seguridad" for="x__2_Espera_helicoptero_FP_de_seguridad" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_2_Espera_helicoptero_FP_de_seguridad->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_2_Espera_helicoptero_FP_de_seguridad->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__2_Espera_helicoptero_FP_de_seguridad">
+<input type="text" data-field="x__2_Espera_helicoptero_FP_de_seguridad" name="x__2_Espera_helicoptero_FP_de_seguridad" id="x__2_Espera_helicoptero_FP_de_seguridad" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_2_Espera_helicoptero_FP_de_seguridad->PlaceHolder) ?>" value="<?php echo $view_id->_2_Espera_helicoptero_FP_de_seguridad->EditValue ?>"<?php echo $view_id->_2_Espera_helicoptero_FP_de_seguridad->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__2_Espera_helicoptero_FP_de_seguridad">
 <span<?php echo $view_id->_2_Espera_helicoptero_FP_de_seguridad->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_2_Espera_helicoptero_FP_de_seguridad->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_2_Espera_helicoptero_FP_de_seguridad->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__2_Espera_helicoptero_FP_de_seguridad" name="x__2_Espera_helicoptero_FP_de_seguridad" id="x__2_Espera_helicoptero_FP_de_seguridad" value="<?php echo ew_HtmlEncode($view_id->_2_Espera_helicoptero_FP_de_seguridad->CurrentValue) ?>">
+<input type="hidden" data-field="x__2_Espera_helicoptero_FP_de_seguridad" name="x__2_Espera_helicoptero_FP_de_seguridad" id="x__2_Espera_helicoptero_FP_de_seguridad" value="<?php echo ew_HtmlEncode($view_id->_2_Espera_helicoptero_FP_de_seguridad->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_2_Espera_helicoptero_FP_de_seguridad->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4077,11 +5674,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__2_Espera_helicoptero_FP_que_abastece" class="form-group">
 		<label id="elh_view_id__2_Espera_helicoptero_FP_que_abastece" for="x__2_Espera_helicoptero_FP_que_abastece" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_2_Espera_helicoptero_FP_que_abastece->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_2_Espera_helicoptero_FP_que_abastece->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__2_Espera_helicoptero_FP_que_abastece">
+<input type="text" data-field="x__2_Espera_helicoptero_FP_que_abastece" name="x__2_Espera_helicoptero_FP_que_abastece" id="x__2_Espera_helicoptero_FP_que_abastece" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_2_Espera_helicoptero_FP_que_abastece->PlaceHolder) ?>" value="<?php echo $view_id->_2_Espera_helicoptero_FP_que_abastece->EditValue ?>"<?php echo $view_id->_2_Espera_helicoptero_FP_que_abastece->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__2_Espera_helicoptero_FP_que_abastece">
 <span<?php echo $view_id->_2_Espera_helicoptero_FP_que_abastece->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_2_Espera_helicoptero_FP_que_abastece->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_2_Espera_helicoptero_FP_que_abastece->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__2_Espera_helicoptero_FP_que_abastece" name="x__2_Espera_helicoptero_FP_que_abastece" id="x__2_Espera_helicoptero_FP_que_abastece" value="<?php echo ew_HtmlEncode($view_id->_2_Espera_helicoptero_FP_que_abastece->CurrentValue) ?>">
+<input type="hidden" data-field="x__2_Espera_helicoptero_FP_que_abastece" name="x__2_Espera_helicoptero_FP_que_abastece" id="x__2_Espera_helicoptero_FP_que_abastece" value="<?php echo ew_HtmlEncode($view_id->_2_Espera_helicoptero_FP_que_abastece->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_2_Espera_helicoptero_FP_que_abastece->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4089,11 +5692,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__2_Induccion_FP" class="form-group">
 		<label id="elh_view_id__2_Induccion_FP" for="x__2_Induccion_FP" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_2_Induccion_FP->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_2_Induccion_FP->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__2_Induccion_FP">
+<input type="text" data-field="x__2_Induccion_FP" name="x__2_Induccion_FP" id="x__2_Induccion_FP" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_2_Induccion_FP->PlaceHolder) ?>" value="<?php echo $view_id->_2_Induccion_FP->EditValue ?>"<?php echo $view_id->_2_Induccion_FP->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__2_Induccion_FP">
 <span<?php echo $view_id->_2_Induccion_FP->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_2_Induccion_FP->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_2_Induccion_FP->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__2_Induccion_FP" name="x__2_Induccion_FP" id="x__2_Induccion_FP" value="<?php echo ew_HtmlEncode($view_id->_2_Induccion_FP->CurrentValue) ?>">
+<input type="hidden" data-field="x__2_Induccion_FP" name="x__2_Induccion_FP" id="x__2_Induccion_FP" value="<?php echo ew_HtmlEncode($view_id->_2_Induccion_FP->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_2_Induccion_FP->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4101,11 +5710,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__2_Novedad_canino_o_del_grupo_de_deteccion" class="form-group">
 		<label id="elh_view_id__2_Novedad_canino_o_del_grupo_de_deteccion" for="x__2_Novedad_canino_o_del_grupo_de_deteccion" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_2_Novedad_canino_o_del_grupo_de_deteccion->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_2_Novedad_canino_o_del_grupo_de_deteccion->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__2_Novedad_canino_o_del_grupo_de_deteccion">
+<input type="text" data-field="x__2_Novedad_canino_o_del_grupo_de_deteccion" name="x__2_Novedad_canino_o_del_grupo_de_deteccion" id="x__2_Novedad_canino_o_del_grupo_de_deteccion" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_2_Novedad_canino_o_del_grupo_de_deteccion->PlaceHolder) ?>" value="<?php echo $view_id->_2_Novedad_canino_o_del_grupo_de_deteccion->EditValue ?>"<?php echo $view_id->_2_Novedad_canino_o_del_grupo_de_deteccion->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__2_Novedad_canino_o_del_grupo_de_deteccion">
 <span<?php echo $view_id->_2_Novedad_canino_o_del_grupo_de_deteccion->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_2_Novedad_canino_o_del_grupo_de_deteccion->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_2_Novedad_canino_o_del_grupo_de_deteccion->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__2_Novedad_canino_o_del_grupo_de_deteccion" name="x__2_Novedad_canino_o_del_grupo_de_deteccion" id="x__2_Novedad_canino_o_del_grupo_de_deteccion" value="<?php echo ew_HtmlEncode($view_id->_2_Novedad_canino_o_del_grupo_de_deteccion->CurrentValue) ?>">
+<input type="hidden" data-field="x__2_Novedad_canino_o_del_grupo_de_deteccion" name="x__2_Novedad_canino_o_del_grupo_de_deteccion" id="x__2_Novedad_canino_o_del_grupo_de_deteccion" value="<?php echo ew_HtmlEncode($view_id->_2_Novedad_canino_o_del_grupo_de_deteccion->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_2_Novedad_canino_o_del_grupo_de_deteccion->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4113,11 +5728,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__2_Problemas_fuerza_publica" class="form-group">
 		<label id="elh_view_id__2_Problemas_fuerza_publica" for="x__2_Problemas_fuerza_publica" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_2_Problemas_fuerza_publica->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_2_Problemas_fuerza_publica->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__2_Problemas_fuerza_publica">
+<input type="text" data-field="x__2_Problemas_fuerza_publica" name="x__2_Problemas_fuerza_publica" id="x__2_Problemas_fuerza_publica" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_2_Problemas_fuerza_publica->PlaceHolder) ?>" value="<?php echo $view_id->_2_Problemas_fuerza_publica->EditValue ?>"<?php echo $view_id->_2_Problemas_fuerza_publica->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__2_Problemas_fuerza_publica">
 <span<?php echo $view_id->_2_Problemas_fuerza_publica->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_2_Problemas_fuerza_publica->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_2_Problemas_fuerza_publica->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__2_Problemas_fuerza_publica" name="x__2_Problemas_fuerza_publica" id="x__2_Problemas_fuerza_publica" value="<?php echo ew_HtmlEncode($view_id->_2_Problemas_fuerza_publica->CurrentValue) ?>">
+<input type="hidden" data-field="x__2_Problemas_fuerza_publica" name="x__2_Problemas_fuerza_publica" id="x__2_Problemas_fuerza_publica" value="<?php echo ew_HtmlEncode($view_id->_2_Problemas_fuerza_publica->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_2_Problemas_fuerza_publica->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4125,11 +5746,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__2_Sin_seguridad" class="form-group">
 		<label id="elh_view_id__2_Sin_seguridad" for="x__2_Sin_seguridad" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_2_Sin_seguridad->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_2_Sin_seguridad->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__2_Sin_seguridad">
+<input type="text" data-field="x__2_Sin_seguridad" name="x__2_Sin_seguridad" id="x__2_Sin_seguridad" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_2_Sin_seguridad->PlaceHolder) ?>" value="<?php echo $view_id->_2_Sin_seguridad->EditValue ?>"<?php echo $view_id->_2_Sin_seguridad->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__2_Sin_seguridad">
 <span<?php echo $view_id->_2_Sin_seguridad->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_2_Sin_seguridad->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_2_Sin_seguridad->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__2_Sin_seguridad" name="x__2_Sin_seguridad" id="x__2_Sin_seguridad" value="<?php echo ew_HtmlEncode($view_id->_2_Sin_seguridad->CurrentValue) ?>">
+<input type="hidden" data-field="x__2_Sin_seguridad" name="x__2_Sin_seguridad" id="x__2_Sin_seguridad" value="<?php echo ew_HtmlEncode($view_id->_2_Sin_seguridad->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_2_Sin_seguridad->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4137,11 +5764,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Sit_Seguridad" class="form-group">
 		<label id="elh_view_id_Sit_Seguridad" for="x_Sit_Seguridad" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Sit_Seguridad->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Sit_Seguridad->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Sit_Seguridad">
+<input type="text" data-field="x_Sit_Seguridad" name="x_Sit_Seguridad" id="x_Sit_Seguridad" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->Sit_Seguridad->PlaceHolder) ?>" value="<?php echo $view_id->Sit_Seguridad->EditValue ?>"<?php echo $view_id->Sit_Seguridad->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Sit_Seguridad">
 <span<?php echo $view_id->Sit_Seguridad->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Sit_Seguridad->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Sit_Seguridad->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Sit_Seguridad" name="x_Sit_Seguridad" id="x_Sit_Seguridad" value="<?php echo ew_HtmlEncode($view_id->Sit_Seguridad->CurrentValue) ?>">
+<input type="hidden" data-field="x_Sit_Seguridad" name="x_Sit_Seguridad" id="x_Sit_Seguridad" value="<?php echo ew_HtmlEncode($view_id->Sit_Seguridad->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Sit_Seguridad->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4149,11 +5782,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__3_AEI_controlado" class="form-group">
 		<label id="elh_view_id__3_AEI_controlado" for="x__3_AEI_controlado" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_3_AEI_controlado->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_3_AEI_controlado->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__3_AEI_controlado">
+<input type="text" data-field="x__3_AEI_controlado" name="x__3_AEI_controlado" id="x__3_AEI_controlado" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_3_AEI_controlado->PlaceHolder) ?>" value="<?php echo $view_id->_3_AEI_controlado->EditValue ?>"<?php echo $view_id->_3_AEI_controlado->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__3_AEI_controlado">
 <span<?php echo $view_id->_3_AEI_controlado->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_3_AEI_controlado->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_3_AEI_controlado->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__3_AEI_controlado" name="x__3_AEI_controlado" id="x__3_AEI_controlado" value="<?php echo ew_HtmlEncode($view_id->_3_AEI_controlado->CurrentValue) ?>">
+<input type="hidden" data-field="x__3_AEI_controlado" name="x__3_AEI_controlado" id="x__3_AEI_controlado" value="<?php echo ew_HtmlEncode($view_id->_3_AEI_controlado->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_3_AEI_controlado->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4161,11 +5800,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__3_AEI_no_controlado" class="form-group">
 		<label id="elh_view_id__3_AEI_no_controlado" for="x__3_AEI_no_controlado" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_3_AEI_no_controlado->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_3_AEI_no_controlado->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__3_AEI_no_controlado">
+<input type="text" data-field="x__3_AEI_no_controlado" name="x__3_AEI_no_controlado" id="x__3_AEI_no_controlado" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_3_AEI_no_controlado->PlaceHolder) ?>" value="<?php echo $view_id->_3_AEI_no_controlado->EditValue ?>"<?php echo $view_id->_3_AEI_no_controlado->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__3_AEI_no_controlado">
 <span<?php echo $view_id->_3_AEI_no_controlado->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_3_AEI_no_controlado->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_3_AEI_no_controlado->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__3_AEI_no_controlado" name="x__3_AEI_no_controlado" id="x__3_AEI_no_controlado" value="<?php echo ew_HtmlEncode($view_id->_3_AEI_no_controlado->CurrentValue) ?>">
+<input type="hidden" data-field="x__3_AEI_no_controlado" name="x__3_AEI_no_controlado" id="x__3_AEI_no_controlado" value="<?php echo ew_HtmlEncode($view_id->_3_AEI_no_controlado->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_3_AEI_no_controlado->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4173,11 +5818,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__3_Bloqueo_parcial_de_la_comunidad" class="form-group">
 		<label id="elh_view_id__3_Bloqueo_parcial_de_la_comunidad" for="x__3_Bloqueo_parcial_de_la_comunidad" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_3_Bloqueo_parcial_de_la_comunidad->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_3_Bloqueo_parcial_de_la_comunidad->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__3_Bloqueo_parcial_de_la_comunidad">
+<input type="text" data-field="x__3_Bloqueo_parcial_de_la_comunidad" name="x__3_Bloqueo_parcial_de_la_comunidad" id="x__3_Bloqueo_parcial_de_la_comunidad" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_3_Bloqueo_parcial_de_la_comunidad->PlaceHolder) ?>" value="<?php echo $view_id->_3_Bloqueo_parcial_de_la_comunidad->EditValue ?>"<?php echo $view_id->_3_Bloqueo_parcial_de_la_comunidad->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__3_Bloqueo_parcial_de_la_comunidad">
 <span<?php echo $view_id->_3_Bloqueo_parcial_de_la_comunidad->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_3_Bloqueo_parcial_de_la_comunidad->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_3_Bloqueo_parcial_de_la_comunidad->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__3_Bloqueo_parcial_de_la_comunidad" name="x__3_Bloqueo_parcial_de_la_comunidad" id="x__3_Bloqueo_parcial_de_la_comunidad" value="<?php echo ew_HtmlEncode($view_id->_3_Bloqueo_parcial_de_la_comunidad->CurrentValue) ?>">
+<input type="hidden" data-field="x__3_Bloqueo_parcial_de_la_comunidad" name="x__3_Bloqueo_parcial_de_la_comunidad" id="x__3_Bloqueo_parcial_de_la_comunidad" value="<?php echo ew_HtmlEncode($view_id->_3_Bloqueo_parcial_de_la_comunidad->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_3_Bloqueo_parcial_de_la_comunidad->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4185,11 +5836,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__3_Bloqueo_total_de_la_comunidad" class="form-group">
 		<label id="elh_view_id__3_Bloqueo_total_de_la_comunidad" for="x__3_Bloqueo_total_de_la_comunidad" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_3_Bloqueo_total_de_la_comunidad->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_3_Bloqueo_total_de_la_comunidad->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__3_Bloqueo_total_de_la_comunidad">
+<input type="text" data-field="x__3_Bloqueo_total_de_la_comunidad" name="x__3_Bloqueo_total_de_la_comunidad" id="x__3_Bloqueo_total_de_la_comunidad" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_3_Bloqueo_total_de_la_comunidad->PlaceHolder) ?>" value="<?php echo $view_id->_3_Bloqueo_total_de_la_comunidad->EditValue ?>"<?php echo $view_id->_3_Bloqueo_total_de_la_comunidad->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__3_Bloqueo_total_de_la_comunidad">
 <span<?php echo $view_id->_3_Bloqueo_total_de_la_comunidad->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_3_Bloqueo_total_de_la_comunidad->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_3_Bloqueo_total_de_la_comunidad->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__3_Bloqueo_total_de_la_comunidad" name="x__3_Bloqueo_total_de_la_comunidad" id="x__3_Bloqueo_total_de_la_comunidad" value="<?php echo ew_HtmlEncode($view_id->_3_Bloqueo_total_de_la_comunidad->CurrentValue) ?>">
+<input type="hidden" data-field="x__3_Bloqueo_total_de_la_comunidad" name="x__3_Bloqueo_total_de_la_comunidad" id="x__3_Bloqueo_total_de_la_comunidad" value="<?php echo ew_HtmlEncode($view_id->_3_Bloqueo_total_de_la_comunidad->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_3_Bloqueo_total_de_la_comunidad->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4197,11 +5854,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__3_Combate" class="form-group">
 		<label id="elh_view_id__3_Combate" for="x__3_Combate" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_3_Combate->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_3_Combate->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__3_Combate">
+<input type="text" data-field="x__3_Combate" name="x__3_Combate" id="x__3_Combate" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_3_Combate->PlaceHolder) ?>" value="<?php echo $view_id->_3_Combate->EditValue ?>"<?php echo $view_id->_3_Combate->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__3_Combate">
 <span<?php echo $view_id->_3_Combate->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_3_Combate->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_3_Combate->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__3_Combate" name="x__3_Combate" id="x__3_Combate" value="<?php echo ew_HtmlEncode($view_id->_3_Combate->CurrentValue) ?>">
+<input type="hidden" data-field="x__3_Combate" name="x__3_Combate" id="x__3_Combate" value="<?php echo ew_HtmlEncode($view_id->_3_Combate->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_3_Combate->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4209,11 +5872,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__3_Hostigamiento" class="form-group">
 		<label id="elh_view_id__3_Hostigamiento" for="x__3_Hostigamiento" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_3_Hostigamiento->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_3_Hostigamiento->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__3_Hostigamiento">
+<input type="text" data-field="x__3_Hostigamiento" name="x__3_Hostigamiento" id="x__3_Hostigamiento" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_3_Hostigamiento->PlaceHolder) ?>" value="<?php echo $view_id->_3_Hostigamiento->EditValue ?>"<?php echo $view_id->_3_Hostigamiento->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__3_Hostigamiento">
 <span<?php echo $view_id->_3_Hostigamiento->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_3_Hostigamiento->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_3_Hostigamiento->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__3_Hostigamiento" name="x__3_Hostigamiento" id="x__3_Hostigamiento" value="<?php echo ew_HtmlEncode($view_id->_3_Hostigamiento->CurrentValue) ?>">
+<input type="hidden" data-field="x__3_Hostigamiento" name="x__3_Hostigamiento" id="x__3_Hostigamiento" value="<?php echo ew_HtmlEncode($view_id->_3_Hostigamiento->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_3_Hostigamiento->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4221,11 +5890,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__3_MAP_Controlada" class="form-group">
 		<label id="elh_view_id__3_MAP_Controlada" for="x__3_MAP_Controlada" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_3_MAP_Controlada->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_3_MAP_Controlada->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__3_MAP_Controlada">
+<input type="text" data-field="x__3_MAP_Controlada" name="x__3_MAP_Controlada" id="x__3_MAP_Controlada" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_3_MAP_Controlada->PlaceHolder) ?>" value="<?php echo $view_id->_3_MAP_Controlada->EditValue ?>"<?php echo $view_id->_3_MAP_Controlada->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__3_MAP_Controlada">
 <span<?php echo $view_id->_3_MAP_Controlada->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_3_MAP_Controlada->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_3_MAP_Controlada->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__3_MAP_Controlada" name="x__3_MAP_Controlada" id="x__3_MAP_Controlada" value="<?php echo ew_HtmlEncode($view_id->_3_MAP_Controlada->CurrentValue) ?>">
+<input type="hidden" data-field="x__3_MAP_Controlada" name="x__3_MAP_Controlada" id="x__3_MAP_Controlada" value="<?php echo ew_HtmlEncode($view_id->_3_MAP_Controlada->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_3_MAP_Controlada->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4233,11 +5908,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__3_MAP_No_controlada" class="form-group">
 		<label id="elh_view_id__3_MAP_No_controlada" for="x__3_MAP_No_controlada" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_3_MAP_No_controlada->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_3_MAP_No_controlada->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__3_MAP_No_controlada">
+<input type="text" data-field="x__3_MAP_No_controlada" name="x__3_MAP_No_controlada" id="x__3_MAP_No_controlada" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_3_MAP_No_controlada->PlaceHolder) ?>" value="<?php echo $view_id->_3_MAP_No_controlada->EditValue ?>"<?php echo $view_id->_3_MAP_No_controlada->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__3_MAP_No_controlada">
 <span<?php echo $view_id->_3_MAP_No_controlada->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_3_MAP_No_controlada->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_3_MAP_No_controlada->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__3_MAP_No_controlada" name="x__3_MAP_No_controlada" id="x__3_MAP_No_controlada" value="<?php echo ew_HtmlEncode($view_id->_3_MAP_No_controlada->CurrentValue) ?>">
+<input type="hidden" data-field="x__3_MAP_No_controlada" name="x__3_MAP_No_controlada" id="x__3_MAP_No_controlada" value="<?php echo ew_HtmlEncode($view_id->_3_MAP_No_controlada->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_3_MAP_No_controlada->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4245,11 +5926,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__3_MUSE" class="form-group">
 		<label id="elh_view_id__3_MUSE" for="x__3_MUSE" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_3_MUSE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_3_MUSE->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__3_MUSE">
+<input type="text" data-field="x__3_MUSE" name="x__3_MUSE" id="x__3_MUSE" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_3_MUSE->PlaceHolder) ?>" value="<?php echo $view_id->_3_MUSE->EditValue ?>"<?php echo $view_id->_3_MUSE->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__3_MUSE">
 <span<?php echo $view_id->_3_MUSE->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_3_MUSE->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_3_MUSE->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__3_MUSE" name="x__3_MUSE" id="x__3_MUSE" value="<?php echo ew_HtmlEncode($view_id->_3_MUSE->CurrentValue) ?>">
+<input type="hidden" data-field="x__3_MUSE" name="x__3_MUSE" id="x__3_MUSE" value="<?php echo ew_HtmlEncode($view_id->_3_MUSE->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_3_MUSE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4257,35 +5944,35 @@ $view_id_edit->ShowMessage();
 	<div id="r__3_Operaciones_de_seguridad" class="form-group">
 		<label id="elh_view_id__3_Operaciones_de_seguridad" for="x__3_Operaciones_de_seguridad" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_3_Operaciones_de_seguridad->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_3_Operaciones_de_seguridad->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__3_Operaciones_de_seguridad">
+<input type="text" data-field="x__3_Operaciones_de_seguridad" name="x__3_Operaciones_de_seguridad" id="x__3_Operaciones_de_seguridad" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_3_Operaciones_de_seguridad->PlaceHolder) ?>" value="<?php echo $view_id->_3_Operaciones_de_seguridad->EditValue ?>"<?php echo $view_id->_3_Operaciones_de_seguridad->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__3_Operaciones_de_seguridad">
 <span<?php echo $view_id->_3_Operaciones_de_seguridad->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_3_Operaciones_de_seguridad->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_3_Operaciones_de_seguridad->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__3_Operaciones_de_seguridad" name="x__3_Operaciones_de_seguridad" id="x__3_Operaciones_de_seguridad" value="<?php echo ew_HtmlEncode($view_id->_3_Operaciones_de_seguridad->CurrentValue) ?>">
-<?php echo $view_id->_3_Operaciones_de_seguridad->CustomMsg ?></div></div>
-	</div>
+<input type="hidden" data-field="x__3_Operaciones_de_seguridad" name="x__3_Operaciones_de_seguridad" id="x__3_Operaciones_de_seguridad" value="<?php echo ew_HtmlEncode($view_id->_3_Operaciones_de_seguridad->FormValue) ?>">
 <?php } ?>
-<?php if ($view_id->LATITUD_segurid->Visible) { // LATITUD_segurid ?>
-	<div id="r_LATITUD_segurid" class="form-group">
-		<label id="elh_view_id_LATITUD_segurid" for="x_LATITUD_segurid" class="col-sm-2 control-label ewLabel"><?php echo $view_id->LATITUD_segurid->FldCaption() ?></label>
-		<div class="col-sm-10"><div<?php echo $view_id->LATITUD_segurid->CellAttributes() ?>>
-<span id="el_view_id_LATITUD_segurid">
-<span<?php echo $view_id->LATITUD_segurid->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->LATITUD_segurid->EditValue ?></p></span>
-</span>
-<input type="hidden" data-field="x_LATITUD_segurid" name="x_LATITUD_segurid" id="x_LATITUD_segurid" value="<?php echo ew_HtmlEncode($view_id->LATITUD_segurid->CurrentValue) ?>">
-<?php echo $view_id->LATITUD_segurid->CustomMsg ?></div></div>
+<?php echo $view_id->_3_Operaciones_de_seguridad->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 <?php if ($view_id->GRA_LAT_segurid->Visible) { // GRA_LAT_segurid ?>
 	<div id="r_GRA_LAT_segurid" class="form-group">
 		<label id="elh_view_id_GRA_LAT_segurid" for="x_GRA_LAT_segurid" class="col-sm-2 control-label ewLabel"><?php echo $view_id->GRA_LAT_segurid->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->GRA_LAT_segurid->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_GRA_LAT_segurid">
+<input type="text" data-field="x_GRA_LAT_segurid" name="x_GRA_LAT_segurid" id="x_GRA_LAT_segurid" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->GRA_LAT_segurid->PlaceHolder) ?>" value="<?php echo $view_id->GRA_LAT_segurid->EditValue ?>"<?php echo $view_id->GRA_LAT_segurid->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_GRA_LAT_segurid">
 <span<?php echo $view_id->GRA_LAT_segurid->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->GRA_LAT_segurid->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->GRA_LAT_segurid->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_GRA_LAT_segurid" name="x_GRA_LAT_segurid" id="x_GRA_LAT_segurid" value="<?php echo ew_HtmlEncode($view_id->GRA_LAT_segurid->CurrentValue) ?>">
+<input type="hidden" data-field="x_GRA_LAT_segurid" name="x_GRA_LAT_segurid" id="x_GRA_LAT_segurid" value="<?php echo ew_HtmlEncode($view_id->GRA_LAT_segurid->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->GRA_LAT_segurid->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4293,11 +5980,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_MIN_LAT_segurid" class="form-group">
 		<label id="elh_view_id_MIN_LAT_segurid" for="x_MIN_LAT_segurid" class="col-sm-2 control-label ewLabel"><?php echo $view_id->MIN_LAT_segurid->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->MIN_LAT_segurid->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_MIN_LAT_segurid">
+<input type="text" data-field="x_MIN_LAT_segurid" name="x_MIN_LAT_segurid" id="x_MIN_LAT_segurid" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->MIN_LAT_segurid->PlaceHolder) ?>" value="<?php echo $view_id->MIN_LAT_segurid->EditValue ?>"<?php echo $view_id->MIN_LAT_segurid->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_MIN_LAT_segurid">
 <span<?php echo $view_id->MIN_LAT_segurid->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->MIN_LAT_segurid->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->MIN_LAT_segurid->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_MIN_LAT_segurid" name="x_MIN_LAT_segurid" id="x_MIN_LAT_segurid" value="<?php echo ew_HtmlEncode($view_id->MIN_LAT_segurid->CurrentValue) ?>">
+<input type="hidden" data-field="x_MIN_LAT_segurid" name="x_MIN_LAT_segurid" id="x_MIN_LAT_segurid" value="<?php echo ew_HtmlEncode($view_id->MIN_LAT_segurid->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->MIN_LAT_segurid->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4305,11 +5998,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_SEG_LAT_segurid" class="form-group">
 		<label id="elh_view_id_SEG_LAT_segurid" for="x_SEG_LAT_segurid" class="col-sm-2 control-label ewLabel"><?php echo $view_id->SEG_LAT_segurid->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->SEG_LAT_segurid->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_SEG_LAT_segurid">
+<input type="text" data-field="x_SEG_LAT_segurid" name="x_SEG_LAT_segurid" id="x_SEG_LAT_segurid" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->SEG_LAT_segurid->PlaceHolder) ?>" value="<?php echo $view_id->SEG_LAT_segurid->EditValue ?>"<?php echo $view_id->SEG_LAT_segurid->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_SEG_LAT_segurid">
 <span<?php echo $view_id->SEG_LAT_segurid->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->SEG_LAT_segurid->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->SEG_LAT_segurid->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_SEG_LAT_segurid" name="x_SEG_LAT_segurid" id="x_SEG_LAT_segurid" value="<?php echo ew_HtmlEncode($view_id->SEG_LAT_segurid->CurrentValue) ?>">
+<input type="hidden" data-field="x_SEG_LAT_segurid" name="x_SEG_LAT_segurid" id="x_SEG_LAT_segurid" value="<?php echo ew_HtmlEncode($view_id->SEG_LAT_segurid->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->SEG_LAT_segurid->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4317,11 +6016,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_GRA_LONG_seguri" class="form-group">
 		<label id="elh_view_id_GRA_LONG_seguri" for="x_GRA_LONG_seguri" class="col-sm-2 control-label ewLabel"><?php echo $view_id->GRA_LONG_seguri->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->GRA_LONG_seguri->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_GRA_LONG_seguri">
+<input type="text" data-field="x_GRA_LONG_seguri" name="x_GRA_LONG_seguri" id="x_GRA_LONG_seguri" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->GRA_LONG_seguri->PlaceHolder) ?>" value="<?php echo $view_id->GRA_LONG_seguri->EditValue ?>"<?php echo $view_id->GRA_LONG_seguri->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_GRA_LONG_seguri">
 <span<?php echo $view_id->GRA_LONG_seguri->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->GRA_LONG_seguri->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->GRA_LONG_seguri->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_GRA_LONG_seguri" name="x_GRA_LONG_seguri" id="x_GRA_LONG_seguri" value="<?php echo ew_HtmlEncode($view_id->GRA_LONG_seguri->CurrentValue) ?>">
+<input type="hidden" data-field="x_GRA_LONG_seguri" name="x_GRA_LONG_seguri" id="x_GRA_LONG_seguri" value="<?php echo ew_HtmlEncode($view_id->GRA_LONG_seguri->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->GRA_LONG_seguri->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4329,11 +6034,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_MIN_LONG_seguri" class="form-group">
 		<label id="elh_view_id_MIN_LONG_seguri" for="x_MIN_LONG_seguri" class="col-sm-2 control-label ewLabel"><?php echo $view_id->MIN_LONG_seguri->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->MIN_LONG_seguri->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_MIN_LONG_seguri">
+<input type="text" data-field="x_MIN_LONG_seguri" name="x_MIN_LONG_seguri" id="x_MIN_LONG_seguri" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->MIN_LONG_seguri->PlaceHolder) ?>" value="<?php echo $view_id->MIN_LONG_seguri->EditValue ?>"<?php echo $view_id->MIN_LONG_seguri->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_MIN_LONG_seguri">
 <span<?php echo $view_id->MIN_LONG_seguri->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->MIN_LONG_seguri->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->MIN_LONG_seguri->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_MIN_LONG_seguri" name="x_MIN_LONG_seguri" id="x_MIN_LONG_seguri" value="<?php echo ew_HtmlEncode($view_id->MIN_LONG_seguri->CurrentValue) ?>">
+<input type="hidden" data-field="x_MIN_LONG_seguri" name="x_MIN_LONG_seguri" id="x_MIN_LONG_seguri" value="<?php echo ew_HtmlEncode($view_id->MIN_LONG_seguri->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->MIN_LONG_seguri->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4341,11 +6052,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_SEG_LONG_seguri" class="form-group">
 		<label id="elh_view_id_SEG_LONG_seguri" for="x_SEG_LONG_seguri" class="col-sm-2 control-label ewLabel"><?php echo $view_id->SEG_LONG_seguri->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->SEG_LONG_seguri->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_SEG_LONG_seguri">
+<input type="text" data-field="x_SEG_LONG_seguri" name="x_SEG_LONG_seguri" id="x_SEG_LONG_seguri" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->SEG_LONG_seguri->PlaceHolder) ?>" value="<?php echo $view_id->SEG_LONG_seguri->EditValue ?>"<?php echo $view_id->SEG_LONG_seguri->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_SEG_LONG_seguri">
 <span<?php echo $view_id->SEG_LONG_seguri->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->SEG_LONG_seguri->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->SEG_LONG_seguri->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_SEG_LONG_seguri" name="x_SEG_LONG_seguri" id="x_SEG_LONG_seguri" value="<?php echo ew_HtmlEncode($view_id->SEG_LONG_seguri->CurrentValue) ?>">
+<input type="hidden" data-field="x_SEG_LONG_seguri" name="x_SEG_LONG_seguri" id="x_SEG_LONG_seguri" value="<?php echo ew_HtmlEncode($view_id->SEG_LONG_seguri->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->SEG_LONG_seguri->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4353,11 +6070,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Novedad" class="form-group">
 		<label id="elh_view_id_Novedad" for="x_Novedad" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Novedad->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Novedad->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Novedad">
+<input type="text" data-field="x_Novedad" name="x_Novedad" id="x_Novedad" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->Novedad->PlaceHolder) ?>" value="<?php echo $view_id->Novedad->EditValue ?>"<?php echo $view_id->Novedad->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Novedad">
 <span<?php echo $view_id->Novedad->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Novedad->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Novedad->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Novedad" name="x_Novedad" id="x_Novedad" value="<?php echo ew_HtmlEncode($view_id->Novedad->CurrentValue) ?>">
+<input type="hidden" data-field="x_Novedad" name="x_Novedad" id="x_Novedad" value="<?php echo ew_HtmlEncode($view_id->Novedad->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Novedad->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4365,11 +6088,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__4_Epidemia" class="form-group">
 		<label id="elh_view_id__4_Epidemia" for="x__4_Epidemia" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_4_Epidemia->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_4_Epidemia->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__4_Epidemia">
+<input type="text" data-field="x__4_Epidemia" name="x__4_Epidemia" id="x__4_Epidemia" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_4_Epidemia->PlaceHolder) ?>" value="<?php echo $view_id->_4_Epidemia->EditValue ?>"<?php echo $view_id->_4_Epidemia->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__4_Epidemia">
 <span<?php echo $view_id->_4_Epidemia->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_4_Epidemia->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_4_Epidemia->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__4_Epidemia" name="x__4_Epidemia" id="x__4_Epidemia" value="<?php echo ew_HtmlEncode($view_id->_4_Epidemia->CurrentValue) ?>">
+<input type="hidden" data-field="x__4_Epidemia" name="x__4_Epidemia" id="x__4_Epidemia" value="<?php echo ew_HtmlEncode($view_id->_4_Epidemia->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_4_Epidemia->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4377,11 +6106,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__4_Novedad_climatologica" class="form-group">
 		<label id="elh_view_id__4_Novedad_climatologica" for="x__4_Novedad_climatologica" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_4_Novedad_climatologica->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_4_Novedad_climatologica->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__4_Novedad_climatologica">
+<input type="text" data-field="x__4_Novedad_climatologica" name="x__4_Novedad_climatologica" id="x__4_Novedad_climatologica" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_4_Novedad_climatologica->PlaceHolder) ?>" value="<?php echo $view_id->_4_Novedad_climatologica->EditValue ?>"<?php echo $view_id->_4_Novedad_climatologica->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__4_Novedad_climatologica">
 <span<?php echo $view_id->_4_Novedad_climatologica->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_4_Novedad_climatologica->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_4_Novedad_climatologica->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__4_Novedad_climatologica" name="x__4_Novedad_climatologica" id="x__4_Novedad_climatologica" value="<?php echo ew_HtmlEncode($view_id->_4_Novedad_climatologica->CurrentValue) ?>">
+<input type="hidden" data-field="x__4_Novedad_climatologica" name="x__4_Novedad_climatologica" id="x__4_Novedad_climatologica" value="<?php echo ew_HtmlEncode($view_id->_4_Novedad_climatologica->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_4_Novedad_climatologica->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4389,11 +6124,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__4_Registro_de_cultivos" class="form-group">
 		<label id="elh_view_id__4_Registro_de_cultivos" for="x__4_Registro_de_cultivos" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_4_Registro_de_cultivos->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_4_Registro_de_cultivos->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__4_Registro_de_cultivos">
+<input type="text" data-field="x__4_Registro_de_cultivos" name="x__4_Registro_de_cultivos" id="x__4_Registro_de_cultivos" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_4_Registro_de_cultivos->PlaceHolder) ?>" value="<?php echo $view_id->_4_Registro_de_cultivos->EditValue ?>"<?php echo $view_id->_4_Registro_de_cultivos->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__4_Registro_de_cultivos">
 <span<?php echo $view_id->_4_Registro_de_cultivos->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_4_Registro_de_cultivos->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_4_Registro_de_cultivos->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__4_Registro_de_cultivos" name="x__4_Registro_de_cultivos" id="x__4_Registro_de_cultivos" value="<?php echo ew_HtmlEncode($view_id->_4_Registro_de_cultivos->CurrentValue) ?>">
+<input type="hidden" data-field="x__4_Registro_de_cultivos" name="x__4_Registro_de_cultivos" id="x__4_Registro_de_cultivos" value="<?php echo ew_HtmlEncode($view_id->_4_Registro_de_cultivos->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_4_Registro_de_cultivos->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4401,11 +6142,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__4_Zona_con_cultivos_muy_dispersos" class="form-group">
 		<label id="elh_view_id__4_Zona_con_cultivos_muy_dispersos" for="x__4_Zona_con_cultivos_muy_dispersos" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_4_Zona_con_cultivos_muy_dispersos->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_4_Zona_con_cultivos_muy_dispersos->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__4_Zona_con_cultivos_muy_dispersos">
+<input type="text" data-field="x__4_Zona_con_cultivos_muy_dispersos" name="x__4_Zona_con_cultivos_muy_dispersos" id="x__4_Zona_con_cultivos_muy_dispersos" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_4_Zona_con_cultivos_muy_dispersos->PlaceHolder) ?>" value="<?php echo $view_id->_4_Zona_con_cultivos_muy_dispersos->EditValue ?>"<?php echo $view_id->_4_Zona_con_cultivos_muy_dispersos->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__4_Zona_con_cultivos_muy_dispersos">
 <span<?php echo $view_id->_4_Zona_con_cultivos_muy_dispersos->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_4_Zona_con_cultivos_muy_dispersos->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_4_Zona_con_cultivos_muy_dispersos->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__4_Zona_con_cultivos_muy_dispersos" name="x__4_Zona_con_cultivos_muy_dispersos" id="x__4_Zona_con_cultivos_muy_dispersos" value="<?php echo ew_HtmlEncode($view_id->_4_Zona_con_cultivos_muy_dispersos->CurrentValue) ?>">
+<input type="hidden" data-field="x__4_Zona_con_cultivos_muy_dispersos" name="x__4_Zona_con_cultivos_muy_dispersos" id="x__4_Zona_con_cultivos_muy_dispersos" value="<?php echo ew_HtmlEncode($view_id->_4_Zona_con_cultivos_muy_dispersos->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_4_Zona_con_cultivos_muy_dispersos->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4413,11 +6160,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__4_Zona_de_cruce_de_rios_caudalosos" class="form-group">
 		<label id="elh_view_id__4_Zona_de_cruce_de_rios_caudalosos" for="x__4_Zona_de_cruce_de_rios_caudalosos" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_4_Zona_de_cruce_de_rios_caudalosos->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_4_Zona_de_cruce_de_rios_caudalosos->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__4_Zona_de_cruce_de_rios_caudalosos">
+<input type="text" data-field="x__4_Zona_de_cruce_de_rios_caudalosos" name="x__4_Zona_de_cruce_de_rios_caudalosos" id="x__4_Zona_de_cruce_de_rios_caudalosos" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_4_Zona_de_cruce_de_rios_caudalosos->PlaceHolder) ?>" value="<?php echo $view_id->_4_Zona_de_cruce_de_rios_caudalosos->EditValue ?>"<?php echo $view_id->_4_Zona_de_cruce_de_rios_caudalosos->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__4_Zona_de_cruce_de_rios_caudalosos">
 <span<?php echo $view_id->_4_Zona_de_cruce_de_rios_caudalosos->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_4_Zona_de_cruce_de_rios_caudalosos->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_4_Zona_de_cruce_de_rios_caudalosos->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__4_Zona_de_cruce_de_rios_caudalosos" name="x__4_Zona_de_cruce_de_rios_caudalosos" id="x__4_Zona_de_cruce_de_rios_caudalosos" value="<?php echo ew_HtmlEncode($view_id->_4_Zona_de_cruce_de_rios_caudalosos->CurrentValue) ?>">
+<input type="hidden" data-field="x__4_Zona_de_cruce_de_rios_caudalosos" name="x__4_Zona_de_cruce_de_rios_caudalosos" id="x__4_Zona_de_cruce_de_rios_caudalosos" value="<?php echo ew_HtmlEncode($view_id->_4_Zona_de_cruce_de_rios_caudalosos->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_4_Zona_de_cruce_de_rios_caudalosos->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4425,11 +6178,17 @@ $view_id_edit->ShowMessage();
 	<div id="r__4_Zona_sin_cultivos" class="form-group">
 		<label id="elh_view_id__4_Zona_sin_cultivos" for="x__4_Zona_sin_cultivos" class="col-sm-2 control-label ewLabel"><?php echo $view_id->_4_Zona_sin_cultivos->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->_4_Zona_sin_cultivos->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id__4_Zona_sin_cultivos">
+<input type="text" data-field="x__4_Zona_sin_cultivos" name="x__4_Zona_sin_cultivos" id="x__4_Zona_sin_cultivos" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->_4_Zona_sin_cultivos->PlaceHolder) ?>" value="<?php echo $view_id->_4_Zona_sin_cultivos->EditValue ?>"<?php echo $view_id->_4_Zona_sin_cultivos->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id__4_Zona_sin_cultivos">
 <span<?php echo $view_id->_4_Zona_sin_cultivos->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->_4_Zona_sin_cultivos->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->_4_Zona_sin_cultivos->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x__4_Zona_sin_cultivos" name="x__4_Zona_sin_cultivos" id="x__4_Zona_sin_cultivos" value="<?php echo ew_HtmlEncode($view_id->_4_Zona_sin_cultivos->CurrentValue) ?>">
+<input type="hidden" data-field="x__4_Zona_sin_cultivos" name="x__4_Zona_sin_cultivos" id="x__4_Zona_sin_cultivos" value="<?php echo ew_HtmlEncode($view_id->_4_Zona_sin_cultivos->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->_4_Zona_sin_cultivos->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4437,11 +6196,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Num_Erra_Salen" class="form-group">
 		<label id="elh_view_id_Num_Erra_Salen" for="x_Num_Erra_Salen" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Num_Erra_Salen->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Num_Erra_Salen->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Num_Erra_Salen">
+<input type="text" data-field="x_Num_Erra_Salen" name="x_Num_Erra_Salen" id="x_Num_Erra_Salen" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->Num_Erra_Salen->PlaceHolder) ?>" value="<?php echo $view_id->Num_Erra_Salen->EditValue ?>"<?php echo $view_id->Num_Erra_Salen->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Num_Erra_Salen">
 <span<?php echo $view_id->Num_Erra_Salen->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Num_Erra_Salen->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Num_Erra_Salen->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Num_Erra_Salen" name="x_Num_Erra_Salen" id="x_Num_Erra_Salen" value="<?php echo ew_HtmlEncode($view_id->Num_Erra_Salen->CurrentValue) ?>">
+<input type="hidden" data-field="x_Num_Erra_Salen" name="x_Num_Erra_Salen" id="x_Num_Erra_Salen" value="<?php echo ew_HtmlEncode($view_id->Num_Erra_Salen->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Num_Erra_Salen->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4449,11 +6214,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_Num_Erra_Quedan" class="form-group">
 		<label id="elh_view_id_Num_Erra_Quedan" for="x_Num_Erra_Quedan" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Num_Erra_Quedan->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Num_Erra_Quedan->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Num_Erra_Quedan">
+<input type="text" data-field="x_Num_Erra_Quedan" name="x_Num_Erra_Quedan" id="x_Num_Erra_Quedan" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->Num_Erra_Quedan->PlaceHolder) ?>" value="<?php echo $view_id->Num_Erra_Quedan->EditValue ?>"<?php echo $view_id->Num_Erra_Quedan->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Num_Erra_Quedan">
 <span<?php echo $view_id->Num_Erra_Quedan->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Num_Erra_Quedan->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Num_Erra_Quedan->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Num_Erra_Quedan" name="x_Num_Erra_Quedan" id="x_Num_Erra_Quedan" value="<?php echo ew_HtmlEncode($view_id->Num_Erra_Quedan->CurrentValue) ?>">
+<input type="hidden" data-field="x_Num_Erra_Quedan" name="x_Num_Erra_Quedan" id="x_Num_Erra_Quedan" value="<?php echo ew_HtmlEncode($view_id->Num_Erra_Quedan->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Num_Erra_Quedan->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4461,11 +6232,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_No_ENFERMERO" class="form-group">
 		<label id="elh_view_id_No_ENFERMERO" for="x_No_ENFERMERO" class="col-sm-2 control-label ewLabel"><?php echo $view_id->No_ENFERMERO->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->No_ENFERMERO->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_No_ENFERMERO">
+<input type="text" data-field="x_No_ENFERMERO" name="x_No_ENFERMERO" id="x_No_ENFERMERO" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view_id->No_ENFERMERO->PlaceHolder) ?>" value="<?php echo $view_id->No_ENFERMERO->EditValue ?>"<?php echo $view_id->No_ENFERMERO->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_No_ENFERMERO">
 <span<?php echo $view_id->No_ENFERMERO->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->No_ENFERMERO->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->No_ENFERMERO->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_No_ENFERMERO" name="x_No_ENFERMERO" id="x_No_ENFERMERO" value="<?php echo ew_HtmlEncode($view_id->No_ENFERMERO->CurrentValue) ?>">
+<input type="hidden" data-field="x_No_ENFERMERO" name="x_No_ENFERMERO" id="x_No_ENFERMERO" value="<?php echo ew_HtmlEncode($view_id->No_ENFERMERO->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->No_ENFERMERO->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4473,11 +6250,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_NUM_FP" class="form-group">
 		<label id="elh_view_id_NUM_FP" for="x_NUM_FP" class="col-sm-2 control-label ewLabel"><?php echo $view_id->NUM_FP->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->NUM_FP->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_NUM_FP">
+<input type="text" data-field="x_NUM_FP" name="x_NUM_FP" id="x_NUM_FP" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->NUM_FP->PlaceHolder) ?>" value="<?php echo $view_id->NUM_FP->EditValue ?>"<?php echo $view_id->NUM_FP->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_NUM_FP">
 <span<?php echo $view_id->NUM_FP->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->NUM_FP->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->NUM_FP->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_NUM_FP" name="x_NUM_FP" id="x_NUM_FP" value="<?php echo ew_HtmlEncode($view_id->NUM_FP->CurrentValue) ?>">
+<input type="hidden" data-field="x_NUM_FP" name="x_NUM_FP" id="x_NUM_FP" value="<?php echo ew_HtmlEncode($view_id->NUM_FP->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->NUM_FP->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4485,11 +6268,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_NUM_Perso_EVA" class="form-group">
 		<label id="elh_view_id_NUM_Perso_EVA" for="x_NUM_Perso_EVA" class="col-sm-2 control-label ewLabel"><?php echo $view_id->NUM_Perso_EVA->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->NUM_Perso_EVA->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_NUM_Perso_EVA">
+<input type="text" data-field="x_NUM_Perso_EVA" name="x_NUM_Perso_EVA" id="x_NUM_Perso_EVA" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->NUM_Perso_EVA->PlaceHolder) ?>" value="<?php echo $view_id->NUM_Perso_EVA->EditValue ?>"<?php echo $view_id->NUM_Perso_EVA->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_NUM_Perso_EVA">
 <span<?php echo $view_id->NUM_Perso_EVA->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->NUM_Perso_EVA->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->NUM_Perso_EVA->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_NUM_Perso_EVA" name="x_NUM_Perso_EVA" id="x_NUM_Perso_EVA" value="<?php echo ew_HtmlEncode($view_id->NUM_Perso_EVA->CurrentValue) ?>">
+<input type="hidden" data-field="x_NUM_Perso_EVA" name="x_NUM_Perso_EVA" id="x_NUM_Perso_EVA" value="<?php echo ew_HtmlEncode($view_id->NUM_Perso_EVA->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->NUM_Perso_EVA->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4497,11 +6286,17 @@ $view_id_edit->ShowMessage();
 	<div id="r_NUM_Poli" class="form-group">
 		<label id="elh_view_id_NUM_Poli" for="x_NUM_Poli" class="col-sm-2 control-label ewLabel"><?php echo $view_id->NUM_Poli->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->NUM_Poli->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_NUM_Poli">
+<input type="text" data-field="x_NUM_Poli" name="x_NUM_Poli" id="x_NUM_Poli" size="30" placeholder="<?php echo ew_HtmlEncode($view_id->NUM_Poli->PlaceHolder) ?>" value="<?php echo $view_id->NUM_Poli->EditValue ?>"<?php echo $view_id->NUM_Poli->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_id_NUM_Poli">
 <span<?php echo $view_id->NUM_Poli->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->NUM_Poli->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->NUM_Poli->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_NUM_Poli" name="x_NUM_Poli" id="x_NUM_Poli" value="<?php echo ew_HtmlEncode($view_id->NUM_Poli->CurrentValue) ?>">
+<input type="hidden" data-field="x_NUM_Poli" name="x_NUM_Poli" id="x_NUM_Poli" value="<?php echo ew_HtmlEncode($view_id->NUM_Poli->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->NUM_Poli->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4509,11 +6304,37 @@ $view_id_edit->ShowMessage();
 	<div id="r_AD1O" class="form-group">
 		<label id="elh_view_id_AD1O" for="x_AD1O" class="col-sm-2 control-label ewLabel"><?php echo $view_id->AD1O->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->AD1O->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_AD1O">
+<select data-field="x_AD1O" id="x_AD1O" name="x_AD1O"<?php echo $view_id->AD1O->EditAttributes() ?>>
+<?php
+if (is_array($view_id->AD1O->EditValue)) {
+	$arwrk = $view_id->AD1O->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_id->AD1O->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview_idedit.Lists["x_AD1O"].Options = <?php echo (is_array($view_id->AD1O->EditValue)) ? ew_ArrayToJson($view_id->AD1O->EditValue, 1) : "[]" ?>;
+</script>
+</span>
+<?php } else { ?>
 <span id="el_view_id_AD1O">
 <span<?php echo $view_id->AD1O->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->AD1O->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->AD1O->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_AD1O" name="x_AD1O" id="x_AD1O" value="<?php echo ew_HtmlEncode($view_id->AD1O->CurrentValue) ?>">
+<input type="hidden" data-field="x_AD1O" name="x_AD1O" id="x_AD1O" value="<?php echo ew_HtmlEncode($view_id->AD1O->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->AD1O->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -4521,30 +6342,84 @@ $view_id_edit->ShowMessage();
 	<div id="r_FASE" class="form-group">
 		<label id="elh_view_id_FASE" for="x_FASE" class="col-sm-2 control-label ewLabel"><?php echo $view_id->FASE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->FASE->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_FASE">
+<select data-field="x_FASE" id="x_FASE" name="x_FASE"<?php echo $view_id->FASE->EditAttributes() ?>>
+<?php
+if (is_array($view_id->FASE->EditValue)) {
+	$arwrk = $view_id->FASE->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_id->FASE->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview_idedit.Lists["x_FASE"].Options = <?php echo (is_array($view_id->FASE->EditValue)) ? ew_ArrayToJson($view_id->FASE->EditValue, 1) : "[]" ?>;
+</script>
+</span>
+<?php } else { ?>
 <span id="el_view_id_FASE">
 <span<?php echo $view_id->FASE->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->FASE->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->FASE->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_FASE" name="x_FASE" id="x_FASE" value="<?php echo ew_HtmlEncode($view_id->FASE->CurrentValue) ?>">
+<input type="hidden" data-field="x_FASE" name="x_FASE" id="x_FASE" value="<?php echo ew_HtmlEncode($view_id->FASE->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->FASE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 <?php if ($view_id->Modificado->Visible) { // Modificado ?>
 	<div id="r_Modificado" class="form-group">
-		<label id="elh_view_id_Modificado" for="x_Modificado" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Modificado->FldCaption() ?></label>
+		<label id="elh_view_id_Modificado" for="x_Modificado" class="col-sm-2 control-label ewLabel"><?php echo $view_id->Modificado->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $view_id->Modificado->CellAttributes() ?>>
+<?php if ($view_id->CurrentAction <> "F") { ?>
+<span id="el_view_id_Modificado">
+<select data-field="x_Modificado" id="x_Modificado" name="x_Modificado"<?php echo $view_id->Modificado->EditAttributes() ?>>
+<?php
+if (is_array($view_id->Modificado->EditValue)) {
+	$arwrk = $view_id->Modificado->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_id->Modificado->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+</span>
+<?php } else { ?>
 <span id="el_view_id_Modificado">
 <span<?php echo $view_id->Modificado->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_id->Modificado->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_id->Modificado->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Modificado" name="x_Modificado" id="x_Modificado" value="<?php echo ew_HtmlEncode($view_id->Modificado->CurrentValue) ?>">
+<input type="hidden" data-field="x_Modificado" name="x_Modificado" id="x_Modificado" value="<?php echo ew_HtmlEncode($view_id->Modificado->FormValue) ?>">
+<?php } ?>
 <?php echo $view_id->Modificado->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div>
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-10">
-<button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit"><?php echo $Language->Phrase("SaveBtn") ?></button>
+<?php if ($view_id->CurrentAction <> "F") { // Confirm page ?>
+<button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit" onclick="this.form.a_edit.value='F';"><?php echo $Language->Phrase("SaveBtn") ?></button>
+<?php } else { ?>
+<button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit"><?php echo $Language->Phrase("ConfirmBtn") ?></button>
+<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="submit" onclick="this.form.a_edit.value='X';"><?php echo $Language->Phrase("CancelBtn") ?></button>
+<?php } ?>
 	</div>
 </div>
 </form>

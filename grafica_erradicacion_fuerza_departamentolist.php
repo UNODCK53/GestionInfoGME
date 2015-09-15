@@ -668,34 +668,34 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 		global $Security;
 		$sWhere = "";
 		if (!$Security->CanSearch()) return "";
-		$this->BuildSearchSql($sWhere, $this->fuerza, $Default, FALSE); // fuerza
 		$this->BuildSearchSql($sWhere, $this->Departamento, $Default, FALSE); // Departamento
 		$this->BuildSearchSql($sWhere, $this->Muncipio, $Default, FALSE); // Muncipio
-		$this->BuildSearchSql($sWhere, $this->Punto, $Default, FALSE); // Punto
 		$this->BuildSearchSql($sWhere, $this->aF1o, $Default, FALSE); // año
 		$this->BuildSearchSql($sWhere, $this->fase, $Default, FALSE); // fase
-		$this->BuildSearchSql($sWhere, $this->Profesional_especializado, $Default, FALSE); // Profesional_especializado
 		$this->BuildSearchSql($sWhere, $this->Ha_Coca, $Default, FALSE); // Ha_Coca
 		$this->BuildSearchSql($sWhere, $this->Ha_Amapola, $Default, FALSE); // Ha_Amapola
 		$this->BuildSearchSql($sWhere, $this->Ha_Marihuana, $Default, FALSE); // Ha_Marihuana
 		$this->BuildSearchSql($sWhere, $this->Total_erradicado, $Default, FALSE); // Total_erradicado
+		$this->BuildSearchSql($sWhere, $this->fuerza, $Default, FALSE); // fuerza
+		$this->BuildSearchSql($sWhere, $this->Punto, $Default, FALSE); // Punto
+		$this->BuildSearchSql($sWhere, $this->Profesional_especializado, $Default, FALSE); // Profesional_especializado
 
 		// Set up search parm
 		if (!$Default && $sWhere <> "") {
 			$this->Command = "search";
 		}
 		if (!$Default && $this->Command == "search") {
-			$this->fuerza->AdvancedSearch->Save(); // fuerza
 			$this->Departamento->AdvancedSearch->Save(); // Departamento
 			$this->Muncipio->AdvancedSearch->Save(); // Muncipio
-			$this->Punto->AdvancedSearch->Save(); // Punto
 			$this->aF1o->AdvancedSearch->Save(); // año
 			$this->fase->AdvancedSearch->Save(); // fase
-			$this->Profesional_especializado->AdvancedSearch->Save(); // Profesional_especializado
 			$this->Ha_Coca->AdvancedSearch->Save(); // Ha_Coca
 			$this->Ha_Amapola->AdvancedSearch->Save(); // Ha_Amapola
 			$this->Ha_Marihuana->AdvancedSearch->Save(); // Ha_Marihuana
 			$this->Total_erradicado->AdvancedSearch->Save(); // Total_erradicado
+			$this->fuerza->AdvancedSearch->Save(); // fuerza
+			$this->Punto->AdvancedSearch->Save(); // Punto
+			$this->Profesional_especializado->AdvancedSearch->Save(); // Profesional_especializado
 		}
 		return $sWhere;
 	}
@@ -751,19 +751,13 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 
 	// Check if search parm exists
 	function CheckSearchParms() {
-		if ($this->fuerza->AdvancedSearch->IssetSession())
-			return TRUE;
 		if ($this->Departamento->AdvancedSearch->IssetSession())
 			return TRUE;
 		if ($this->Muncipio->AdvancedSearch->IssetSession())
 			return TRUE;
-		if ($this->Punto->AdvancedSearch->IssetSession())
-			return TRUE;
 		if ($this->aF1o->AdvancedSearch->IssetSession())
 			return TRUE;
 		if ($this->fase->AdvancedSearch->IssetSession())
-			return TRUE;
-		if ($this->Profesional_especializado->AdvancedSearch->IssetSession())
 			return TRUE;
 		if ($this->Ha_Coca->AdvancedSearch->IssetSession())
 			return TRUE;
@@ -772,6 +766,12 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 		if ($this->Ha_Marihuana->AdvancedSearch->IssetSession())
 			return TRUE;
 		if ($this->Total_erradicado->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->fuerza->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->Punto->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->Profesional_especializado->AdvancedSearch->IssetSession())
 			return TRUE;
 		return FALSE;
 	}
@@ -794,17 +794,17 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 
 	// Clear all advanced search parameters
 	function ResetAdvancedSearchParms() {
-		$this->fuerza->AdvancedSearch->UnsetSession();
 		$this->Departamento->AdvancedSearch->UnsetSession();
 		$this->Muncipio->AdvancedSearch->UnsetSession();
-		$this->Punto->AdvancedSearch->UnsetSession();
 		$this->aF1o->AdvancedSearch->UnsetSession();
 		$this->fase->AdvancedSearch->UnsetSession();
-		$this->Profesional_especializado->AdvancedSearch->UnsetSession();
 		$this->Ha_Coca->AdvancedSearch->UnsetSession();
 		$this->Ha_Amapola->AdvancedSearch->UnsetSession();
 		$this->Ha_Marihuana->AdvancedSearch->UnsetSession();
 		$this->Total_erradicado->AdvancedSearch->UnsetSession();
+		$this->fuerza->AdvancedSearch->UnsetSession();
+		$this->Punto->AdvancedSearch->UnsetSession();
+		$this->Profesional_especializado->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
@@ -812,17 +812,17 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 		$this->RestoreSearch = TRUE;
 
 		// Restore advanced search values
-		$this->fuerza->AdvancedSearch->Load();
 		$this->Departamento->AdvancedSearch->Load();
 		$this->Muncipio->AdvancedSearch->Load();
-		$this->Punto->AdvancedSearch->Load();
 		$this->aF1o->AdvancedSearch->Load();
 		$this->fase->AdvancedSearch->Load();
-		$this->Profesional_especializado->AdvancedSearch->Load();
 		$this->Ha_Coca->AdvancedSearch->Load();
 		$this->Ha_Amapola->AdvancedSearch->Load();
 		$this->Ha_Marihuana->AdvancedSearch->Load();
 		$this->Total_erradicado->AdvancedSearch->Load();
+		$this->fuerza->AdvancedSearch->Load();
+		$this->Punto->AdvancedSearch->Load();
+		$this->Profesional_especializado->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -835,17 +835,17 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 		if (@$_GET["order"] <> "") {
 			$this->CurrentOrder = ew_StripSlashes(@$_GET["order"]);
 			$this->CurrentOrderType = @$_GET["ordertype"];
-			$this->UpdateSort($this->fuerza, $bCtrl); // fuerza
 			$this->UpdateSort($this->Departamento, $bCtrl); // Departamento
 			$this->UpdateSort($this->Muncipio, $bCtrl); // Muncipio
-			$this->UpdateSort($this->Punto, $bCtrl); // Punto
 			$this->UpdateSort($this->aF1o, $bCtrl); // año
 			$this->UpdateSort($this->fase, $bCtrl); // fase
-			$this->UpdateSort($this->Profesional_especializado, $bCtrl); // Profesional_especializado
 			$this->UpdateSort($this->Ha_Coca, $bCtrl); // Ha_Coca
 			$this->UpdateSort($this->Ha_Amapola, $bCtrl); // Ha_Amapola
 			$this->UpdateSort($this->Ha_Marihuana, $bCtrl); // Ha_Marihuana
 			$this->UpdateSort($this->Total_erradicado, $bCtrl); // Total_erradicado
+			$this->UpdateSort($this->fuerza, $bCtrl); // fuerza
+			$this->UpdateSort($this->Punto, $bCtrl); // Punto
+			$this->UpdateSort($this->Profesional_especializado, $bCtrl); // Profesional_especializado
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -878,17 +878,17 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 			if ($this->Command == "resetsort") {
 				$sOrderBy = "";
 				$this->setSessionOrderBy($sOrderBy);
-				$this->fuerza->setSort("");
 				$this->Departamento->setSort("");
 				$this->Muncipio->setSort("");
-				$this->Punto->setSort("");
 				$this->aF1o->setSort("");
 				$this->fase->setSort("");
-				$this->Profesional_especializado->setSort("");
 				$this->Ha_Coca->setSort("");
 				$this->Ha_Amapola->setSort("");
 				$this->Ha_Marihuana->setSort("");
 				$this->Total_erradicado->setSort("");
+				$this->fuerza->setSort("");
+				$this->Punto->setSort("");
+				$this->Profesional_especializado->setSort("");
 			}
 
 			// Reset start position
@@ -1121,13 +1121,8 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 		global $objForm;
 
 		// Load search values
-		// fuerza
-
-		$this->fuerza->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_fuerza"]);
-		if ($this->fuerza->AdvancedSearch->SearchValue <> "") $this->Command = "search";
-		$this->fuerza->AdvancedSearch->SearchOperator = @$_GET["z_fuerza"];
-
 		// Departamento
+
 		$this->Departamento->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Departamento"]);
 		if ($this->Departamento->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->Departamento->AdvancedSearch->SearchOperator = @$_GET["z_Departamento"];
@@ -1136,11 +1131,6 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 		$this->Muncipio->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Muncipio"]);
 		if ($this->Muncipio->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->Muncipio->AdvancedSearch->SearchOperator = @$_GET["z_Muncipio"];
-
-		// Punto
-		$this->Punto->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Punto"]);
-		if ($this->Punto->AdvancedSearch->SearchValue <> "") $this->Command = "search";
-		$this->Punto->AdvancedSearch->SearchOperator = @$_GET["z_Punto"];
 
 		// año
 		$this->aF1o->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_aF1o"]);
@@ -1151,11 +1141,6 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 		$this->fase->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_fase"]);
 		if ($this->fase->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->fase->AdvancedSearch->SearchOperator = @$_GET["z_fase"];
-
-		// Profesional_especializado
-		$this->Profesional_especializado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Profesional_especializado"]);
-		if ($this->Profesional_especializado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
-		$this->Profesional_especializado->AdvancedSearch->SearchOperator = @$_GET["z_Profesional_especializado"];
 
 		// Ha_Coca
 		$this->Ha_Coca->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Ha_Coca"]);
@@ -1176,6 +1161,21 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 		$this->Total_erradicado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Total_erradicado"]);
 		if ($this->Total_erradicado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->Total_erradicado->AdvancedSearch->SearchOperator = @$_GET["z_Total_erradicado"];
+
+		// fuerza
+		$this->fuerza->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_fuerza"]);
+		if ($this->fuerza->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->fuerza->AdvancedSearch->SearchOperator = @$_GET["z_fuerza"];
+
+		// Punto
+		$this->Punto->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Punto"]);
+		if ($this->Punto->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Punto->AdvancedSearch->SearchOperator = @$_GET["z_Punto"];
+
+		// Profesional_especializado
+		$this->Profesional_especializado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Profesional_especializado"]);
+		if ($this->Profesional_especializado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Profesional_especializado->AdvancedSearch->SearchOperator = @$_GET["z_Profesional_especializado"];
 	}
 
 	// Load recordset
@@ -1224,34 +1224,34 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		$this->fuerza->setDbValue($rs->fields('fuerza'));
 		$this->Departamento->setDbValue($rs->fields('Departamento'));
 		$this->Muncipio->setDbValue($rs->fields('Muncipio'));
-		$this->Punto->setDbValue($rs->fields('Punto'));
 		$this->aF1o->setDbValue($rs->fields('año'));
 		$this->fase->setDbValue($rs->fields('fase'));
-		$this->Profesional_especializado->setDbValue($rs->fields('Profesional_especializado'));
 		$this->Ha_Coca->setDbValue($rs->fields('Ha_Coca'));
 		$this->Ha_Amapola->setDbValue($rs->fields('Ha_Amapola'));
 		$this->Ha_Marihuana->setDbValue($rs->fields('Ha_Marihuana'));
 		$this->Total_erradicado->setDbValue($rs->fields('Total_erradicado'));
+		$this->fuerza->setDbValue($rs->fields('fuerza'));
+		$this->Punto->setDbValue($rs->fields('Punto'));
+		$this->Profesional_especializado->setDbValue($rs->fields('Profesional_especializado'));
 	}
 
 	// Load DbValue from recordset
 	function LoadDbValues(&$rs) {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
-		$this->fuerza->DbValue = $row['fuerza'];
 		$this->Departamento->DbValue = $row['Departamento'];
 		$this->Muncipio->DbValue = $row['Muncipio'];
-		$this->Punto->DbValue = $row['Punto'];
 		$this->aF1o->DbValue = $row['año'];
 		$this->fase->DbValue = $row['fase'];
-		$this->Profesional_especializado->DbValue = $row['Profesional_especializado'];
 		$this->Ha_Coca->DbValue = $row['Ha_Coca'];
 		$this->Ha_Amapola->DbValue = $row['Ha_Amapola'];
 		$this->Ha_Marihuana->DbValue = $row['Ha_Marihuana'];
 		$this->Total_erradicado->DbValue = $row['Total_erradicado'];
+		$this->fuerza->DbValue = $row['fuerza'];
+		$this->Punto->DbValue = $row['Punto'];
+		$this->Profesional_especializado->DbValue = $row['Profesional_especializado'];
 	}
 
 	// Load old record
@@ -1305,47 +1305,151 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// fuerza
 		// Departamento
 		// Muncipio
-		// Punto
 		// año
 		// fase
-		// Profesional_especializado
 		// Ha_Coca
 		// Ha_Amapola
 		// Ha_Marihuana
 		// Total_erradicado
+		// fuerza
+		// Punto
+		// Profesional_especializado
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-			// fuerza
-			$this->fuerza->ViewValue = $this->fuerza->CurrentValue;
-			$this->fuerza->ViewCustomAttributes = "";
-
 			// Departamento
-			$this->Departamento->ViewValue = $this->Departamento->CurrentValue;
+			if (strval($this->Departamento->CurrentValue) <> "") {
+				$sFilterWrk = "`Departamento`" . ew_SearchString("=", $this->Departamento->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Departamento`, `Departamento` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Departamento`, `Departamento` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Departamento, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Departamento` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Departamento->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Departamento->ViewValue = $this->Departamento->CurrentValue;
+				}
+			} else {
+				$this->Departamento->ViewValue = NULL;
+			}
 			$this->Departamento->ViewCustomAttributes = "";
 
 			// Muncipio
-			$this->Muncipio->ViewValue = $this->Muncipio->CurrentValue;
+			if (strval($this->Muncipio->CurrentValue) <> "") {
+				$sFilterWrk = "`Muncipio`" . ew_SearchString("=", $this->Muncipio->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Muncipio`, `Muncipio` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Muncipio`, `Muncipio` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Muncipio, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Muncipio` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Muncipio->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Muncipio->ViewValue = $this->Muncipio->CurrentValue;
+				}
+			} else {
+				$this->Muncipio->ViewValue = NULL;
+			}
 			$this->Muncipio->ViewCustomAttributes = "";
 
-			// Punto
-			$this->Punto->ViewValue = $this->Punto->CurrentValue;
-			$this->Punto->ViewCustomAttributes = "";
-
 			// año
-			$this->aF1o->ViewValue = $this->aF1o->CurrentValue;
+			if (strval($this->aF1o->CurrentValue) <> "") {
+				$sFilterWrk = "`año`" . ew_SearchString("=", $this->aF1o->CurrentValue, EW_DATATYPE_NUMBER);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->aF1o, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `año` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->aF1o->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->aF1o->ViewValue = $this->aF1o->CurrentValue;
+				}
+			} else {
+				$this->aF1o->ViewValue = NULL;
+			}
 			$this->aF1o->ViewCustomAttributes = "";
 
 			// fase
-			$this->fase->ViewValue = $this->fase->CurrentValue;
-			$this->fase->ViewCustomAttributes = "";
+			if (strval($this->fase->CurrentValue) <> "") {
+				$sFilterWrk = "`fase`" . ew_SearchString("=", $this->fase->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
 
-			// Profesional_especializado
-			$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->CurrentValue;
-			$this->Profesional_especializado->ViewCustomAttributes = "";
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->fase, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `fase` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->fase->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->fase->ViewValue = $this->fase->CurrentValue;
+				}
+			} else {
+				$this->fase->ViewValue = NULL;
+			}
+			$this->fase->ViewCustomAttributes = "";
 
 			// Ha_Coca
 			$this->Ha_Coca->ViewValue = $this->Ha_Coca->CurrentValue;
@@ -1364,10 +1468,103 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 			$this->Total_erradicado->ViewCustomAttributes = "";
 
 			// fuerza
-			$this->fuerza->LinkCustomAttributes = "";
-			$this->fuerza->HrefValue = "";
-			$this->fuerza->TooltipValue = "";
+			if (strval($this->fuerza->CurrentValue) <> "") {
+				$sFilterWrk = "`fuerza`" . ew_SearchString("=", $this->fuerza->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `fuerza`, `fuerza` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `fuerza`, `fuerza` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
 
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->fuerza, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `fuerza` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->fuerza->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->fuerza->ViewValue = $this->fuerza->CurrentValue;
+				}
+			} else {
+				$this->fuerza->ViewValue = NULL;
+			}
+			$this->fuerza->ViewCustomAttributes = "";
+
+			// Punto
+			if (strval($this->Punto->CurrentValue) <> "") {
+				$sFilterWrk = "`Punto`" . ew_SearchString("=", $this->Punto->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Punto` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Punto->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Punto->ViewValue = $this->Punto->CurrentValue;
+				}
+			} else {
+				$this->Punto->ViewValue = NULL;
+			}
+			$this->Punto->ViewCustomAttributes = "";
+
+			// Profesional_especializado
+			if (strval($this->Profesional_especializado->CurrentValue) <> "") {
+				$sFilterWrk = "`Profesional_especializado`" . ew_SearchString("=", $this->Profesional_especializado->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Profesional_especializado`, `Profesional_especializado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Profesional_especializado`, `Profesional_especializado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Profesional_especializado, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Profesional_especializado` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Profesional_especializado->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->CurrentValue;
+				}
+			} else {
+				$this->Profesional_especializado->ViewValue = NULL;
+			}
+			$this->Profesional_especializado->ViewCustomAttributes = "";
 			// Departamento
 			$this->Departamento->LinkCustomAttributes = "";
 			$this->Departamento->HrefValue = "";
@@ -1378,11 +1575,6 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 			$this->Muncipio->HrefValue = "";
 			$this->Muncipio->TooltipValue = "";
 
-			// Punto
-			$this->Punto->LinkCustomAttributes = "";
-			$this->Punto->HrefValue = "";
-			$this->Punto->TooltipValue = "";
-
 			// año
 			$this->aF1o->LinkCustomAttributes = "";
 			$this->aF1o->HrefValue = "";
@@ -1392,11 +1584,6 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 			$this->fase->LinkCustomAttributes = "";
 			$this->fase->HrefValue = "";
 			$this->fase->TooltipValue = "";
-
-			// Profesional_especializado
-			$this->Profesional_especializado->LinkCustomAttributes = "";
-			$this->Profesional_especializado->HrefValue = "";
-			$this->Profesional_especializado->TooltipValue = "";
 
 			// Ha_Coca
 			$this->Ha_Coca->LinkCustomAttributes = "";
@@ -1417,49 +1604,134 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 			$this->Total_erradicado->LinkCustomAttributes = "";
 			$this->Total_erradicado->HrefValue = "";
 			$this->Total_erradicado->TooltipValue = "";
-		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
 			// fuerza
-			$this->fuerza->EditAttrs["class"] = "form-control";
-			$this->fuerza->EditCustomAttributes = "";
-			$this->fuerza->EditValue = ew_HtmlEncode($this->fuerza->AdvancedSearch->SearchValue);
-			$this->fuerza->PlaceHolder = ew_RemoveHtml($this->fuerza->FldCaption());
+			$this->fuerza->LinkCustomAttributes = "";
+			$this->fuerza->HrefValue = "";
+			$this->fuerza->TooltipValue = "";
+
+			// Punto
+			$this->Punto->LinkCustomAttributes = "";
+			$this->Punto->HrefValue = "";
+			$this->Punto->TooltipValue = "";
+
+			// Profesional_especializado
+			$this->Profesional_especializado->LinkCustomAttributes = "";
+			$this->Profesional_especializado->HrefValue = "";
+			$this->Profesional_especializado->TooltipValue = "";
+		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
 			// Departamento
 			$this->Departamento->EditAttrs["class"] = "form-control";
 			$this->Departamento->EditCustomAttributes = "";
-			$this->Departamento->EditValue = ew_HtmlEncode($this->Departamento->AdvancedSearch->SearchValue);
-			$this->Departamento->PlaceHolder = ew_RemoveHtml($this->Departamento->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Departamento`, `Departamento` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Departamento`, `Departamento` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Departamento, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Departamento` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Departamento->EditValue = $arwrk;
 
 			// Muncipio
 			$this->Muncipio->EditAttrs["class"] = "form-control";
 			$this->Muncipio->EditCustomAttributes = "";
-			$this->Muncipio->EditValue = ew_HtmlEncode($this->Muncipio->AdvancedSearch->SearchValue);
-			$this->Muncipio->PlaceHolder = ew_RemoveHtml($this->Muncipio->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Muncipio`, `Muncipio` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Muncipio`, `Muncipio` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
 
-			// Punto
-			$this->Punto->EditAttrs["class"] = "form-control";
-			$this->Punto->EditCustomAttributes = "";
-			$this->Punto->EditValue = ew_HtmlEncode($this->Punto->AdvancedSearch->SearchValue);
-			$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Muncipio, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Muncipio` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Muncipio->EditValue = $arwrk;
 
 			// año
 			$this->aF1o->EditAttrs["class"] = "form-control";
 			$this->aF1o->EditCustomAttributes = "";
-			$this->aF1o->EditValue = ew_HtmlEncode($this->aF1o->AdvancedSearch->SearchValue);
-			$this->aF1o->PlaceHolder = ew_RemoveHtml($this->aF1o->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->aF1o, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `año` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->aF1o->EditValue = $arwrk;
 
 			// fase
 			$this->fase->EditAttrs["class"] = "form-control";
 			$this->fase->EditCustomAttributes = "";
-			$this->fase->EditValue = ew_HtmlEncode($this->fase->AdvancedSearch->SearchValue);
-			$this->fase->PlaceHolder = ew_RemoveHtml($this->fase->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
 
-			// Profesional_especializado
-			$this->Profesional_especializado->EditAttrs["class"] = "form-control";
-			$this->Profesional_especializado->EditCustomAttributes = "";
-			$this->Profesional_especializado->EditValue = ew_HtmlEncode($this->Profesional_especializado->AdvancedSearch->SearchValue);
-			$this->Profesional_especializado->PlaceHolder = ew_RemoveHtml($this->Profesional_especializado->FldCaption());
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->fase, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `fase` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->fase->EditValue = $arwrk;
 
 			// Ha_Coca
 			$this->Ha_Coca->EditAttrs["class"] = "form-control";
@@ -1484,6 +1756,92 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 			$this->Total_erradicado->EditCustomAttributes = "";
 			$this->Total_erradicado->EditValue = ew_HtmlEncode($this->Total_erradicado->AdvancedSearch->SearchValue);
 			$this->Total_erradicado->PlaceHolder = ew_RemoveHtml($this->Total_erradicado->FldCaption());
+
+			// fuerza
+			$this->fuerza->EditAttrs["class"] = "form-control";
+			$this->fuerza->EditCustomAttributes = "";
+
+
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `fuerza`, `fuerza` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `fuerza`, `fuerza` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->fuerza, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `fuerza` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->fuerza->EditValue = $arwrk;
+
+			// Punto
+			$this->Punto->EditAttrs["class"] = "form-control";
+			$this->Punto->EditCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Punto` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Punto->EditValue = $arwrk;
+
+			// Profesional_especializado
+			$this->Profesional_especializado->EditAttrs["class"] = "form-control";
+			$this->Profesional_especializado->EditCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Profesional_especializado`, `Profesional_especializado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Profesional_especializado`, `Profesional_especializado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_erradicacion_fuerza_departamento`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Profesional_especializado, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Profesional_especializado` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Profesional_especializado->EditValue = $arwrk;
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -1506,9 +1864,6 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 		// Check if validation required
 		if (!EW_SERVER_VALIDATE)
 			return TRUE;
-		if (!ew_CheckInteger($this->aF1o->AdvancedSearch->SearchValue)) {
-			ew_AddMessage($gsSearchError, $this->aF1o->FldErrMsg());
-		}
 
 		// Return validate result
 		$ValidateSearch = ($gsSearchError == "");
@@ -1524,17 +1879,17 @@ class cgrafica_erradicacion_fuerza_departamento_list extends cgrafica_erradicaci
 
 	// Load advanced search
 	function LoadAdvancedSearch() {
-		$this->fuerza->AdvancedSearch->Load();
 		$this->Departamento->AdvancedSearch->Load();
 		$this->Muncipio->AdvancedSearch->Load();
-		$this->Punto->AdvancedSearch->Load();
 		$this->aF1o->AdvancedSearch->Load();
 		$this->fase->AdvancedSearch->Load();
-		$this->Profesional_especializado->AdvancedSearch->Load();
 		$this->Ha_Coca->AdvancedSearch->Load();
 		$this->Ha_Amapola->AdvancedSearch->Load();
 		$this->Ha_Marihuana->AdvancedSearch->Load();
 		$this->Total_erradicado->AdvancedSearch->Load();
+		$this->fuerza->AdvancedSearch->Load();
+		$this->Punto->AdvancedSearch->Load();
+		$this->Profesional_especializado->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -1856,8 +2211,14 @@ fgrafica_erradicacion_fuerza_departamentolist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
+fgrafica_erradicacion_fuerza_departamentolist.Lists["x_Departamento"] = {"LinkField":"x_Departamento","Ajax":null,"AutoFill":false,"DisplayFields":["x_Departamento","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_erradicacion_fuerza_departamentolist.Lists["x_Muncipio"] = {"LinkField":"x_Muncipio","Ajax":null,"AutoFill":false,"DisplayFields":["x_Muncipio","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_erradicacion_fuerza_departamentolist.Lists["x_aF1o"] = {"LinkField":"x_aF1o","Ajax":null,"AutoFill":false,"DisplayFields":["x_aF1o","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_erradicacion_fuerza_departamentolist.Lists["x_fase"] = {"LinkField":"x_fase","Ajax":null,"AutoFill":false,"DisplayFields":["x_fase","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_erradicacion_fuerza_departamentolist.Lists["x_fuerza"] = {"LinkField":"x_fuerza","Ajax":null,"AutoFill":false,"DisplayFields":["x_fuerza","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_erradicacion_fuerza_departamentolist.Lists["x_Punto"] = {"LinkField":"x_Punto","Ajax":null,"AutoFill":false,"DisplayFields":["x_Punto","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_erradicacion_fuerza_departamentolist.Lists["x_Profesional_especializado"] = {"LinkField":"x_Profesional_especializado","Ajax":null,"AutoFill":false,"DisplayFields":["x_Profesional_especializado","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 // Form object for search
-
 var fgrafica_erradicacion_fuerza_departamentolistsrch = new ew_Form("fgrafica_erradicacion_fuerza_departamentolistsrch");
 
 // Validate function for search
@@ -1867,9 +2228,6 @@ fgrafica_erradicacion_fuerza_departamentolistsrch.Validate = function(fobj) {
 	fobj = fobj || this.Form;
 	this.PostAutoSuggest();
 	var infix = "";
-	elm = this.GetElements("x" + infix + "_aF1o");
-	if (elm && !ew_CheckInteger(elm.value))
-		return this.OnError(elm, "<?php echo ew_JsEncode2($grafica_erradicacion_fuerza_departamento->aF1o->FldErrMsg()) ?>");
 
 	// Set up row object
 	ew_ElementsToRow(fobj);
@@ -1896,6 +2254,13 @@ fgrafica_erradicacion_fuerza_departamentolistsrch.ValidateRequired = false; // N
 <?php } ?>
 
 // Dynamic selection lists
+fgrafica_erradicacion_fuerza_departamentolistsrch.Lists["x_Departamento"] = {"LinkField":"x_Departamento","Ajax":null,"AutoFill":false,"DisplayFields":["x_Departamento","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_erradicacion_fuerza_departamentolistsrch.Lists["x_Muncipio"] = {"LinkField":"x_Muncipio","Ajax":null,"AutoFill":false,"DisplayFields":["x_Muncipio","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_erradicacion_fuerza_departamentolistsrch.Lists["x_aF1o"] = {"LinkField":"x_aF1o","Ajax":null,"AutoFill":false,"DisplayFields":["x_aF1o","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_erradicacion_fuerza_departamentolistsrch.Lists["x_fase"] = {"LinkField":"x_fase","Ajax":null,"AutoFill":false,"DisplayFields":["x_fase","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_erradicacion_fuerza_departamentolistsrch.Lists["x_fuerza"] = {"LinkField":"x_fuerza","Ajax":null,"AutoFill":false,"DisplayFields":["x_fuerza","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_erradicacion_fuerza_departamentolistsrch.Lists["x_Punto"] = {"LinkField":"x_Punto","Ajax":null,"AutoFill":false,"DisplayFields":["x_Punto","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_erradicacion_fuerza_departamentolistsrch.Lists["x_Profesional_especializado"] = {"LinkField":"x_Profesional_especializado","Ajax":null,"AutoFill":false,"DisplayFields":["x_Profesional_especializado","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 </script>
 <script type="text/javascript">
 
@@ -1907,40 +2272,55 @@ fgrafica_erradicacion_fuerza_departamentolistsrch.ValidateRequired = false; // N
 <?php if ($grafica_erradicacion_fuerza_departamento->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-
-<h2>Reporte de erradicación según fuerza pública</h2>
-<p>La siguiente tabla contiene las hectáreas erradicadas según fuerza pública para cada Punto de erradicación, desde fase III de erradicación 2015 a la fecha</p>
-<hr>
-
-<table>
-	<tr>
-		<td><?php if ($grafica_erradicacion_fuerza_departamento_list->TotalRecs > 0 && $grafica_erradicacion_fuerza_departamento_list->ExportOptions->Visible()) { ?>
-			<?php $grafica_erradicacion_fuerza_departamento_list->ExportOptions->Render("body") ?></td>
-		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono </td>
-	</tr>
-</table>
-<hr>
-<br>
+<?php if ($grafica_erradicacion_fuerza_departamento->Export == "") { ?>
+<?php echo $Language->SelectionForm(); ?>
+<?php } ?>
 <div class="clearfix"></div>
 </div>
+<?php } ?>
+<div class="ewToolbar">
+<H2> Reporte de erradicación según fuerza pública</h2>
+<p>La siguiente tabla contiene las hectáreas erradicadas según fuerza pública para cada Punto de erradicación, desde fase III de erradicación 2015 a la fecha</p><p> <font color="#F78181">Datos operativos del grupo de erradicación, cifras no oficiales, pendiente de validación y verificación por parte del ente neutral</font></p>
+
+<hr>
 <table>
 	<tr>
-		<td><?php $grafica_erradicacion_fuerza_departamento_list->SearchOptions->Render("body") ?></td>
-		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente</td>
-	</tr>
-</table>
+		<td>
+			<?php if ($grafica_erradicacion_fuerza_departamento_list->TotalRecs > 0 && $grafica_erradicacion_fuerza_departamento_list->ExportOptions->Visible()) { ?>
 
-<br>
+			<?php $grafica_erradicacion_fuerza_departamento_list->ExportOptions->Render("body") ?>
+			<?php } ?>
+
+		</td>
+		<td>
+			Si desea exportar la tabla en formato excel haga click en el siguiente icono 
+		</td>	
+	</tr>	
+</table> 
+
 <hr>
-<br>
-<?php } ?>
+
+</div>
 <?php if ($grafica_erradicacion_fuerza_departamento->Export == "") { ?>
 
-<?php } ?>
+<div>
+<br>
+<table>
+	<tr>
+		<td>
+			<?php if ($grafica_erradicacion_fuerza_departamento_list->SearchOptions->Visible()) { ?>
+			<?php $grafica_erradicacion_fuerza_departamento_list->SearchOptions->Render("body") ?>
+			<?php } ?>
+		</td>
+		<td>
+			Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente
+		</td>	
+	</tr>
+</table>
+<br>
+</div>
 
-<?php } ?>
-<?php if ($grafica_erradicacion_fuerza_departamento_list->SearchOptions->Visible()) { ?>
-
+<hr>
 <?php } ?>
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
@@ -1989,88 +2369,234 @@ $grafica_erradicacion_fuerza_departamento->RowType = EW_ROWTYPE_SEARCH;
 $grafica_erradicacion_fuerza_departamento->ResetAttrs();
 $grafica_erradicacion_fuerza_departamento_list->RenderRow();
 ?>
-
+<br>
 <table>
 	<tr>
-		<td><label for="x_fuerza" class="ewSearchCaption ewLabel">FUERZA</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_fuerza" id="z_fuerza" value="LIKE"></span></td>
+		<td>
+			<label for="x_Departamento" class="ewSearchCaption ewLabel"><?php echo $grafica_erradicacion_fuerza_departamento->Departamento->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Departamento" id="z_Departamento" value="LIKE"></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_fuerza" name="x_fuerza" id="x_fuerza" size="30" maxlength="70" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->fuerza->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->fuerza->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->fuerza->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_Departamento" id="x_Departamento" name="x_Departamento"<?php echo $grafica_erradicacion_fuerza_departamento->Departamento->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_erradicacion_fuerza_departamento->Departamento->EditValue)) {
+					$arwrk = $grafica_erradicacion_fuerza_departamento->Departamento->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_erradicacion_fuerza_departamento->Departamento->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_erradicacion_fuerza_departamentolistsrch.Lists["x_Departamento"].Options = <?php echo (is_array($grafica_erradicacion_fuerza_departamento->Departamento->EditValue)) ? ew_ArrayToJson($grafica_erradicacion_fuerza_departamento->Departamento->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
 	</tr>
 	<tr>
-		<td><label for="x_Departamento" class="ewSearchCaption ewLabel">DEPARTAMENTO</label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Departamento" id="z_Departamento" value="LIKE"></span></td>
+		<td>
+			<label for="x_Muncipio" class="ewSearchCaption ewLabel"><?php echo $grafica_erradicacion_fuerza_departamento->Muncipio->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Muncipio" id="z_Muncipio" value="LIKE"></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_Departamento" name="x_Departamento" id="x_Departamento" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->Departamento->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->Departamento->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->Departamento->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_Muncipio" id="x_Muncipio" name="x_Muncipio"<?php echo $grafica_erradicacion_fuerza_departamento->Muncipio->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_erradicacion_fuerza_departamento->Muncipio->EditValue)) {
+					$arwrk = $grafica_erradicacion_fuerza_departamento->Muncipio->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_erradicacion_fuerza_departamento->Muncipio->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_erradicacion_fuerza_departamentolistsrch.Lists["x_Muncipio"].Options = <?php echo (is_array($grafica_erradicacion_fuerza_departamento->Muncipio->EditValue)) ? ew_ArrayToJson($grafica_erradicacion_fuerza_departamento->Muncipio->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
 	</tr>
 	<tr>
-		<td><label for="x_Muncipio" class="ewSearchCaption ewLabel">MUNICIPIO</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Muncipio" id="z_Muncipio" value="LIKE"></span></td>
+		<td>
+			<label for="x_aF1o" class="ewSearchCaption ewLabel"><?php echo $grafica_erradicacion_fuerza_departamento->aF1o->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_aF1o" id="z_aF1o" value="="></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_Muncipio" name="x_Muncipio" id="x_Muncipio" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->Muncipio->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->Muncipio->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->Muncipio->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_aF1o" id="x_aF1o" name="x_aF1o"<?php echo $grafica_erradicacion_fuerza_departamento->aF1o->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_erradicacion_fuerza_departamento->aF1o->EditValue)) {
+					$arwrk = $grafica_erradicacion_fuerza_departamento->aF1o->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_erradicacion_fuerza_departamento->aF1o->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_erradicacion_fuerza_departamentolistsrch.Lists["x_aF1o"].Options = <?php echo (is_array($grafica_erradicacion_fuerza_departamento->aF1o->EditValue)) ? ew_ArrayToJson($grafica_erradicacion_fuerza_departamento->aF1o->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
 	</tr>
 	<tr>
-		<td><label for="x_Punto" class="ewSearchCaption ewLabel">PUNTO DE ERRADICACIÓN</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span></td>
+		<td>
+			<label for="x_fase" class="ewSearchCaption ewLabel"><?php echo $grafica_erradicacion_fuerza_departamento->fase->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_fase" id="z_fase" value="LIKE"></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->Punto->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->Punto->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->Punto->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_fase" id="x_fase" name="x_fase"<?php echo $grafica_erradicacion_fuerza_departamento->fase->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_erradicacion_fuerza_departamento->fase->EditValue)) {
+					$arwrk = $grafica_erradicacion_fuerza_departamento->fase->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_erradicacion_fuerza_departamento->fase->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_erradicacion_fuerza_departamentolistsrch.Lists["x_fase"].Options = <?php echo (is_array($grafica_erradicacion_fuerza_departamento->fase->EditValue)) ? ew_ArrayToJson($grafica_erradicacion_fuerza_departamento->fase->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
 	</tr>
 	<tr>
-		<td><label for="x_aF1o" class="ewSearchCaption ewLabel">AÑO</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_aF1o" id="z_aF1o" value="="></span></td>
+		<td>
+			<label for="x_fuerza" class="ewSearchCaption ewLabel"><?php echo $grafica_erradicacion_fuerza_departamento->fuerza->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_fuerza" id="z_fuerza" value="LIKE"></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_aF1o" name="x_aF1o" id="x_aF1o" size="30" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->aF1o->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->aF1o->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->aF1o->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_fuerza" id="x_fuerza" name="x_fuerza"<?php echo $grafica_erradicacion_fuerza_departamento->fuerza->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_erradicacion_fuerza_departamento->fuerza->EditValue)) {
+					$arwrk = $grafica_erradicacion_fuerza_departamento->fuerza->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_erradicacion_fuerza_departamento->fuerza->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_erradicacion_fuerza_departamentolistsrch.Lists["x_fuerza"].Options = <?php echo (is_array($grafica_erradicacion_fuerza_departamento->fuerza->EditValue)) ? ew_ArrayToJson($grafica_erradicacion_fuerza_departamento->fuerza->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
 	</tr>
 	<tr>
-		<td><label for="x_fase" class="ewSearchCaption ewLabel">FASE</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_fase" id="z_fase" value="LIKE"></span></td>
+		<td>
+			<label for="x_Punto" class="ewSearchCaption ewLabel"><?php echo $grafica_erradicacion_fuerza_departamento->Punto->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_fase" name="x_fase" id="x_fase" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->fase->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->fase->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->fase->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_Punto" id="x_Punto" name="x_Punto"<?php echo $grafica_erradicacion_fuerza_departamento->Punto->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_erradicacion_fuerza_departamento->Punto->EditValue)) {
+					$arwrk = $grafica_erradicacion_fuerza_departamento->Punto->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_erradicacion_fuerza_departamento->Punto->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_erradicacion_fuerza_departamentolistsrch.Lists["x_Punto"].Options = <?php echo (is_array($grafica_erradicacion_fuerza_departamento->Punto->EditValue)) ? ew_ArrayToJson($grafica_erradicacion_fuerza_departamento->Punto->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
 	</tr>
 	<tr>
-		<td><label for="x_Profesional_especializado" class="ewSearchCaption ewLabel">PROFESIONAL ESPECIALIZADO</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Profesional_especializado" id="z_Profesional_especializado" value="LIKE"></span></td>
+		<td>
+			<label for="x_Profesional_especializado" class="ewSearchCaption ewLabel"><?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Profesional_especializado" id="z_Profesional_especializado" value="LIKE"></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_Profesional_especializado" name="x_Profesional_especializado" id="x_Profesional_especializado" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_erradicacion_fuerza_departamento->Profesional_especializado->PlaceHolder) ?>" value="<?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->EditValue ?>"<?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_Profesional_especializado" id="x_Profesional_especializado" name="x_Profesional_especializado"<?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_erradicacion_fuerza_departamento->Profesional_especializado->EditValue)) {
+					$arwrk = $grafica_erradicacion_fuerza_departamento->Profesional_especializado->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_erradicacion_fuerza_departamento->Profesional_especializado->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_erradicacion_fuerza_departamentolistsrch.Lists["x_Profesional_especializado"].Options = <?php echo (is_array($grafica_erradicacion_fuerza_departamento->Profesional_especializado->EditValue)) ? ew_ArrayToJson($grafica_erradicacion_fuerza_departamento->Profesional_especializado->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
 	</tr>
 </table>
-
-<?php if ($grafica_erradicacion_fuerza_departamento->fuerza->Visible) { // fuerza ?>
-<?php } ?>
-<?php if ($grafica_erradicacion_fuerza_departamento->Departamento->Visible) { // Departamento ?>
-<?php } ?>
-<?php if ($grafica_erradicacion_fuerza_departamento->Muncipio->Visible) { // Muncipio ?>
-<?php } ?>
-<?php if ($grafica_erradicacion_fuerza_departamento->Punto->Visible) { // Punto ?>
-<?php } ?>
-<?php if ($grafica_erradicacion_fuerza_departamento->aF1o->Visible) { // año ?>
-<?php } ?>
-<?php if ($grafica_erradicacion_fuerza_departamento->fase->Visible) { // fase ?>
-<?php } ?>
-
-<?php if ($grafica_erradicacion_fuerza_departamento->Profesional_especializado->Visible) { // Profesional_especializado ?>
-<?php } ?>
-
-<br>
 <button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-
-<br>
-<br>
-<hr>
 
 	</div>
 </div>
@@ -2163,12 +2689,21 @@ $grafica_erradicacion_fuerza_departamento_list->RenderListOptions();
 // Render list options (header, left)
 $grafica_erradicacion_fuerza_departamento_list->ListOptions->Render("header", "left");
 ?>
-<?php if ($grafica_erradicacion_fuerza_departamento->fuerza->Visible) { // fuerza ?>
-	<?php if ($grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->fuerza) == "") { ?>
-		<th data-name="fuerza"><div id="elh_grafica_erradicacion_fuerza_departamento_fuerza" class="grafica_erradicacion_fuerza_departamento_fuerza"><div class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->fuerza->FldCaption() ?></div></div></th>
+<?php if ($grafica_erradicacion_fuerza_departamento->Punto->Visible) { // Punto ?>
+	<?php if ($grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->Punto) == "") { ?>
+		<th data-name="Punto"><div id="elh_grafica_erradicacion_fuerza_departamento_Punto" class="grafica_erradicacion_fuerza_departamento_Punto"><div class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->Punto->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="fuerza"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->fuerza) ?>',2);"><div id="elh_grafica_erradicacion_fuerza_departamento_fuerza" class="grafica_erradicacion_fuerza_departamento_fuerza">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->fuerza->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_erradicacion_fuerza_departamento->fuerza->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_erradicacion_fuerza_departamento->fuerza->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+		<th data-name="Punto"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->Punto) ?>',2);"><div id="elh_grafica_erradicacion_fuerza_departamento_Punto" class="grafica_erradicacion_fuerza_departamento_Punto">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->Punto->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_erradicacion_fuerza_departamento->Punto->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_erradicacion_fuerza_departamento->Punto->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($grafica_erradicacion_fuerza_departamento->Profesional_especializado->Visible) { // Profesional_especializado ?>
+	<?php if ($grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->Profesional_especializado) == "") { ?>
+		<th data-name="Profesional_especializado"><div id="elh_grafica_erradicacion_fuerza_departamento_Profesional_especializado" class="grafica_erradicacion_fuerza_departamento_Profesional_especializado"><div class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Profesional_especializado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->Profesional_especializado) ?>',2);"><div id="elh_grafica_erradicacion_fuerza_departamento_Profesional_especializado" class="grafica_erradicacion_fuerza_departamento_Profesional_especializado">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_erradicacion_fuerza_departamento->Profesional_especializado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_erradicacion_fuerza_departamento->Profesional_especializado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -2190,39 +2725,12 @@ $grafica_erradicacion_fuerza_departamento_list->ListOptions->Render("header", "l
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
-<?php if ($grafica_erradicacion_fuerza_departamento->Punto->Visible) { // Punto ?>
-	<?php if ($grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->Punto) == "") { ?>
-		<th data-name="Punto"><div id="elh_grafica_erradicacion_fuerza_departamento_Punto" class="grafica_erradicacion_fuerza_departamento_Punto"><div class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->Punto->FldCaption() ?></div></div></th>
+<?php if ($grafica_erradicacion_fuerza_departamento->fuerza->Visible) { // fuerza ?>
+	<?php if ($grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->fuerza) == "") { ?>
+		<th data-name="fuerza"><div id="elh_grafica_erradicacion_fuerza_departamento_fuerza" class="grafica_erradicacion_fuerza_departamento_fuerza"><div class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->fuerza->FldCaption() ?></div></div></th>
 	<?php } else { ?>
-		<th data-name="Punto"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->Punto) ?>',2);"><div id="elh_grafica_erradicacion_fuerza_departamento_Punto" class="grafica_erradicacion_fuerza_departamento_Punto">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->Punto->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_erradicacion_fuerza_departamento->Punto->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_erradicacion_fuerza_departamento->Punto->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
-<?php if ($grafica_erradicacion_fuerza_departamento->aF1o->Visible) { // año ?>
-	<?php if ($grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->aF1o) == "") { ?>
-		<th data-name="aF1o"><div id="elh_grafica_erradicacion_fuerza_departamento_aF1o" class="grafica_erradicacion_fuerza_departamento_aF1o"><div class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->aF1o->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="aF1o"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->aF1o) ?>',2);"><div id="elh_grafica_erradicacion_fuerza_departamento_aF1o" class="grafica_erradicacion_fuerza_departamento_aF1o">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->aF1o->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_erradicacion_fuerza_departamento->aF1o->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_erradicacion_fuerza_departamento->aF1o->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
-<?php if ($grafica_erradicacion_fuerza_departamento->fase->Visible) { // fase ?>
-	<?php if ($grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->fase) == "") { ?>
-		<th data-name="fase"><div id="elh_grafica_erradicacion_fuerza_departamento_fase" class="grafica_erradicacion_fuerza_departamento_fase"><div class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->fase->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="fase"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->fase) ?>',2);"><div id="elh_grafica_erradicacion_fuerza_departamento_fase" class="grafica_erradicacion_fuerza_departamento_fase">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->fase->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_erradicacion_fuerza_departamento->fase->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_erradicacion_fuerza_departamento->fase->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
-<?php if ($grafica_erradicacion_fuerza_departamento->Profesional_especializado->Visible) { // Profesional_especializado ?>
-	<?php if ($grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->Profesional_especializado) == "") { ?>
-		<th data-name="Profesional_especializado"><div id="elh_grafica_erradicacion_fuerza_departamento_Profesional_especializado" class="grafica_erradicacion_fuerza_departamento_Profesional_especializado"><div class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="Profesional_especializado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->Profesional_especializado) ?>',2);"><div id="elh_grafica_erradicacion_fuerza_departamento_Profesional_especializado" class="grafica_erradicacion_fuerza_departamento_Profesional_especializado">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_erradicacion_fuerza_departamento->Profesional_especializado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_erradicacion_fuerza_departamento->Profesional_especializado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+		<th data-name="fuerza"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->fuerza) ?>',2);"><div id="elh_grafica_erradicacion_fuerza_departamento_fuerza" class="grafica_erradicacion_fuerza_departamento_fuerza">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->fuerza->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_erradicacion_fuerza_departamento->fuerza->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_erradicacion_fuerza_departamento->fuerza->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -2259,6 +2767,24 @@ $grafica_erradicacion_fuerza_departamento_list->ListOptions->Render("header", "l
 	<?php } else { ?>
 		<th data-name="Total_erradicado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->Total_erradicado) ?>',2);"><div id="elh_grafica_erradicacion_fuerza_departamento_Total_erradicado" class="grafica_erradicacion_fuerza_departamento_Total_erradicado">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->Total_erradicado->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_erradicacion_fuerza_departamento->Total_erradicado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_erradicacion_fuerza_departamento->Total_erradicado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($grafica_erradicacion_fuerza_departamento->aF1o->Visible) { // año ?>
+	<?php if ($grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->aF1o) == "") { ?>
+		<th data-name="aF1o"><div id="elh_grafica_erradicacion_fuerza_departamento_aF1o" class="grafica_erradicacion_fuerza_departamento_aF1o"><div class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->aF1o->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="aF1o"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->aF1o) ?>',2);"><div id="elh_grafica_erradicacion_fuerza_departamento_aF1o" class="grafica_erradicacion_fuerza_departamento_aF1o">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->aF1o->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_erradicacion_fuerza_departamento->aF1o->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_erradicacion_fuerza_departamento->aF1o->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($grafica_erradicacion_fuerza_departamento->fase->Visible) { // fase ?>
+	<?php if ($grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->fase) == "") { ?>
+		<th data-name="fase"><div id="elh_grafica_erradicacion_fuerza_departamento_fase" class="grafica_erradicacion_fuerza_departamento_fase"><div class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->fase->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="fase"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_erradicacion_fuerza_departamento->SortUrl($grafica_erradicacion_fuerza_departamento->fase) ?>',2);"><div id="elh_grafica_erradicacion_fuerza_departamento_fase" class="grafica_erradicacion_fuerza_departamento_fase">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_erradicacion_fuerza_departamento->fase->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_erradicacion_fuerza_departamento->fase->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_erradicacion_fuerza_departamento->fase->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -2327,11 +2853,17 @@ while ($grafica_erradicacion_fuerza_departamento_list->RecCnt < $grafica_erradic
 // Render list options (body, left)
 $grafica_erradicacion_fuerza_departamento_list->ListOptions->Render("body", "left", $grafica_erradicacion_fuerza_departamento_list->RowCnt);
 ?>
-	<?php if ($grafica_erradicacion_fuerza_departamento->fuerza->Visible) { // fuerza ?>
-		<td data-name="fuerza"<?php echo $grafica_erradicacion_fuerza_departamento->fuerza->CellAttributes() ?>>
-<span<?php echo $grafica_erradicacion_fuerza_departamento->fuerza->ViewAttributes() ?>>
-<?php echo $grafica_erradicacion_fuerza_departamento->fuerza->ListViewValue() ?></span>
+	<?php if ($grafica_erradicacion_fuerza_departamento->Punto->Visible) { // Punto ?>
+		<td data-name="Punto"<?php echo $grafica_erradicacion_fuerza_departamento->Punto->CellAttributes() ?>>
+<span<?php echo $grafica_erradicacion_fuerza_departamento->Punto->ViewAttributes() ?>>
+<?php echo $grafica_erradicacion_fuerza_departamento->Punto->ListViewValue() ?></span>
 <a id="<?php echo $grafica_erradicacion_fuerza_departamento_list->PageObjName . "_row_" . $grafica_erradicacion_fuerza_departamento_list->RowCnt ?>"></a></td>
+	<?php } ?>
+	<?php if ($grafica_erradicacion_fuerza_departamento->Profesional_especializado->Visible) { // Profesional_especializado ?>
+		<td data-name="Profesional_especializado"<?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->CellAttributes() ?>>
+<span<?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->ViewAttributes() ?>>
+<?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->ListViewValue() ?></span>
+</td>
 	<?php } ?>
 	<?php if ($grafica_erradicacion_fuerza_departamento->Departamento->Visible) { // Departamento ?>
 		<td data-name="Departamento"<?php echo $grafica_erradicacion_fuerza_departamento->Departamento->CellAttributes() ?>>
@@ -2345,28 +2877,10 @@ $grafica_erradicacion_fuerza_departamento_list->ListOptions->Render("body", "lef
 <?php echo $grafica_erradicacion_fuerza_departamento->Muncipio->ListViewValue() ?></span>
 </td>
 	<?php } ?>
-	<?php if ($grafica_erradicacion_fuerza_departamento->Punto->Visible) { // Punto ?>
-		<td data-name="Punto"<?php echo $grafica_erradicacion_fuerza_departamento->Punto->CellAttributes() ?>>
-<span<?php echo $grafica_erradicacion_fuerza_departamento->Punto->ViewAttributes() ?>>
-<?php echo $grafica_erradicacion_fuerza_departamento->Punto->ListViewValue() ?></span>
-</td>
-	<?php } ?>
-	<?php if ($grafica_erradicacion_fuerza_departamento->aF1o->Visible) { // año ?>
-		<td data-name="aF1o"<?php echo $grafica_erradicacion_fuerza_departamento->aF1o->CellAttributes() ?>>
-<span<?php echo $grafica_erradicacion_fuerza_departamento->aF1o->ViewAttributes() ?>>
-<?php echo $grafica_erradicacion_fuerza_departamento->aF1o->ListViewValue() ?></span>
-</td>
-	<?php } ?>
-	<?php if ($grafica_erradicacion_fuerza_departamento->fase->Visible) { // fase ?>
-		<td data-name="fase"<?php echo $grafica_erradicacion_fuerza_departamento->fase->CellAttributes() ?>>
-<span<?php echo $grafica_erradicacion_fuerza_departamento->fase->ViewAttributes() ?>>
-<?php echo $grafica_erradicacion_fuerza_departamento->fase->ListViewValue() ?></span>
-</td>
-	<?php } ?>
-	<?php if ($grafica_erradicacion_fuerza_departamento->Profesional_especializado->Visible) { // Profesional_especializado ?>
-		<td data-name="Profesional_especializado"<?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->CellAttributes() ?>>
-<span<?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->ViewAttributes() ?>>
-<?php echo $grafica_erradicacion_fuerza_departamento->Profesional_especializado->ListViewValue() ?></span>
+	<?php if ($grafica_erradicacion_fuerza_departamento->fuerza->Visible) { // fuerza ?>
+		<td data-name="fuerza"<?php echo $grafica_erradicacion_fuerza_departamento->fuerza->CellAttributes() ?>>
+<span<?php echo $grafica_erradicacion_fuerza_departamento->fuerza->ViewAttributes() ?>>
+<?php echo $grafica_erradicacion_fuerza_departamento->fuerza->ListViewValue() ?></span>
 </td>
 	<?php } ?>
 	<?php if ($grafica_erradicacion_fuerza_departamento->Ha_Coca->Visible) { // Ha_Coca ?>
@@ -2391,6 +2905,18 @@ $grafica_erradicacion_fuerza_departamento_list->ListOptions->Render("body", "lef
 		<td data-name="Total_erradicado"<?php echo $grafica_erradicacion_fuerza_departamento->Total_erradicado->CellAttributes() ?>>
 <span<?php echo $grafica_erradicacion_fuerza_departamento->Total_erradicado->ViewAttributes() ?>>
 <?php echo $grafica_erradicacion_fuerza_departamento->Total_erradicado->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($grafica_erradicacion_fuerza_departamento->aF1o->Visible) { // año ?>
+		<td data-name="aF1o"<?php echo $grafica_erradicacion_fuerza_departamento->aF1o->CellAttributes() ?>>
+<span<?php echo $grafica_erradicacion_fuerza_departamento->aF1o->ViewAttributes() ?>>
+<?php echo $grafica_erradicacion_fuerza_departamento->aF1o->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($grafica_erradicacion_fuerza_departamento->fase->Visible) { // fase ?>
+		<td data-name="fase"<?php echo $grafica_erradicacion_fuerza_departamento->fase->CellAttributes() ?>>
+<span<?php echo $grafica_erradicacion_fuerza_departamento->fase->ViewAttributes() ?>>
+<?php echo $grafica_erradicacion_fuerza_departamento->fase->ListViewValue() ?></span>
 </td>
 	<?php } ?>
 <?php

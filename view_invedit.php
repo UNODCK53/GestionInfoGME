@@ -384,7 +384,11 @@ class cview_inv_edit extends cview_inv {
 		}
 
 		// Render the record
-		$this->RowType = EW_ROWTYPE_EDIT; // Render as Edit
+		if ($this->CurrentAction == "F") { // Confirm page
+			$this->RowType = EW_ROWTYPE_VIEW; // Render as View
+		} else {
+			$this->RowType = EW_ROWTYPE_EDIT; // Render as Edit
+		}
 		$this->ResetAttrs();
 		$this->RenderRow();
 	}
@@ -442,7 +446,7 @@ class cview_inv_edit extends cview_inv {
 		}
 		if (!$this->F_Sincron->FldIsDetailKey) {
 			$this->F_Sincron->setFormValue($objForm->GetValue("x_F_Sincron"));
-			$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 7);
+			$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 5);
 		}
 		if (!$this->USUARIO->FldIsDetailKey) {
 			$this->USUARIO->setFormValue($objForm->GetValue("x_USUARIO"));
@@ -647,7 +651,7 @@ class cview_inv_edit extends cview_inv {
 		$this->LoadRow();
 		$this->llave->CurrentValue = $this->llave->FormValue;
 		$this->F_Sincron->CurrentValue = $this->F_Sincron->FormValue;
-		$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 7);
+		$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 5);
 		$this->USUARIO->CurrentValue = $this->USUARIO->FormValue;
 		$this->Cargo_gme->CurrentValue = $this->Cargo_gme->FormValue;
 		$this->NOM_PE->CurrentValue = $this->NOM_PE->FormValue;
@@ -985,11 +989,40 @@ class cview_inv_edit extends cview_inv {
 
 			// F_Sincron
 			$this->F_Sincron->ViewValue = $this->F_Sincron->CurrentValue;
-			$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 7);
+			$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 5);
 			$this->F_Sincron->ViewCustomAttributes = "";
 
 			// USUARIO
-			$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+			if (strval($this->USUARIO->CurrentValue) <> "") {
+				$sFilterWrk = "`USUARIO`" . ew_SearchString("=", $this->USUARIO->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->USUARIO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `USUARIO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->USUARIO->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+				}
+			} else {
+				$this->USUARIO->ViewValue = NULL;
+			}
 			$this->USUARIO->ViewCustomAttributes = "";
 
 			// Cargo_gme
@@ -997,7 +1030,36 @@ class cview_inv_edit extends cview_inv {
 			$this->Cargo_gme->ViewCustomAttributes = "";
 
 			// NOM_PE
-			$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+			if (strval($this->NOM_PE->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_PE`" . ew_SearchString("=", $this->NOM_PE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_PE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+				}
+			} else {
+				$this->NOM_PE->ViewValue = NULL;
+			}
 			$this->NOM_PE->ViewCustomAttributes = "";
 
 			// Otro_PE
@@ -1017,19 +1079,111 @@ class cview_inv_edit extends cview_inv {
 			$this->OBSERVACION->ViewCustomAttributes = "";
 
 			// AÑO
-			$this->AD1O->ViewValue = $this->AD1O->CurrentValue;
+			if (strval($this->AD1O->CurrentValue) <> "") {
+				$sFilterWrk = "`AÑO`" . ew_SearchString("=", $this->AD1O->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `AÑO`, `AÑO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `AÑO`, `AÑO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->AD1O, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `AÑO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->AD1O->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->AD1O->ViewValue = $this->AD1O->CurrentValue;
+				}
+			} else {
+				$this->AD1O->ViewValue = NULL;
+			}
 			$this->AD1O->ViewCustomAttributes = "";
 
 			// FASE
-			$this->FASE->ViewValue = $this->FASE->CurrentValue;
+			if (strval($this->FASE->CurrentValue) <> "") {
+				$sFilterWrk = "`FASE`" . ew_SearchString("=", $this->FASE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `FASE`, `FASE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `FASE`, `FASE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->FASE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `FASE`";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->FASE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->FASE->ViewValue = $this->FASE->CurrentValue;
+				}
+			} else {
+				$this->FASE->ViewValue = NULL;
+			}
 			$this->FASE->ViewCustomAttributes = "";
 
 			// FECHA_INV
 			$this->FECHA_INV->ViewValue = $this->FECHA_INV->CurrentValue;
+			$this->FECHA_INV->ViewValue = ew_FormatDateTime($this->FECHA_INV->ViewValue, 5);
 			$this->FECHA_INV->ViewCustomAttributes = "";
 
 			// TIPO_INV
-			$this->TIPO_INV->ViewValue = $this->TIPO_INV->CurrentValue;
+			if (strval($this->TIPO_INV->CurrentValue) <> "") {
+				$sFilterWrk = "`label`" . ew_SearchString("=", $this->TIPO_INV->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='inv'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->TIPO_INV, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->TIPO_INV->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->TIPO_INV->ViewValue = $this->TIPO_INV->CurrentValue;
+				}
+			} else {
+				$this->TIPO_INV->ViewValue = NULL;
+			}
 			$this->TIPO_INV->ViewCustomAttributes = "";
 
 			// NOM_CAPATAZ
@@ -1245,7 +1399,20 @@ class cview_inv_edit extends cview_inv {
 			$this->_3_Tubo_galvanizado->ViewCustomAttributes = "";
 
 			// Modificado
-			$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+			if (strval($this->Modificado->CurrentValue) <> "") {
+				switch ($this->Modificado->CurrentValue) {
+					case $this->Modificado->FldTagValue(1):
+						$this->Modificado->ViewValue = $this->Modificado->FldTagCaption(1) <> "" ? $this->Modificado->FldTagCaption(1) : $this->Modificado->CurrentValue;
+						break;
+					case $this->Modificado->FldTagValue(2):
+						$this->Modificado->ViewValue = $this->Modificado->FldTagCaption(2) <> "" ? $this->Modificado->FldTagCaption(2) : $this->Modificado->CurrentValue;
+						break;
+					default:
+						$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+				}
+			} else {
+				$this->Modificado->ViewValue = NULL;
+			}
 			$this->Modificado->ViewCustomAttributes = "";
 
 			// llave
@@ -1594,13 +1761,42 @@ class cview_inv_edit extends cview_inv {
 			$this->F_Sincron->EditAttrs["class"] = "form-control";
 			$this->F_Sincron->EditCustomAttributes = "";
 			$this->F_Sincron->EditValue = $this->F_Sincron->CurrentValue;
-			$this->F_Sincron->EditValue = ew_FormatDateTime($this->F_Sincron->EditValue, 7);
+			$this->F_Sincron->EditValue = ew_FormatDateTime($this->F_Sincron->EditValue, 5);
 			$this->F_Sincron->ViewCustomAttributes = "";
 
 			// USUARIO
 			$this->USUARIO->EditAttrs["class"] = "form-control";
 			$this->USUARIO->EditCustomAttributes = "";
-			$this->USUARIO->EditValue = $this->USUARIO->CurrentValue;
+			if (strval($this->USUARIO->CurrentValue) <> "") {
+				$sFilterWrk = "`USUARIO`" . ew_SearchString("=", $this->USUARIO->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->USUARIO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `USUARIO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->USUARIO->EditValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->USUARIO->EditValue = $this->USUARIO->CurrentValue;
+				}
+			} else {
+				$this->USUARIO->EditValue = NULL;
+			}
 			$this->USUARIO->ViewCustomAttributes = "";
 
 			// Cargo_gme
@@ -1612,26 +1808,48 @@ class cview_inv_edit extends cview_inv {
 			// NOM_PE
 			$this->NOM_PE->EditAttrs["class"] = "form-control";
 			$this->NOM_PE->EditCustomAttributes = "";
-			$this->NOM_PE->EditValue = $this->NOM_PE->CurrentValue;
-			$this->NOM_PE->ViewCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->NOM_PE->EditValue = $arwrk;
 
 			// Otro_PE
 			$this->Otro_PE->EditAttrs["class"] = "form-control";
 			$this->Otro_PE->EditCustomAttributes = "";
-			$this->Otro_PE->EditValue = $this->Otro_PE->CurrentValue;
-			$this->Otro_PE->ViewCustomAttributes = "";
+			$this->Otro_PE->EditValue = ew_HtmlEncode($this->Otro_PE->CurrentValue);
+			$this->Otro_PE->PlaceHolder = ew_RemoveHtml($this->Otro_PE->FldCaption());
 
 			// DIA
 			$this->DIA->EditAttrs["class"] = "form-control";
 			$this->DIA->EditCustomAttributes = "";
-			$this->DIA->EditValue = $this->DIA->CurrentValue;
-			$this->DIA->ViewCustomAttributes = "";
+			$this->DIA->EditValue = ew_HtmlEncode($this->DIA->CurrentValue);
+			$this->DIA->PlaceHolder = ew_RemoveHtml($this->DIA->FldCaption());
 
 			// MES
 			$this->MES->EditAttrs["class"] = "form-control";
 			$this->MES->EditCustomAttributes = "";
-			$this->MES->EditValue = $this->MES->CurrentValue;
-			$this->MES->ViewCustomAttributes = "";
+			$this->MES->EditValue = ew_HtmlEncode($this->MES->CurrentValue);
+			$this->MES->PlaceHolder = ew_RemoveHtml($this->MES->FldCaption());
 
 			// OBSERVACION
 			$this->OBSERVACION->EditAttrs["class"] = "form-control";
@@ -1642,56 +1860,127 @@ class cview_inv_edit extends cview_inv {
 			// AÑO
 			$this->AD1O->EditAttrs["class"] = "form-control";
 			$this->AD1O->EditCustomAttributes = "";
-			$this->AD1O->EditValue = $this->AD1O->CurrentValue;
-			$this->AD1O->ViewCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `AÑO`, `AÑO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `AÑO`, `AÑO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->AD1O, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `AÑO` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->AD1O->EditValue = $arwrk;
 
 			// FASE
 			$this->FASE->EditAttrs["class"] = "form-control";
 			$this->FASE->EditCustomAttributes = "";
-			$this->FASE->EditValue = $this->FASE->CurrentValue;
-			$this->FASE->ViewCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `FASE`, `FASE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `FASE`, `FASE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_inv`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->FASE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `FASE`";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->FASE->EditValue = $arwrk;
 
 			// FECHA_INV
 			$this->FECHA_INV->EditAttrs["class"] = "form-control";
 			$this->FECHA_INV->EditCustomAttributes = "";
-			$this->FECHA_INV->EditValue = $this->FECHA_INV->CurrentValue;
-			$this->FECHA_INV->ViewCustomAttributes = "";
+			$this->FECHA_INV->EditValue = ew_HtmlEncode($this->FECHA_INV->CurrentValue);
+			$this->FECHA_INV->PlaceHolder = ew_RemoveHtml($this->FECHA_INV->FldCaption());
 
 			// TIPO_INV
 			$this->TIPO_INV->EditAttrs["class"] = "form-control";
 			$this->TIPO_INV->EditCustomAttributes = "";
-			$this->TIPO_INV->EditValue = $this->TIPO_INV->CurrentValue;
-			$this->TIPO_INV->ViewCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='inv'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->TIPO_INV, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->TIPO_INV->EditValue = $arwrk;
 
 			// NOM_CAPATAZ
 			$this->NOM_CAPATAZ->EditAttrs["class"] = "form-control";
 			$this->NOM_CAPATAZ->EditCustomAttributes = "";
-			$this->NOM_CAPATAZ->EditValue = $this->NOM_CAPATAZ->CurrentValue;
-			$this->NOM_CAPATAZ->ViewCustomAttributes = "";
+			$this->NOM_CAPATAZ->EditValue = ew_HtmlEncode($this->NOM_CAPATAZ->CurrentValue);
+			$this->NOM_CAPATAZ->PlaceHolder = ew_RemoveHtml($this->NOM_CAPATAZ->FldCaption());
 
 			// Otro_NOM_CAPAT
 			$this->Otro_NOM_CAPAT->EditAttrs["class"] = "form-control";
 			$this->Otro_NOM_CAPAT->EditCustomAttributes = "";
-			$this->Otro_NOM_CAPAT->EditValue = $this->Otro_NOM_CAPAT->CurrentValue;
-			$this->Otro_NOM_CAPAT->ViewCustomAttributes = "";
+			$this->Otro_NOM_CAPAT->EditValue = ew_HtmlEncode($this->Otro_NOM_CAPAT->CurrentValue);
+			$this->Otro_NOM_CAPAT->PlaceHolder = ew_RemoveHtml($this->Otro_NOM_CAPAT->FldCaption());
 
 			// Otro_CC_CAPAT
 			$this->Otro_CC_CAPAT->EditAttrs["class"] = "form-control";
 			$this->Otro_CC_CAPAT->EditCustomAttributes = "";
-			$this->Otro_CC_CAPAT->EditValue = $this->Otro_CC_CAPAT->CurrentValue;
-			$this->Otro_CC_CAPAT->ViewCustomAttributes = "";
+			$this->Otro_CC_CAPAT->EditValue = ew_HtmlEncode($this->Otro_CC_CAPAT->CurrentValue);
+			$this->Otro_CC_CAPAT->PlaceHolder = ew_RemoveHtml($this->Otro_CC_CAPAT->FldCaption());
 
 			// NOM_LUGAR
 			$this->NOM_LUGAR->EditAttrs["class"] = "form-control";
 			$this->NOM_LUGAR->EditCustomAttributes = "";
-			$this->NOM_LUGAR->EditValue = $this->NOM_LUGAR->CurrentValue;
-			$this->NOM_LUGAR->ViewCustomAttributes = "";
+			$this->NOM_LUGAR->EditValue = ew_HtmlEncode($this->NOM_LUGAR->CurrentValue);
+			$this->NOM_LUGAR->PlaceHolder = ew_RemoveHtml($this->NOM_LUGAR->FldCaption());
 
 			// Cocina
 			$this->Cocina->EditAttrs["class"] = "form-control";
 			$this->Cocina->EditCustomAttributes = "";
-			$this->Cocina->EditValue = $this->Cocina->CurrentValue;
-			$this->Cocina->ViewCustomAttributes = "";
+			$this->Cocina->EditValue = ew_HtmlEncode($this->Cocina->CurrentValue);
+			$this->Cocina->PlaceHolder = ew_RemoveHtml($this->Cocina->FldCaption());
+			if (strval($this->Cocina->EditValue) <> "" && is_numeric($this->Cocina->EditValue)) $this->Cocina->EditValue = ew_FormatNumber($this->Cocina->EditValue, -2, -1, -2, 0);
 
 			// 1_Abrelatas
 			$this->_1_Abrelatas->EditAttrs["class"] = "form-control";
@@ -1985,8 +2274,11 @@ class cview_inv_edit extends cview_inv {
 			// Modificado
 			$this->Modificado->EditAttrs["class"] = "form-control";
 			$this->Modificado->EditCustomAttributes = "";
-			$this->Modificado->EditValue = ew_HtmlEncode($this->Modificado->CurrentValue);
-			$this->Modificado->PlaceHolder = ew_RemoveHtml($this->Modificado->FldCaption());
+			$arwrk = array();
+			$arwrk[] = array($this->Modificado->FldTagValue(1), $this->Modificado->FldTagCaption(1) <> "" ? $this->Modificado->FldTagCaption(1) : $this->Modificado->FldTagValue(1));
+			$arwrk[] = array($this->Modificado->FldTagValue(2), $this->Modificado->FldTagCaption(2) <> "" ? $this->Modificado->FldTagCaption(2) : $this->Modificado->FldTagValue(2));
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+			$this->Modificado->EditValue = $arwrk;
 
 			// Edit refer script
 			// llave
@@ -2212,6 +2504,9 @@ class cview_inv_edit extends cview_inv {
 		// Check if validation required
 		if (!EW_SERVER_VALIDATE)
 			return ($gsFormError == "");
+		if (!ew_CheckNumber($this->Cocina->FormValue)) {
+			ew_AddMessage($gsFormError, $this->Cocina->FldErrMsg());
+		}
 		if (!ew_CheckInteger($this->_1_Abrelatas->FormValue)) {
 			ew_AddMessage($gsFormError, $this->_1_Abrelatas->FldErrMsg());
 		}
@@ -2386,8 +2681,47 @@ class cview_inv_edit extends cview_inv {
 			$this->LoadDbValues($rsold);
 			$rsnew = array();
 
+			// NOM_PE
+			$this->NOM_PE->SetDbValueDef($rsnew, $this->NOM_PE->CurrentValue, NULL, $this->NOM_PE->ReadOnly);
+
+			// Otro_PE
+			$this->Otro_PE->SetDbValueDef($rsnew, $this->Otro_PE->CurrentValue, NULL, $this->Otro_PE->ReadOnly);
+
+			// DIA
+			$this->DIA->SetDbValueDef($rsnew, $this->DIA->CurrentValue, NULL, $this->DIA->ReadOnly);
+
+			// MES
+			$this->MES->SetDbValueDef($rsnew, $this->MES->CurrentValue, NULL, $this->MES->ReadOnly);
+
 			// OBSERVACION
 			$this->OBSERVACION->SetDbValueDef($rsnew, $this->OBSERVACION->CurrentValue, NULL, $this->OBSERVACION->ReadOnly);
+
+			// AÑO
+			$this->AD1O->SetDbValueDef($rsnew, $this->AD1O->CurrentValue, NULL, $this->AD1O->ReadOnly);
+
+			// FASE
+			$this->FASE->SetDbValueDef($rsnew, $this->FASE->CurrentValue, NULL, $this->FASE->ReadOnly);
+
+			// FECHA_INV
+			$this->FECHA_INV->SetDbValueDef($rsnew, $this->FECHA_INV->CurrentValue, NULL, $this->FECHA_INV->ReadOnly);
+
+			// TIPO_INV
+			$this->TIPO_INV->SetDbValueDef($rsnew, $this->TIPO_INV->CurrentValue, NULL, $this->TIPO_INV->ReadOnly);
+
+			// NOM_CAPATAZ
+			$this->NOM_CAPATAZ->SetDbValueDef($rsnew, $this->NOM_CAPATAZ->CurrentValue, NULL, $this->NOM_CAPATAZ->ReadOnly);
+
+			// Otro_NOM_CAPAT
+			$this->Otro_NOM_CAPAT->SetDbValueDef($rsnew, $this->Otro_NOM_CAPAT->CurrentValue, NULL, $this->Otro_NOM_CAPAT->ReadOnly);
+
+			// Otro_CC_CAPAT
+			$this->Otro_CC_CAPAT->SetDbValueDef($rsnew, $this->Otro_CC_CAPAT->CurrentValue, NULL, $this->Otro_CC_CAPAT->ReadOnly);
+
+			// NOM_LUGAR
+			$this->NOM_LUGAR->SetDbValueDef($rsnew, $this->NOM_LUGAR->CurrentValue, NULL, $this->NOM_LUGAR->ReadOnly);
+
+			// Cocina
+			$this->Cocina->SetDbValueDef($rsnew, $this->Cocina->CurrentValue, NULL, $this->Cocina->ReadOnly);
 
 			// 1_Abrelatas
 			$this->_1_Abrelatas->SetDbValueDef($rsnew, $this->_1_Abrelatas->CurrentValue, NULL, $this->_1_Abrelatas->ReadOnly);
@@ -2685,6 +3019,9 @@ fview_invedit.Validate = function() {
 	for (var i = startcnt; i <= rowcnt; i++) {
 		var infix = ($k[0]) ? String(i) : "";
 		$fobj.data("rowindex", infix);
+			elm = this.GetElements("x" + infix + "_Cocina");
+			if (elm && !ew_CheckNumber(elm.value))
+				return this.OnError(elm, "<?php echo ew_JsEncode2($view_inv->Cocina->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "__1_Abrelatas");
 			if (elm && !ew_CheckInteger(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($view_inv->_1_Abrelatas->FldErrMsg()) ?>");
@@ -2862,8 +3199,13 @@ fview_invedit.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fview_invedit.Lists["x_USUARIO"] = {"LinkField":"x_USUARIO","Ajax":null,"AutoFill":false,"DisplayFields":["x_USUARIO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_invedit.Lists["x_NOM_PE"] = {"LinkField":"x_NOM_PE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_invedit.Lists["x_AD1O"] = {"LinkField":"x_AD1O","Ajax":null,"AutoFill":false,"DisplayFields":["x_AD1O","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_invedit.Lists["x_FASE"] = {"LinkField":"x_FASE","Ajax":null,"AutoFill":false,"DisplayFields":["x_FASE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_invedit.Lists["x_TIPO_INV"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
@@ -2884,16 +3226,27 @@ $view_inv_edit->ShowMessage();
 <?php } ?>
 <input type="hidden" name="t" value="view_inv">
 <input type="hidden" name="a_edit" id="a_edit" value="U">
+<?php if ($view_inv->CurrentAction == "F") { // Confirm page ?>
+<input type="hidden" name="a_confirm" id="a_confirm" value="F">
+<?php } ?>
 <div>
 <?php if ($view_inv->llave->Visible) { // llave ?>
 	<div id="r_llave" class="form-group">
 		<label id="elh_view_inv_llave" for="x_llave" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->llave->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->llave->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv_llave">
 <span<?php echo $view_inv->llave->ViewAttributes() ?>>
 <p class="form-control-static"><?php echo $view_inv->llave->EditValue ?></p></span>
 </span>
 <input type="hidden" data-field="x_llave" name="x_llave" id="x_llave" value="<?php echo ew_HtmlEncode($view_inv->llave->CurrentValue) ?>">
+<?php } else { ?>
+<span id="el_view_inv_llave">
+<span<?php echo $view_inv->llave->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->llave->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_llave" name="x_llave" id="x_llave" value="<?php echo ew_HtmlEncode($view_inv->llave->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->llave->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2901,11 +3254,19 @@ $view_inv_edit->ShowMessage();
 	<div id="r_F_Sincron" class="form-group">
 		<label id="elh_view_inv_F_Sincron" for="x_F_Sincron" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->F_Sincron->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->F_Sincron->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv_F_Sincron">
 <span<?php echo $view_inv->F_Sincron->ViewAttributes() ?>>
 <p class="form-control-static"><?php echo $view_inv->F_Sincron->EditValue ?></p></span>
 </span>
 <input type="hidden" data-field="x_F_Sincron" name="x_F_Sincron" id="x_F_Sincron" value="<?php echo ew_HtmlEncode($view_inv->F_Sincron->CurrentValue) ?>">
+<?php } else { ?>
+<span id="el_view_inv_F_Sincron">
+<span<?php echo $view_inv->F_Sincron->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->F_Sincron->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_F_Sincron" name="x_F_Sincron" id="x_F_Sincron" value="<?php echo ew_HtmlEncode($view_inv->F_Sincron->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->F_Sincron->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2913,11 +3274,19 @@ $view_inv_edit->ShowMessage();
 	<div id="r_USUARIO" class="form-group">
 		<label id="elh_view_inv_USUARIO" for="x_USUARIO" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->USUARIO->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->USUARIO->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv_USUARIO">
 <span<?php echo $view_inv->USUARIO->ViewAttributes() ?>>
 <p class="form-control-static"><?php echo $view_inv->USUARIO->EditValue ?></p></span>
 </span>
 <input type="hidden" data-field="x_USUARIO" name="x_USUARIO" id="x_USUARIO" value="<?php echo ew_HtmlEncode($view_inv->USUARIO->CurrentValue) ?>">
+<?php } else { ?>
+<span id="el_view_inv_USUARIO">
+<span<?php echo $view_inv->USUARIO->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->USUARIO->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_USUARIO" name="x_USUARIO" id="x_USUARIO" value="<?php echo ew_HtmlEncode($view_inv->USUARIO->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->USUARIO->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2925,11 +3294,19 @@ $view_inv_edit->ShowMessage();
 	<div id="r_Cargo_gme" class="form-group">
 		<label id="elh_view_inv_Cargo_gme" for="x_Cargo_gme" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->Cargo_gme->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->Cargo_gme->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv_Cargo_gme">
 <span<?php echo $view_inv->Cargo_gme->ViewAttributes() ?>>
 <p class="form-control-static"><?php echo $view_inv->Cargo_gme->EditValue ?></p></span>
 </span>
 <input type="hidden" data-field="x_Cargo_gme" name="x_Cargo_gme" id="x_Cargo_gme" value="<?php echo ew_HtmlEncode($view_inv->Cargo_gme->CurrentValue) ?>">
+<?php } else { ?>
+<span id="el_view_inv_Cargo_gme">
+<span<?php echo $view_inv->Cargo_gme->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->Cargo_gme->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Cargo_gme" name="x_Cargo_gme" id="x_Cargo_gme" value="<?php echo ew_HtmlEncode($view_inv->Cargo_gme->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->Cargo_gme->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2937,11 +3314,37 @@ $view_inv_edit->ShowMessage();
 	<div id="r_NOM_PE" class="form-group">
 		<label id="elh_view_inv_NOM_PE" for="x_NOM_PE" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->NOM_PE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->NOM_PE->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
+<span id="el_view_inv_NOM_PE">
+<select data-field="x_NOM_PE" id="x_NOM_PE" name="x_NOM_PE"<?php echo $view_inv->NOM_PE->EditAttributes() ?>>
+<?php
+if (is_array($view_inv->NOM_PE->EditValue)) {
+	$arwrk = $view_inv->NOM_PE->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_inv->NOM_PE->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview_invedit.Lists["x_NOM_PE"].Options = <?php echo (is_array($view_inv->NOM_PE->EditValue)) ? ew_ArrayToJson($view_inv->NOM_PE->EditValue, 1) : "[]" ?>;
+</script>
+</span>
+<?php } else { ?>
 <span id="el_view_inv_NOM_PE">
 <span<?php echo $view_inv->NOM_PE->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_inv->NOM_PE->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_inv->NOM_PE->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_NOM_PE" name="x_NOM_PE" id="x_NOM_PE" value="<?php echo ew_HtmlEncode($view_inv->NOM_PE->CurrentValue) ?>">
+<input type="hidden" data-field="x_NOM_PE" name="x_NOM_PE" id="x_NOM_PE" value="<?php echo ew_HtmlEncode($view_inv->NOM_PE->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->NOM_PE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2949,11 +3352,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r_Otro_PE" class="form-group">
 		<label id="elh_view_inv_Otro_PE" for="x_Otro_PE" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->Otro_PE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->Otro_PE->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
+<span id="el_view_inv_Otro_PE">
+<input type="text" data-field="x_Otro_PE" name="x_Otro_PE" id="x_Otro_PE" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view_inv->Otro_PE->PlaceHolder) ?>" value="<?php echo $view_inv->Otro_PE->EditValue ?>"<?php echo $view_inv->Otro_PE->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_inv_Otro_PE">
 <span<?php echo $view_inv->Otro_PE->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_inv->Otro_PE->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_inv->Otro_PE->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Otro_PE" name="x_Otro_PE" id="x_Otro_PE" value="<?php echo ew_HtmlEncode($view_inv->Otro_PE->CurrentValue) ?>">
+<input type="hidden" data-field="x_Otro_PE" name="x_Otro_PE" id="x_Otro_PE" value="<?php echo ew_HtmlEncode($view_inv->Otro_PE->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->Otro_PE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2961,11 +3370,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r_DIA" class="form-group">
 		<label id="elh_view_inv_DIA" for="x_DIA" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->DIA->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->DIA->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
+<span id="el_view_inv_DIA">
+<input type="text" data-field="x_DIA" name="x_DIA" id="x_DIA" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($view_inv->DIA->PlaceHolder) ?>" value="<?php echo $view_inv->DIA->EditValue ?>"<?php echo $view_inv->DIA->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_inv_DIA">
 <span<?php echo $view_inv->DIA->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_inv->DIA->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_inv->DIA->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_DIA" name="x_DIA" id="x_DIA" value="<?php echo ew_HtmlEncode($view_inv->DIA->CurrentValue) ?>">
+<input type="hidden" data-field="x_DIA" name="x_DIA" id="x_DIA" value="<?php echo ew_HtmlEncode($view_inv->DIA->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->DIA->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2973,11 +3388,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r_MES" class="form-group">
 		<label id="elh_view_inv_MES" for="x_MES" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->MES->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->MES->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
+<span id="el_view_inv_MES">
+<input type="text" data-field="x_MES" name="x_MES" id="x_MES" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($view_inv->MES->PlaceHolder) ?>" value="<?php echo $view_inv->MES->EditValue ?>"<?php echo $view_inv->MES->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_inv_MES">
 <span<?php echo $view_inv->MES->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_inv->MES->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_inv->MES->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_MES" name="x_MES" id="x_MES" value="<?php echo ew_HtmlEncode($view_inv->MES->CurrentValue) ?>">
+<input type="hidden" data-field="x_MES" name="x_MES" id="x_MES" value="<?php echo ew_HtmlEncode($view_inv->MES->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->MES->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2985,9 +3406,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r_OBSERVACION" class="form-group">
 		<label id="elh_view_inv_OBSERVACION" for="x_OBSERVACION" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->OBSERVACION->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->OBSERVACION->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv_OBSERVACION">
 <textarea data-field="x_OBSERVACION" name="x_OBSERVACION" id="x_OBSERVACION" cols="120" rows="4" placeholder="<?php echo ew_HtmlEncode($view_inv->OBSERVACION->PlaceHolder) ?>"<?php echo $view_inv->OBSERVACION->EditAttributes() ?>><?php echo $view_inv->OBSERVACION->EditValue ?></textarea>
 </span>
+<?php } else { ?>
+<span id="el_view_inv_OBSERVACION">
+<span<?php echo $view_inv->OBSERVACION->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->OBSERVACION->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_OBSERVACION" name="x_OBSERVACION" id="x_OBSERVACION" value="<?php echo ew_HtmlEncode($view_inv->OBSERVACION->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->OBSERVACION->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2995,11 +3424,37 @@ $view_inv_edit->ShowMessage();
 	<div id="r_AD1O" class="form-group">
 		<label id="elh_view_inv_AD1O" for="x_AD1O" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->AD1O->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->AD1O->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
+<span id="el_view_inv_AD1O">
+<select data-field="x_AD1O" id="x_AD1O" name="x_AD1O"<?php echo $view_inv->AD1O->EditAttributes() ?>>
+<?php
+if (is_array($view_inv->AD1O->EditValue)) {
+	$arwrk = $view_inv->AD1O->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_inv->AD1O->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview_invedit.Lists["x_AD1O"].Options = <?php echo (is_array($view_inv->AD1O->EditValue)) ? ew_ArrayToJson($view_inv->AD1O->EditValue, 1) : "[]" ?>;
+</script>
+</span>
+<?php } else { ?>
 <span id="el_view_inv_AD1O">
 <span<?php echo $view_inv->AD1O->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_inv->AD1O->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_inv->AD1O->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_AD1O" name="x_AD1O" id="x_AD1O" value="<?php echo ew_HtmlEncode($view_inv->AD1O->CurrentValue) ?>">
+<input type="hidden" data-field="x_AD1O" name="x_AD1O" id="x_AD1O" value="<?php echo ew_HtmlEncode($view_inv->AD1O->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->AD1O->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3007,11 +3462,37 @@ $view_inv_edit->ShowMessage();
 	<div id="r_FASE" class="form-group">
 		<label id="elh_view_inv_FASE" for="x_FASE" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->FASE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->FASE->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
+<span id="el_view_inv_FASE">
+<select data-field="x_FASE" id="x_FASE" name="x_FASE"<?php echo $view_inv->FASE->EditAttributes() ?>>
+<?php
+if (is_array($view_inv->FASE->EditValue)) {
+	$arwrk = $view_inv->FASE->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_inv->FASE->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview_invedit.Lists["x_FASE"].Options = <?php echo (is_array($view_inv->FASE->EditValue)) ? ew_ArrayToJson($view_inv->FASE->EditValue, 1) : "[]" ?>;
+</script>
+</span>
+<?php } else { ?>
 <span id="el_view_inv_FASE">
 <span<?php echo $view_inv->FASE->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_inv->FASE->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_inv->FASE->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_FASE" name="x_FASE" id="x_FASE" value="<?php echo ew_HtmlEncode($view_inv->FASE->CurrentValue) ?>">
+<input type="hidden" data-field="x_FASE" name="x_FASE" id="x_FASE" value="<?php echo ew_HtmlEncode($view_inv->FASE->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->FASE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3019,11 +3500,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r_FECHA_INV" class="form-group">
 		<label id="elh_view_inv_FECHA_INV" for="x_FECHA_INV" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->FECHA_INV->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->FECHA_INV->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
+<span id="el_view_inv_FECHA_INV">
+<input type="text" data-field="x_FECHA_INV" name="x_FECHA_INV" id="x_FECHA_INV" size="30" maxlength="10" placeholder="<?php echo ew_HtmlEncode($view_inv->FECHA_INV->PlaceHolder) ?>" value="<?php echo $view_inv->FECHA_INV->EditValue ?>"<?php echo $view_inv->FECHA_INV->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_inv_FECHA_INV">
 <span<?php echo $view_inv->FECHA_INV->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_inv->FECHA_INV->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_inv->FECHA_INV->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_FECHA_INV" name="x_FECHA_INV" id="x_FECHA_INV" value="<?php echo ew_HtmlEncode($view_inv->FECHA_INV->CurrentValue) ?>">
+<input type="hidden" data-field="x_FECHA_INV" name="x_FECHA_INV" id="x_FECHA_INV" value="<?php echo ew_HtmlEncode($view_inv->FECHA_INV->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->FECHA_INV->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3031,11 +3518,37 @@ $view_inv_edit->ShowMessage();
 	<div id="r_TIPO_INV" class="form-group">
 		<label id="elh_view_inv_TIPO_INV" for="x_TIPO_INV" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->TIPO_INV->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->TIPO_INV->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
+<span id="el_view_inv_TIPO_INV">
+<select data-field="x_TIPO_INV" id="x_TIPO_INV" name="x_TIPO_INV"<?php echo $view_inv->TIPO_INV->EditAttributes() ?>>
+<?php
+if (is_array($view_inv->TIPO_INV->EditValue)) {
+	$arwrk = $view_inv->TIPO_INV->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_inv->TIPO_INV->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview_invedit.Lists["x_TIPO_INV"].Options = <?php echo (is_array($view_inv->TIPO_INV->EditValue)) ? ew_ArrayToJson($view_inv->TIPO_INV->EditValue, 1) : "[]" ?>;
+</script>
+</span>
+<?php } else { ?>
 <span id="el_view_inv_TIPO_INV">
 <span<?php echo $view_inv->TIPO_INV->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_inv->TIPO_INV->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_inv->TIPO_INV->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_TIPO_INV" name="x_TIPO_INV" id="x_TIPO_INV" value="<?php echo ew_HtmlEncode($view_inv->TIPO_INV->CurrentValue) ?>">
+<input type="hidden" data-field="x_TIPO_INV" name="x_TIPO_INV" id="x_TIPO_INV" value="<?php echo ew_HtmlEncode($view_inv->TIPO_INV->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->TIPO_INV->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3043,11 +3556,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r_NOM_CAPATAZ" class="form-group">
 		<label id="elh_view_inv_NOM_CAPATAZ" for="x_NOM_CAPATAZ" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->NOM_CAPATAZ->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->NOM_CAPATAZ->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
+<span id="el_view_inv_NOM_CAPATAZ">
+<textarea data-field="x_NOM_CAPATAZ" name="x_NOM_CAPATAZ" id="x_NOM_CAPATAZ" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view_inv->NOM_CAPATAZ->PlaceHolder) ?>"<?php echo $view_inv->NOM_CAPATAZ->EditAttributes() ?>><?php echo $view_inv->NOM_CAPATAZ->EditValue ?></textarea>
+</span>
+<?php } else { ?>
 <span id="el_view_inv_NOM_CAPATAZ">
 <span<?php echo $view_inv->NOM_CAPATAZ->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_inv->NOM_CAPATAZ->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_inv->NOM_CAPATAZ->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_NOM_CAPATAZ" name="x_NOM_CAPATAZ" id="x_NOM_CAPATAZ" value="<?php echo ew_HtmlEncode($view_inv->NOM_CAPATAZ->CurrentValue) ?>">
+<input type="hidden" data-field="x_NOM_CAPATAZ" name="x_NOM_CAPATAZ" id="x_NOM_CAPATAZ" value="<?php echo ew_HtmlEncode($view_inv->NOM_CAPATAZ->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->NOM_CAPATAZ->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3055,11 +3574,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r_Otro_NOM_CAPAT" class="form-group">
 		<label id="elh_view_inv_Otro_NOM_CAPAT" for="x_Otro_NOM_CAPAT" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->Otro_NOM_CAPAT->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->Otro_NOM_CAPAT->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
+<span id="el_view_inv_Otro_NOM_CAPAT">
+<input type="text" data-field="x_Otro_NOM_CAPAT" name="x_Otro_NOM_CAPAT" id="x_Otro_NOM_CAPAT" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view_inv->Otro_NOM_CAPAT->PlaceHolder) ?>" value="<?php echo $view_inv->Otro_NOM_CAPAT->EditValue ?>"<?php echo $view_inv->Otro_NOM_CAPAT->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_inv_Otro_NOM_CAPAT">
 <span<?php echo $view_inv->Otro_NOM_CAPAT->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_inv->Otro_NOM_CAPAT->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_inv->Otro_NOM_CAPAT->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Otro_NOM_CAPAT" name="x_Otro_NOM_CAPAT" id="x_Otro_NOM_CAPAT" value="<?php echo ew_HtmlEncode($view_inv->Otro_NOM_CAPAT->CurrentValue) ?>">
+<input type="hidden" data-field="x_Otro_NOM_CAPAT" name="x_Otro_NOM_CAPAT" id="x_Otro_NOM_CAPAT" value="<?php echo ew_HtmlEncode($view_inv->Otro_NOM_CAPAT->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->Otro_NOM_CAPAT->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3067,11 +3592,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r_Otro_CC_CAPAT" class="form-group">
 		<label id="elh_view_inv_Otro_CC_CAPAT" for="x_Otro_CC_CAPAT" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->Otro_CC_CAPAT->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->Otro_CC_CAPAT->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
+<span id="el_view_inv_Otro_CC_CAPAT">
+<input type="text" data-field="x_Otro_CC_CAPAT" name="x_Otro_CC_CAPAT" id="x_Otro_CC_CAPAT" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view_inv->Otro_CC_CAPAT->PlaceHolder) ?>" value="<?php echo $view_inv->Otro_CC_CAPAT->EditValue ?>"<?php echo $view_inv->Otro_CC_CAPAT->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_inv_Otro_CC_CAPAT">
 <span<?php echo $view_inv->Otro_CC_CAPAT->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_inv->Otro_CC_CAPAT->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_inv->Otro_CC_CAPAT->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Otro_CC_CAPAT" name="x_Otro_CC_CAPAT" id="x_Otro_CC_CAPAT" value="<?php echo ew_HtmlEncode($view_inv->Otro_CC_CAPAT->CurrentValue) ?>">
+<input type="hidden" data-field="x_Otro_CC_CAPAT" name="x_Otro_CC_CAPAT" id="x_Otro_CC_CAPAT" value="<?php echo ew_HtmlEncode($view_inv->Otro_CC_CAPAT->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->Otro_CC_CAPAT->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3079,11 +3610,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r_NOM_LUGAR" class="form-group">
 		<label id="elh_view_inv_NOM_LUGAR" for="x_NOM_LUGAR" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->NOM_LUGAR->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->NOM_LUGAR->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
+<span id="el_view_inv_NOM_LUGAR">
+<input type="text" data-field="x_NOM_LUGAR" name="x_NOM_LUGAR" id="x_NOM_LUGAR" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view_inv->NOM_LUGAR->PlaceHolder) ?>" value="<?php echo $view_inv->NOM_LUGAR->EditValue ?>"<?php echo $view_inv->NOM_LUGAR->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_inv_NOM_LUGAR">
 <span<?php echo $view_inv->NOM_LUGAR->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_inv->NOM_LUGAR->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_inv->NOM_LUGAR->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_NOM_LUGAR" name="x_NOM_LUGAR" id="x_NOM_LUGAR" value="<?php echo ew_HtmlEncode($view_inv->NOM_LUGAR->CurrentValue) ?>">
+<input type="hidden" data-field="x_NOM_LUGAR" name="x_NOM_LUGAR" id="x_NOM_LUGAR" value="<?php echo ew_HtmlEncode($view_inv->NOM_LUGAR->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->NOM_LUGAR->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3091,11 +3628,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r_Cocina" class="form-group">
 		<label id="elh_view_inv_Cocina" for="x_Cocina" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->Cocina->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->Cocina->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
+<span id="el_view_inv_Cocina">
+<input type="text" data-field="x_Cocina" name="x_Cocina" id="x_Cocina" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->Cocina->PlaceHolder) ?>" value="<?php echo $view_inv->Cocina->EditValue ?>"<?php echo $view_inv->Cocina->EditAttributes() ?>>
+</span>
+<?php } else { ?>
 <span id="el_view_inv_Cocina">
 <span<?php echo $view_inv->Cocina->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $view_inv->Cocina->EditValue ?></p></span>
+<p class="form-control-static"><?php echo $view_inv->Cocina->ViewValue ?></p></span>
 </span>
-<input type="hidden" data-field="x_Cocina" name="x_Cocina" id="x_Cocina" value="<?php echo ew_HtmlEncode($view_inv->Cocina->CurrentValue) ?>">
+<input type="hidden" data-field="x_Cocina" name="x_Cocina" id="x_Cocina" value="<?php echo ew_HtmlEncode($view_inv->Cocina->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->Cocina->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3103,9 +3646,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Abrelatas" class="form-group">
 		<label id="elh_view_inv__1_Abrelatas" for="x__1_Abrelatas" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Abrelatas->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Abrelatas->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Abrelatas">
 <input type="text" data-field="x__1_Abrelatas" name="x__1_Abrelatas" id="x__1_Abrelatas" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Abrelatas->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Abrelatas->EditValue ?>"<?php echo $view_inv->_1_Abrelatas->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Abrelatas">
+<span<?php echo $view_inv->_1_Abrelatas->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Abrelatas->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Abrelatas" name="x__1_Abrelatas" id="x__1_Abrelatas" value="<?php echo ew_HtmlEncode($view_inv->_1_Abrelatas->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Abrelatas->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3113,9 +3664,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Balde" class="form-group">
 		<label id="elh_view_inv__1_Balde" for="x__1_Balde" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Balde->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Balde->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Balde">
 <input type="text" data-field="x__1_Balde" name="x__1_Balde" id="x__1_Balde" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Balde->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Balde->EditValue ?>"<?php echo $view_inv->_1_Balde->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Balde">
+<span<?php echo $view_inv->_1_Balde->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Balde->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Balde" name="x__1_Balde" id="x__1_Balde" value="<?php echo ew_HtmlEncode($view_inv->_1_Balde->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Balde->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3123,9 +3682,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Arrocero_50" class="form-group">
 		<label id="elh_view_inv__1_Arrocero_50" for="x__1_Arrocero_50" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Arrocero_50->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Arrocero_50->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Arrocero_50">
 <input type="text" data-field="x__1_Arrocero_50" name="x__1_Arrocero_50" id="x__1_Arrocero_50" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Arrocero_50->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Arrocero_50->EditValue ?>"<?php echo $view_inv->_1_Arrocero_50->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Arrocero_50">
+<span<?php echo $view_inv->_1_Arrocero_50->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Arrocero_50->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Arrocero_50" name="x__1_Arrocero_50" id="x__1_Arrocero_50" value="<?php echo ew_HtmlEncode($view_inv->_1_Arrocero_50->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Arrocero_50->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3133,9 +3700,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Arrocero_44" class="form-group">
 		<label id="elh_view_inv__1_Arrocero_44" for="x__1_Arrocero_44" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Arrocero_44->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Arrocero_44->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Arrocero_44">
 <input type="text" data-field="x__1_Arrocero_44" name="x__1_Arrocero_44" id="x__1_Arrocero_44" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Arrocero_44->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Arrocero_44->EditValue ?>"<?php echo $view_inv->_1_Arrocero_44->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Arrocero_44">
+<span<?php echo $view_inv->_1_Arrocero_44->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Arrocero_44->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Arrocero_44" name="x__1_Arrocero_44" id="x__1_Arrocero_44" value="<?php echo ew_HtmlEncode($view_inv->_1_Arrocero_44->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Arrocero_44->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3143,9 +3718,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Chocolatera" class="form-group">
 		<label id="elh_view_inv__1_Chocolatera" for="x__1_Chocolatera" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Chocolatera->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Chocolatera->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Chocolatera">
 <input type="text" data-field="x__1_Chocolatera" name="x__1_Chocolatera" id="x__1_Chocolatera" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Chocolatera->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Chocolatera->EditValue ?>"<?php echo $view_inv->_1_Chocolatera->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Chocolatera">
+<span<?php echo $view_inv->_1_Chocolatera->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Chocolatera->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Chocolatera" name="x__1_Chocolatera" id="x__1_Chocolatera" value="<?php echo ew_HtmlEncode($view_inv->_1_Chocolatera->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Chocolatera->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3153,9 +3736,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Colador" class="form-group">
 		<label id="elh_view_inv__1_Colador" for="x__1_Colador" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Colador->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Colador->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Colador">
 <input type="text" data-field="x__1_Colador" name="x__1_Colador" id="x__1_Colador" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Colador->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Colador->EditValue ?>"<?php echo $view_inv->_1_Colador->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Colador">
+<span<?php echo $view_inv->_1_Colador->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Colador->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Colador" name="x__1_Colador" id="x__1_Colador" value="<?php echo ew_HtmlEncode($view_inv->_1_Colador->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Colador->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3163,9 +3754,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Cucharon_sopa" class="form-group">
 		<label id="elh_view_inv__1_Cucharon_sopa" for="x__1_Cucharon_sopa" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Cucharon_sopa->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Cucharon_sopa->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Cucharon_sopa">
 <input type="text" data-field="x__1_Cucharon_sopa" name="x__1_Cucharon_sopa" id="x__1_Cucharon_sopa" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Cucharon_sopa->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Cucharon_sopa->EditValue ?>"<?php echo $view_inv->_1_Cucharon_sopa->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Cucharon_sopa">
+<span<?php echo $view_inv->_1_Cucharon_sopa->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Cucharon_sopa->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Cucharon_sopa" name="x__1_Cucharon_sopa" id="x__1_Cucharon_sopa" value="<?php echo ew_HtmlEncode($view_inv->_1_Cucharon_sopa->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Cucharon_sopa->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3173,9 +3772,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Cucharon_arroz" class="form-group">
 		<label id="elh_view_inv__1_Cucharon_arroz" for="x__1_Cucharon_arroz" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Cucharon_arroz->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Cucharon_arroz->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Cucharon_arroz">
 <input type="text" data-field="x__1_Cucharon_arroz" name="x__1_Cucharon_arroz" id="x__1_Cucharon_arroz" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Cucharon_arroz->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Cucharon_arroz->EditValue ?>"<?php echo $view_inv->_1_Cucharon_arroz->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Cucharon_arroz">
+<span<?php echo $view_inv->_1_Cucharon_arroz->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Cucharon_arroz->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Cucharon_arroz" name="x__1_Cucharon_arroz" id="x__1_Cucharon_arroz" value="<?php echo ew_HtmlEncode($view_inv->_1_Cucharon_arroz->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Cucharon_arroz->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3183,9 +3790,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Cuchillo" class="form-group">
 		<label id="elh_view_inv__1_Cuchillo" for="x__1_Cuchillo" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Cuchillo->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Cuchillo->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Cuchillo">
 <input type="text" data-field="x__1_Cuchillo" name="x__1_Cuchillo" id="x__1_Cuchillo" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Cuchillo->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Cuchillo->EditValue ?>"<?php echo $view_inv->_1_Cuchillo->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Cuchillo">
+<span<?php echo $view_inv->_1_Cuchillo->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Cuchillo->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Cuchillo" name="x__1_Cuchillo" id="x__1_Cuchillo" value="<?php echo ew_HtmlEncode($view_inv->_1_Cuchillo->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Cuchillo->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3193,9 +3808,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Embudo" class="form-group">
 		<label id="elh_view_inv__1_Embudo" for="x__1_Embudo" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Embudo->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Embudo->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Embudo">
 <input type="text" data-field="x__1_Embudo" name="x__1_Embudo" id="x__1_Embudo" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Embudo->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Embudo->EditValue ?>"<?php echo $view_inv->_1_Embudo->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Embudo">
+<span<?php echo $view_inv->_1_Embudo->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Embudo->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Embudo" name="x__1_Embudo" id="x__1_Embudo" value="<?php echo ew_HtmlEncode($view_inv->_1_Embudo->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Embudo->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3203,9 +3826,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Espumera" class="form-group">
 		<label id="elh_view_inv__1_Espumera" for="x__1_Espumera" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Espumera->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Espumera->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Espumera">
 <input type="text" data-field="x__1_Espumera" name="x__1_Espumera" id="x__1_Espumera" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Espumera->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Espumera->EditValue ?>"<?php echo $view_inv->_1_Espumera->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Espumera">
+<span<?php echo $view_inv->_1_Espumera->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Espumera->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Espumera" name="x__1_Espumera" id="x__1_Espumera" value="<?php echo ew_HtmlEncode($view_inv->_1_Espumera->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Espumera->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3213,9 +3844,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Estufa" class="form-group">
 		<label id="elh_view_inv__1_Estufa" for="x__1_Estufa" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Estufa->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Estufa->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Estufa">
 <input type="text" data-field="x__1_Estufa" name="x__1_Estufa" id="x__1_Estufa" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Estufa->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Estufa->EditValue ?>"<?php echo $view_inv->_1_Estufa->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Estufa">
+<span<?php echo $view_inv->_1_Estufa->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Estufa->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Estufa" name="x__1_Estufa" id="x__1_Estufa" value="<?php echo ew_HtmlEncode($view_inv->_1_Estufa->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Estufa->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3223,9 +3862,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Cuchara_sopa" class="form-group">
 		<label id="elh_view_inv__1_Cuchara_sopa" for="x__1_Cuchara_sopa" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Cuchara_sopa->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Cuchara_sopa->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Cuchara_sopa">
 <input type="text" data-field="x__1_Cuchara_sopa" name="x__1_Cuchara_sopa" id="x__1_Cuchara_sopa" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Cuchara_sopa->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Cuchara_sopa->EditValue ?>"<?php echo $view_inv->_1_Cuchara_sopa->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Cuchara_sopa">
+<span<?php echo $view_inv->_1_Cuchara_sopa->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Cuchara_sopa->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Cuchara_sopa" name="x__1_Cuchara_sopa" id="x__1_Cuchara_sopa" value="<?php echo ew_HtmlEncode($view_inv->_1_Cuchara_sopa->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Cuchara_sopa->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3233,9 +3880,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Recipiente" class="form-group">
 		<label id="elh_view_inv__1_Recipiente" for="x__1_Recipiente" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Recipiente->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Recipiente->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Recipiente">
 <input type="text" data-field="x__1_Recipiente" name="x__1_Recipiente" id="x__1_Recipiente" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Recipiente->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Recipiente->EditValue ?>"<?php echo $view_inv->_1_Recipiente->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Recipiente">
+<span<?php echo $view_inv->_1_Recipiente->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Recipiente->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Recipiente" name="x__1_Recipiente" id="x__1_Recipiente" value="<?php echo ew_HtmlEncode($view_inv->_1_Recipiente->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Recipiente->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3243,9 +3898,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Kit_Repue_estufa" class="form-group">
 		<label id="elh_view_inv__1_Kit_Repue_estufa" for="x__1_Kit_Repue_estufa" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Kit_Repue_estufa->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Kit_Repue_estufa->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Kit_Repue_estufa">
 <input type="text" data-field="x__1_Kit_Repue_estufa" name="x__1_Kit_Repue_estufa" id="x__1_Kit_Repue_estufa" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Kit_Repue_estufa->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Kit_Repue_estufa->EditValue ?>"<?php echo $view_inv->_1_Kit_Repue_estufa->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Kit_Repue_estufa">
+<span<?php echo $view_inv->_1_Kit_Repue_estufa->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Kit_Repue_estufa->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Kit_Repue_estufa" name="x__1_Kit_Repue_estufa" id="x__1_Kit_Repue_estufa" value="<?php echo ew_HtmlEncode($view_inv->_1_Kit_Repue_estufa->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Kit_Repue_estufa->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3253,9 +3916,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Molinillo" class="form-group">
 		<label id="elh_view_inv__1_Molinillo" for="x__1_Molinillo" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Molinillo->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Molinillo->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Molinillo">
 <input type="text" data-field="x__1_Molinillo" name="x__1_Molinillo" id="x__1_Molinillo" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Molinillo->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Molinillo->EditValue ?>"<?php echo $view_inv->_1_Molinillo->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Molinillo">
+<span<?php echo $view_inv->_1_Molinillo->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Molinillo->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Molinillo" name="x__1_Molinillo" id="x__1_Molinillo" value="<?php echo ew_HtmlEncode($view_inv->_1_Molinillo->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Molinillo->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3263,9 +3934,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Olla_36" class="form-group">
 		<label id="elh_view_inv__1_Olla_36" for="x__1_Olla_36" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Olla_36->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Olla_36->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Olla_36">
 <input type="text" data-field="x__1_Olla_36" name="x__1_Olla_36" id="x__1_Olla_36" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Olla_36->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Olla_36->EditValue ?>"<?php echo $view_inv->_1_Olla_36->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Olla_36">
+<span<?php echo $view_inv->_1_Olla_36->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Olla_36->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Olla_36" name="x__1_Olla_36" id="x__1_Olla_36" value="<?php echo ew_HtmlEncode($view_inv->_1_Olla_36->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Olla_36->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3273,9 +3952,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Olla_40" class="form-group">
 		<label id="elh_view_inv__1_Olla_40" for="x__1_Olla_40" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Olla_40->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Olla_40->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Olla_40">
 <input type="text" data-field="x__1_Olla_40" name="x__1_Olla_40" id="x__1_Olla_40" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Olla_40->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Olla_40->EditValue ?>"<?php echo $view_inv->_1_Olla_40->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Olla_40">
+<span<?php echo $view_inv->_1_Olla_40->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Olla_40->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Olla_40" name="x__1_Olla_40" id="x__1_Olla_40" value="<?php echo ew_HtmlEncode($view_inv->_1_Olla_40->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Olla_40->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3283,9 +3970,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Paila_32" class="form-group">
 		<label id="elh_view_inv__1_Paila_32" for="x__1_Paila_32" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Paila_32->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Paila_32->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Paila_32">
 <input type="text" data-field="x__1_Paila_32" name="x__1_Paila_32" id="x__1_Paila_32" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Paila_32->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Paila_32->EditValue ?>"<?php echo $view_inv->_1_Paila_32->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Paila_32">
+<span<?php echo $view_inv->_1_Paila_32->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Paila_32->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Paila_32" name="x__1_Paila_32" id="x__1_Paila_32" value="<?php echo ew_HtmlEncode($view_inv->_1_Paila_32->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Paila_32->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3293,9 +3988,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__1_Paila_36_37" class="form-group">
 		<label id="elh_view_inv__1_Paila_36_37" for="x__1_Paila_36_37" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_1_Paila_36_37->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_1_Paila_36_37->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__1_Paila_36_37">
 <input type="text" data-field="x__1_Paila_36_37" name="x__1_Paila_36_37" id="x__1_Paila_36_37" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_1_Paila_36_37->PlaceHolder) ?>" value="<?php echo $view_inv->_1_Paila_36_37->EditValue ?>"<?php echo $view_inv->_1_Paila_36_37->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__1_Paila_36_37">
+<span<?php echo $view_inv->_1_Paila_36_37->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_1_Paila_36_37->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__1_Paila_36_37" name="x__1_Paila_36_37" id="x__1_Paila_36_37" value="<?php echo ew_HtmlEncode($view_inv->_1_Paila_36_37->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_1_Paila_36_37->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3303,11 +4006,19 @@ $view_inv_edit->ShowMessage();
 	<div id="r_Camping" class="form-group">
 		<label id="elh_view_inv_Camping" for="x_Camping" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->Camping->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->Camping->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv_Camping">
 <span<?php echo $view_inv->Camping->ViewAttributes() ?>>
 <p class="form-control-static"><?php echo $view_inv->Camping->EditValue ?></p></span>
 </span>
 <input type="hidden" data-field="x_Camping" name="x_Camping" id="x_Camping" value="<?php echo ew_HtmlEncode($view_inv->Camping->CurrentValue) ?>">
+<?php } else { ?>
+<span id="el_view_inv_Camping">
+<span<?php echo $view_inv->Camping->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->Camping->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Camping" name="x_Camping" id="x_Camping" value="<?php echo ew_HtmlEncode($view_inv->Camping->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->Camping->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3315,9 +4026,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__2_Aislante" class="form-group">
 		<label id="elh_view_inv__2_Aislante" for="x__2_Aislante" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_2_Aislante->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_2_Aislante->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__2_Aislante">
 <input type="text" data-field="x__2_Aislante" name="x__2_Aislante" id="x__2_Aislante" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_2_Aislante->PlaceHolder) ?>" value="<?php echo $view_inv->_2_Aislante->EditValue ?>"<?php echo $view_inv->_2_Aislante->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__2_Aislante">
+<span<?php echo $view_inv->_2_Aislante->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_2_Aislante->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__2_Aislante" name="x__2_Aislante" id="x__2_Aislante" value="<?php echo ew_HtmlEncode($view_inv->_2_Aislante->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_2_Aislante->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3325,9 +4044,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__2_Carpa_hamaca" class="form-group">
 		<label id="elh_view_inv__2_Carpa_hamaca" for="x__2_Carpa_hamaca" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_2_Carpa_hamaca->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_2_Carpa_hamaca->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__2_Carpa_hamaca">
 <input type="text" data-field="x__2_Carpa_hamaca" name="x__2_Carpa_hamaca" id="x__2_Carpa_hamaca" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_2_Carpa_hamaca->PlaceHolder) ?>" value="<?php echo $view_inv->_2_Carpa_hamaca->EditValue ?>"<?php echo $view_inv->_2_Carpa_hamaca->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__2_Carpa_hamaca">
+<span<?php echo $view_inv->_2_Carpa_hamaca->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_2_Carpa_hamaca->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__2_Carpa_hamaca" name="x__2_Carpa_hamaca" id="x__2_Carpa_hamaca" value="<?php echo ew_HtmlEncode($view_inv->_2_Carpa_hamaca->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_2_Carpa_hamaca->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3335,9 +4062,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__2_Carpa_rancho" class="form-group">
 		<label id="elh_view_inv__2_Carpa_rancho" for="x__2_Carpa_rancho" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_2_Carpa_rancho->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_2_Carpa_rancho->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__2_Carpa_rancho">
 <input type="text" data-field="x__2_Carpa_rancho" name="x__2_Carpa_rancho" id="x__2_Carpa_rancho" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_2_Carpa_rancho->PlaceHolder) ?>" value="<?php echo $view_inv->_2_Carpa_rancho->EditValue ?>"<?php echo $view_inv->_2_Carpa_rancho->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__2_Carpa_rancho">
+<span<?php echo $view_inv->_2_Carpa_rancho->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_2_Carpa_rancho->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__2_Carpa_rancho" name="x__2_Carpa_rancho" id="x__2_Carpa_rancho" value="<?php echo ew_HtmlEncode($view_inv->_2_Carpa_rancho->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_2_Carpa_rancho->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3345,9 +4080,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__2_Fibra_rollo" class="form-group">
 		<label id="elh_view_inv__2_Fibra_rollo" for="x__2_Fibra_rollo" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_2_Fibra_rollo->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_2_Fibra_rollo->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__2_Fibra_rollo">
 <input type="text" data-field="x__2_Fibra_rollo" name="x__2_Fibra_rollo" id="x__2_Fibra_rollo" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_2_Fibra_rollo->PlaceHolder) ?>" value="<?php echo $view_inv->_2_Fibra_rollo->EditValue ?>"<?php echo $view_inv->_2_Fibra_rollo->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__2_Fibra_rollo">
+<span<?php echo $view_inv->_2_Fibra_rollo->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_2_Fibra_rollo->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__2_Fibra_rollo" name="x__2_Fibra_rollo" id="x__2_Fibra_rollo" value="<?php echo ew_HtmlEncode($view_inv->_2_Fibra_rollo->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_2_Fibra_rollo->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3355,9 +4098,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__2_CAL" class="form-group">
 		<label id="elh_view_inv__2_CAL" for="x__2_CAL" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_2_CAL->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_2_CAL->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__2_CAL">
 <input type="text" data-field="x__2_CAL" name="x__2_CAL" id="x__2_CAL" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_2_CAL->PlaceHolder) ?>" value="<?php echo $view_inv->_2_CAL->EditValue ?>"<?php echo $view_inv->_2_CAL->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__2_CAL">
+<span<?php echo $view_inv->_2_CAL->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_2_CAL->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__2_CAL" name="x__2_CAL" id="x__2_CAL" value="<?php echo ew_HtmlEncode($view_inv->_2_CAL->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_2_CAL->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3365,9 +4116,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__2_Linterna" class="form-group">
 		<label id="elh_view_inv__2_Linterna" for="x__2_Linterna" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_2_Linterna->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_2_Linterna->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__2_Linterna">
 <input type="text" data-field="x__2_Linterna" name="x__2_Linterna" id="x__2_Linterna" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_2_Linterna->PlaceHolder) ?>" value="<?php echo $view_inv->_2_Linterna->EditValue ?>"<?php echo $view_inv->_2_Linterna->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__2_Linterna">
+<span<?php echo $view_inv->_2_Linterna->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_2_Linterna->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__2_Linterna" name="x__2_Linterna" id="x__2_Linterna" value="<?php echo ew_HtmlEncode($view_inv->_2_Linterna->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_2_Linterna->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3375,9 +4134,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__2_Botiquin" class="form-group">
 		<label id="elh_view_inv__2_Botiquin" for="x__2_Botiquin" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_2_Botiquin->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_2_Botiquin->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__2_Botiquin">
 <input type="text" data-field="x__2_Botiquin" name="x__2_Botiquin" id="x__2_Botiquin" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_2_Botiquin->PlaceHolder) ?>" value="<?php echo $view_inv->_2_Botiquin->EditValue ?>"<?php echo $view_inv->_2_Botiquin->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__2_Botiquin">
+<span<?php echo $view_inv->_2_Botiquin->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_2_Botiquin->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__2_Botiquin" name="x__2_Botiquin" id="x__2_Botiquin" value="<?php echo ew_HtmlEncode($view_inv->_2_Botiquin->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_2_Botiquin->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3385,9 +4152,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__2_Mascara_filtro" class="form-group">
 		<label id="elh_view_inv__2_Mascara_filtro" for="x__2_Mascara_filtro" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_2_Mascara_filtro->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_2_Mascara_filtro->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__2_Mascara_filtro">
 <input type="text" data-field="x__2_Mascara_filtro" name="x__2_Mascara_filtro" id="x__2_Mascara_filtro" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_2_Mascara_filtro->PlaceHolder) ?>" value="<?php echo $view_inv->_2_Mascara_filtro->EditValue ?>"<?php echo $view_inv->_2_Mascara_filtro->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__2_Mascara_filtro">
+<span<?php echo $view_inv->_2_Mascara_filtro->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_2_Mascara_filtro->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__2_Mascara_filtro" name="x__2_Mascara_filtro" id="x__2_Mascara_filtro" value="<?php echo ew_HtmlEncode($view_inv->_2_Mascara_filtro->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_2_Mascara_filtro->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3395,9 +4170,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__2_Pimpina" class="form-group">
 		<label id="elh_view_inv__2_Pimpina" for="x__2_Pimpina" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_2_Pimpina->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_2_Pimpina->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__2_Pimpina">
 <input type="text" data-field="x__2_Pimpina" name="x__2_Pimpina" id="x__2_Pimpina" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_2_Pimpina->PlaceHolder) ?>" value="<?php echo $view_inv->_2_Pimpina->EditValue ?>"<?php echo $view_inv->_2_Pimpina->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__2_Pimpina">
+<span<?php echo $view_inv->_2_Pimpina->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_2_Pimpina->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__2_Pimpina" name="x__2_Pimpina" id="x__2_Pimpina" value="<?php echo ew_HtmlEncode($view_inv->_2_Pimpina->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_2_Pimpina->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3405,9 +4188,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__2_SleepingA0" class="form-group">
 		<label id="elh_view_inv__2_SleepingA0" for="x__2_SleepingA0" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_2_SleepingA0->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_2_SleepingA0->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__2_SleepingA0">
 <input type="text" data-field="x__2_SleepingA0" name="x__2_SleepingA0" id="x__2_SleepingA0" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_2_SleepingA0->PlaceHolder) ?>" value="<?php echo $view_inv->_2_SleepingA0->EditValue ?>"<?php echo $view_inv->_2_SleepingA0->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__2_SleepingA0">
+<span<?php echo $view_inv->_2_SleepingA0->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_2_SleepingA0->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__2_SleepingA0" name="x__2_SleepingA0" id="x__2_SleepingA0" value="<?php echo ew_HtmlEncode($view_inv->_2_SleepingA0->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_2_SleepingA0->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3415,9 +4206,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__2_Plastico_negro" class="form-group">
 		<label id="elh_view_inv__2_Plastico_negro" for="x__2_Plastico_negro" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_2_Plastico_negro->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_2_Plastico_negro->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__2_Plastico_negro">
 <input type="text" data-field="x__2_Plastico_negro" name="x__2_Plastico_negro" id="x__2_Plastico_negro" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_2_Plastico_negro->PlaceHolder) ?>" value="<?php echo $view_inv->_2_Plastico_negro->EditValue ?>"<?php echo $view_inv->_2_Plastico_negro->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__2_Plastico_negro">
+<span<?php echo $view_inv->_2_Plastico_negro->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_2_Plastico_negro->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__2_Plastico_negro" name="x__2_Plastico_negro" id="x__2_Plastico_negro" value="<?php echo ew_HtmlEncode($view_inv->_2_Plastico_negro->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_2_Plastico_negro->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3425,9 +4224,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__2_Tula_tropa" class="form-group">
 		<label id="elh_view_inv__2_Tula_tropa" for="x__2_Tula_tropa" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_2_Tula_tropa->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_2_Tula_tropa->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__2_Tula_tropa">
 <input type="text" data-field="x__2_Tula_tropa" name="x__2_Tula_tropa" id="x__2_Tula_tropa" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_2_Tula_tropa->PlaceHolder) ?>" value="<?php echo $view_inv->_2_Tula_tropa->EditValue ?>"<?php echo $view_inv->_2_Tula_tropa->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__2_Tula_tropa">
+<span<?php echo $view_inv->_2_Tula_tropa->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_2_Tula_tropa->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__2_Tula_tropa" name="x__2_Tula_tropa" id="x__2_Tula_tropa" value="<?php echo ew_HtmlEncode($view_inv->_2_Tula_tropa->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_2_Tula_tropa->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3435,9 +4242,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__2_Camilla" class="form-group">
 		<label id="elh_view_inv__2_Camilla" for="x__2_Camilla" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_2_Camilla->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_2_Camilla->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__2_Camilla">
 <input type="text" data-field="x__2_Camilla" name="x__2_Camilla" id="x__2_Camilla" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_2_Camilla->PlaceHolder) ?>" value="<?php echo $view_inv->_2_Camilla->EditValue ?>"<?php echo $view_inv->_2_Camilla->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__2_Camilla">
+<span<?php echo $view_inv->_2_Camilla->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_2_Camilla->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__2_Camilla" name="x__2_Camilla" id="x__2_Camilla" value="<?php echo ew_HtmlEncode($view_inv->_2_Camilla->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_2_Camilla->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3445,9 +4260,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r_Herramientas" class="form-group">
 		<label id="elh_view_inv_Herramientas" for="x_Herramientas" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->Herramientas->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->Herramientas->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv_Herramientas">
 <input type="text" data-field="x_Herramientas" name="x_Herramientas" id="x_Herramientas" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->Herramientas->PlaceHolder) ?>" value="<?php echo $view_inv->Herramientas->EditValue ?>"<?php echo $view_inv->Herramientas->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv_Herramientas">
+<span<?php echo $view_inv->Herramientas->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->Herramientas->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Herramientas" name="x_Herramientas" id="x_Herramientas" value="<?php echo ew_HtmlEncode($view_inv->Herramientas->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->Herramientas->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3455,11 +4278,19 @@ $view_inv_edit->ShowMessage();
 	<div id="r__3_Abrazadera" class="form-group">
 		<label id="elh_view_inv__3_Abrazadera" for="x__3_Abrazadera" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_3_Abrazadera->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_3_Abrazadera->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__3_Abrazadera">
 <span<?php echo $view_inv->_3_Abrazadera->ViewAttributes() ?>>
 <p class="form-control-static"><?php echo $view_inv->_3_Abrazadera->EditValue ?></p></span>
 </span>
 <input type="hidden" data-field="x__3_Abrazadera" name="x__3_Abrazadera" id="x__3_Abrazadera" value="<?php echo ew_HtmlEncode($view_inv->_3_Abrazadera->CurrentValue) ?>">
+<?php } else { ?>
+<span id="el_view_inv__3_Abrazadera">
+<span<?php echo $view_inv->_3_Abrazadera->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_3_Abrazadera->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__3_Abrazadera" name="x__3_Abrazadera" id="x__3_Abrazadera" value="<?php echo ew_HtmlEncode($view_inv->_3_Abrazadera->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_3_Abrazadera->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3467,9 +4298,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__3_Aspersora" class="form-group">
 		<label id="elh_view_inv__3_Aspersora" for="x__3_Aspersora" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_3_Aspersora->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_3_Aspersora->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__3_Aspersora">
 <input type="text" data-field="x__3_Aspersora" name="x__3_Aspersora" id="x__3_Aspersora" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_3_Aspersora->PlaceHolder) ?>" value="<?php echo $view_inv->_3_Aspersora->EditValue ?>"<?php echo $view_inv->_3_Aspersora->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__3_Aspersora">
+<span<?php echo $view_inv->_3_Aspersora->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_3_Aspersora->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__3_Aspersora" name="x__3_Aspersora" id="x__3_Aspersora" value="<?php echo ew_HtmlEncode($view_inv->_3_Aspersora->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_3_Aspersora->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3477,9 +4316,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__3_Cabo_hacha" class="form-group">
 		<label id="elh_view_inv__3_Cabo_hacha" for="x__3_Cabo_hacha" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_3_Cabo_hacha->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_3_Cabo_hacha->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__3_Cabo_hacha">
 <input type="text" data-field="x__3_Cabo_hacha" name="x__3_Cabo_hacha" id="x__3_Cabo_hacha" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_3_Cabo_hacha->PlaceHolder) ?>" value="<?php echo $view_inv->_3_Cabo_hacha->EditValue ?>"<?php echo $view_inv->_3_Cabo_hacha->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__3_Cabo_hacha">
+<span<?php echo $view_inv->_3_Cabo_hacha->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_3_Cabo_hacha->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__3_Cabo_hacha" name="x__3_Cabo_hacha" id="x__3_Cabo_hacha" value="<?php echo ew_HtmlEncode($view_inv->_3_Cabo_hacha->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_3_Cabo_hacha->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3487,9 +4334,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__3_Funda_machete" class="form-group">
 		<label id="elh_view_inv__3_Funda_machete" for="x__3_Funda_machete" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_3_Funda_machete->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_3_Funda_machete->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__3_Funda_machete">
 <input type="text" data-field="x__3_Funda_machete" name="x__3_Funda_machete" id="x__3_Funda_machete" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_3_Funda_machete->PlaceHolder) ?>" value="<?php echo $view_inv->_3_Funda_machete->EditValue ?>"<?php echo $view_inv->_3_Funda_machete->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__3_Funda_machete">
+<span<?php echo $view_inv->_3_Funda_machete->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_3_Funda_machete->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__3_Funda_machete" name="x__3_Funda_machete" id="x__3_Funda_machete" value="<?php echo ew_HtmlEncode($view_inv->_3_Funda_machete->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_3_Funda_machete->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3497,9 +4352,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__3_Glifosato_4lt" class="form-group">
 		<label id="elh_view_inv__3_Glifosato_4lt" for="x__3_Glifosato_4lt" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_3_Glifosato_4lt->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_3_Glifosato_4lt->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__3_Glifosato_4lt">
 <input type="text" data-field="x__3_Glifosato_4lt" name="x__3_Glifosato_4lt" id="x__3_Glifosato_4lt" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_3_Glifosato_4lt->PlaceHolder) ?>" value="<?php echo $view_inv->_3_Glifosato_4lt->EditValue ?>"<?php echo $view_inv->_3_Glifosato_4lt->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__3_Glifosato_4lt">
+<span<?php echo $view_inv->_3_Glifosato_4lt->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_3_Glifosato_4lt->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__3_Glifosato_4lt" name="x__3_Glifosato_4lt" id="x__3_Glifosato_4lt" value="<?php echo ew_HtmlEncode($view_inv->_3_Glifosato_4lt->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_3_Glifosato_4lt->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3507,9 +4370,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__3_Hacha" class="form-group">
 		<label id="elh_view_inv__3_Hacha" for="x__3_Hacha" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_3_Hacha->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_3_Hacha->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__3_Hacha">
 <input type="text" data-field="x__3_Hacha" name="x__3_Hacha" id="x__3_Hacha" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_3_Hacha->PlaceHolder) ?>" value="<?php echo $view_inv->_3_Hacha->EditValue ?>"<?php echo $view_inv->_3_Hacha->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__3_Hacha">
+<span<?php echo $view_inv->_3_Hacha->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_3_Hacha->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__3_Hacha" name="x__3_Hacha" id="x__3_Hacha" value="<?php echo ew_HtmlEncode($view_inv->_3_Hacha->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_3_Hacha->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3517,9 +4388,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__3_Lima_12_uni" class="form-group">
 		<label id="elh_view_inv__3_Lima_12_uni" for="x__3_Lima_12_uni" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_3_Lima_12_uni->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_3_Lima_12_uni->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__3_Lima_12_uni">
 <input type="text" data-field="x__3_Lima_12_uni" name="x__3_Lima_12_uni" id="x__3_Lima_12_uni" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_3_Lima_12_uni->PlaceHolder) ?>" value="<?php echo $view_inv->_3_Lima_12_uni->EditValue ?>"<?php echo $view_inv->_3_Lima_12_uni->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__3_Lima_12_uni">
+<span<?php echo $view_inv->_3_Lima_12_uni->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_3_Lima_12_uni->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__3_Lima_12_uni" name="x__3_Lima_12_uni" id="x__3_Lima_12_uni" value="<?php echo ew_HtmlEncode($view_inv->_3_Lima_12_uni->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_3_Lima_12_uni->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3527,9 +4406,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__3_Llave_mixta" class="form-group">
 		<label id="elh_view_inv__3_Llave_mixta" for="x__3_Llave_mixta" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_3_Llave_mixta->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_3_Llave_mixta->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__3_Llave_mixta">
 <input type="text" data-field="x__3_Llave_mixta" name="x__3_Llave_mixta" id="x__3_Llave_mixta" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_3_Llave_mixta->PlaceHolder) ?>" value="<?php echo $view_inv->_3_Llave_mixta->EditValue ?>"<?php echo $view_inv->_3_Llave_mixta->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__3_Llave_mixta">
+<span<?php echo $view_inv->_3_Llave_mixta->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_3_Llave_mixta->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__3_Llave_mixta" name="x__3_Llave_mixta" id="x__3_Llave_mixta" value="<?php echo ew_HtmlEncode($view_inv->_3_Llave_mixta->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_3_Llave_mixta->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3537,9 +4424,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__3_Machete" class="form-group">
 		<label id="elh_view_inv__3_Machete" for="x__3_Machete" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_3_Machete->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_3_Machete->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__3_Machete">
 <input type="text" data-field="x__3_Machete" name="x__3_Machete" id="x__3_Machete" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_3_Machete->PlaceHolder) ?>" value="<?php echo $view_inv->_3_Machete->EditValue ?>"<?php echo $view_inv->_3_Machete->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__3_Machete">
+<span<?php echo $view_inv->_3_Machete->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_3_Machete->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__3_Machete" name="x__3_Machete" id="x__3_Machete" value="<?php echo ew_HtmlEncode($view_inv->_3_Machete->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_3_Machete->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3547,9 +4442,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__3_Gafa_traslucida" class="form-group">
 		<label id="elh_view_inv__3_Gafa_traslucida" for="x__3_Gafa_traslucida" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_3_Gafa_traslucida->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_3_Gafa_traslucida->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__3_Gafa_traslucida">
 <input type="text" data-field="x__3_Gafa_traslucida" name="x__3_Gafa_traslucida" id="x__3_Gafa_traslucida" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_3_Gafa_traslucida->PlaceHolder) ?>" value="<?php echo $view_inv->_3_Gafa_traslucida->EditValue ?>"<?php echo $view_inv->_3_Gafa_traslucida->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__3_Gafa_traslucida">
+<span<?php echo $view_inv->_3_Gafa_traslucida->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_3_Gafa_traslucida->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__3_Gafa_traslucida" name="x__3_Gafa_traslucida" id="x__3_Gafa_traslucida" value="<?php echo ew_HtmlEncode($view_inv->_3_Gafa_traslucida->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_3_Gafa_traslucida->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3557,9 +4460,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__3_Motosierra" class="form-group">
 		<label id="elh_view_inv__3_Motosierra" for="x__3_Motosierra" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_3_Motosierra->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_3_Motosierra->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__3_Motosierra">
 <input type="text" data-field="x__3_Motosierra" name="x__3_Motosierra" id="x__3_Motosierra" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_3_Motosierra->PlaceHolder) ?>" value="<?php echo $view_inv->_3_Motosierra->EditValue ?>"<?php echo $view_inv->_3_Motosierra->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__3_Motosierra">
+<span<?php echo $view_inv->_3_Motosierra->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_3_Motosierra->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__3_Motosierra" name="x__3_Motosierra" id="x__3_Motosierra" value="<?php echo ew_HtmlEncode($view_inv->_3_Motosierra->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_3_Motosierra->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3567,9 +4478,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__3_Palin" class="form-group">
 		<label id="elh_view_inv__3_Palin" for="x__3_Palin" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_3_Palin->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_3_Palin->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__3_Palin">
 <input type="text" data-field="x__3_Palin" name="x__3_Palin" id="x__3_Palin" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_3_Palin->PlaceHolder) ?>" value="<?php echo $view_inv->_3_Palin->EditValue ?>"<?php echo $view_inv->_3_Palin->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__3_Palin">
+<span<?php echo $view_inv->_3_Palin->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_3_Palin->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__3_Palin" name="x__3_Palin" id="x__3_Palin" value="<?php echo ew_HtmlEncode($view_inv->_3_Palin->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_3_Palin->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3577,9 +4496,17 @@ $view_inv_edit->ShowMessage();
 	<div id="r__3_Tubo_galvanizado" class="form-group">
 		<label id="elh_view_inv__3_Tubo_galvanizado" for="x__3_Tubo_galvanizado" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->_3_Tubo_galvanizado->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->_3_Tubo_galvanizado->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv__3_Tubo_galvanizado">
 <input type="text" data-field="x__3_Tubo_galvanizado" name="x__3_Tubo_galvanizado" id="x__3_Tubo_galvanizado" size="30" placeholder="<?php echo ew_HtmlEncode($view_inv->_3_Tubo_galvanizado->PlaceHolder) ?>" value="<?php echo $view_inv->_3_Tubo_galvanizado->EditValue ?>"<?php echo $view_inv->_3_Tubo_galvanizado->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view_inv__3_Tubo_galvanizado">
+<span<?php echo $view_inv->_3_Tubo_galvanizado->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->_3_Tubo_galvanizado->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x__3_Tubo_galvanizado" name="x__3_Tubo_galvanizado" id="x__3_Tubo_galvanizado" value="<?php echo ew_HtmlEncode($view_inv->_3_Tubo_galvanizado->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->_3_Tubo_galvanizado->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3587,16 +4514,46 @@ $view_inv_edit->ShowMessage();
 	<div id="r_Modificado" class="form-group">
 		<label id="elh_view_inv_Modificado" for="x_Modificado" class="col-sm-2 control-label ewLabel"><?php echo $view_inv->Modificado->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $view_inv->Modificado->CellAttributes() ?>>
+<?php if ($view_inv->CurrentAction <> "F") { ?>
 <span id="el_view_inv_Modificado">
-<input type="text" data-field="x_Modificado" name="x_Modificado" id="x_Modificado" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($view_inv->Modificado->PlaceHolder) ?>" value="<?php echo $view_inv->Modificado->EditValue ?>"<?php echo $view_inv->Modificado->EditAttributes() ?>>
+<select data-field="x_Modificado" id="x_Modificado" name="x_Modificado"<?php echo $view_inv->Modificado->EditAttributes() ?>>
+<?php
+if (is_array($view_inv->Modificado->EditValue)) {
+	$arwrk = $view_inv->Modificado->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_inv->Modificado->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
 </span>
+<?php } else { ?>
+<span id="el_view_inv_Modificado">
+<span<?php echo $view_inv->Modificado->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_inv->Modificado->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Modificado" name="x_Modificado" id="x_Modificado" value="<?php echo ew_HtmlEncode($view_inv->Modificado->FormValue) ?>">
+<?php } ?>
 <?php echo $view_inv->Modificado->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div>
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-10">
-<button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit"><?php echo $Language->Phrase("SaveBtn") ?></button>
+<?php if ($view_inv->CurrentAction <> "F") { // Confirm page ?>
+<button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit" onclick="this.form.a_edit.value='F';"><?php echo $Language->Phrase("SaveBtn") ?></button>
+<?php } else { ?>
+<button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit"><?php echo $Language->Phrase("ConfirmBtn") ?></button>
+<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="submit" onclick="this.form.a_edit.value='X';"><?php echo $Language->Phrase("CancelBtn") ?></button>
+<?php } ?>
 	</div>
 </div>
 </form>

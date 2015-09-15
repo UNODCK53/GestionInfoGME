@@ -4,11 +4,13 @@
 	include ("coneccion.php");
 	mysql_select_db($base_datos,$db);
 	
-	$sql =mysql_query("select *from(select
+	$sql =mysql_query("select *from(select llave,F_Sincron,USUARIO,Cargo_gme,Num_AV,`NOM_APOYO`,Otro_Nom_Apoyo,Otro_CC_Apoyo,dominio.NOM_PE,Otro_PE,Departamento,Muncipio,`NOM_VDA`,`NO_E`,`NO_OF`,`NO_SUBOF`,`NO_SOL`,`NO_PATRU`,Nom_enfer,Otro_Nom_Enfer,Otro_CC_Enfer,Armada,Ejercito,Policia, NOM_UNIDAD,NOM_COMAN,CC_COMAN,TEL_COMAN,RANGO_COMAN,Otro_rango,`NO_GDETECCION`,`NO_BINOMIO`,`FECHA_INTO_AV`,DIA,MES,LATITUD,GRA_LAT,MIN_LAT,SEG_LAT,GRA_LONG ,MIN_LONG,SEG_LONG, OBSERVACION,AÑO, FASE ,Modificado
+		from
+	(select
 llave,F_Sincron,USUARIO,Cargo_gme,Num_AV,`NOM_APOYO`,Otro_Nom_Apoyo,Otro_CC_Apoyo,`NOM_PE`,Otro_PE,Departamento,Muncipio,`NOM_VDA`,`NO_E`,`NO_OF`,`NO_SUBOF`,`NO_SOL`,`NO_PATRU`,Nom_enfer,Otro_Nom_Enfer,Otro_CC_Enfer,Armada,Ejercito,Policia, NOM_UNIDAD,NOM_COMAN,CC_COMAN,TEL_COMAN,RANGO_COMAN,Otro_rango,`NO_GDETECCION`,`NO_BINOMIO`,`FECHA_INTO_AV`,DIA,MES,dominio.LATITUD,GRA_LAT,MIN_LAT,SEG_LAT,GRA_LONG ,MIN_LONG,SEG_LONG, OBSERVACION,AÑO, FASE ,'No' as Modificado
 	from
 
-		(select llave,F_Sincron,dominio.USUARIO,Cargo_gme,Num_AV,`NOM_APOYO`,Otro_Nom_Apoyo,Otro_CC_Apoyo,`NOM_PE`,Otro_PE,Departamento,Muncipio,`NOM_VDA`,`NO_E`,`NO_OF`,`NO_SUBOF`,`NO_SOL`,`NO_PATRU`,Nom_enfer,Otro_Nom_Enfer,Otro_CC_Enfer,Armada,Ejercito,Policia, NOM_UNIDAD,NOM_COMAN,CC_COMAN,TEL_COMAN,RANGO_COMAN,Otro_rango,`NO_GDETECCION`,`NO_BINOMIO`,`FECHA_INTO_AV`,DIA,MES,LATITUD,GRA_LAT,MIN_LAT,SEG_LAT,GRA_LONG ,MIN_LONG,SEG_LONG, OBSERVACION,SUBSTR(`FECHA_INTO_AV`,9,2) as AÑO,SUBSTRING((CASE  WHEN NOM_PE ='99' THEN Otro_PE ELSE NOM_PE END ),3,2) as FASE  
+		(select llave,F_Sincron,dominio.USUARIO,Cargo_gme,Num_AV,`NOM_APOYO`,Otro_Nom_Apoyo,Otro_CC_Apoyo,`NOM_PE`,Otro_PE,Departamento,Muncipio,`NOM_VDA`,`NO_E`,`NO_OF`,`NO_SUBOF`,`NO_SOL`,`NO_PATRU`,Nom_enfer,Otro_Nom_Enfer,Otro_CC_Enfer,Armada,Ejercito,Policia, NOM_UNIDAD,NOM_COMAN,CC_COMAN,TEL_COMAN,RANGO_COMAN,Otro_rango,`NO_GDETECCION`,`NO_BINOMIO`,`FECHA_INTO_AV`,DIA,MES,LATITUD,GRA_LAT,MIN_LAT,SEG_LAT,GRA_LONG ,MIN_LONG,SEG_LONG, OBSERVACION,SUBSTR(`FECHA_INTO_AV`,3,4) as AÑO,SUBSTRING((CASE  WHEN NOM_PE ='99' THEN Otro_PE ELSE NOM_PE END ),3,2) as FASE  
 			from 
 				(select llave,F_Sincron,USUARIO,Num_AV,`NOM_APOYO`,Otro_Nom_Apoyo,Otro_CC_Apoyo,`NOM_PE`,Otro_PE,Departamento,Muncipio,`NOM_VDA`,`NO_E`,`NO_OF`,`NO_SUBOF`,`NO_SOL`,`NO_PATRU`,Nom_enfer,Otro_Nom_Enfer,Otro_CC_Enfer,Armada,Ejercito,Policia, NOM_UNIDAD,NOM_COMAN,CC_COMAN,TEL_COMAN,dominio.RANGO_COMAN,Otro_rango,`NO_GDETECCION`,`NO_BINOMIO`,`FECHA_INTO_AV`,DIA,MES,LATITUD,GRA_LAT,MIN_LAT,SEG_LAT,GRA_LONG ,MIN_LONG,SEG_LONG, OBSERVACION   
 					from
@@ -20,7 +22,7 @@ llave,F_Sincron,USUARIO,Cargo_gme,Num_AV,`NOM_APOYO`,Otro_Nom_Apoyo,Otro_CC_Apoy
 											from
 												(select llave,F_Sincron,USUARIO,Num_AV,`NOM_APOYO`,Otro_Nom_Apoyo,Otro_CC_Apoyo, `NOM_PE`,Otro_PE,`NOM_DPTO`,`NOM_MPIO`,`NOM_VDA`,`NO_E`,`NO_OF`,`NO_SUBOF`,`NO_SOL`,`NO_PATRU`,Nom_enfer,Otro_Nom_Enfer,Otro_CC_Enfer,Armada,Ejercito,Policia, NOM_UNIDAD,NOM_COMAN,CC_COMAN,TEL_COMAN,RANGO_COMAN,Otro_rango,`NO_GDETECCION`,`NO_BINOMIO`,`FECHA_INTO_AV`,DIA,MES,LATITUD,GRA_LAT,MIN_LAT,SEG_LAT,GRA_LONG ,MIN_LONG,SEG_LONG, OBSERVACION 
 													from
-														(SELECT `_URI` as llave,_SUBMISSION_DATE as F_Sincron,`USUARIO`,`NO_AV` AS Num_AV, `NOM_APOYO`,GRUPO1_NOM_APOYO_NEW as Otro_Nom_Apoyo,GRUPO1_CC_APOYO_NEW as Otro_CC_Apoyo, `NOM_PE`,NOM_PE_NEW as Otro_PE,`NOM_DPTO`,`NOM_MPIO`,`NOM_VDA`,`NO_E`,`NO_OF`,`NO_SUBOF`,`NO_SOL`,`NO_PATRU`,`NOM_ENFER` as Nom_enfer,GRUPO2_CC_ENFER_NEW as Otro_CC_Enfer,GRUPO2_NOM_ENFER_NEW as Otro_Nom_Enfer,`NOM_UNIDAD`,`GRUPO5_NOM_COMAN` as NOM_COMAN,`GRUPO5_CC_COMAN` as CC_COMAN,`GRUPO5_NO_TEL` AS TEL_COMAN,`GRUPO5_RANGO_COMAN` AS RANGO_COMAN,GRUPO5_RANGO_COMAN_NEW as Otro_rango,`NO_GDETECCION`,`NO_BINOMIO`,DATE_FORMAT(`FECHA_INTO_AV`,'%d/%m/%Y') as FECHA_INTO_AV,DATE_FORMAT(`FECHA_INTO_AV`,'%d') as DIA,DATE_FORMAT(`FECHA_INTO_AV`,'%m') as MES,LATITUD,`GRUPO3_GRA_LAT` AS GRA_LAT,`GRUPO3_MIN_LAT`AS MIN_LAT,`GRUPO3_SEG_LAT`AS SEG_LAT ,`GRUPO4_GRA_LONG`AS GRA_LONG,`GRUPO4_MIN_LONG` AS MIN_LONG,`GRUPO4_SEG_LONG` AS SEG_LONG,`OBSERVACION` 
+														(SELECT `_URI` as llave,_SUBMISSION_DATE as F_Sincron,`USUARIO`,`NO_AV` AS Num_AV, `NOM_APOYO`,GRUPO1_NOM_APOYO_NEW as Otro_Nom_Apoyo,GRUPO1_CC_APOYO_NEW as Otro_CC_Apoyo, `NOM_PE`,NOM_PE_NEW as Otro_PE,`NOM_DPTO`,`NOM_MPIO`,`NOM_VDA`,`NO_E`,`NO_OF`,`NO_SUBOF`,`NO_SOL`,`NO_PATRU`,`NOM_ENFER` as Nom_enfer,GRUPO2_CC_ENFER_NEW as Otro_CC_Enfer,GRUPO2_NOM_ENFER_NEW as Otro_Nom_Enfer,`NOM_UNIDAD`,`GRUPO5_NOM_COMAN` as NOM_COMAN,`GRUPO5_CC_COMAN` as CC_COMAN,`GRUPO5_NO_TEL` AS TEL_COMAN,`GRUPO5_RANGO_COMAN` AS RANGO_COMAN,GRUPO5_RANGO_COMAN_NEW as Otro_rango,`NO_GDETECCION`,`NO_BINOMIO`,DATE_FORMAT(`FECHA_INTO_AV`,'%Y/%m/%d') as FECHA_INTO_AV,DATE_FORMAT(`FECHA_INTO_AV`,'%d') as DIA,DATE_FORMAT(`FECHA_INTO_AV`,'%m') as MES,LATITUD,`GRUPO3_GRA_LAT` AS GRA_LAT,`GRUPO3_MIN_LAT`AS MIN_LAT,`GRUPO3_SEG_LAT`AS SEG_LAT ,`GRUPO4_GRA_LONG`AS GRA_LONG,`GRUPO4_MIN_LONG` AS MIN_LONG,`GRUPO4_SEG_LONG` AS SEG_LONG,`OBSERVACION` 
 															FROM `control_areas_vivac_v2_f2_2014_core`
 														) as ACV	
 													join
@@ -55,7 +57,10 @@ llave,F_Sincron,USUARIO,Cargo_gme,Num_AV,`NOM_APOYO`,Otro_Nom_Apoyo,Otro_CC_Apoy
 		)as AVC8
 	left join 
 		(select label as LATITUD,name from `dominio` where `list name`='latitud'
-		)as dominio on AVC8.LATITUD=dominio.name) as final order by F_Sincron asc ");
+		)as dominio on AVC8.LATITUD=dominio.name)as AVC9
+	left join 
+		(select label as NOM_PE,name from `dominio` where `list name`='punto'
+		)as dominio on AVC9.NOM_PE=dominio.name	)as final order by F_Sincron asc ");
 	$registros = mysql_num_rows ($sql);
 
  

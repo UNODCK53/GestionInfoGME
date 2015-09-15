@@ -1734,7 +1734,36 @@ class cview_cav_list extends cview_cav {
 			$this->F_Sincron->ViewCustomAttributes = "";
 
 			// USUARIO
-			$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+			if (strval($this->USUARIO->CurrentValue) <> "") {
+				$sFilterWrk = "`USUARIO`" . ew_SearchString("=", $this->USUARIO->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->USUARIO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `USUARIO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->USUARIO->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+				}
+			} else {
+				$this->USUARIO->ViewValue = NULL;
+			}
 			$this->USUARIO->ViewCustomAttributes = "";
 
 			// Cargo_gme
@@ -1746,7 +1775,36 @@ class cview_cav_list extends cview_cav {
 			$this->Num_AV->ViewCustomAttributes = "";
 
 			// NOM_APOYO
-			$this->NOM_APOYO->ViewValue = $this->NOM_APOYO->CurrentValue;
+			if (strval($this->NOM_APOYO->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_APOYO`" . ew_SearchString("=", $this->NOM_APOYO->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_APOYO`, `NOM_APOYO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_APOYO`, `NOM_APOYO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_APOYO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_APOYO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_APOYO->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_APOYO->ViewValue = $this->NOM_APOYO->CurrentValue;
+				}
+			} else {
+				$this->NOM_APOYO->ViewValue = NULL;
+			}
 			$this->NOM_APOYO->ViewCustomAttributes = "";
 
 			// Otro_Nom_Apoyo
@@ -1758,7 +1816,36 @@ class cview_cav_list extends cview_cav {
 			$this->Otro_CC_Apoyo->ViewCustomAttributes = "";
 
 			// NOM_PE
-			$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+			if (strval($this->NOM_PE->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_PE`" . ew_SearchString("=", $this->NOM_PE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_PE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+				}
+			} else {
+				$this->NOM_PE->ViewValue = NULL;
+			}
 			$this->NOM_PE->ViewCustomAttributes = "";
 
 			// Otro_PE
@@ -1898,11 +1985,69 @@ class cview_cav_list extends cview_cav {
 			$this->OBSERVACION->ViewCustomAttributes = "";
 
 			// AÑO
-			$this->AD1O->ViewValue = $this->AD1O->CurrentValue;
+			if (strval($this->AD1O->CurrentValue) <> "") {
+				$sFilterWrk = "`AÑO`" . ew_SearchString("=", $this->AD1O->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `AÑO`, `AÑO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `AÑO`, `AÑO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->AD1O, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `AÑO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->AD1O->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->AD1O->ViewValue = $this->AD1O->CurrentValue;
+				}
+			} else {
+				$this->AD1O->ViewValue = NULL;
+			}
 			$this->AD1O->ViewCustomAttributes = "";
 
 			// FASE
-			$this->FASE->ViewValue = $this->FASE->CurrentValue;
+			if (strval($this->FASE->CurrentValue) <> "") {
+				$sFilterWrk = "`FASE`" . ew_SearchString("=", $this->FASE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `FASE`, `FASE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `FASE`, `FASE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->FASE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `FASE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->FASE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->FASE->ViewValue = $this->FASE->CurrentValue;
+				}
+			} else {
+				$this->FASE->ViewValue = NULL;
+			}
 			$this->FASE->ViewCustomAttributes = "";
 
 			// Modificado
@@ -2155,8 +2300,30 @@ class cview_cav_list extends cview_cav {
 			// USUARIO
 			$this->USUARIO->EditAttrs["class"] = "form-control";
 			$this->USUARIO->EditCustomAttributes = "";
-			$this->USUARIO->EditValue = ew_HtmlEncode($this->USUARIO->AdvancedSearch->SearchValue);
-			$this->USUARIO->PlaceHolder = ew_RemoveHtml($this->USUARIO->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->USUARIO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `USUARIO` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->USUARIO->EditValue = $arwrk;
 
 			// Cargo_gme
 			$this->Cargo_gme->EditAttrs["class"] = "form-control";
@@ -2173,8 +2340,30 @@ class cview_cav_list extends cview_cav {
 			// NOM_APOYO
 			$this->NOM_APOYO->EditAttrs["class"] = "form-control";
 			$this->NOM_APOYO->EditCustomAttributes = "";
-			$this->NOM_APOYO->EditValue = ew_HtmlEncode($this->NOM_APOYO->AdvancedSearch->SearchValue);
-			$this->NOM_APOYO->PlaceHolder = ew_RemoveHtml($this->NOM_APOYO->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_APOYO`, `NOM_APOYO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_APOYO`, `NOM_APOYO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_APOYO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_APOYO` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->NOM_APOYO->EditValue = $arwrk;
 
 			// Otro_Nom_Apoyo
 			$this->Otro_Nom_Apoyo->EditAttrs["class"] = "form-control";
@@ -2191,8 +2380,30 @@ class cview_cav_list extends cview_cav {
 			// NOM_PE
 			$this->NOM_PE->EditAttrs["class"] = "form-control";
 			$this->NOM_PE->EditCustomAttributes = "";
-			$this->NOM_PE->EditValue = ew_HtmlEncode($this->NOM_PE->AdvancedSearch->SearchValue);
-			$this->NOM_PE->PlaceHolder = ew_RemoveHtml($this->NOM_PE->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->NOM_PE->EditValue = $arwrk;
 
 			// Otro_PE
 			$this->Otro_PE->EditAttrs["class"] = "form-control";
@@ -2401,14 +2612,58 @@ class cview_cav_list extends cview_cav {
 			// AÑO
 			$this->AD1O->EditAttrs["class"] = "form-control";
 			$this->AD1O->EditCustomAttributes = "";
-			$this->AD1O->EditValue = ew_HtmlEncode($this->AD1O->AdvancedSearch->SearchValue);
-			$this->AD1O->PlaceHolder = ew_RemoveHtml($this->AD1O->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `AÑO`, `AÑO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `AÑO`, `AÑO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->AD1O, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `AÑO` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->AD1O->EditValue = $arwrk;
 
 			// FASE
 			$this->FASE->EditAttrs["class"] = "form-control";
 			$this->FASE->EditCustomAttributes = "";
-			$this->FASE->EditValue = ew_HtmlEncode($this->FASE->AdvancedSearch->SearchValue);
-			$this->FASE->PlaceHolder = ew_RemoveHtml($this->FASE->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `FASE`, `FASE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `FASE`, `FASE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_cav`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->FASE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `FASE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->FASE->EditValue = $arwrk;
 
 			// Modificado
 			$this->Modificado->EditAttrs["class"] = "form-control";
@@ -2787,8 +3042,13 @@ fview_cavlist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fview_cavlist.Lists["x_USUARIO"] = {"LinkField":"x_USUARIO","Ajax":null,"AutoFill":false,"DisplayFields":["x_USUARIO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_cavlist.Lists["x_NOM_APOYO"] = {"LinkField":"x_NOM_APOYO","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_APOYO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_cavlist.Lists["x_NOM_PE"] = {"LinkField":"x_NOM_PE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_cavlist.Lists["x_AD1O"] = {"LinkField":"x_AD1O","Ajax":null,"AutoFill":false,"DisplayFields":["x_AD1O","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_cavlist.Lists["x_FASE"] = {"LinkField":"x_FASE","Ajax":null,"AutoFill":false,"DisplayFields":["x_FASE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 var fview_cavlistsrch = new ew_Form("fview_cavlistsrch");
 
 // Validate function for search
@@ -2824,6 +3084,11 @@ fview_cavlistsrch.ValidateRequired = false; // No JavaScript validation
 <?php } ?>
 
 // Dynamic selection lists
+fview_cavlistsrch.Lists["x_USUARIO"] = {"LinkField":"x_USUARIO","Ajax":null,"AutoFill":false,"DisplayFields":["x_USUARIO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_cavlistsrch.Lists["x_NOM_APOYO"] = {"LinkField":"x_NOM_APOYO","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_APOYO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_cavlistsrch.Lists["x_NOM_PE"] = {"LinkField":"x_NOM_PE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_cavlistsrch.Lists["x_AD1O"] = {"LinkField":"x_AD1O","Ajax":null,"AutoFill":false,"DisplayFields":["x_AD1O","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_cavlistsrch.Lists["x_FASE"] = {"LinkField":"x_FASE","Ajax":null,"AutoFill":false,"DisplayFields":["x_FASE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 </script>
 <script type="text/javascript">
 
@@ -2835,47 +3100,55 @@ fview_cavlistsrch.ValidateRequired = false; // No JavaScript validation
 <?php if ($view_cav->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
+<?php if ($view_cav->Export == "") { ?>
+<?php echo $Language->SelectionForm(); ?>
+<?php } ?>
+<div class="clearfix"></div>
+</div>
+<?php } ?>
+<div class="ewToolbar">
 <H2> Control de áreas VIVAC</h2>
-
 <p>La siguiente tabla contiene los informes de Áreas VIVAC realizados desde la fase II de erradicación 2015 a la fecha</p>
 
 <hr>
-
 <table>
 	<tr>
-		<td><?php if ($view_cav_list->TotalRecs > 0 && $view_cav_list->ExportOptions->Visible()) { ?>
+		<td>
+			<?php if ($view_cav_list->TotalRecs > 0 && $view_cav_list->ExportOptions->Visible()) { ?>
+
 			<?php $view_cav_list->ExportOptions->Render("body") ?>
-			<?php } ?></td>
+			<?php } ?>
 
-
-
-		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono </td>		
+		</td>
+		<td>
+			Si desea exportar la tabla en formato excel haga click en el siguiente icono 
+		</td>	
 	</tr>	
-</table>
+</table> 
+
 <hr>
 
+</div>
 <?php if ($view_cav->Export == "") { ?>
 
-
-<?php } ?>
-
-
-</div>
+<div>
 <br>
 <table>
 	<tr>
-		<td><?php if ($view_cav_list->SearchOptions->Visible()) { ?>
-
-<?php $view_cav_list->SearchOptions->Render("body") ?></td>
-		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente</td>
+		<td>
+			<?php if ($view_cav_list->SearchOptions->Visible()) { ?>
+			<?php $view_cav_list->SearchOptions->Render("body") ?>
+			<?php } ?>
+		</td>
+		<td>
+			Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente
+		</td>	
 	</tr>
 </table>
 <br>
+</div>
+
 <hr>
-<br>
-
-<?php } ?>
-
 <?php } ?>
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
@@ -2924,132 +3197,142 @@ $view_cav->RowType = EW_ROWTYPE_SEARCH;
 $view_cav->ResetAttrs();
 $view_cav_list->RenderRow();
 ?>
-
-
+<br>
 <table>
 	<tr>
-		<td><label for="x_USUARIO" class="ewSearchCaption ewLabel"><?php echo $view_cav->USUARIO->FldCaption() ?></label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_USUARIO" id="z_USUARIO" value="LIKE"></span></td>
+		<td>
+			<label for="x_USUARIO" class="ewSearchCaption ewLabel">Apoyo zonal</label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_USUARIO" id="z_USUARIO" value="LIKE"></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-		<input type="text" data-field="x_USUARIO" name="x_USUARIO" id="x_USUARIO" size="35" placeholder="<?php echo ew_HtmlEncode($view_cav->USUARIO->PlaceHolder) ?>" value="<?php echo $view_cav->USUARIO->EditValue ?>"<?php echo $view_cav->USUARIO->EditAttributes() ?>>
-		</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_USUARIO" id="x_USUARIO" name="x_USUARIO"<?php echo $view_cav->USUARIO->EditAttributes() ?>>
+				<?php
+				if (is_array($view_cav->USUARIO->EditValue)) {
+					$arwrk = $view_cav->USUARIO->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($view_cav->USUARIO->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fview_cavlistsrch.Lists["x_USUARIO"].Options = <?php echo (is_array($view_cav->USUARIO->EditValue)) ? ew_ArrayToJson($view_cav->USUARIO->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<label for="x_NOM_PE" class="ewSearchCaption ewLabel">Punto</label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_PE" id="z_NOM_PE" value="LIKE"></span>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_NOM_PE" id="x_NOM_PE" name="x_NOM_PE"<?php echo $view_cav->NOM_PE->EditAttributes() ?>>
+				<?php
+				if (is_array($view_cav->NOM_PE->EditValue)) {
+					$arwrk = $view_cav->NOM_PE->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($view_cav->NOM_PE->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fview_cavlistsrch.Lists["x_NOM_PE"].Options = <?php echo (is_array($view_cav->NOM_PE->EditValue)) ? ew_ArrayToJson($view_cav->NOM_PE->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
 	</tr>
 	<tr>
-		<td><label for="x_NOM_APOYO" class="ewSearchCaption ewLabel">NOMBRE APOYO ZONAL</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_APOYO" id="z_NOM_APOYO" value="LIKE"></span></td>
+		<td>
+			<label for="x_AD1O" class="ewSearchCaption ewLabel">AÑO</label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_AD1O" id="z_AD1O" value="LIKE"></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-		<input type="text" data-field="x_NOM_APOYO" name="x_NOM_APOYO" id="x_NOM_APOYO" size="35" placeholder="<?php echo ew_HtmlEncode($view_cav->NOM_APOYO->PlaceHolder) ?>" value="<?php echo $view_cav->NOM_APOYO->EditValue ?>"<?php echo $view_cav->NOM_APOYO->EditAttributes() ?>>
-		</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_AD1O" id="x_AD1O" name="x_AD1O"<?php echo $view_cav->AD1O->EditAttributes() ?>>
+				<?php
+				if (is_array($view_cav->AD1O->EditValue)) {
+					$arwrk = $view_cav->AD1O->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($view_cav->AD1O->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fview_cavlistsrch.Lists["x_AD1O"].Options = <?php echo (is_array($view_cav->AD1O->EditValue)) ? ew_ArrayToJson($view_cav->AD1O->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
 	</tr>
 	<tr>
-		<td><label for="x_NOM_PE" class="ewSearchCaption ewLabel">PUNTO DE ERRADICACIÓN</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_PE" id="z_NOM_PE" value="LIKE"></span></td>
+		<td>
+			<label for="x_FASE" class="ewSearchCaption ewLabel"><?php echo $view_cav->FASE->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_FASE" id="z_FASE" value="LIKE"></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-		<input type="text" data-field="x_NOM_PE" name="x_NOM_PE" id="x_NOM_PE" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view_cav->NOM_PE->PlaceHolder) ?>" value="<?php echo $view_cav->NOM_PE->EditValue ?>"<?php echo $view_cav->NOM_PE->EditAttributes() ?>>
-		</span></td>
-	</tr>
-	<tr>
-		<td><label for="x_AD1O" class="ewSearchCaption ewLabel">AÑO</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_AD1O" id="z_AD1O" value="LIKE"></span></td>
-		<td width="5%"></td>
-		<td><span class="ewSearchField">
-		<input type="text" title="Últimos dos dígitos del año" data-field="x_AD1O" name="x_AD1O" id="x_AD1O" size="30" maxlength="2" placeholder="AÑO" value="<?php echo $view_cav->AD1O->EditValue ?>"<?php echo $view_cav->AD1O->EditAttributes() ?>>
-		</span></td>
-	</tr>
-	<tr>
-		<td><label for="x_FASE" class="ewSearchCaption ewLabel"><?php echo $view_cav->FASE->FldCaption() ?></label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_FASE" id="z_FASE" value="LIKE"></span></td>
-		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_FASE" name="x_FASE" id="x_FASE" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($view_cav->FASE->PlaceHolder) ?>" value="<?php echo $view_cav->FASE->EditValue ?>"<?php echo $view_cav->FASE->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_FASE" id="x_FASE" name="x_FASE"<?php echo $view_cav->FASE->EditAttributes() ?>>
+				<?php
+				if (is_array($view_cav->FASE->EditValue)) {
+					$arwrk = $view_cav->FASE->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($view_cav->FASE->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fview_cavlistsrch.Lists["x_FASE"].Options = <?php echo (is_array($view_cav->FASE->EditValue)) ? ew_ArrayToJson($view_cav->FASE->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
 	</tr>
 </table>
-
-<br>
-
-<?php if ($view_cav->USUARIO->Visible) { // USUARIO ?>
-
-
-
-
-
-
-
-<?php } ?>
-
-
-<?php if ($view_cav->NOM_APOYO->Visible) { // NOM_APOYO ?>
-
-
-
-
-
-
-
-<?php } ?>
-
-
-<?php if ($view_cav->NOM_PE->Visible) { // NOM_PE ?>
-
-
-
-
-
-
-
-<?php } ?>
-
-
-<?php if ($view_cav->AD1O->Visible) { // AÑO ?>
-
-
-
-
-
-
-
-<?php } ?>
-
-
-<?php if ($view_cav->FASE->Visible) { // FASE ?>
-
-
-
-
-
-
-
-<?php } ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-
-
-
-
-<br>
-<br>
-<hr>
 
 	</div>
 </div>
-
 </form>
 <?php } ?>
 <?php } ?>
@@ -3162,7 +3445,7 @@ $view_cav_list->ListOptions->Render("header", "left");
 		<th data-name="USUARIO"><div id="elh_view_cav_USUARIO" class="view_cav_USUARIO"><div class="ewTableHeaderCaption"><?php echo $view_cav->USUARIO->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="USUARIO"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_cav->SortUrl($view_cav->USUARIO) ?>',2);"><div id="elh_view_cav_USUARIO" class="view_cav_USUARIO">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_cav->USUARIO->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view_cav->USUARIO->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_cav->USUARIO->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_cav->USUARIO->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view_cav->USUARIO->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_cav->USUARIO->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3189,7 +3472,7 @@ $view_cav_list->ListOptions->Render("header", "left");
 		<th data-name="NOM_APOYO"><div id="elh_view_cav_NOM_APOYO" class="view_cav_NOM_APOYO"><div class="ewTableHeaderCaption"><?php echo $view_cav->NOM_APOYO->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="NOM_APOYO"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_cav->SortUrl($view_cav->NOM_APOYO) ?>',2);"><div id="elh_view_cav_NOM_APOYO" class="view_cav_NOM_APOYO">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_cav->NOM_APOYO->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view_cav->NOM_APOYO->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_cav->NOM_APOYO->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_cav->NOM_APOYO->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view_cav->NOM_APOYO->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_cav->NOM_APOYO->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3216,7 +3499,7 @@ $view_cav_list->ListOptions->Render("header", "left");
 		<th data-name="NOM_PE"><div id="elh_view_cav_NOM_PE" class="view_cav_NOM_PE"><div class="ewTableHeaderCaption"><?php echo $view_cav->NOM_PE->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="NOM_PE"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_cav->SortUrl($view_cav->NOM_PE) ?>',2);"><div id="elh_view_cav_NOM_PE" class="view_cav_NOM_PE">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_cav->NOM_PE->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view_cav->NOM_PE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_cav->NOM_PE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_cav->NOM_PE->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view_cav->NOM_PE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_cav->NOM_PE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3531,7 +3814,7 @@ $view_cav_list->ListOptions->Render("header", "left");
 		<th data-name="AD1O"><div id="elh_view_cav_AD1O" class="view_cav_AD1O"><div class="ewTableHeaderCaption"><?php echo $view_cav->AD1O->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="AD1O"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_cav->SortUrl($view_cav->AD1O) ?>',2);"><div id="elh_view_cav_AD1O" class="view_cav_AD1O">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_cav->AD1O->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view_cav->AD1O->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_cav->AD1O->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_cav->AD1O->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view_cav->AD1O->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_cav->AD1O->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3540,7 +3823,7 @@ $view_cav_list->ListOptions->Render("header", "left");
 		<th data-name="FASE"><div id="elh_view_cav_FASE" class="view_cav_FASE"><div class="ewTableHeaderCaption"><?php echo $view_cav->FASE->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="FASE"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_cav->SortUrl($view_cav->FASE) ?>',2);"><div id="elh_view_cav_FASE" class="view_cav_FASE">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_cav->FASE->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view_cav->FASE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_cav->FASE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_cav->FASE->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view_cav->FASE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_cav->FASE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		

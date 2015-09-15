@@ -690,8 +690,9 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$this->BuildSearchSql($sWhere, $this->NOM_PE, $Default, FALSE); // NOM_PE
 		$this->BuildSearchSql($sWhere, $this->Otro_Nom_PE, $Default, FALSE); // Otro_Nom_PE
 		$this->BuildSearchSql($sWhere, $this->Muncipio, $Default, FALSE); // Muncipio
-		$this->BuildSearchSql($sWhere, $this->Departamento, $Default, FALSE); // Departamento
+		$this->BuildSearchSql($sWhere, $this->departamento, $Default, FALSE); // departamento
 		$this->BuildSearchSql($sWhere, $this->Modificado, $Default, FALSE); // Modificado
+		$this->BuildSearchSql($sWhere, $this->llave_2, $Default, FALSE); // llave_2
 
 		// Set up search parm
 		if (!$Default && $sWhere <> "") {
@@ -706,8 +707,9 @@ class cview_e_y_n_list extends cview_e_y_n {
 			$this->NOM_PE->AdvancedSearch->Save(); // NOM_PE
 			$this->Otro_Nom_PE->AdvancedSearch->Save(); // Otro_Nom_PE
 			$this->Muncipio->AdvancedSearch->Save(); // Muncipio
-			$this->Departamento->AdvancedSearch->Save(); // Departamento
+			$this->departamento->AdvancedSearch->Save(); // departamento
 			$this->Modificado->AdvancedSearch->Save(); // Modificado
+			$this->llave_2->AdvancedSearch->Save(); // llave_2
 		}
 		return $sWhere;
 	}
@@ -772,8 +774,9 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$this->BuildBasicSearchSQL($sWhere, $this->NOM_PE, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->Otro_Nom_PE, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->Muncipio, $arKeywords, $type);
-		$this->BuildBasicSearchSQL($sWhere, $this->Departamento, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->departamento, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->Modificado, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->llave_2, $arKeywords, $type);
 		return $sWhere;
 	}
 
@@ -904,9 +907,11 @@ class cview_e_y_n_list extends cview_e_y_n {
 			return TRUE;
 		if ($this->Muncipio->AdvancedSearch->IssetSession())
 			return TRUE;
-		if ($this->Departamento->AdvancedSearch->IssetSession())
+		if ($this->departamento->AdvancedSearch->IssetSession())
 			return TRUE;
 		if ($this->Modificado->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->llave_2->AdvancedSearch->IssetSession())
 			return TRUE;
 		return FALSE;
 	}
@@ -945,8 +950,9 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$this->NOM_PE->AdvancedSearch->UnsetSession();
 		$this->Otro_Nom_PE->AdvancedSearch->UnsetSession();
 		$this->Muncipio->AdvancedSearch->UnsetSession();
-		$this->Departamento->AdvancedSearch->UnsetSession();
+		$this->departamento->AdvancedSearch->UnsetSession();
 		$this->Modificado->AdvancedSearch->UnsetSession();
+		$this->llave_2->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
@@ -965,8 +971,9 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$this->NOM_PE->AdvancedSearch->Load();
 		$this->Otro_Nom_PE->AdvancedSearch->Load();
 		$this->Muncipio->AdvancedSearch->Load();
-		$this->Departamento->AdvancedSearch->Load();
+		$this->departamento->AdvancedSearch->Load();
 		$this->Modificado->AdvancedSearch->Load();
+		$this->llave_2->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -1007,9 +1014,9 @@ class cview_e_y_n_list extends cview_e_y_n {
 			$this->UpdateSort($this->Otro_Nom_Capata, $bCtrl); // Otro_Nom_Capata
 			$this->UpdateSort($this->Otro_CC_Capata, $bCtrl); // Otro_CC_Capata
 			$this->UpdateSort($this->Muncipio, $bCtrl); // Muncipio
-			$this->UpdateSort($this->Departamento, $bCtrl); // Departamento
 			$this->UpdateSort($this->F_llegada, $bCtrl); // F_llegada
 			$this->UpdateSort($this->Fecha, $bCtrl); // Fecha
+			$this->UpdateSort($this->departamento, $bCtrl); // departamento
 			$this->UpdateSort($this->Modificado, $bCtrl); // Modificado
 			$this->setStartRecordNumber(1); // Reset start position
 		}
@@ -1071,9 +1078,9 @@ class cview_e_y_n_list extends cview_e_y_n {
 				$this->Otro_Nom_Capata->setSort("");
 				$this->Otro_CC_Capata->setSort("");
 				$this->Muncipio->setSort("");
-				$this->Departamento->setSort("");
 				$this->F_llegada->setSort("");
 				$this->Fecha->setSort("");
+				$this->departamento->setSort("");
 				$this->Modificado->setSort("");
 			}
 
@@ -1383,15 +1390,20 @@ class cview_e_y_n_list extends cview_e_y_n {
 		if ($this->Muncipio->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->Muncipio->AdvancedSearch->SearchOperator = @$_GET["z_Muncipio"];
 
-		// Departamento
-		$this->Departamento->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Departamento"]);
-		if ($this->Departamento->AdvancedSearch->SearchValue <> "") $this->Command = "search";
-		$this->Departamento->AdvancedSearch->SearchOperator = @$_GET["z_Departamento"];
+		// departamento
+		$this->departamento->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_departamento"]);
+		if ($this->departamento->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->departamento->AdvancedSearch->SearchOperator = @$_GET["z_departamento"];
 
 		// Modificado
 		$this->Modificado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Modificado"]);
 		if ($this->Modificado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->Modificado->AdvancedSearch->SearchOperator = @$_GET["z_Modificado"];
+
+		// llave_2
+		$this->llave_2->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_llave_2"]);
+		if ($this->llave_2->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->llave_2->AdvancedSearch->SearchOperator = @$_GET["z_llave_2"];
 	}
 
 	// Load recordset
@@ -1468,9 +1480,9 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$this->Otro_Nom_Capata->setDbValue($rs->fields('Otro_Nom_Capata'));
 		$this->Otro_CC_Capata->setDbValue($rs->fields('Otro_CC_Capata'));
 		$this->Muncipio->setDbValue($rs->fields('Muncipio'));
-		$this->Departamento->setDbValue($rs->fields('Departamento'));
 		$this->F_llegada->setDbValue($rs->fields('F_llegada'));
 		$this->Fecha->setDbValue($rs->fields('Fecha'));
+		$this->departamento->setDbValue($rs->fields('departamento'));
 		$this->Modificado->setDbValue($rs->fields('Modificado'));
 		$this->llave_2->setDbValue($rs->fields('llave_2'));
 	}
@@ -1507,9 +1519,9 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$this->Otro_Nom_Capata->DbValue = $row['Otro_Nom_Capata'];
 		$this->Otro_CC_Capata->DbValue = $row['Otro_CC_Capata'];
 		$this->Muncipio->DbValue = $row['Muncipio'];
-		$this->Departamento->DbValue = $row['Departamento'];
 		$this->F_llegada->DbValue = $row['F_llegada'];
 		$this->Fecha->DbValue = $row['Fecha'];
+		$this->departamento->DbValue = $row['departamento'];
 		$this->Modificado->DbValue = $row['Modificado'];
 		$this->llave_2->DbValue = $row['llave_2'];
 	}
@@ -1581,13 +1593,12 @@ class cview_e_y_n_list extends cview_e_y_n {
 		// Otro_Nom_Capata
 		// Otro_CC_Capata
 		// Muncipio
-		// Departamento
 		// F_llegada
 		// Fecha
+		// departamento
 		// Modificado
 		// llave_2
 
-		$this->llave_2->CellCssStyle = "white-space: nowrap;";
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 			// ID_Formulario
@@ -1600,7 +1611,36 @@ class cview_e_y_n_list extends cview_e_y_n {
 			$this->F_Sincron->ViewCustomAttributes = "";
 
 			// USUARIO
-			$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+			if (strval($this->USUARIO->CurrentValue) <> "") {
+				$sFilterWrk = "`USUARIO`" . ew_SearchString("=", $this->USUARIO->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->USUARIO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `USUARIO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->USUARIO->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+				}
+			} else {
+				$this->USUARIO->ViewValue = NULL;
+			}
 			$this->USUARIO->ViewCustomAttributes = "";
 
 			// Cargo_gme
@@ -1608,7 +1648,36 @@ class cview_e_y_n_list extends cview_e_y_n {
 			$this->Cargo_gme->ViewCustomAttributes = "";
 
 			// NOM_GE
-			$this->NOM_GE->ViewValue = $this->NOM_GE->CurrentValue;
+			if (strval($this->NOM_GE->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_GE`" . ew_SearchString("=", $this->NOM_GE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_GE`, `NOM_GE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_GE`, `NOM_GE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_GE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_GE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_GE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_GE->ViewValue = $this->NOM_GE->CurrentValue;
+				}
+			} else {
+				$this->NOM_GE->ViewValue = NULL;
+			}
 			$this->NOM_GE->ViewCustomAttributes = "";
 
 			// Otro_PGE
@@ -1680,7 +1749,36 @@ class cview_e_y_n_list extends cview_e_y_n {
 			$this->OBS_EVA->ViewCustomAttributes = "";
 
 			// NOM_PE
-			$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+			if (strval($this->NOM_PE->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_PE`" . ew_SearchString("=", $this->NOM_PE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_PE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+				}
+			} else {
+				$this->NOM_PE->ViewValue = NULL;
+			}
 			$this->NOM_PE->ViewCustomAttributes = "";
 
 			// Otro_Nom_PE
@@ -1703,10 +1801,6 @@ class cview_e_y_n_list extends cview_e_y_n {
 			$this->Muncipio->ViewValue = $this->Muncipio->CurrentValue;
 			$this->Muncipio->ViewCustomAttributes = "";
 
-			// Departamento
-			$this->Departamento->ViewValue = $this->Departamento->CurrentValue;
-			$this->Departamento->ViewCustomAttributes = "";
-
 			// F_llegada
 			$this->F_llegada->ViewValue = $this->F_llegada->CurrentValue;
 			$this->F_llegada->ViewCustomAttributes = "";
@@ -1714,6 +1808,10 @@ class cview_e_y_n_list extends cview_e_y_n {
 			// Fecha
 			$this->Fecha->ViewValue = $this->Fecha->CurrentValue;
 			$this->Fecha->ViewCustomAttributes = "";
+
+			// departamento
+			$this->departamento->ViewValue = $this->departamento->CurrentValue;
+			$this->departamento->ViewCustomAttributes = "";
 
 			// Modificado
 			$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
@@ -1859,11 +1957,6 @@ class cview_e_y_n_list extends cview_e_y_n {
 			$this->Muncipio->HrefValue = "";
 			$this->Muncipio->TooltipValue = "";
 
-			// Departamento
-			$this->Departamento->LinkCustomAttributes = "";
-			$this->Departamento->HrefValue = "";
-			$this->Departamento->TooltipValue = "";
-
 			// F_llegada
 			$this->F_llegada->LinkCustomAttributes = "";
 			$this->F_llegada->HrefValue = "";
@@ -1873,6 +1966,11 @@ class cview_e_y_n_list extends cview_e_y_n {
 			$this->Fecha->LinkCustomAttributes = "";
 			$this->Fecha->HrefValue = "";
 			$this->Fecha->TooltipValue = "";
+
+			// departamento
+			$this->departamento->LinkCustomAttributes = "";
+			$this->departamento->HrefValue = "";
+			$this->departamento->TooltipValue = "";
 
 			// Modificado
 			$this->Modificado->LinkCustomAttributes = "";
@@ -1895,8 +1993,30 @@ class cview_e_y_n_list extends cview_e_y_n {
 			// USUARIO
 			$this->USUARIO->EditAttrs["class"] = "form-control";
 			$this->USUARIO->EditCustomAttributes = "";
-			$this->USUARIO->EditValue = ew_HtmlEncode($this->USUARIO->AdvancedSearch->SearchValue);
-			$this->USUARIO->PlaceHolder = ew_RemoveHtml($this->USUARIO->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->USUARIO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `USUARIO` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->USUARIO->EditValue = $arwrk;
 
 			// Cargo_gme
 			$this->Cargo_gme->EditAttrs["class"] = "form-control";
@@ -1907,8 +2027,30 @@ class cview_e_y_n_list extends cview_e_y_n {
 			// NOM_GE
 			$this->NOM_GE->EditAttrs["class"] = "form-control";
 			$this->NOM_GE->EditCustomAttributes = "";
-			$this->NOM_GE->EditValue = ew_HtmlEncode($this->NOM_GE->AdvancedSearch->SearchValue);
-			$this->NOM_GE->PlaceHolder = ew_RemoveHtml($this->NOM_GE->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_GE`, `NOM_GE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_GE`, `NOM_GE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_GE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_GE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->NOM_GE->EditValue = $arwrk;
 
 			// Otro_PGE
 			$this->Otro_PGE->EditAttrs["class"] = "form-control";
@@ -2015,8 +2157,30 @@ class cview_e_y_n_list extends cview_e_y_n {
 			// NOM_PE
 			$this->NOM_PE->EditAttrs["class"] = "form-control";
 			$this->NOM_PE->EditCustomAttributes = "";
-			$this->NOM_PE->EditValue = ew_HtmlEncode($this->NOM_PE->AdvancedSearch->SearchValue);
-			$this->NOM_PE->PlaceHolder = ew_RemoveHtml($this->NOM_PE->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view_e_y_n`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->NOM_PE->EditValue = $arwrk;
 
 			// Otro_Nom_PE
 			$this->Otro_Nom_PE->EditAttrs["class"] = "form-control";
@@ -2048,12 +2212,6 @@ class cview_e_y_n_list extends cview_e_y_n {
 			$this->Muncipio->EditValue = ew_HtmlEncode($this->Muncipio->AdvancedSearch->SearchValue);
 			$this->Muncipio->PlaceHolder = ew_RemoveHtml($this->Muncipio->FldCaption());
 
-			// Departamento
-			$this->Departamento->EditAttrs["class"] = "form-control";
-			$this->Departamento->EditCustomAttributes = "";
-			$this->Departamento->EditValue = ew_HtmlEncode($this->Departamento->AdvancedSearch->SearchValue);
-			$this->Departamento->PlaceHolder = ew_RemoveHtml($this->Departamento->FldCaption());
-
 			// F_llegada
 			$this->F_llegada->EditAttrs["class"] = "form-control";
 			$this->F_llegada->EditCustomAttributes = "";
@@ -2065,6 +2223,12 @@ class cview_e_y_n_list extends cview_e_y_n {
 			$this->Fecha->EditCustomAttributes = "";
 			$this->Fecha->EditValue = ew_HtmlEncode($this->Fecha->AdvancedSearch->SearchValue);
 			$this->Fecha->PlaceHolder = ew_RemoveHtml($this->Fecha->FldCaption());
+
+			// departamento
+			$this->departamento->EditAttrs["class"] = "form-control";
+			$this->departamento->EditCustomAttributes = "";
+			$this->departamento->EditValue = ew_HtmlEncode($this->departamento->AdvancedSearch->SearchValue);
+			$this->departamento->PlaceHolder = ew_RemoveHtml($this->departamento->FldCaption());
 
 			// Modificado
 			$this->Modificado->EditAttrs["class"] = "form-control";
@@ -2116,8 +2280,9 @@ class cview_e_y_n_list extends cview_e_y_n {
 		$this->NOM_PE->AdvancedSearch->Load();
 		$this->Otro_Nom_PE->AdvancedSearch->Load();
 		$this->Muncipio->AdvancedSearch->Load();
-		$this->Departamento->AdvancedSearch->Load();
+		$this->departamento->AdvancedSearch->Load();
 		$this->Modificado->AdvancedSearch->Load();
+		$this->llave_2->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -2439,8 +2604,11 @@ fview_e_y_nlist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fview_e_y_nlist.Lists["x_USUARIO"] = {"LinkField":"x_USUARIO","Ajax":null,"AutoFill":false,"DisplayFields":["x_USUARIO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_e_y_nlist.Lists["x_NOM_GE"] = {"LinkField":"x_NOM_GE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_GE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_e_y_nlist.Lists["x_NOM_PE"] = {"LinkField":"x_NOM_PE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 var fview_e_y_nlistsrch = new ew_Form("fview_e_y_nlistsrch");
 
 // Validate function for search
@@ -2476,6 +2644,9 @@ fview_e_y_nlistsrch.ValidateRequired = false; // No JavaScript validation
 <?php } ?>
 
 // Dynamic selection lists
+fview_e_y_nlistsrch.Lists["x_USUARIO"] = {"LinkField":"x_USUARIO","Ajax":null,"AutoFill":false,"DisplayFields":["x_USUARIO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_e_y_nlistsrch.Lists["x_NOM_GE"] = {"LinkField":"x_NOM_GE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_GE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview_e_y_nlistsrch.Lists["x_NOM_PE"] = {"LinkField":"x_NOM_PE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 </script>
 <script type="text/javascript">
 
@@ -2487,55 +2658,55 @@ fview_e_y_nlistsrch.ValidateRequired = false; // No JavaScript validation
 <?php if ($view_e_y_n->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-<?php if ($view_e_y_n_list->TotalRecs > 0 && $view_e_y_n_list->ExportOptions->Visible()) { ?>
-<?php $view_e_y_n_list->ExportOptions->Render("body") ?>
+<?php if ($view_e_y_n->Export == "") { ?>
+<?php echo $Language->SelectionForm(); ?>
 <?php } ?>
-
-
-
+<div class="clearfix"></div>
+</div>
+<?php } ?>
+<div class="ewToolbar">
 <H2> Informe de Enlace y Novedad</h2>
-
 <p>La siguiente tabla contiene los informes de Enlace y Novedad realizados desde la fase II de erradicación 2015 a la fecha</p>
 
 <hr>
-
 <table>
 	<tr>
-		<td><?php if ($view_e_y_n_list->TotalRecs > 0 && $view_e_y_n_list->ExportOptions->Visible()) { ?>
-		<?php $view_e_y_n_list->ExportOptions->Render("body") ?></td>
-		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono</td>	
-	</tr>
-</table>
+		<td>
+			<?php if ($view_e_y_n_list->TotalRecs > 0 && $view_e_y_n_list->ExportOptions->Visible()) { ?>
+
+			<?php $view_e_y_n_list->ExportOptions->Render("body") ?>
+			<?php } ?>
+
+		</td>
+		<td>
+			Si desea exportar la tabla en formato excel haga click en el siguiente icono 
+		</td>	
+	</tr>	
+</table> 
 
 <hr>
-
-<?php } ?>
-<?php if ($view_e_y_n->Export == "") { ?>
-
-
-
-<?php } ?>
-
-
 
 </div>
+<?php if ($view_e_y_n->Export == "") { ?>
 
+<div>
 <br>
-
 <table>
 	<tr>
-		<td><?php if ($view_e_y_n_list->SearchOptions->Visible()) { ?>
-		<?php $view_e_y_n_list->SearchOptions->Render("body") ?></td>
-		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente </td>
+		<td>
+			<?php if ($view_e_y_n_list->SearchOptions->Visible()) { ?>
+			<?php $view_e_y_n_list->SearchOptions->Render("body") ?>
+			<?php } ?>
+		</td>
+		<td>
+			Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente
+		</td>	
 	</tr>
 </table>
-
 <br>
+</div>
+
 <hr>
-<br>
-
-<?php } ?>
-
 <?php } ?>
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
@@ -2585,135 +2756,107 @@ $view_e_y_n->ResetAttrs();
 $view_e_y_n_list->RenderRow();
 ?>
 
-
-
 <br>
-
 <table>
 	<tr>
-		<td><label for="x_USUARIO" class="ewSearchCaption ewLabel"><?php echo $view_e_y_n->USUARIO->FldCaption() ?></label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_USUARIO" id="z_USUARIO" value="LIKE"></span></td>
+		<td>
+			<label for="x_USUARIO" class="ewSearchCaption ewLabel"><?php echo $view_e_y_n->USUARIO->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_USUARIO" id="z_USUARIO" value="LIKE"></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_USUARIO" name="x_USUARIO" id="x_USUARIO" size="35" placeholder="<?php echo ew_HtmlEncode($view_e_y_n->USUARIO->PlaceHolder) ?>" value="<?php echo $view_e_y_n->USUARIO->EditValue ?>"<?php echo $view_e_y_n->USUARIO->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_USUARIO" id="x_USUARIO" name="x_USUARIO"<?php echo $view_e_y_n->USUARIO->EditAttributes() ?>>
+<?php
+if (is_array($view_e_y_n->USUARIO->EditValue)) {
+	$arwrk = $view_e_y_n->USUARIO->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_e_y_n->USUARIO->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview_e_y_nlistsrch.Lists["x_USUARIO"].Options = <?php echo (is_array($view_e_y_n->USUARIO->EditValue)) ? ew_ArrayToJson($view_e_y_n->USUARIO->EditValue, 1) : "[]" ?>;
+</script>
+			</span>
+		</td>
 	</tr>
 	<tr>
-		<td><label for="x_NOM_GE" class="ewSearchCaption ewLabel">NOMBRE PROFESIONAL ESPECIALIZADO</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_GE" id="z_NOM_GE" value="LIKE"></span></td>
+		<td>
+			<label for="x_NOM_GE" class="ewSearchCaption ewLabel"><?php echo $view_e_y_n->NOM_GE->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_GE" id="z_NOM_GE" value="LIKE"></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_NOM_GE" name="x_NOM_GE" id="x_NOM_GE" size="35" placeholder="<?php echo ew_HtmlEncode($view_e_y_n->NOM_GE->PlaceHolder) ?>" value="<?php echo $view_e_y_n->NOM_GE->EditValue ?>"<?php echo $view_e_y_n->NOM_GE->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_NOM_GE" id="x_NOM_GE" name="x_NOM_GE"<?php echo $view_e_y_n->NOM_GE->EditAttributes() ?>>
+<?php
+if (is_array($view_e_y_n->NOM_GE->EditValue)) {
+	$arwrk = $view_e_y_n->NOM_GE->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_e_y_n->NOM_GE->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview_e_y_nlistsrch.Lists["x_NOM_GE"].Options = <?php echo (is_array($view_e_y_n->NOM_GE->EditValue)) ? ew_ArrayToJson($view_e_y_n->NOM_GE->EditValue, 1) : "[]" ?>;
+</script>
+			</span>
+		</td>
 	</tr>
 	<tr>
-		<td><label for="x_NOM_PE" class="ewSearchCaption ewLabel">PUNTO DE ERRADICACIÓN</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_PE" id="z_NOM_PE" value="LIKE"></span></td>
+		<td>
+			<label for="x_NOM_PE" class="ewSearchCaption ewLabel"><?php echo $view_e_y_n->NOM_PE->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_PE" id="z_NOM_PE" value="LIKE"></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_NOM_PE" name="x_NOM_PE" id="x_NOM_PE" size="35" placeholder="<?php echo ew_HtmlEncode($view_e_y_n->NOM_PE->PlaceHolder) ?>" value="<?php echo $view_e_y_n->NOM_PE->EditValue ?>"<?php echo $view_e_y_n->NOM_PE->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_NOM_PE" id="x_NOM_PE" name="x_NOM_PE"<?php echo $view_e_y_n->NOM_PE->EditAttributes() ?>>
+<?php
+if (is_array($view_e_y_n->NOM_PE->EditValue)) {
+	$arwrk = $view_e_y_n->NOM_PE->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_e_y_n->NOM_PE->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview_e_y_nlistsrch.Lists["x_NOM_PE"].Options = <?php echo (is_array($view_e_y_n->NOM_PE->EditValue)) ? ew_ArrayToJson($view_e_y_n->NOM_PE->EditValue, 1) : "[]" ?>;
+</script>
+			</span>
+		</td>
 	</tr>
+	
 </table>
-
-<br>
-
 <button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-
-<?php if ($view_e_y_n->USUARIO->Visible) { // USUARIO ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<?php } ?>
-
-
-
-
-<?php if ($view_e_y_n->NOM_GE->Visible) { // NOM_GE ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<?php } ?>
-
-
-
-
-<?php if ($view_e_y_n->NOM_PE->Visible) { // NOM_PE ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<?php } ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<br>
-<br>
-<hr>
 
 
 	</div>
@@ -2830,7 +2973,7 @@ $view_e_y_n_list->ListOptions->Render("header", "left");
 		<th data-name="USUARIO"><div id="elh_view_e_y_n_USUARIO" class="view_e_y_n_USUARIO"><div class="ewTableHeaderCaption"><?php echo $view_e_y_n->USUARIO->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="USUARIO"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_e_y_n->SortUrl($view_e_y_n->USUARIO) ?>',2);"><div id="elh_view_e_y_n_USUARIO" class="view_e_y_n_USUARIO">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_e_y_n->USUARIO->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view_e_y_n->USUARIO->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_e_y_n->USUARIO->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_e_y_n->USUARIO->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view_e_y_n->USUARIO->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_e_y_n->USUARIO->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -2848,7 +2991,7 @@ $view_e_y_n_list->ListOptions->Render("header", "left");
 		<th data-name="NOM_GE"><div id="elh_view_e_y_n_NOM_GE" class="view_e_y_n_NOM_GE"><div class="ewTableHeaderCaption"><?php echo $view_e_y_n->NOM_GE->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="NOM_GE"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_e_y_n->SortUrl($view_e_y_n->NOM_GE) ?>',2);"><div id="elh_view_e_y_n_NOM_GE" class="view_e_y_n_NOM_GE">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_e_y_n->NOM_GE->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view_e_y_n->NOM_GE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_e_y_n->NOM_GE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_e_y_n->NOM_GE->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view_e_y_n->NOM_GE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_e_y_n->NOM_GE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3010,7 +3153,7 @@ $view_e_y_n_list->ListOptions->Render("header", "left");
 		<th data-name="NOM_PE"><div id="elh_view_e_y_n_NOM_PE" class="view_e_y_n_NOM_PE"><div class="ewTableHeaderCaption"><?php echo $view_e_y_n->NOM_PE->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="NOM_PE"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_e_y_n->SortUrl($view_e_y_n->NOM_PE) ?>',2);"><div id="elh_view_e_y_n_NOM_PE" class="view_e_y_n_NOM_PE">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_e_y_n->NOM_PE->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view_e_y_n->NOM_PE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_e_y_n->NOM_PE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_e_y_n->NOM_PE->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view_e_y_n->NOM_PE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_e_y_n->NOM_PE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3059,15 +3202,6 @@ $view_e_y_n_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
-<?php if ($view_e_y_n->Departamento->Visible) { // Departamento ?>
-	<?php if ($view_e_y_n->SortUrl($view_e_y_n->Departamento) == "") { ?>
-		<th data-name="Departamento"><div id="elh_view_e_y_n_Departamento" class="view_e_y_n_Departamento"><div class="ewTableHeaderCaption"><?php echo $view_e_y_n->Departamento->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="Departamento"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_e_y_n->SortUrl($view_e_y_n->Departamento) ?>',2);"><div id="elh_view_e_y_n_Departamento" class="view_e_y_n_Departamento">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_e_y_n->Departamento->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view_e_y_n->Departamento->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_e_y_n->Departamento->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
 <?php if ($view_e_y_n->F_llegada->Visible) { // F_llegada ?>
 	<?php if ($view_e_y_n->SortUrl($view_e_y_n->F_llegada) == "") { ?>
 		<th data-name="F_llegada"><div id="elh_view_e_y_n_F_llegada" class="view_e_y_n_F_llegada"><div class="ewTableHeaderCaption"><?php echo $view_e_y_n->F_llegada->FldCaption() ?></div></div></th>
@@ -3083,6 +3217,15 @@ $view_e_y_n_list->ListOptions->Render("header", "left");
 	<?php } else { ?>
 		<th data-name="Fecha"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_e_y_n->SortUrl($view_e_y_n->Fecha) ?>',2);"><div id="elh_view_e_y_n_Fecha" class="view_e_y_n_Fecha">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_e_y_n->Fecha->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view_e_y_n->Fecha->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_e_y_n->Fecha->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($view_e_y_n->departamento->Visible) { // departamento ?>
+	<?php if ($view_e_y_n->SortUrl($view_e_y_n->departamento) == "") { ?>
+		<th data-name="departamento"><div id="elh_view_e_y_n_departamento" class="view_e_y_n_departamento"><div class="ewTableHeaderCaption"><?php echo $view_e_y_n->departamento->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="departamento"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view_e_y_n->SortUrl($view_e_y_n->departamento) ?>',2);"><div id="elh_view_e_y_n_departamento" class="view_e_y_n_departamento">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view_e_y_n->departamento->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view_e_y_n->departamento->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view_e_y_n->departamento->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3328,12 +3471,6 @@ $view_e_y_n_list->ListOptions->Render("body", "left", $view_e_y_n_list->RowCnt);
 <?php echo $view_e_y_n->Muncipio->ListViewValue() ?></span>
 </td>
 	<?php } ?>
-	<?php if ($view_e_y_n->Departamento->Visible) { // Departamento ?>
-		<td data-name="Departamento"<?php echo $view_e_y_n->Departamento->CellAttributes() ?>>
-<span<?php echo $view_e_y_n->Departamento->ViewAttributes() ?>>
-<?php echo $view_e_y_n->Departamento->ListViewValue() ?></span>
-</td>
-	<?php } ?>
 	<?php if ($view_e_y_n->F_llegada->Visible) { // F_llegada ?>
 		<td data-name="F_llegada"<?php echo $view_e_y_n->F_llegada->CellAttributes() ?>>
 <span<?php echo $view_e_y_n->F_llegada->ViewAttributes() ?>>
@@ -3344,6 +3481,12 @@ $view_e_y_n_list->ListOptions->Render("body", "left", $view_e_y_n_list->RowCnt);
 		<td data-name="Fecha"<?php echo $view_e_y_n->Fecha->CellAttributes() ?>>
 <span<?php echo $view_e_y_n->Fecha->ViewAttributes() ?>>
 <?php echo $view_e_y_n->Fecha->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($view_e_y_n->departamento->Visible) { // departamento ?>
+		<td data-name="departamento"<?php echo $view_e_y_n->departamento->CellAttributes() ?>>
+<span<?php echo $view_e_y_n->departamento->ViewAttributes() ?>>
+<?php echo $view_e_y_n->departamento->ListViewValue() ?></span>
 </td>
 	<?php } ?>
 	<?php if ($view_e_y_n->Modificado->Visible) { // Modificado ?>

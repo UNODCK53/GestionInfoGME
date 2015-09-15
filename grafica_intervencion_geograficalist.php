@@ -674,6 +674,8 @@ class cgrafica_intervencion_geografica_list extends cgrafica_intervencion_geogra
 		$this->BuildSearchSql($sWhere, $this->Ha_Amapola, $Default, FALSE); // Ha_Amapola
 		$this->BuildSearchSql($sWhere, $this->Ha_Marihuana, $Default, FALSE); // Ha_Marihuana
 		$this->BuildSearchSql($sWhere, $this->Total_erradicado, $Default, FALSE); // Total_erradicado
+		$this->BuildSearchSql($sWhere, $this->aF1o, $Default, FALSE); // año
+		$this->BuildSearchSql($sWhere, $this->fase, $Default, FALSE); // fase
 
 		// Set up search parm
 		if (!$Default && $sWhere <> "") {
@@ -686,6 +688,8 @@ class cgrafica_intervencion_geografica_list extends cgrafica_intervencion_geogra
 			$this->Ha_Amapola->AdvancedSearch->Save(); // Ha_Amapola
 			$this->Ha_Marihuana->AdvancedSearch->Save(); // Ha_Marihuana
 			$this->Total_erradicado->AdvancedSearch->Save(); // Total_erradicado
+			$this->aF1o->AdvancedSearch->Save(); // año
+			$this->fase->AdvancedSearch->Save(); // fase
 		}
 		return $sWhere;
 	}
@@ -753,6 +757,10 @@ class cgrafica_intervencion_geografica_list extends cgrafica_intervencion_geogra
 			return TRUE;
 		if ($this->Total_erradicado->AdvancedSearch->IssetSession())
 			return TRUE;
+		if ($this->aF1o->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->fase->AdvancedSearch->IssetSession())
+			return TRUE;
 		return FALSE;
 	}
 
@@ -780,6 +788,8 @@ class cgrafica_intervencion_geografica_list extends cgrafica_intervencion_geogra
 		$this->Ha_Amapola->AdvancedSearch->UnsetSession();
 		$this->Ha_Marihuana->AdvancedSearch->UnsetSession();
 		$this->Total_erradicado->AdvancedSearch->UnsetSession();
+		$this->aF1o->AdvancedSearch->UnsetSession();
+		$this->fase->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
@@ -793,6 +803,8 @@ class cgrafica_intervencion_geografica_list extends cgrafica_intervencion_geogra
 		$this->Ha_Amapola->AdvancedSearch->Load();
 		$this->Ha_Marihuana->AdvancedSearch->Load();
 		$this->Total_erradicado->AdvancedSearch->Load();
+		$this->aF1o->AdvancedSearch->Load();
+		$this->fase->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -811,6 +823,8 @@ class cgrafica_intervencion_geografica_list extends cgrafica_intervencion_geogra
 			$this->UpdateSort($this->Ha_Amapola, $bCtrl); // Ha_Amapola
 			$this->UpdateSort($this->Ha_Marihuana, $bCtrl); // Ha_Marihuana
 			$this->UpdateSort($this->Total_erradicado, $bCtrl); // Total_erradicado
+			$this->UpdateSort($this->aF1o, $bCtrl); // año
+			$this->UpdateSort($this->fase, $bCtrl); // fase
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -849,6 +863,8 @@ class cgrafica_intervencion_geografica_list extends cgrafica_intervencion_geogra
 				$this->Ha_Amapola->setSort("");
 				$this->Ha_Marihuana->setSort("");
 				$this->Total_erradicado->setSort("");
+				$this->aF1o->setSort("");
+				$this->fase->setSort("");
 			}
 
 			// Reset start position
@@ -1111,6 +1127,16 @@ class cgrafica_intervencion_geografica_list extends cgrafica_intervencion_geogra
 		$this->Total_erradicado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Total_erradicado"]);
 		if ($this->Total_erradicado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->Total_erradicado->AdvancedSearch->SearchOperator = @$_GET["z_Total_erradicado"];
+
+		// año
+		$this->aF1o->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_aF1o"]);
+		if ($this->aF1o->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->aF1o->AdvancedSearch->SearchOperator = @$_GET["z_aF1o"];
+
+		// fase
+		$this->fase->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_fase"]);
+		if ($this->fase->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->fase->AdvancedSearch->SearchOperator = @$_GET["z_fase"];
 	}
 
 	// Load recordset
@@ -1165,6 +1191,8 @@ class cgrafica_intervencion_geografica_list extends cgrafica_intervencion_geogra
 		$this->Ha_Amapola->setDbValue($rs->fields('Ha_Amapola'));
 		$this->Ha_Marihuana->setDbValue($rs->fields('Ha_Marihuana'));
 		$this->Total_erradicado->setDbValue($rs->fields('Total_erradicado'));
+		$this->aF1o->setDbValue($rs->fields('año'));
+		$this->fase->setDbValue($rs->fields('fase'));
 	}
 
 	// Load DbValue from recordset
@@ -1177,6 +1205,8 @@ class cgrafica_intervencion_geografica_list extends cgrafica_intervencion_geogra
 		$this->Ha_Amapola->DbValue = $row['Ha_Amapola'];
 		$this->Ha_Marihuana->DbValue = $row['Ha_Marihuana'];
 		$this->Total_erradicado->DbValue = $row['Total_erradicado'];
+		$this->aF1o->DbValue = $row['año'];
+		$this->fase->DbValue = $row['fase'];
 	}
 
 	// Load old record
@@ -1236,15 +1266,75 @@ class cgrafica_intervencion_geografica_list extends cgrafica_intervencion_geogra
 		// Ha_Amapola
 		// Ha_Marihuana
 		// Total_erradicado
+		// año
+		// fase
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 			// Departamento
-			$this->Departamento->ViewValue = $this->Departamento->CurrentValue;
+			if (strval($this->Departamento->CurrentValue) <> "") {
+				$sFilterWrk = "`Departamento`" . ew_SearchString("=", $this->Departamento->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Departamento`, `Departamento` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Departamento`, `Departamento` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Departamento, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Departamento` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Departamento->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Departamento->ViewValue = $this->Departamento->CurrentValue;
+				}
+			} else {
+				$this->Departamento->ViewValue = NULL;
+			}
 			$this->Departamento->ViewCustomAttributes = "";
 
 			// Muncipio
-			$this->Muncipio->ViewValue = $this->Muncipio->CurrentValue;
+			if (strval($this->Muncipio->CurrentValue) <> "") {
+				$sFilterWrk = "`Muncipio`" . ew_SearchString("=", $this->Muncipio->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Muncipio`, `Muncipio` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Muncipio`, `Muncipio` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Muncipio, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Muncipio` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Muncipio->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Muncipio->ViewValue = $this->Muncipio->CurrentValue;
+				}
+			} else {
+				$this->Muncipio->ViewValue = NULL;
+			}
 			$this->Muncipio->ViewCustomAttributes = "";
 
 			// Ha_Coca
@@ -1262,6 +1352,72 @@ class cgrafica_intervencion_geografica_list extends cgrafica_intervencion_geogra
 			// Total_erradicado
 			$this->Total_erradicado->ViewValue = $this->Total_erradicado->CurrentValue;
 			$this->Total_erradicado->ViewCustomAttributes = "";
+
+			// año
+			if (strval($this->aF1o->CurrentValue) <> "") {
+				$sFilterWrk = "`año`" . ew_SearchString("=", $this->aF1o->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->aF1o, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `año` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->aF1o->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->aF1o->ViewValue = $this->aF1o->CurrentValue;
+				}
+			} else {
+				$this->aF1o->ViewValue = NULL;
+			}
+			$this->aF1o->ViewCustomAttributes = "";
+
+			// fase
+			if (strval($this->fase->CurrentValue) <> "") {
+				$sFilterWrk = "`fase`" . ew_SearchString("=", $this->fase->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->fase, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `fase`";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->fase->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->fase->ViewValue = $this->fase->CurrentValue;
+				}
+			} else {
+				$this->fase->ViewValue = NULL;
+			}
+			$this->fase->ViewCustomAttributes = "";
 
 			// Departamento
 			$this->Departamento->LinkCustomAttributes = "";
@@ -1292,19 +1448,73 @@ class cgrafica_intervencion_geografica_list extends cgrafica_intervencion_geogra
 			$this->Total_erradicado->LinkCustomAttributes = "";
 			$this->Total_erradicado->HrefValue = "";
 			$this->Total_erradicado->TooltipValue = "";
+
+			// año
+			$this->aF1o->LinkCustomAttributes = "";
+			$this->aF1o->HrefValue = "";
+			$this->aF1o->TooltipValue = "";
+
+			// fase
+			$this->fase->LinkCustomAttributes = "";
+			$this->fase->HrefValue = "";
+			$this->fase->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
 			// Departamento
 			$this->Departamento->EditAttrs["class"] = "form-control";
 			$this->Departamento->EditCustomAttributes = "";
-			$this->Departamento->EditValue = ew_HtmlEncode($this->Departamento->AdvancedSearch->SearchValue);
-			$this->Departamento->PlaceHolder = ew_RemoveHtml($this->Departamento->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Departamento`, `Departamento` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Departamento`, `Departamento` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Departamento, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Departamento` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Departamento->EditValue = $arwrk;
 
 			// Muncipio
 			$this->Muncipio->EditAttrs["class"] = "form-control";
 			$this->Muncipio->EditCustomAttributes = "";
-			$this->Muncipio->EditValue = ew_HtmlEncode($this->Muncipio->AdvancedSearch->SearchValue);
-			$this->Muncipio->PlaceHolder = ew_RemoveHtml($this->Muncipio->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Muncipio`, `Muncipio` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Muncipio`, `Muncipio` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Muncipio, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Muncipio` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Muncipio->EditValue = $arwrk;
 
 			// Ha_Coca
 			$this->Ha_Coca->EditAttrs["class"] = "form-control";
@@ -1329,6 +1539,62 @@ class cgrafica_intervencion_geografica_list extends cgrafica_intervencion_geogra
 			$this->Total_erradicado->EditCustomAttributes = "";
 			$this->Total_erradicado->EditValue = ew_HtmlEncode($this->Total_erradicado->AdvancedSearch->SearchValue);
 			$this->Total_erradicado->PlaceHolder = ew_RemoveHtml($this->Total_erradicado->FldCaption());
+
+			// año
+			$this->aF1o->EditAttrs["class"] = "form-control";
+			$this->aF1o->EditCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->aF1o, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `año` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->aF1o->EditValue = $arwrk;
+
+			// fase
+			$this->fase->EditAttrs["class"] = "form-control";
+			$this->fase->EditCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_intervencion_geografica`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->fase, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `fase`";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->fase->EditValue = $arwrk;
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -1372,6 +1638,8 @@ class cgrafica_intervencion_geografica_list extends cgrafica_intervencion_geogra
 		$this->Ha_Amapola->AdvancedSearch->Load();
 		$this->Ha_Marihuana->AdvancedSearch->Load();
 		$this->Total_erradicado->AdvancedSearch->Load();
+		$this->aF1o->AdvancedSearch->Load();
+		$this->fase->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -1693,8 +1961,12 @@ fgrafica_intervencion_geograficalist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fgrafica_intervencion_geograficalist.Lists["x_Departamento"] = {"LinkField":"x_Departamento","Ajax":null,"AutoFill":false,"DisplayFields":["x_Departamento","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_intervencion_geograficalist.Lists["x_Muncipio"] = {"LinkField":"x_Muncipio","Ajax":null,"AutoFill":false,"DisplayFields":["x_Muncipio","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_intervencion_geograficalist.Lists["x_aF1o"] = {"LinkField":"x_aF1o","Ajax":null,"AutoFill":false,"DisplayFields":["x_aF1o","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_intervencion_geograficalist.Lists["x_fase"] = {"LinkField":"x_fase","Ajax":null,"AutoFill":false,"DisplayFields":["x_fase","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 var fgrafica_intervencion_geograficalistsrch = new ew_Form("fgrafica_intervencion_geograficalistsrch");
 
 // Validate function for search
@@ -1730,6 +2002,10 @@ fgrafica_intervencion_geograficalistsrch.ValidateRequired = false; // No JavaScr
 <?php } ?>
 
 // Dynamic selection lists
+fgrafica_intervencion_geograficalistsrch.Lists["x_Departamento"] = {"LinkField":"x_Departamento","Ajax":null,"AutoFill":false,"DisplayFields":["x_Departamento","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_intervencion_geograficalistsrch.Lists["x_Muncipio"] = {"LinkField":"x_Muncipio","Ajax":null,"AutoFill":false,"DisplayFields":["x_Muncipio","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_intervencion_geograficalistsrch.Lists["x_aF1o"] = {"LinkField":"x_aF1o","Ajax":null,"AutoFill":false,"DisplayFields":["x_aF1o","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_intervencion_geograficalistsrch.Lists["x_fase"] = {"LinkField":"x_fase","Ajax":null,"AutoFill":false,"DisplayFields":["x_fase","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 </script>
 <script type="text/javascript">
 
@@ -1742,25 +2018,24 @@ fgrafica_intervencion_geograficalistsrch.ValidateRequired = false; // No JavaScr
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
 <?php if ($grafica_intervencion_geografica->Export == "") { ?>
-
+<?php echo $Language->SelectionForm(); ?>
 <?php } ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<div>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="./Highcharts/js/modules/exporting.js"></script>
 <script src="./Highcharts/js/modules/heatmap.js"></script>
 <script src="./Highcharts/js/modules/treemap.js"></script>
-<table>
-	<h2>Intervención geográfica de erradicación</h2>
-	<p>Este reporte muestra el total de hectáreas erradicadas  por departamento y municipios, según filtros de año y fase </p>
+<div>
+<h2>Intervención geográfica de erradicación</h2>
+	<p>Este reporte muestra el total de hectáreas erradicadas  por departamento y municipios, según filtros de año y fase </p><p> <font color="#F78181">Datos operativos del grupo de erradicación, cifras no oficiales, pendiente de validación y verificación por parte del ente neutral</font></p>
 
 	<hr>
 	<h3>Generador de gráfica</h3>
 	<p>La gráfica permite visualizar la información de erradicación en <strong>tres niveles diferentes al hacer  Click </strong>sobre los cuadros </p><p>- El primer nivel muestra información a escala departamental, si el departamento posee más de un municipio con erradicación, el cuadro del departamento se dividirá según el número de municipios y el tamaño de estas divisiones será proporcional al área erradicada en cada municipio</p> <p>- El segundo nivel muestra información a escala municipal, las divisiones en este nivel hacen referencia a los tipos de cultivos erradicados en cada municipio y su proporción de área erradicada</p><p>- El tercer nivel muestra las hectáreas erradicadas por tipo de cultivo</p><br>
-	<i><strong>Nota:</strong> Seleccione una opción en todos los campos</i><br>
-	<br>
+	<i><strong>Nota:</strong> Seleccione una opción en todos los campos</i><br><br>
+<table>	
 	<tr>
 		<td>Año:</td>
 		<td width="5%"></td>
@@ -1777,20 +2052,16 @@ fgrafica_intervencion_geograficalistsrch.ValidateRequired = false; // No JavaScr
 				
 			</select></td>
 	</tr>
-	
 </table>
 <br>
 <button class="btn btn-primary ewButton" name="btnsubmit" id="reporte" type="submit"> Generar gráfica </button>
+
 <br>
 <br>
 <hr>
-
 </div>
 <div id="container" style="max-height: 400px; min-width: 310px"></div>
-
 <div id="linea"></div>
-
-
 <script>
 document.getElementById("reporte").onclick = function() {myFunction()};
 
@@ -1807,7 +2078,6 @@ function myFunction() {
 	}    
 }
 </script>
-
 <script>
 $(document).ready(function(){
 				$.ajax({
@@ -1896,18 +2166,29 @@ $("#reporte").click(function(){
 							tooltip: {
 									headerFormat: '<span style="font-size:11px"></span>',
 									pointFormat: 'En <span style="color:{point.color}">{point.name}</span> se erradicaron <br><b>{point.value:.1f} </b> hectáreas<br/>'
-								},							
+								},	
+							exporting: {
+								sourceWidth: 2000,
+								sourceHeight: 700
+							},
+								
 							series: [{
 								layoutAlgorithm: 'squarified',
 								allowDrillToNode: true,
 								dataLabels: {
-									enabled: false
+									enabled: false,
+									style: {
+											textShadow: ''
+										}
 								},
 								levelIsConstant: false,
 								levels: [{
 									level: 1,
 									dataLabels: {
-										enabled: true
+										enabled: true,
+										style: {
+											textShadow: ''
+										}
 									},
 									borderWidth: 3
 								}],
@@ -1929,34 +2210,46 @@ $("#reporte").click(function(){
 });
 
 </script>
-
+<div class="ewToolbar">
 <h3>Resumen de datos</h3>
 La siguiente tabla contiene la distribución de área erradicada por departamento y municipio por año y fase de erradicación</p>
 <hr>
-<div class="ewToolbar">
 <table>
-	<TR>
-		<td><?php if ($grafica_intervencion_geografica_list->TotalRecs > 0 && $grafica_intervencion_geografica_list->ExportOptions->Visible()) { ?>
-			<?php $grafica_intervencion_geografica_list->ExportOptions->Render("body") ?></td>
-		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono </td>
-	</TR>
-</table>
-</div>
+	<tr>
+		<td>
+			<?php if ($grafica_intervencion_geografica_list->TotalRecs > 0 && $grafica_intervencion_geografica_list->ExportOptions->Visible()) { ?>
+			<?php $grafica_intervencion_geografica_list->ExportOptions->Render("body") ?>
+			<?php } ?>
+
+		</td>
+		<td>
+			Si desea exportar la tabla en formato excel haga click en el siguiente icono 
+		</td>	
+	</tr>	
+</table> 
 <hr>
+</div>
+<?php if ($grafica_intervencion_geografica_list->Export == "") { ?>
+
+<div>
 <br>
 <table>
 	<tr>
-		<td><?php if ($grafica_intervencion_geografica_list->SearchOptions->Visible()) { ?>
-			<?php $grafica_intervencion_geografica_list->SearchOptions->Render("body") ?></td>
-		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente</td>
+		<td>
+			<?php if ($grafica_intervencion_geografica_list->SearchOptions->Visible()) { ?>
+			<?php $grafica_intervencion_geografica_list->SearchOptions->Render("body") ?>
+			<?php } ?>
+		</td>
+		<td>
+			Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente
+		</td>	
 	</tr>
 </table>
 <br>
-<hr>
-<br>
-<?php } ?>
+</div>
 
-<?php } ?>
+<hr>
+<?php } ?>	
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
 	if ($bSelectLimit) {
@@ -2004,36 +2297,139 @@ $grafica_intervencion_geografica->RowType = EW_ROWTYPE_SEARCH;
 $grafica_intervencion_geografica->ResetAttrs();
 $grafica_intervencion_geografica_list->RenderRow();
 ?>
-
+<br>
 <table>
 	<tr>
-		<td><label for="x_Departamento" class="ewSearchCaption ewLabel">DEPARTAMENTO</label>
-		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Departamento" id="z_Departamento" value="LIKE"></span></td>
-		<td width="5%"</td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_Departamento" name="x_Departamento" id="x_Departamento" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($grafica_intervencion_geografica->Departamento->PlaceHolder) ?>" value="<?php echo $grafica_intervencion_geografica->Departamento->EditValue ?>"<?php echo $grafica_intervencion_geografica->Departamento->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<label for="x_Departamento" class="ewSearchCaption ewLabel"><?php echo $grafica_intervencion_geografica->Departamento->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Departamento" id="z_Departamento" value="LIKE"></span>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_Departamento" id="x_Departamento" name="x_Departamento"<?php echo $grafica_intervencion_geografica->Departamento->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_intervencion_geografica->Departamento->EditValue)) {
+					$arwrk = $grafica_intervencion_geografica->Departamento->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_intervencion_geografica->Departamento->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_intervencion_geograficalistsrch.Lists["x_Departamento"].Options = <?php echo (is_array($grafica_intervencion_geografica->Departamento->EditValue)) ? ew_ArrayToJson($grafica_intervencion_geografica->Departamento->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
 	</tr>
 	<tr>
-		<td><label for="x_Muncipio" class="ewSearchCaption ewLabel">MUNICIPIO</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Muncipio" id="z_Muncipio" value="LIKE"></span></td>
-		<td width="5%"</td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_Muncipio" name="x_Muncipio" id="x_Muncipio" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_intervencion_geografica->Muncipio->PlaceHolder) ?>" value="<?php echo $grafica_intervencion_geografica->Muncipio->EditValue ?>"<?php echo $grafica_intervencion_geografica->Muncipio->EditAttributes() ?>>
-			</span></td>
-	</tr>		
+		<td>
+			<label for="x_Muncipio" class="ewSearchCaption ewLabel"><?php echo $grafica_intervencion_geografica->Muncipio->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Muncipio" id="z_Muncipio" value="LIKE"></span>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_Muncipio" id="x_Muncipio" name="x_Muncipio"<?php echo $grafica_intervencion_geografica->Muncipio->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_intervencion_geografica->Muncipio->EditValue)) {
+					$arwrk = $grafica_intervencion_geografica->Muncipio->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_intervencion_geografica->Muncipio->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_intervencion_geograficalistsrch.Lists["x_Muncipio"].Options = <?php echo (is_array($grafica_intervencion_geografica->Muncipio->EditValue)) ? ew_ArrayToJson($grafica_intervencion_geografica->Muncipio->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="x_aF1o" class="ewSearchCaption ewLabel"><?php echo $grafica_intervencion_geografica->aF1o->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_aF1o" id="z_aF1o" value="LIKE"></span>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_aF1o" id="x_aF1o" name="x_aF1o"<?php echo $grafica_intervencion_geografica->aF1o->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_intervencion_geografica->aF1o->EditValue)) {
+					$arwrk = $grafica_intervencion_geografica->aF1o->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_intervencion_geografica->aF1o->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_intervencion_geograficalistsrch.Lists["x_aF1o"].Options = <?php echo (is_array($grafica_intervencion_geografica->aF1o->EditValue)) ? ew_ArrayToJson($grafica_intervencion_geografica->aF1o->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="x_fase" class="ewSearchCaption ewLabel"><?php echo $grafica_intervencion_geografica->fase->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_fase" id="z_fase" value="LIKE"></span>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_fase" id="x_fase" name="x_fase"<?php echo $grafica_intervencion_geografica->fase->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_intervencion_geografica->fase->EditValue)) {
+					$arwrk = $grafica_intervencion_geografica->fase->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_intervencion_geografica->fase->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_intervencion_geograficalistsrch.Lists["x_fase"].Options = <?php echo (is_array($grafica_intervencion_geografica->fase->EditValue)) ? ew_ArrayToJson($grafica_intervencion_geografica->fase->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
+	</tr>
+
 </table>
-
-<?php if ($grafica_intervencion_geografica->Departamento->Visible) { // Departamento ?>
-<?php } ?>
-
-<?php if ($grafica_intervencion_geografica->Muncipio->Visible) { // Muncipio ?>
-<?php } ?>
-
 <button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-<br>
-<br>
-<hr>
 
 	</div>
 </div>
@@ -2044,7 +2440,6 @@ $grafica_intervencion_geografica_list->RenderRow();
 <?php
 $grafica_intervencion_geografica_list->ShowMessage();
 ?>
-
 <?php if ($grafica_intervencion_geografica_list->TotalRecs > 0 || $grafica_intervencion_geografica->CurrentAction <> "") { ?>
 <div class="ewGrid">
 <?php if ($grafica_intervencion_geografica->Export == "") { ?>
@@ -2181,6 +2576,24 @@ $grafica_intervencion_geografica_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
+<?php if ($grafica_intervencion_geografica->aF1o->Visible) { // año ?>
+	<?php if ($grafica_intervencion_geografica->SortUrl($grafica_intervencion_geografica->aF1o) == "") { ?>
+		<th data-name="aF1o"><div id="elh_grafica_intervencion_geografica_aF1o" class="grafica_intervencion_geografica_aF1o"><div class="ewTableHeaderCaption"><?php echo $grafica_intervencion_geografica->aF1o->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="aF1o"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_intervencion_geografica->SortUrl($grafica_intervencion_geografica->aF1o) ?>',2);"><div id="elh_grafica_intervencion_geografica_aF1o" class="grafica_intervencion_geografica_aF1o">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_intervencion_geografica->aF1o->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_intervencion_geografica->aF1o->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_intervencion_geografica->aF1o->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($grafica_intervencion_geografica->fase->Visible) { // fase ?>
+	<?php if ($grafica_intervencion_geografica->SortUrl($grafica_intervencion_geografica->fase) == "") { ?>
+		<th data-name="fase"><div id="elh_grafica_intervencion_geografica_fase" class="grafica_intervencion_geografica_fase"><div class="ewTableHeaderCaption"><?php echo $grafica_intervencion_geografica->fase->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="fase"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_intervencion_geografica->SortUrl($grafica_intervencion_geografica->fase) ?>',2);"><div id="elh_grafica_intervencion_geografica_fase" class="grafica_intervencion_geografica_fase">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_intervencion_geografica->fase->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_intervencion_geografica->fase->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_intervencion_geografica->fase->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
 <?php
 
 // Render list options (header, right)
@@ -2280,6 +2693,18 @@ $grafica_intervencion_geografica_list->ListOptions->Render("body", "left", $graf
 		<td data-name="Total_erradicado"<?php echo $grafica_intervencion_geografica->Total_erradicado->CellAttributes() ?>>
 <span<?php echo $grafica_intervencion_geografica->Total_erradicado->ViewAttributes() ?>>
 <?php echo $grafica_intervencion_geografica->Total_erradicado->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($grafica_intervencion_geografica->aF1o->Visible) { // año ?>
+		<td data-name="aF1o"<?php echo $grafica_intervencion_geografica->aF1o->CellAttributes() ?>>
+<span<?php echo $grafica_intervencion_geografica->aF1o->ViewAttributes() ?>>
+<?php echo $grafica_intervencion_geografica->aF1o->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($grafica_intervencion_geografica->fase->Visible) { // fase ?>
+		<td data-name="fase"<?php echo $grafica_intervencion_geografica->fase->CellAttributes() ?>>
+<span<?php echo $grafica_intervencion_geografica->fase->ViewAttributes() ?>>
+<?php echo $grafica_intervencion_geografica->fase->ListViewValue() ?></span>
 </td>
 	<?php } ?>
 <?php

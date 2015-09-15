@@ -7,7 +7,7 @@ function valores ($ano) {
 	include ("coneccion.php");
 		mysql_select_db($base_datos,$db);
 
-		$sql=mysql_query("SELECT Fase FROM `info_diario` WHERE SUBSTR(`FECHA_REPORT`,7,4)=".$ano." and  Fase !='' GROUP BY Fase ORDER BY fase DESC");
+		$sql=mysql_query("SELECT Fase FROM `info_diario` WHERE SUBSTR(`FECHA_REPORT`,1,4)=".$ano." and  Fase !='' GROUP BY Fase ORDER BY fase DESC");
 		echo '<option value="">Seleccione una:</option>';
 		while($row=mysql_fetch_array($sql))
 			{

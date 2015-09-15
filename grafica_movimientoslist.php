@@ -1176,7 +1176,36 @@ class cgrafica_movimientos_list extends cgrafica_movimientos {
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 			// Punto
-			$this->Punto->ViewValue = $this->Punto->CurrentValue;
+			if (strval($this->Punto->CurrentValue) <> "") {
+				$sFilterWrk = "`Punto`" . ew_SearchString("=", $this->Punto->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_movimientos`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_movimientos`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Punto` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Punto->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Punto->ViewValue = $this->Punto->CurrentValue;
+				}
+			} else {
+				$this->Punto->ViewValue = NULL;
+			}
 			$this->Punto->ViewCustomAttributes = "";
 
 			// Fecha_ultimo_movimiento
@@ -1206,8 +1235,30 @@ class cgrafica_movimientos_list extends cgrafica_movimientos {
 			// Punto
 			$this->Punto->EditAttrs["class"] = "form-control";
 			$this->Punto->EditCustomAttributes = "";
-			$this->Punto->EditValue = ew_HtmlEncode($this->Punto->AdvancedSearch->SearchValue);
-			$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_movimientos`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_movimientos`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Punto` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Punto->EditValue = $arwrk;
 
 			// Fecha_ultimo_movimiento
 			$this->Fecha_ultimo_movimiento->EditAttrs["class"] = "form-control";
@@ -1581,8 +1632,9 @@ fgrafica_movimientoslist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fgrafica_movimientoslist.Lists["x_Punto"] = {"LinkField":"x_Punto","Ajax":null,"AutoFill":false,"DisplayFields":["x_Punto","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 var fgrafica_movimientoslistsrch = new ew_Form("fgrafica_movimientoslistsrch");
 
 // Validate function for search
@@ -1618,6 +1670,7 @@ fgrafica_movimientoslistsrch.ValidateRequired = false; // No JavaScript validati
 <?php } ?>
 
 // Dynamic selection lists
+fgrafica_movimientoslistsrch.Lists["x_Punto"] = {"LinkField":"x_Punto","Ajax":null,"AutoFill":false,"DisplayFields":["x_Punto","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 </script>
 <script type="text/javascript">
 
@@ -1629,39 +1682,55 @@ fgrafica_movimientoslistsrch.ValidateRequired = false; // No JavaScript validati
 <?php if ($grafica_movimientos->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-<H2> Informe de movimientos</h2>
-<p>La siguiente tabla contiene los informes diarios realizados desde la fase II de erradicación 2015 a la fecha</p>
-<hr>
-
-<table>
-	<tr>
-		<td><?php if ($grafica_movimientos_list->TotalRecs > 0 && $grafica_movimientos_list->ExportOptions->Visible()) { ?>
-			<?php $grafica_movimientos_list->ExportOptions->Render("body") ?></td>
-		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono </td>
-	</tr>
-</table>
-
-<hr>
-<?php } ?>
-
 <?php if ($grafica_movimientos->Export == "") { ?>
-
+<?php echo $Language->SelectionForm(); ?>
 <?php } ?>
 <div class="clearfix"></div>
 </div>
+<?php } ?>
+<div class="ewToolbar">
+<H2> Informe de movilidado</h2>
+<p>La siguiente tabla contiene los informes diarios realizados desde la fase II de erradicación 2015 a la fecha</p><p> <font color="#F78181">Datos operativos del grupo de erradicación, cifras no oficiales, pendiente de validación y verificación por parte del ente neutral</font></p>
+
+<hr>
+<table>
+	<tr>
+		<td>
+			<?php if ($grafica_movimientos_list->TotalRecs > 0 && $grafica_movimientos_list->ExportOptions->Visible()) { ?>
+
+			<?php $grafica_movimientos_list->ExportOptions->Render("body") ?>
+			<?php } ?>
+
+		</td>
+		<td>
+			Si desea exportar la tabla en formato excel haga click en el siguiente icono 
+		</td>	
+	</tr>	
+</table> 
+
+<hr>
+
+</div>
+<?php if ($grafica_movimientos->Export == "") { ?>
+
+<div>
 <br>
 <table>
 	<tr>
-		<td><?php if ($grafica_movimientos_list->SearchOptions->Visible()) { ?>
-			<?php $grafica_movimientos_list->SearchOptions->Render("body") ?></td>
-		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente</td>
+		<td>
+			<?php if ($grafica_movimientos_list->SearchOptions->Visible()) { ?>
+			<?php $grafica_movimientos_list->SearchOptions->Render("body") ?>
+			<?php } ?>
+		</td>
+		<td>
+			Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente
+		</td>	
 	</tr>
 </table>
 <br>
-<hr>
-<br>
-<?php } ?>
+</div>
 
+<hr>
 <?php } ?>
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
@@ -1710,24 +1779,43 @@ $grafica_movimientos->RowType = EW_ROWTYPE_SEARCH;
 $grafica_movimientos->ResetAttrs();
 $grafica_movimientos_list->RenderRow();
 ?>
-
-
-<div id="xsr_1" class="ewRow">
-<?php if ($grafica_movimientos->Punto->Visible) { // Punto ?>
-	<div id="xsc_Punto" class="ewCell form-group">
-		<label for="x_Punto" class="ewSearchCaption ewLabel">PUNTO DE ERRADICACIÓN</label>
+<br>
+<table>
+	<tr>
+		<td>
+			<label for="x_Punto" class="ewSearchCaption ewLabel"><?php echo $grafica_movimientos->Punto->FldCaption() ?></label>
 		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($grafica_movimientos->Punto->PlaceHolder) ?>" value="<?php echo $grafica_movimientos->Punto->EditValue ?>"<?php echo $grafica_movimientos->Punto->EditAttributes() ?>>
-</span>
-	</div>
-<?php } ?>
-</div>
-<div id="xsr_2" class="ewRow">
-	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-</div>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_Punto" id="x_Punto" name="x_Punto"<?php echo $grafica_movimientos->Punto->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_movimientos->Punto->EditValue)) {
+					$arwrk = $grafica_movimientos->Punto->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_movimientos->Punto->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_movimientoslistsrch.Lists["x_Punto"].Options = <?php echo (is_array($grafica_movimientos->Punto->EditValue)) ? ew_ArrayToJson($grafica_movimientos->Punto->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
+	</tr>
+</table>
+<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
 
-<hr>
 	</div>
 </div>
 </form>

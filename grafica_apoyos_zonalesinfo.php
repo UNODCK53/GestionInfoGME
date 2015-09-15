@@ -544,15 +544,102 @@ class cgrafica_apoyos_zonales extends cTable {
 		// Cargo
 		// Profesional_Especializado
 
-		$this->Profesional_Especializado->ViewValue = $this->Profesional_Especializado->CurrentValue;
+		if (strval($this->Profesional_Especializado->CurrentValue) <> "") {
+			$sFilterWrk = "`Profesional_Especializado`" . ew_SearchString("=", $this->Profesional_Especializado->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Profesional_Especializado`, `Profesional_Especializado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_apoyos_zonales`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Profesional_Especializado`, `Profesional_Especializado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_apoyos_zonales`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Profesional_Especializado, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Profesional_Especializado` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Profesional_Especializado->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Profesional_Especializado->ViewValue = $this->Profesional_Especializado->CurrentValue;
+			}
+		} else {
+			$this->Profesional_Especializado->ViewValue = NULL;
+		}
 		$this->Profesional_Especializado->ViewCustomAttributes = "";
 
 		// Punto
-		$this->Punto->ViewValue = $this->Punto->CurrentValue;
+		if (strval($this->Punto->CurrentValue) <> "") {
+			$sFilterWrk = "`Punto`" . ew_SearchString("=", $this->Punto->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_apoyos_zonales`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_apoyos_zonales`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Punto` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Punto->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Punto->ViewValue = $this->Punto->CurrentValue;
+			}
+		} else {
+			$this->Punto->ViewValue = NULL;
+		}
 		$this->Punto->ViewCustomAttributes = "";
 
 		// Apoyo_zonal
-		$this->Apoyo_zonal->ViewValue = $this->Apoyo_zonal->CurrentValue;
+		if (strval($this->Apoyo_zonal->CurrentValue) <> "") {
+			$sFilterWrk = "`Apoyo_zonal`" . ew_SearchString("=", $this->Apoyo_zonal->CurrentValue, EW_DATATYPE_STRING);
+		switch (@$gsLanguage) {
+			case "en":
+				$sSqlWrk = "SELECT DISTINCT `Apoyo_zonal`, `Apoyo_zonal` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_apoyos_zonales`";
+				$sWhereWrk = "";
+				break;
+			default:
+				$sSqlWrk = "SELECT DISTINCT `Apoyo_zonal`, `Apoyo_zonal` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_apoyos_zonales`";
+				$sWhereWrk = "";
+				break;
+		}
+		if ($sFilterWrk <> "") {
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+		}
+
+		// Call Lookup selecting
+		$this->Lookup_Selecting($this->Apoyo_zonal, $sWhereWrk);
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+		$sSqlWrk .= " ORDER BY `Apoyo_zonal` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$this->Apoyo_zonal->ViewValue = $rswrk->fields('DispFld');
+				$rswrk->Close();
+			} else {
+				$this->Apoyo_zonal->ViewValue = $this->Apoyo_zonal->CurrentValue;
+			}
+		} else {
+			$this->Apoyo_zonal->ViewValue = NULL;
+		}
 		$this->Apoyo_zonal->ViewCustomAttributes = "";
 
 		// Cargo
@@ -593,20 +680,14 @@ class cgrafica_apoyos_zonales extends cTable {
 		// Profesional_Especializado
 		$this->Profesional_Especializado->EditAttrs["class"] = "form-control";
 		$this->Profesional_Especializado->EditCustomAttributes = "";
-		$this->Profesional_Especializado->EditValue = ew_HtmlEncode($this->Profesional_Especializado->CurrentValue);
-		$this->Profesional_Especializado->PlaceHolder = ew_RemoveHtml($this->Profesional_Especializado->FldCaption());
 
 		// Punto
 		$this->Punto->EditAttrs["class"] = "form-control";
 		$this->Punto->EditCustomAttributes = "";
-		$this->Punto->EditValue = ew_HtmlEncode($this->Punto->CurrentValue);
-		$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
 
 		// Apoyo_zonal
 		$this->Apoyo_zonal->EditAttrs["class"] = "form-control";
 		$this->Apoyo_zonal->EditCustomAttributes = "";
-		$this->Apoyo_zonal->EditValue = ew_HtmlEncode($this->Apoyo_zonal->CurrentValue);
-		$this->Apoyo_zonal->PlaceHolder = ew_RemoveHtml($this->Apoyo_zonal->FldCaption());
 
 		// Cargo
 		$this->Cargo->EditAttrs["class"] = "form-control";

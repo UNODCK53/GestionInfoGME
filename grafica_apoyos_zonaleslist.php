@@ -1192,15 +1192,102 @@ class cgrafica_apoyos_zonales_list extends cgrafica_apoyos_zonales {
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 			// Profesional_Especializado
-			$this->Profesional_Especializado->ViewValue = $this->Profesional_Especializado->CurrentValue;
+			if (strval($this->Profesional_Especializado->CurrentValue) <> "") {
+				$sFilterWrk = "`Profesional_Especializado`" . ew_SearchString("=", $this->Profesional_Especializado->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Profesional_Especializado`, `Profesional_Especializado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_apoyos_zonales`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Profesional_Especializado`, `Profesional_Especializado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_apoyos_zonales`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Profesional_Especializado, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Profesional_Especializado` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Profesional_Especializado->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Profesional_Especializado->ViewValue = $this->Profesional_Especializado->CurrentValue;
+				}
+			} else {
+				$this->Profesional_Especializado->ViewValue = NULL;
+			}
 			$this->Profesional_Especializado->ViewCustomAttributes = "";
 
 			// Punto
-			$this->Punto->ViewValue = $this->Punto->CurrentValue;
+			if (strval($this->Punto->CurrentValue) <> "") {
+				$sFilterWrk = "`Punto`" . ew_SearchString("=", $this->Punto->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_apoyos_zonales`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_apoyos_zonales`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Punto` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Punto->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Punto->ViewValue = $this->Punto->CurrentValue;
+				}
+			} else {
+				$this->Punto->ViewValue = NULL;
+			}
 			$this->Punto->ViewCustomAttributes = "";
 
 			// Apoyo_zonal
-			$this->Apoyo_zonal->ViewValue = $this->Apoyo_zonal->CurrentValue;
+			if (strval($this->Apoyo_zonal->CurrentValue) <> "") {
+				$sFilterWrk = "`Apoyo_zonal`" . ew_SearchString("=", $this->Apoyo_zonal->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Apoyo_zonal`, `Apoyo_zonal` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_apoyos_zonales`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Apoyo_zonal`, `Apoyo_zonal` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_apoyos_zonales`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Apoyo_zonal, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Apoyo_zonal` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Apoyo_zonal->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Apoyo_zonal->ViewValue = $this->Apoyo_zonal->CurrentValue;
+				}
+			} else {
+				$this->Apoyo_zonal->ViewValue = NULL;
+			}
 			$this->Apoyo_zonal->ViewCustomAttributes = "";
 
 			// Cargo
@@ -1231,20 +1318,86 @@ class cgrafica_apoyos_zonales_list extends cgrafica_apoyos_zonales {
 			// Profesional_Especializado
 			$this->Profesional_Especializado->EditAttrs["class"] = "form-control";
 			$this->Profesional_Especializado->EditCustomAttributes = "";
-			$this->Profesional_Especializado->EditValue = ew_HtmlEncode($this->Profesional_Especializado->AdvancedSearch->SearchValue);
-			$this->Profesional_Especializado->PlaceHolder = ew_RemoveHtml($this->Profesional_Especializado->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Profesional_Especializado`, `Profesional_Especializado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_apoyos_zonales`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Profesional_Especializado`, `Profesional_Especializado` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_apoyos_zonales`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Profesional_Especializado, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Profesional_Especializado` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Profesional_Especializado->EditValue = $arwrk;
 
 			// Punto
 			$this->Punto->EditAttrs["class"] = "form-control";
 			$this->Punto->EditCustomAttributes = "";
-			$this->Punto->EditValue = ew_HtmlEncode($this->Punto->AdvancedSearch->SearchValue);
-			$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_apoyos_zonales`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_apoyos_zonales`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Punto` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Punto->EditValue = $arwrk;
 
 			// Apoyo_zonal
 			$this->Apoyo_zonal->EditAttrs["class"] = "form-control";
 			$this->Apoyo_zonal->EditCustomAttributes = "";
-			$this->Apoyo_zonal->EditValue = ew_HtmlEncode($this->Apoyo_zonal->AdvancedSearch->SearchValue);
-			$this->Apoyo_zonal->PlaceHolder = ew_RemoveHtml($this->Apoyo_zonal->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Apoyo_zonal`, `Apoyo_zonal` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_apoyos_zonales`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Apoyo_zonal`, `Apoyo_zonal` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_apoyos_zonales`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Apoyo_zonal, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Apoyo_zonal` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Apoyo_zonal->EditValue = $arwrk;
 
 			// Cargo
 			$this->Cargo->EditAttrs["class"] = "form-control";
@@ -1613,8 +1766,11 @@ fgrafica_apoyos_zonaleslist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fgrafica_apoyos_zonaleslist.Lists["x_Profesional_Especializado"] = {"LinkField":"x_Profesional_Especializado","Ajax":null,"AutoFill":false,"DisplayFields":["x_Profesional_Especializado","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_apoyos_zonaleslist.Lists["x_Punto"] = {"LinkField":"x_Punto","Ajax":null,"AutoFill":false,"DisplayFields":["x_Punto","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_apoyos_zonaleslist.Lists["x_Apoyo_zonal"] = {"LinkField":"x_Apoyo_zonal","Ajax":null,"AutoFill":false,"DisplayFields":["x_Apoyo_zonal","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 var fgrafica_apoyos_zonaleslistsrch = new ew_Form("fgrafica_apoyos_zonaleslistsrch");
 
 // Validate function for search
@@ -1650,6 +1806,9 @@ fgrafica_apoyos_zonaleslistsrch.ValidateRequired = false; // No JavaScript valid
 <?php } ?>
 
 // Dynamic selection lists
+fgrafica_apoyos_zonaleslistsrch.Lists["x_Profesional_Especializado"] = {"LinkField":"x_Profesional_Especializado","Ajax":null,"AutoFill":false,"DisplayFields":["x_Profesional_Especializado","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_apoyos_zonaleslistsrch.Lists["x_Punto"] = {"LinkField":"x_Punto","Ajax":null,"AutoFill":false,"DisplayFields":["x_Punto","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_apoyos_zonaleslistsrch.Lists["x_Apoyo_zonal"] = {"LinkField":"x_Apoyo_zonal","Ajax":null,"AutoFill":false,"DisplayFields":["x_Apoyo_zonal","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 </script>
 <script type="text/javascript">
 
@@ -1661,45 +1820,55 @@ fgrafica_apoyos_zonaleslistsrch.ValidateRequired = false; // No JavaScript valid
 <?php if ($grafica_apoyos_zonales->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-<h2>Reporte de Apoyos Zonales</h2>
-
-<p>La siguiente tabla contiene el listado de apoyos zonales asignados por Punto de erradicación.</p><p> <font color="#F78181">Datos operativos del grupo de erradicación, cifras no oficiales, pendiente de validación y verificación por parte del ente neutral</font>
-</p>
-<hr> 
-<table>
-	<tr>
-		<td valign="center"><?php if ($grafica_apoyos_zonales_list->TotalRecs > 0 && $grafica_apoyos_zonales_list->ExportOptions->Visible()) { ?>
-			<?php $grafica_apoyos_zonales_list->ExportOptions->Render("body") ?>
-			<?php } ?></td>
-		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono</td>
-		
-	</tr>	
-</table>	
-<hr> 
-
 <?php if ($grafica_apoyos_zonales->Export == "") { ?>
+<?php echo $Language->SelectionForm(); ?>
 <?php } ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<?php if ($grafica_apoyos_zonales_list->SearchOptions->Visible()) { ?>
+<div class="ewToolbar">
+<H2> Reporte de Apoyos Zonales</h2>
+<p>La siguiente tabla contiene el listado de apoyos zonales asignados por Punto de erradicación.</p><p> <font color="#F78181">Datos operativos del grupo de erradicación, cifras no oficiales, pendiente de validación y verificación por parte del ente neutral</font>
 
+<hr>
+<table>
+	<tr>
+		<td>
+			<?php if ($grafica_apoyos_zonales_list->TotalRecs > 0 && $grafica_apoyos_zonales_list->ExportOptions->Visible()) { ?>
 
+			<?php $grafica_apoyos_zonales_list->ExportOptions->Render("body") ?>
+			<?php } ?>
 
+		</td>
+		<td>
+			Si desea exportar la tabla en formato excel haga click en el siguiente icono 
+		</td>	
+	</tr>	
+</table> 
+
+<hr>
+
+</div>
+<?php if ($grafica_apoyos_zonales->Export == "") { ?>
+
+<div>
 <br>
 <table>
 	<tr>
-		<td><?php $grafica_apoyos_zonales_list->SearchOptions->Render("body") ?></td>
-		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente</td>
-	</tr>	
+		<td>
+			<?php if ($grafica_apoyos_zonales_list->SearchOptions->Visible()) { ?>
+			<?php $grafica_apoyos_zonales_list->SearchOptions->Render("body") ?>
+			<?php } ?>
+		</td>
+		<td>
+			Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente
+		</td>	
+	</tr>
 </table>
 <br>
+</div>
+
 <hr>
-<br>
-
-
-
-
 <?php } ?>
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
@@ -1748,62 +1917,109 @@ $grafica_apoyos_zonales->RowType = EW_ROWTYPE_SEARCH;
 $grafica_apoyos_zonales->ResetAttrs();
 $grafica_apoyos_zonales_list->RenderRow();
 ?>
+<br>
 <table>
 	<tr>
 		<td>
-			<?php if ($grafica_apoyos_zonales->Profesional_Especializado->Visible) { // Profesional_Especializado ?>
 			<label for="x_Profesional_Especializado" class="ewSearchCaption ewLabel"><?php echo $grafica_apoyos_zonales->Profesional_Especializado->FldCaption() ?></label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Profesional_Especializado" id="z_Profesional_Especializado" value="LIKE"></span>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Profesional_Especializado" id="z_Profesional_Especializado" value="LIKE"></span>
 		</td>
 		<td width="5%"></td>
 		<td>
 			<span class="ewSearchField">
-			<input type="text" data-field="x_Profesional_Especializado" name="x_Profesional_Especializado" id="x_Profesional_Especializado" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_apoyos_zonales->Profesional_Especializado->PlaceHolder) ?>" value="<?php echo $grafica_apoyos_zonales->Profesional_Especializado->EditValue ?>"<?php echo $grafica_apoyos_zonales->Profesional_Especializado->EditAttributes() ?>>
+			<select style="min-width: 350px;" data-field="x_Profesional_Especializado" id="x_Profesional_Especializado" name="x_Profesional_Especializado"<?php echo $grafica_apoyos_zonales->Profesional_Especializado->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_apoyos_zonales->Profesional_Especializado->EditValue)) {
+					$arwrk = $grafica_apoyos_zonales->Profesional_Especializado->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_apoyos_zonales->Profesional_Especializado->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_apoyos_zonaleslistsrch.Lists["x_Profesional_Especializado"].Options = <?php echo (is_array($grafica_apoyos_zonales->Profesional_Especializado->EditValue)) ? ew_ArrayToJson($grafica_apoyos_zonales->Profesional_Especializado->EditValue, 1) : "[]" ?>;
+				</script>
 			</span>
 		</td>
 	</tr>
 	<tr>
 		<td>
 			<label for="x_Punto" class="ewSearchCaption ewLabel"><?php echo $grafica_apoyos_zonales->Punto->FldCaption() ?></label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span>
 		</td>
 		<td width="5%"></td>
 		<td>
 			<span class="ewSearchField">
-			<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_apoyos_zonales->Punto->PlaceHolder) ?>" value="<?php echo $grafica_apoyos_zonales->Punto->EditValue ?>"<?php echo $grafica_apoyos_zonales->Punto->EditAttributes() ?>>
+			<select style="min-width: 350px;" data-field="x_Punto" id="x_Punto" name="x_Punto"<?php echo $grafica_apoyos_zonales->Punto->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_apoyos_zonales->Punto->EditValue)) {
+					$arwrk = $grafica_apoyos_zonales->Punto->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_apoyos_zonales->Punto->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_apoyos_zonaleslistsrch.Lists["x_Punto"].Options = <?php echo (is_array($grafica_apoyos_zonales->Punto->EditValue)) ? ew_ArrayToJson($grafica_apoyos_zonales->Punto->EditValue, 1) : "[]" ?>;
+				</script>
 			</span>
-		</td>			
-	</tr>
+		</td>
+	</tr>	
 	<tr>
 		<td>
 			<label for="x_Apoyo_zonal" class="ewSearchCaption ewLabel"><?php echo $grafica_apoyos_zonales->Apoyo_zonal->FldCaption() ?></label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Apoyo_zonal" id="z_Apoyo_zonal" value="LIKE"></span>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Apoyo_zonal" id="z_Apoyo_zonal" value="LIKE"></span>
 		</td>
 		<td width="5%"></td>
 		<td>
 			<span class="ewSearchField">
-			<input type="text" data-field="x_Apoyo_zonal" name="x_Apoyo_zonal" id="x_Apoyo_zonal" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_apoyos_zonales->Apoyo_zonal->PlaceHolder) ?>" value="<?php echo $grafica_apoyos_zonales->Apoyo_zonal->EditValue ?>"<?php echo $grafica_apoyos_zonales->Apoyo_zonal->EditAttributes() ?>>
+			<select style="min-width: 350px;" data-field="x_Apoyo_zonal" id="x_Apoyo_zonal" name="x_Apoyo_zonal"<?php echo $grafica_apoyos_zonales->Apoyo_zonal->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_apoyos_zonales->Apoyo_zonal->EditValue)) {
+					$arwrk = $grafica_apoyos_zonales->Apoyo_zonal->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_apoyos_zonales->Apoyo_zonal->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_apoyos_zonaleslistsrch.Lists["x_Apoyo_zonal"].Options = <?php echo (is_array($grafica_apoyos_zonales->Apoyo_zonal->EditValue)) ? ew_ArrayToJson($grafica_apoyos_zonales->Apoyo_zonal->EditValue, 1) : "[]" ?>;
+				</script>
 			</span>
-		</td>	
+		</td>
 	</tr>	
 </table>
-
-	
-<?php } ?>
-<?php if ($grafica_apoyos_zonales->Punto->Visible) { // Punto ?>
-<?php } ?>
-<?php if ($grafica_apoyos_zonales->Apoyo_zonal->Visible) { // Apoyo_zonal ?>
-<?php } ?>
-
-<div id="xsr_4" class="ewRow">
-	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-</div>
-
-<hr>
+<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
 
 	</div>
 </div>
-
 </form>
 <?php } ?>
 <?php } ?>
@@ -1893,24 +2109,6 @@ $grafica_apoyos_zonales_list->RenderListOptions();
 // Render list options (header, left)
 $grafica_apoyos_zonales_list->ListOptions->Render("header", "left");
 ?>
-<?php if ($grafica_apoyos_zonales->Punto->Visible) { // Punto ?>
-	<?php if ($grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Punto) == "") { ?>
-		<th data-name="Punto"><div id="elh_grafica_apoyos_zonales_Punto" class="grafica_apoyos_zonales_Punto"><div class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Punto->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="Punto"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Punto) ?>',2);"><div id="elh_grafica_apoyos_zonales_Punto" class="grafica_apoyos_zonales_Punto">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Punto->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_apoyos_zonales->Punto->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_apoyos_zonales->Punto->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>	
-<?php if ($grafica_apoyos_zonales->Apoyo_zonal->Visible) { // Apoyo_zonal ?>
-	<?php if ($grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Apoyo_zonal) == "") { ?>
-		<th data-name="Apoyo_zonal"><div id="elh_grafica_apoyos_zonales_Apoyo_zonal" class="grafica_apoyos_zonales_Apoyo_zonal"><div class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Apoyo_zonal->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="Apoyo_zonal"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Apoyo_zonal) ?>',2);"><div id="elh_grafica_apoyos_zonales_Apoyo_zonal" class="grafica_apoyos_zonales_Apoyo_zonal">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Apoyo_zonal->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_apoyos_zonales->Apoyo_zonal->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_apoyos_zonales->Apoyo_zonal->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>	
 <?php if ($grafica_apoyos_zonales->Profesional_Especializado->Visible) { // Profesional_Especializado ?>
 	<?php if ($grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Profesional_Especializado) == "") { ?>
 		<th data-name="Profesional_Especializado"><div id="elh_grafica_apoyos_zonales_Profesional_Especializado" class="grafica_apoyos_zonales_Profesional_Especializado"><div class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Profesional_Especializado->FldCaption() ?></div></div></th>
@@ -1920,7 +2118,33 @@ $grafica_apoyos_zonales_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
-	
+<?php if ($grafica_apoyos_zonales->Punto->Visible) { // Punto ?>
+	<?php if ($grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Punto) == "") { ?>
+		<th data-name="Punto"><div id="elh_grafica_apoyos_zonales_Punto" class="grafica_apoyos_zonales_Punto"><div class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Punto->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Punto"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Punto) ?>',2);"><div id="elh_grafica_apoyos_zonales_Punto" class="grafica_apoyos_zonales_Punto">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Punto->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_apoyos_zonales->Punto->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_apoyos_zonales->Punto->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($grafica_apoyos_zonales->Apoyo_zonal->Visible) { // Apoyo_zonal ?>
+	<?php if ($grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Apoyo_zonal) == "") { ?>
+		<th data-name="Apoyo_zonal"><div id="elh_grafica_apoyos_zonales_Apoyo_zonal" class="grafica_apoyos_zonales_Apoyo_zonal"><div class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Apoyo_zonal->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Apoyo_zonal"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Apoyo_zonal) ?>',2);"><div id="elh_grafica_apoyos_zonales_Apoyo_zonal" class="grafica_apoyos_zonales_Apoyo_zonal">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Apoyo_zonal->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_apoyos_zonales->Apoyo_zonal->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_apoyos_zonales->Apoyo_zonal->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($grafica_apoyos_zonales->Cargo->Visible) { // Cargo ?>
+	<?php if ($grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Cargo) == "") { ?>
+		<th data-name="Cargo"><div id="elh_grafica_apoyos_zonales_Cargo" class="grafica_apoyos_zonales_Cargo"><div class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Cargo->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Cargo"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_apoyos_zonales->SortUrl($grafica_apoyos_zonales->Cargo) ?>',2);"><div id="elh_grafica_apoyos_zonales_Cargo" class="grafica_apoyos_zonales_Cargo">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_apoyos_zonales->Cargo->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_apoyos_zonales->Cargo->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_apoyos_zonales->Cargo->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
 <?php
 
 // Render list options (header, right)
@@ -1986,6 +2210,12 @@ while ($grafica_apoyos_zonales_list->RecCnt < $grafica_apoyos_zonales_list->Stop
 // Render list options (body, left)
 $grafica_apoyos_zonales_list->ListOptions->Render("body", "left", $grafica_apoyos_zonales_list->RowCnt);
 ?>
+	<?php if ($grafica_apoyos_zonales->Profesional_Especializado->Visible) { // Profesional_Especializado ?>
+		<td data-name="Profesional_Especializado"<?php echo $grafica_apoyos_zonales->Profesional_Especializado->CellAttributes() ?>>
+<span<?php echo $grafica_apoyos_zonales->Profesional_Especializado->ViewAttributes() ?>>
+<?php echo $grafica_apoyos_zonales->Profesional_Especializado->ListViewValue() ?></span>
+<a id="<?php echo $grafica_apoyos_zonales_list->PageObjName . "_row_" . $grafica_apoyos_zonales_list->RowCnt ?>"></a></td>
+	<?php } ?>
 	<?php if ($grafica_apoyos_zonales->Punto->Visible) { // Punto ?>
 		<td data-name="Punto"<?php echo $grafica_apoyos_zonales->Punto->CellAttributes() ?>>
 <span<?php echo $grafica_apoyos_zonales->Punto->ViewAttributes() ?>>
@@ -1998,15 +2228,12 @@ $grafica_apoyos_zonales_list->ListOptions->Render("body", "left", $grafica_apoyo
 <?php echo $grafica_apoyos_zonales->Apoyo_zonal->ListViewValue() ?></span>
 </td>
 	<?php } ?>
-	<?php if ($grafica_apoyos_zonales->Profesional_Especializado->Visible) { // Profesional_Especializado ?>
-		<td data-name="Profesional_Especializado"<?php echo $grafica_apoyos_zonales->Profesional_Especializado->CellAttributes() ?>>
-<span<?php echo $grafica_apoyos_zonales->Profesional_Especializado->ViewAttributes() ?>>
-<?php echo $grafica_apoyos_zonales->Profesional_Especializado->ListViewValue() ?></span>
-<a id="<?php echo $grafica_apoyos_zonales_list->PageObjName . "_row_" . $grafica_apoyos_zonales_list->RowCnt ?>"></a></td>
+	<?php if ($grafica_apoyos_zonales->Cargo->Visible) { // Cargo ?>
+		<td data-name="Cargo"<?php echo $grafica_apoyos_zonales->Cargo->CellAttributes() ?>>
+<span<?php echo $grafica_apoyos_zonales->Cargo->ViewAttributes() ?>>
+<?php echo $grafica_apoyos_zonales->Cargo->ListViewValue() ?></span>
+</td>
 	<?php } ?>
-	
-	
-	
 <?php
 
 // Render list options (body, right)

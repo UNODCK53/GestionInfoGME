@@ -671,6 +671,8 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 		$this->BuildSearchSql($sWhere, $this->GME_Activos, $Default, FALSE); // GME_Activos
 		$this->BuildSearchSql($sWhere, $this->Total_erradicado, $Default, FALSE); // Total_erradicado
 		$this->BuildSearchSql($sWhere, $this->fecha, $Default, FALSE); // fecha
+		$this->BuildSearchSql($sWhere, $this->aF1o, $Default, FALSE); // año
+		$this->BuildSearchSql($sWhere, $this->fase, $Default, FALSE); // fase
 
 		// Set up search parm
 		if (!$Default && $sWhere <> "") {
@@ -680,6 +682,8 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 			$this->GME_Activos->AdvancedSearch->Save(); // GME_Activos
 			$this->Total_erradicado->AdvancedSearch->Save(); // Total_erradicado
 			$this->fecha->AdvancedSearch->Save(); // fecha
+			$this->aF1o->AdvancedSearch->Save(); // año
+			$this->fase->AdvancedSearch->Save(); // fase
 		}
 		return $sWhere;
 	}
@@ -741,6 +745,10 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 			return TRUE;
 		if ($this->fecha->AdvancedSearch->IssetSession())
 			return TRUE;
+		if ($this->aF1o->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->fase->AdvancedSearch->IssetSession())
+			return TRUE;
 		return FALSE;
 	}
 
@@ -765,6 +773,8 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 		$this->GME_Activos->AdvancedSearch->UnsetSession();
 		$this->Total_erradicado->AdvancedSearch->UnsetSession();
 		$this->fecha->AdvancedSearch->UnsetSession();
+		$this->aF1o->AdvancedSearch->UnsetSession();
+		$this->fase->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
@@ -775,6 +785,8 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 		$this->GME_Activos->AdvancedSearch->Load();
 		$this->Total_erradicado->AdvancedSearch->Load();
 		$this->fecha->AdvancedSearch->Load();
+		$this->aF1o->AdvancedSearch->Load();
+		$this->fase->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -790,6 +802,8 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 			$this->UpdateSort($this->GME_Activos, $bCtrl); // GME_Activos
 			$this->UpdateSort($this->Total_erradicado, $bCtrl); // Total_erradicado
 			$this->UpdateSort($this->fecha, $bCtrl); // fecha
+			$this->UpdateSort($this->aF1o, $bCtrl); // año
+			$this->UpdateSort($this->fase, $bCtrl); // fase
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -825,6 +839,8 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 				$this->GME_Activos->setSort("");
 				$this->Total_erradicado->setSort("");
 				$this->fecha->setSort("");
+				$this->aF1o->setSort("");
+				$this->fase->setSort("");
 			}
 
 			// Reset start position
@@ -1072,6 +1088,16 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 		$this->fecha->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_fecha"]);
 		if ($this->fecha->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->fecha->AdvancedSearch->SearchOperator = @$_GET["z_fecha"];
+
+		// año
+		$this->aF1o->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_aF1o"]);
+		if ($this->aF1o->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->aF1o->AdvancedSearch->SearchOperator = @$_GET["z_aF1o"];
+
+		// fase
+		$this->fase->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_fase"]);
+		if ($this->fase->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->fase->AdvancedSearch->SearchOperator = @$_GET["z_fase"];
 	}
 
 	// Load recordset
@@ -1123,6 +1149,8 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 		$this->GME_Activos->setDbValue($rs->fields('GME_Activos'));
 		$this->Total_erradicado->setDbValue($rs->fields('Total_erradicado'));
 		$this->fecha->setDbValue($rs->fields('fecha'));
+		$this->aF1o->setDbValue($rs->fields('año'));
+		$this->fase->setDbValue($rs->fields('fase'));
 	}
 
 	// Load DbValue from recordset
@@ -1132,6 +1160,8 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 		$this->GME_Activos->DbValue = $row['GME_Activos'];
 		$this->Total_erradicado->DbValue = $row['Total_erradicado'];
 		$this->fecha->DbValue = $row['fecha'];
+		$this->aF1o->DbValue = $row['año'];
+		$this->fase->DbValue = $row['fase'];
 	}
 
 	// Load old record
@@ -1165,10 +1195,6 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 		$this->InlineCopyUrl = $this->GetInlineCopyUrl();
 		$this->DeleteUrl = $this->GetDeleteUrl();
 
-		// Convert decimal values if posted back
-		if ($this->Total_erradicado->FormValue == $this->Total_erradicado->CurrentValue && is_numeric(ew_StrToFloat($this->Total_erradicado->CurrentValue)))
-			$this->Total_erradicado->CurrentValue = ew_StrToFloat($this->Total_erradicado->CurrentValue);
-
 		// Call Row_Rendering event
 		$this->Row_Rendering();
 
@@ -1176,11 +1202,42 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 		// GME_Activos
 		// Total_erradicado
 		// fecha
+		// año
+		// fase
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 			// GME_Activos
-			$this->GME_Activos->ViewValue = $this->GME_Activos->CurrentValue;
+			if (strval($this->GME_Activos->CurrentValue) <> "") {
+				$sFilterWrk = "`GME_Activos`" . ew_SearchString("=", $this->GME_Activos->CurrentValue, EW_DATATYPE_NUMBER);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `GME_Activos`, `GME_Activos` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_produccion`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `GME_Activos`, `GME_Activos` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_produccion`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->GME_Activos, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `GME_Activos` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->GME_Activos->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->GME_Activos->ViewValue = $this->GME_Activos->CurrentValue;
+				}
+			} else {
+				$this->GME_Activos->ViewValue = NULL;
+			}
 			$this->GME_Activos->ViewCustomAttributes = "";
 
 			// Total_erradicado
@@ -1191,6 +1248,72 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 			$this->fecha->ViewValue = $this->fecha->CurrentValue;
 			$this->fecha->ViewValue = ew_FormatDateTime($this->fecha->ViewValue, 7);
 			$this->fecha->ViewCustomAttributes = "";
+
+			// año
+			if (strval($this->aF1o->CurrentValue) <> "") {
+				$sFilterWrk = "`año`" . ew_SearchString("=", $this->aF1o->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_produccion`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_produccion`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->aF1o, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `año` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->aF1o->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->aF1o->ViewValue = $this->aF1o->CurrentValue;
+				}
+			} else {
+				$this->aF1o->ViewValue = NULL;
+			}
+			$this->aF1o->ViewCustomAttributes = "";
+
+			// fase
+			if (strval($this->fase->CurrentValue) <> "") {
+				$sFilterWrk = "`fase`" . ew_SearchString("=", $this->fase->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_produccion`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_produccion`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->fase, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `fase` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->fase->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->fase->ViewValue = $this->fase->CurrentValue;
+				}
+			} else {
+				$this->fase->ViewValue = NULL;
+			}
+			$this->fase->ViewCustomAttributes = "";
 
 			// GME_Activos
 			$this->GME_Activos->LinkCustomAttributes = "";
@@ -1206,13 +1329,45 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 			$this->fecha->LinkCustomAttributes = "";
 			$this->fecha->HrefValue = "";
 			$this->fecha->TooltipValue = "";
+
+			// año
+			$this->aF1o->LinkCustomAttributes = "";
+			$this->aF1o->HrefValue = "";
+			$this->aF1o->TooltipValue = "";
+
+			// fase
+			$this->fase->LinkCustomAttributes = "";
+			$this->fase->HrefValue = "";
+			$this->fase->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
 			// GME_Activos
 			$this->GME_Activos->EditAttrs["class"] = "form-control";
 			$this->GME_Activos->EditCustomAttributes = "";
-			$this->GME_Activos->EditValue = ew_HtmlEncode($this->GME_Activos->AdvancedSearch->SearchValue);
-			$this->GME_Activos->PlaceHolder = ew_RemoveHtml($this->GME_Activos->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `GME_Activos`, `GME_Activos` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_produccion`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `GME_Activos`, `GME_Activos` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_produccion`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->GME_Activos, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `GME_Activos` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->GME_Activos->EditValue = $arwrk;
 
 			// Total_erradicado
 			$this->Total_erradicado->EditAttrs["class"] = "form-control";
@@ -1225,6 +1380,62 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 			$this->fecha->EditCustomAttributes = "";
 			$this->fecha->EditValue = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->fecha->AdvancedSearch->SearchValue, 7), 7));
 			$this->fecha->PlaceHolder = ew_RemoveHtml($this->fecha->FldCaption());
+
+			// año
+			$this->aF1o->EditAttrs["class"] = "form-control";
+			$this->aF1o->EditCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_produccion`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `año`, `año` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_produccion`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->aF1o, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `año` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->aF1o->EditValue = $arwrk;
+
+			// fase
+			$this->fase->EditAttrs["class"] = "form-control";
+			$this->fase->EditCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_produccion`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `fase`, `fase` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_produccion`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->fase, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `fase` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->fase->EditValue = $arwrk;
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -1247,13 +1458,7 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 		// Check if validation required
 		if (!EW_SERVER_VALIDATE)
 			return TRUE;
-		if (!ew_CheckInteger($this->GME_Activos->AdvancedSearch->SearchValue)) {
-			ew_AddMessage($gsSearchError, $this->GME_Activos->FldErrMsg());
-		}
-		if (!ew_CheckNumber($this->Total_erradicado->AdvancedSearch->SearchValue)) {
-			ew_AddMessage($gsSearchError, $this->Total_erradicado->FldErrMsg());
-		}
-		if (!ew_CheckEuroDate($this->fecha->AdvancedSearch->SearchValue)) {
+		if (!ew_CheckDate($this->fecha->AdvancedSearch->SearchValue)) {
 			ew_AddMessage($gsSearchError, $this->fecha->FldErrMsg());
 		}
 
@@ -1274,6 +1479,8 @@ class cgrafica_produccion_list extends cgrafica_produccion {
 		$this->GME_Activos->AdvancedSearch->Load();
 		$this->Total_erradicado->AdvancedSearch->Load();
 		$this->fecha->AdvancedSearch->Load();
+		$this->aF1o->AdvancedSearch->Load();
+		$this->fase->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -1595,8 +1802,11 @@ fgrafica_produccionlist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fgrafica_produccionlist.Lists["x_GME_Activos"] = {"LinkField":"x_GME_Activos","Ajax":null,"AutoFill":false,"DisplayFields":["x_GME_Activos","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_produccionlist.Lists["x_aF1o"] = {"LinkField":"x_aF1o","Ajax":null,"AutoFill":false,"DisplayFields":["x_aF1o","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_produccionlist.Lists["x_fase"] = {"LinkField":"x_fase","Ajax":null,"AutoFill":false,"DisplayFields":["x_fase","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 var fgrafica_produccionlistsrch = new ew_Form("fgrafica_produccionlistsrch");
 
 // Validate function for search
@@ -1606,14 +1816,8 @@ fgrafica_produccionlistsrch.Validate = function(fobj) {
 	fobj = fobj || this.Form;
 	this.PostAutoSuggest();
 	var infix = "";
-	elm = this.GetElements("x" + infix + "_GME_Activos");
-	if (elm && !ew_CheckInteger(elm.value))
-		return this.OnError(elm, "<?php echo ew_JsEncode2($grafica_produccion->GME_Activos->FldErrMsg()) ?>");
-	elm = this.GetElements("x" + infix + "_Total_erradicado");
-	if (elm && !ew_CheckNumber(elm.value))
-		return this.OnError(elm, "<?php echo ew_JsEncode2($grafica_produccion->Total_erradicado->FldErrMsg()) ?>");
 	elm = this.GetElements("x" + infix + "_fecha");
-	if (elm && !ew_CheckEuroDate(elm.value))
+	if (elm && !ew_CheckDate(elm.value))
 		return this.OnError(elm, "<?php echo ew_JsEncode2($grafica_produccion->fecha->FldErrMsg()) ?>");
 
 	// Set up row object
@@ -1641,6 +1845,9 @@ fgrafica_produccionlistsrch.ValidateRequired = false; // No JavaScript validatio
 <?php } ?>
 
 // Dynamic selection lists
+fgrafica_produccionlistsrch.Lists["x_GME_Activos"] = {"LinkField":"x_GME_Activos","Ajax":null,"AutoFill":false,"DisplayFields":["x_GME_Activos","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_produccionlistsrch.Lists["x_aF1o"] = {"LinkField":"x_aF1o","Ajax":null,"AutoFill":false,"DisplayFields":["x_aF1o","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_produccionlistsrch.Lists["x_fase"] = {"LinkField":"x_fase","Ajax":null,"AutoFill":false,"DisplayFields":["x_fase","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 </script>
 <script type="text/javascript">
 
@@ -1652,64 +1859,17 @@ fgrafica_produccionlistsrch.ValidateRequired = false; // No JavaScript validatio
 <?php if ($grafica_produccion->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-
-
-
-
 <?php if ($grafica_produccion->Export == "") { ?>
-
+<?php echo $Language->SelectionForm(); ?>
 <?php } ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<?php
-	$bSelectLimit = EW_SELECT_LIMIT;
-	if ($bSelectLimit) {
-		if ($grafica_produccion_list->TotalRecs <= 0)
-			$grafica_produccion_list->TotalRecs = $grafica_produccion->SelectRecordCount();
-	} else {
-		if (!$grafica_produccion_list->Recordset && ($grafica_produccion_list->Recordset = $grafica_produccion_list->LoadRecordset()))
-			$grafica_produccion_list->TotalRecs = $grafica_produccion_list->Recordset->RecordCount();
-	}
-	$grafica_produccion_list->StartRec = 1;
-	if ($grafica_produccion_list->DisplayRecs <= 0 || ($grafica_produccion->Export <> "" && $grafica_produccion->ExportAll)) // Display all records
-		$grafica_produccion_list->DisplayRecs = $grafica_produccion_list->TotalRecs;
-	if (!($grafica_produccion->Export <> "" && $grafica_produccion->ExportAll))
-		$grafica_produccion_list->SetUpStartRec(); // Set up start record position
-	if ($bSelectLimit)
-		$grafica_produccion_list->Recordset = $grafica_produccion_list->LoadRecordset($grafica_produccion_list->StartRec-1, $grafica_produccion_list->DisplayRecs);
-
-	// Set no record found message
-	if ($grafica_produccion->CurrentAction == "" && $grafica_produccion_list->TotalRecs == 0) {
-		if (!$Security->CanList())
-			$grafica_produccion_list->setWarningMessage($Language->Phrase("NoPermission"));
-		if ($grafica_produccion_list->SearchWhere == "0=101")
-			$grafica_produccion_list->setWarningMessage($Language->Phrase("EnterSearchCriteria"));
-		else
-			$grafica_produccion_list->setWarningMessage($Language->Phrase("NoRecord"));
-	}
-$grafica_produccion_list->RenderOtherOptions();
-?>
-<?php if ($Security->CanSearch()) { ?>
-<?php if ($grafica_produccion->Export == "" && $grafica_produccion->CurrentAction == "") { ?>
-
-</form>
-<?php } ?>
-<?php } ?>
-<?php $grafica_produccion_list->ShowPageHeader(); ?>
-<?php
-$grafica_produccion_list->ShowMessage();
-?>
-
 <script src="./Highstock/js/highstock.js"></script>
 <script src="./Highstock/js/modules/exporting.js"></script>
-
-
 <div>
-
-
 <h2>Hectáreas erradicadas y GME activos por día</h2>
-<p>Este reporte muestra el total de hectáreas erradicadas y el número de grupos GME activos, según filtros por año y fase. Los  grupos GME activos hacen referencia a la sumatoria de los reportes diarios realizados por las personas en campo</p>
+<p> Este reporte muestra el total de hectáreas erradicadas y el número de grupos GME activos por día. Los grupos GME activos hacen referencia a la sumatoria de los reportes diarios realizados por los apoyos zonales en campo.  La información puede filtrarse por año y fase.</p><p> <font color="#F78181">Datos operativos del grupo de erradicación, cifras no oficiales, pendiente de validación y verificación por parte del ente neutral</font></p>
 <hr>
 <h3>Generador de gráfica</h3>
 <i><strong>Nota:</strong> Seleccione una opción en todos los campos</i><br><br>
@@ -1742,9 +1902,11 @@ $grafica_produccion_list->ShowMessage();
 </table>
 <br>
 <button class="btn btn-primary ewButton" name="btnsubmit" id="reporte" type="submit"> Generar gráfica </button>
+
 <br>
 <br>
 <hr>
+</div>
 <script type="text/javascript">
 
 		$(document).ready(function(){
@@ -1827,7 +1989,7 @@ $grafica_produccion_list->ShowMessage();
 		if(ano != "" && fase !="" && punto !=""){
 			if(ano==99){	
 				var titulo="Serie histórica desde el ";
-				var fases="2015 fase II a "+fecha;
+				var fases="2015 a "+fecha;
 			}else if(fase==99 && ano != 99){
 				var titulo="Todas las fases del ";
 				var fases=ano;
@@ -1882,6 +2044,10 @@ $grafica_produccion_list->ShowMessage();
 									format: '{value}'
 								}
 							},
+							exporting: {
+								sourceWidth: 2000,
+								sourceHeight: 700
+							},
 							
 								series : [{
 									name : 'Hectáreas erradicadas',
@@ -1922,7 +2088,7 @@ $grafica_produccion_list->ShowMessage();
 		} 	
 });	
 	</script>
-</div>
+
 <div id="container" style="max-height: 400px; min-width: 310px"></div>
 
 <div id="linea"></div>
@@ -1944,42 +2110,80 @@ function myFunction() {
 	}    
 }
 </script>
+<div class="ewToolbar">
 <h3>Resumen de datos</h3>
 
 <p>La siguiente tabla presenta el total de hectáreas erradicadas por día.</p>
 
 <hr>
-<div class="ewToolbar">
 <table>
 	<tr>
-		<td><?php if ($grafica_produccion_list->TotalRecs > 0 && $grafica_produccion_list->ExportOptions->Visible()) { ?>
-			<?php $grafica_produccion_list->ExportOptions->Render("body") ?></td>
-		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono</td>
+		<td>
+			<?php if ($grafica_produccion_list->TotalRecs > 0 && $grafica_produccion_list->ExportOptions->Visible()) { ?>
+			<?php $grafica_produccion_list->ExportOptions->Render("body") ?>
+			<?php } ?>
+
+		</td>
+		<td>
+			Si desea exportar la tabla en formato excel haga click en el siguiente icono 
+		</td>	
 	</tr>	
-</table>
-</div>
+</table> 
 <hr>
+</div>
+<?php if ($grafica_produccion->Export == "") { ?>
+
+<div>
 <br>
-
-
-
-<form name="fgrafica_produccionlistsrch" id="fgrafica_produccionlistsrch" class="form-inline ewForm" action="<?php echo ew_CurrentPage() ?>">
-<?php $SearchPanelClass = ($grafica_produccion_list->SearchWhere <> "") ? " " : " "; ?>
-
 <table>
 	<tr>
-		<td><?php if ($grafica_produccion_list->SearchOptions->Visible()) { ?>
+		<td>
+			<?php if ($grafica_produccion_list->SearchOptions->Visible()) { ?>
 			<?php $grafica_produccion_list->SearchOptions->Render("body") ?>
-			<?php } ?></td>
-		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente</td>
+			<?php } ?>
+		</td>
+		<td>
+			Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente
+		</td>	
 	</tr>
 </table>
 <br>
+</div>
+
 <hr>
-<br>
+<?php } ?>
+<?php
+	$bSelectLimit = EW_SELECT_LIMIT;
+	if ($bSelectLimit) {
+		if ($grafica_produccion_list->TotalRecs <= 0)
+			$grafica_produccion_list->TotalRecs = $grafica_produccion->SelectRecordCount();
+	} else {
+		if (!$grafica_produccion_list->Recordset && ($grafica_produccion_list->Recordset = $grafica_produccion_list->LoadRecordset()))
+			$grafica_produccion_list->TotalRecs = $grafica_produccion_list->Recordset->RecordCount();
+	}
+	$grafica_produccion_list->StartRec = 1;
+	if ($grafica_produccion_list->DisplayRecs <= 0 || ($grafica_produccion->Export <> "" && $grafica_produccion->ExportAll)) // Display all records
+		$grafica_produccion_list->DisplayRecs = $grafica_produccion_list->TotalRecs;
+	if (!($grafica_produccion->Export <> "" && $grafica_produccion->ExportAll))
+		$grafica_produccion_list->SetUpStartRec(); // Set up start record position
+	if ($bSelectLimit)
+		$grafica_produccion_list->Recordset = $grafica_produccion_list->LoadRecordset($grafica_produccion_list->StartRec-1, $grafica_produccion_list->DisplayRecs);
 
-
-
+	// Set no record found message
+	if ($grafica_produccion->CurrentAction == "" && $grafica_produccion_list->TotalRecs == 0) {
+		if (!$Security->CanList())
+			$grafica_produccion_list->setWarningMessage($Language->Phrase("NoPermission"));
+		if ($grafica_produccion_list->SearchWhere == "0=101")
+			$grafica_produccion_list->setWarningMessage($Language->Phrase("EnterSearchCriteria"));
+		else
+			$grafica_produccion_list->setWarningMessage($Language->Phrase("NoRecord"));
+	}
+$grafica_produccion_list->RenderOtherOptions();
+?>
+<?php if ($Security->CanSearch()) { ?>
+<?php if ($grafica_produccion->Export == "" && $grafica_produccion->CurrentAction == "") { ?>
+<form name="fgrafica_produccionlistsrch" id="fgrafica_produccionlistsrch" class="form-inline ewForm" action="<?php echo ew_CurrentPage() ?>">
+<?php $SearchPanelClass = ($grafica_produccion_list->SearchWhere <> "") ? " " : " "; ?>
 <div id="fgrafica_produccionlistsrch_SearchPanel" class="ewSearchPanel collapse<?php echo $SearchPanelClass ?>">
 <input type="hidden" name="cmd" value="search">
 <input type="hidden" name="t" value="grafica_produccion">
@@ -1995,53 +2199,127 @@ $grafica_produccion->RowType = EW_ROWTYPE_SEARCH;
 $grafica_produccion->ResetAttrs();
 $grafica_produccion_list->RenderRow();
 ?>
-
+<br>
 <table>
 	<tr>
-		<td><label for="x_GME_Activos" class="ewSearchCaption ewLabel">GME ACTIVOS</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_GME_Activos" id="z_GME_Activos" value="="></span></td>
+		<td>
+			<label for="x_GME_Activos" class="ewSearchCaption ewLabel"><?php echo $grafica_produccion->GME_Activos->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_GME_Activos" id="z_GME_Activos" value="="></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_GME_Activos" name="x_GME_Activos" id="x_GME_Activos" size="30" placeholder="<?php echo ew_HtmlEncode($grafica_produccion->GME_Activos->PlaceHolder) ?>" value="<?php echo $grafica_produccion->GME_Activos->EditValue ?>"<?php echo $grafica_produccion->GME_Activos->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_GME_Activos" id="x_GME_Activos" name="x_GME_Activos"<?php echo $grafica_produccion->GME_Activos->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_produccion->GME_Activos->EditValue)) {
+					$arwrk = $grafica_produccion->GME_Activos->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_produccion->GME_Activos->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_produccionlistsrch.Lists["x_GME_Activos"].Options = <?php echo (is_array($grafica_produccion->GME_Activos->EditValue)) ? ew_ArrayToJson($grafica_produccion->GME_Activos->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
 	</tr>
-		<tr>
-		<td><label for="x_Total_erradicado" class="ewSearchCaption ewLabel">TOTAL ERRADICADO</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_Total_erradicado" id="z_Total_erradicado" value="="></span></td>
+	<tr>
+		<td>
+			<label for="x_fecha" class="ewSearchCaption ewLabel"><?php echo $grafica_produccion->fecha->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_fecha" id="z_fecha" value="="></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_Total_erradicado" name="x_Total_erradicado" id="x_Total_erradicado" size="30" placeholder="<?php echo ew_HtmlEncode($grafica_produccion->Total_erradicado->PlaceHolder) ?>" value="<?php echo $grafica_produccion->Total_erradicado->EditValue ?>"<?php echo $grafica_produccion->Total_erradicado->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<input style="min-width: 350px;" type="text" data-field="x_fecha" name="x_fecha" id="x_fecha" placeholder="<?php echo ew_HtmlEncode($grafica_produccion->fecha->PlaceHolder) ?>" value="<?php echo $grafica_produccion->fecha->EditValue ?>"<?php echo $grafica_produccion->fecha->EditAttributes() ?>>
+			</span>
+		</td>
 	</tr>
-		<tr>
-		<td><label for="x_fecha" class="ewSearchCaption ewLabel">FECHA</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("=") ?><input type="hidden" name="z_fecha" id="z_fecha" value="="></span></td>
+	<tr>
+		<td>
+			<label for="x_aF1o" class="ewSearchCaption ewLabel"><?php echo $grafica_produccion->aF1o->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_aF1o" id="z_aF1o" value="LIKE"></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="date" data-field="x_fecha" name="x_fecha" id="x_fecha" value="<?php echo $grafica_produccion->fecha->EditValue ?>"<?php echo $grafica_produccion->fecha->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_aF1o" id="x_aF1o" name="x_aF1o"<?php echo $grafica_produccion->aF1o->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_produccion->aF1o->EditValue)) {
+					$arwrk = $grafica_produccion->aF1o->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_produccion->aF1o->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_produccionlistsrch.Lists["x_aF1o"].Options = <?php echo (is_array($grafica_produccion->aF1o->EditValue)) ? ew_ArrayToJson($grafica_produccion->aF1o->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="x_fase" class="ewSearchCaption ewLabel"><?php echo $grafica_produccion->fase->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_fase" id="z_fase" value="LIKE"></span>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_fase" id="x_fase" name="x_fase"<?php echo $grafica_produccion->fase->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_produccion->fase->EditValue)) {
+					$arwrk = $grafica_produccion->fase->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_produccion->fase->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_produccionlistsrch.Lists["x_fase"].Options = <?php echo (is_array($grafica_produccion->fase->EditValue)) ? ew_ArrayToJson($grafica_produccion->fase->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
 	</tr>
 </table>
-
-<?php if ($grafica_produccion->GME_Activos->Visible) { // GME_Activos ?>
-<?php } ?>
-<?php if ($grafica_produccion->Total_erradicado->Visible) { // Total_erradicado ?>
-<?php } ?>
-<?php if ($grafica_produccion->fecha->Visible) { // fecha ?>
-<?php } ?>
-
-<div id="xsr_4" class="ewRow">
-	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
 </div>
-<hr>
-
-	</div>
 </div>
-
-
-
-
+</form>
 <?php } ?>
+<?php } ?>
+<?php $grafica_produccion_list->ShowPageHeader(); ?>
+<?php
+$grafica_produccion_list->ShowMessage();
+?>
 <?php if ($grafica_produccion_list->TotalRecs > 0 || $grafica_produccion->CurrentAction <> "") { ?>
 <div class="ewGrid">
 <?php if ($grafica_produccion->Export == "") { ?>
@@ -2151,6 +2429,24 @@ $grafica_produccion_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
+<?php if ($grafica_produccion->aF1o->Visible) { // año ?>
+	<?php if ($grafica_produccion->SortUrl($grafica_produccion->aF1o) == "") { ?>
+		<th data-name="aF1o"><div id="elh_grafica_produccion_aF1o" class="grafica_produccion_aF1o"><div class="ewTableHeaderCaption"><?php echo $grafica_produccion->aF1o->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="aF1o"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_produccion->SortUrl($grafica_produccion->aF1o) ?>',2);"><div id="elh_grafica_produccion_aF1o" class="grafica_produccion_aF1o">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_produccion->aF1o->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_produccion->aF1o->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_produccion->aF1o->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($grafica_produccion->fase->Visible) { // fase ?>
+	<?php if ($grafica_produccion->SortUrl($grafica_produccion->fase) == "") { ?>
+		<th data-name="fase"><div id="elh_grafica_produccion_fase" class="grafica_produccion_fase"><div class="ewTableHeaderCaption"><?php echo $grafica_produccion->fase->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="fase"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $grafica_produccion->SortUrl($grafica_produccion->fase) ?>',2);"><div id="elh_grafica_produccion_fase" class="grafica_produccion_fase">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $grafica_produccion->fase->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($grafica_produccion->fase->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($grafica_produccion->fase->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
 <?php
 
 // Render list options (header, right)
@@ -2232,6 +2528,18 @@ $grafica_produccion_list->ListOptions->Render("body", "left", $grafica_produccio
 		<td data-name="fecha"<?php echo $grafica_produccion->fecha->CellAttributes() ?>>
 <span<?php echo $grafica_produccion->fecha->ViewAttributes() ?>>
 <?php echo $grafica_produccion->fecha->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($grafica_produccion->aF1o->Visible) { // año ?>
+		<td data-name="aF1o"<?php echo $grafica_produccion->aF1o->CellAttributes() ?>>
+<span<?php echo $grafica_produccion->aF1o->ViewAttributes() ?>>
+<?php echo $grafica_produccion->aF1o->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($grafica_produccion->fase->Visible) { // fase ?>
+		<td data-name="fase"<?php echo $grafica_produccion->fase->CellAttributes() ?>>
+<span<?php echo $grafica_produccion->fase->ViewAttributes() ?>>
+<?php echo $grafica_produccion->fase->ListViewValue() ?></span>
 </td>
 	<?php } ?>
 <?php

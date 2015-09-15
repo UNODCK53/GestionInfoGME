@@ -1224,11 +1224,69 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 			// Punto
-			$this->Punto->ViewValue = $this->Punto->CurrentValue;
+			if (strval($this->Punto->CurrentValue) <> "") {
+				$sFilterWrk = "`Punto`" . ew_SearchString("=", $this->Punto->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_dias_contratados`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_dias_contratados`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Punto` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Punto->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Punto->ViewValue = $this->Punto->CurrentValue;
+				}
+			} else {
+				$this->Punto->ViewValue = NULL;
+			}
 			$this->Punto->ViewCustomAttributes = "";
 
 			// Profesional
-			$this->Profesional->ViewValue = $this->Profesional->CurrentValue;
+			if (strval($this->Profesional->CurrentValue) <> "") {
+				$sFilterWrk = "`Profesional`" . ew_SearchString("=", $this->Profesional->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Profesional`, `Profesional` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_dias_contratados`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Profesional`, `Profesional` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_dias_contratados`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Profesional, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Profesional` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Profesional->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Profesional->ViewValue = $this->Profesional->CurrentValue;
+				}
+			} else {
+				$this->Profesional->ViewValue = NULL;
+			}
 			$this->Profesional->ViewCustomAttributes = "";
 
 			// Firma_Contrato_Gme
@@ -1281,14 +1339,58 @@ class cgrafica_dias_contratados_list extends cgrafica_dias_contratados {
 			// Punto
 			$this->Punto->EditAttrs["class"] = "form-control";
 			$this->Punto->EditCustomAttributes = "";
-			$this->Punto->EditValue = ew_HtmlEncode($this->Punto->AdvancedSearch->SearchValue);
-			$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_dias_contratados`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_dias_contratados`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Punto` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Punto->EditValue = $arwrk;
 
 			// Profesional
 			$this->Profesional->EditAttrs["class"] = "form-control";
 			$this->Profesional->EditCustomAttributes = "";
-			$this->Profesional->EditValue = ew_HtmlEncode($this->Profesional->AdvancedSearch->SearchValue);
-			$this->Profesional->PlaceHolder = ew_RemoveHtml($this->Profesional->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Profesional`, `Profesional` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_dias_contratados`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Profesional`, `Profesional` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_dias_contratados`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Profesional, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Profesional` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Profesional->EditValue = $arwrk;
 
 			// Firma_Contrato_Gme
 			$this->Firma_Contrato_Gme->EditAttrs["class"] = "form-control";
@@ -1677,8 +1779,10 @@ fgrafica_dias_contratadoslist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fgrafica_dias_contratadoslist.Lists["x_Punto"] = {"LinkField":"x_Punto","Ajax":null,"AutoFill":false,"DisplayFields":["x_Punto","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_dias_contratadoslist.Lists["x_Profesional"] = {"LinkField":"x_Profesional","Ajax":null,"AutoFill":false,"DisplayFields":["x_Profesional","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 var fgrafica_dias_contratadoslistsrch = new ew_Form("fgrafica_dias_contratadoslistsrch");
 
 // Validate function for search
@@ -1714,6 +1818,8 @@ fgrafica_dias_contratadoslistsrch.ValidateRequired = false; // No JavaScript val
 <?php } ?>
 
 // Dynamic selection lists
+fgrafica_dias_contratadoslistsrch.Lists["x_Punto"] = {"LinkField":"x_Punto","Ajax":null,"AutoFill":false,"DisplayFields":["x_Punto","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fgrafica_dias_contratadoslistsrch.Lists["x_Profesional"] = {"LinkField":"x_Profesional","Ajax":null,"AutoFill":false,"DisplayFields":["x_Profesional","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 </script>
 <script type="text/javascript">
 
@@ -1725,45 +1831,55 @@ fgrafica_dias_contratadoslistsrch.ValidateRequired = false; // No JavaScript val
 <?php if ($grafica_dias_contratados->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-<h2>Reporte de Días contratados</h2>
-<p>La siguiente tabla contiene el listado de los días trabajados en zona por cada Punto de erradicación, desde que firmaron contrato hasta que finalizaron la fase</p><p><font color="#F78181">Datos operativos del grupo de erradicación, cifras no oficiales, pendiente de validación y verificación por parte del ente neutral</font></p>
-<hr>
-
-<table>
-	<tr>
-		<td><?php if ($grafica_dias_contratados_list->TotalRecs > 0 && $grafica_dias_contratados_list->ExportOptions->Visible()) { ?>
-			<?php $grafica_dias_contratados_list->ExportOptions->Render("body") ?></td>
-
-
-
-		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono </td>
-	</tr>
-</table>
-
-<hr>
-
-<?php } ?>
 <?php if ($grafica_dias_contratados->Export == "") { ?>
-
-
+<?php echo $Language->SelectionForm(); ?>
 <?php } ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<?php if ($grafica_dias_contratados_list->SearchOptions->Visible()) { ?>
+<div class="ewToolbar">
+<H2> Reporte de Días contratados</h2>
+<p>La siguiente tabla contiene el listado de los días trabajados en zona por cada Punto de erradicación, desde que firmaron contrato hasta que finalizaron la fase</p><p><font color="#F78181">Datos operativos del grupo de erradicación, cifras no oficiales, pendiente de validación y verificación por parte del ente neutral</font></p>
 
+<hr>
+<table>
+	<tr>
+		<td>
+			<?php if ($grafica_dias_contratados_list->TotalRecs > 0 && $grafica_dias_contratados_list->ExportOptions->Visible()) { ?>
+
+			<?php $grafica_dias_contratados_list->ExportOptions->Render("body") ?>
+			<?php } ?>
+
+		</td>
+		<td>
+			Si desea exportar la tabla en formato excel haga click en el siguiente icono 
+		</td>	
+	</tr>	
+</table> 
+
+<hr>
+
+</div>
+<?php if ($grafica_dias_contratados->Export == "") { ?>
+
+<div>
 <br>
 <table>
 	<tr>
-		<td><?php $grafica_dias_contratados_list->SearchOptions->Render("body") ?></td>
-		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente</td>
+		<td>
+			<?php if ($grafica_dias_contratados_list->SearchOptions->Visible()) { ?>
+			<?php $grafica_dias_contratados_list->SearchOptions->Render("body") ?>
+			<?php } ?>
+		</td>
+		<td>
+			Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente
+		</td>	
 	</tr>
 </table>
 <br>
+</div>
+
 <hr>
-<br>
-
-
 <?php } ?>
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
@@ -1796,7 +1912,7 @@ $grafica_dias_contratados_list->RenderOtherOptions();
 <?php if ($Security->CanSearch()) { ?>
 <?php if ($grafica_dias_contratados->Export == "" && $grafica_dias_contratados->CurrentAction == "") { ?>
 <form name="fgrafica_dias_contratadoslistsrch" id="fgrafica_dias_contratadoslistsrch" class="form-inline ewForm" action="<?php echo ew_CurrentPage() ?>">
-<?php $SearchPanelClass = ($grafica_dias_contratados_list->SearchWhere <> "") ? " in" : " in"; ?>
+<?php $SearchPanelClass = ($grafica_dias_contratados_list->SearchWhere <> "") ? " " : " "; ?>
 <div id="fgrafica_dias_contratadoslistsrch_SearchPanel" class="ewSearchPanel collapse<?php echo $SearchPanelClass ?>">
 <input type="hidden" name="cmd" value="search">
 <input type="hidden" name="t" value="grafica_dias_contratados">
@@ -1812,34 +1928,74 @@ $grafica_dias_contratados->RowType = EW_ROWTYPE_SEARCH;
 $grafica_dias_contratados->ResetAttrs();
 $grafica_dias_contratados_list->RenderRow();
 ?>
-<div id="xsr_1" class="ewRow">
-
-
+<br>
 <table>
 	<tr>
-		<td><label for="x_Punto" class="ewSearchCaption ewLabel">PUNTO DE ERRADICACIÓN</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span></td>
+		<td>
+			<label for="x_Punto" class="ewSearchCaption ewLabel"><?php echo $grafica_dias_contratados->Punto->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_dias_contratados->Punto->PlaceHolder) ?>" value="<?php echo $grafica_dias_contratados->Punto->EditValue ?>"<?php echo $grafica_dias_contratados->Punto->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_Punto" id="x_Punto" name="x_Punto"<?php echo $grafica_dias_contratados->Punto->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_dias_contratados->Punto->EditValue)) {
+					$arwrk = $grafica_dias_contratados->Punto->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_dias_contratados->Punto->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_dias_contratadoslistsrch.Lists["x_Punto"].Options = <?php echo (is_array($grafica_dias_contratados->Punto->EditValue)) ? ew_ArrayToJson($grafica_dias_contratados->Punto->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
 	</tr>
 	<tr>
-		<td><label for="x_Profesional" class="ewSearchCaption ewLabel">PROFESIONAL</label>
-			<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Profesional" id="z_Profesional" value="LIKE"></span></td>
+		<td>
+			<label for="x_Profesional" class="ewSearchCaption ewLabel"><?php echo $grafica_dias_contratados->Profesional->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Profesional" id="z_Profesional" value="LIKE"></span>
+		</td>
 		<td width="5%"></td>
-		<td><span class="ewSearchField">
-			<input type="text" data-field="x_Profesional" name="x_Profesional" id="x_Profesional" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_dias_contratados->Profesional->PlaceHolder) ?>" value="<?php echo $grafica_dias_contratados->Profesional->EditValue ?>"<?php echo $grafica_dias_contratados->Profesional->EditAttributes() ?>>
-			</span></td>
+		<td>
+			<span class="ewSearchField">
+			<select  style="min-width: 350px;" data-field="x_Profesional" id="x_Profesional" name="x_Profesional"<?php echo $grafica_dias_contratados->Profesional->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_dias_contratados->Profesional->EditValue)) {
+					$arwrk = $grafica_dias_contratados->Profesional->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_dias_contratados->Profesional->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_dias_contratadoslistsrch.Lists["x_Profesional"].Options = <?php echo (is_array($grafica_dias_contratados->Profesional->EditValue)) ? ew_ArrayToJson($grafica_dias_contratados->Profesional->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
 	</tr>
 </table>
-<br>
 <button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-<br>
-<br>
-<hr>
-
-
 	</div>
 </div>
 </form>

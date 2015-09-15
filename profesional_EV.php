@@ -15,7 +15,7 @@ function valores ($ano,$fase,$profesional) {
 		
 			echo '<option value="">Seleccione uno</option>';
 			echo '<option value="99">Todos los Profesionales</option>';
-			$sql=mysql_query("select (case when `NOM_GE`='Otros' then `Otro_PGE`else `NOM_GE` end) as NOM_GE FROM gestioninfogme.enlace_novedad WHERE SUBSTR(`FECHA_NOVEDAD`,7,4)=".$ano." and `Num_Evacua`>0 group by NOM_GE order by NOM_GE asc");
+			$sql=mysql_query("select (case when `NOM_GE`='Otros' then `Otro_PGE`else `NOM_GE` end) as NOM_GE FROM gestioninfogme.enlace_novedad WHERE SUBSTR(`FECHA_NOVEDAD`,1,4)=".$ano." and `Num_Evacua`>0 group by NOM_GE order by NOM_GE asc");
 			while($row=mysql_fetch_array($sql))
 				{
 					//crea la lista de opciones segun la sentencia sql 2012
@@ -26,7 +26,7 @@ function valores ($ano,$fase,$profesional) {
 		}else{
 			echo '<option value="">Seleccione uno</option>';
 			echo '<option value="99">Todos los Profesionales</option>';
-			$sql=mysql_query("select (case when `NOM_GE`='Otros' then `Otro_PGE`else `NOM_GE` end) as NOM_GE FROM gestioninfogme.enlace_novedad WHERE SUBSTR(`FECHA_NOVEDAD`,7,4)=".$ano." and `Num_Evacua`>0 and SUBSTR(NOM_PE,3,2)='".$fase."'  group by NOM_GE order by NOM_GE asc"
+			$sql=mysql_query("select (case when `NOM_GE`='Otros' then `Otro_PGE`else `NOM_GE` end) as NOM_GE FROM gestioninfogme.enlace_novedad WHERE SUBSTR(`FECHA_NOVEDAD`,1,4)=".$ano." and `Num_Evacua`>0 and SUBSTR(NOM_PE,3,2)='".$fase."'  group by NOM_GE order by NOM_GE asc"
 			);
 			while($row=mysql_fetch_array($sql))
 				{

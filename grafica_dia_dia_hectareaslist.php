@@ -1180,7 +1180,36 @@ class cgrafica_dia_dia_hectareas_list extends cgrafica_dia_dia_hectareas {
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 			// Punto
-			$this->Punto->ViewValue = $this->Punto->CurrentValue;
+			if (strval($this->Punto->CurrentValue) <> "") {
+				$sFilterWrk = "`Punto`" . ew_SearchString("=", $this->Punto->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_dia_dia_hectareas`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `grafica_dia_dia_hectareas`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Punto` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Punto->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Punto->ViewValue = $this->Punto->CurrentValue;
+				}
+			} else {
+				$this->Punto->ViewValue = NULL;
+			}
 			$this->Punto->ViewCustomAttributes = "";
 
 			// Fecha
@@ -1210,8 +1239,30 @@ class cgrafica_dia_dia_hectareas_list extends cgrafica_dia_dia_hectareas {
 			// Punto
 			$this->Punto->EditAttrs["class"] = "form-control";
 			$this->Punto->EditCustomAttributes = "";
-			$this->Punto->EditValue = ew_HtmlEncode($this->Punto->AdvancedSearch->SearchValue);
-			$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_dia_dia_hectareas`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Punto`, `Punto` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `grafica_dia_dia_hectareas`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Punto, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Punto` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Punto->EditValue = $arwrk;
 
 			// Fecha
 			$this->Fecha->EditAttrs["class"] = "form-control";
@@ -1585,8 +1636,9 @@ fgrafica_dia_dia_hectareaslist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fgrafica_dia_dia_hectareaslist.Lists["x_Punto"] = {"LinkField":"x_Punto","Ajax":null,"AutoFill":false,"DisplayFields":["x_Punto","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 var fgrafica_dia_dia_hectareaslistsrch = new ew_Form("fgrafica_dia_dia_hectareaslistsrch");
 
 // Validate function for search
@@ -1622,6 +1674,7 @@ fgrafica_dia_dia_hectareaslistsrch.ValidateRequired = false; // No JavaScript va
 <?php } ?>
 
 // Dynamic selection lists
+fgrafica_dia_dia_hectareaslistsrch.Lists["x_Punto"] = {"LinkField":"x_Punto","Ajax":null,"AutoFill":false,"DisplayFields":["x_Punto","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 </script>
 <script type="text/javascript">
 
@@ -1634,59 +1687,23 @@ fgrafica_dia_dia_hectareaslistsrch.ValidateRequired = false; // No JavaScript va
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
 <?php if ($grafica_dia_dia_hectareas->Export == "") { ?>
-
+<?php echo $Language->SelectionForm(); ?>
 <?php } ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<?php
-	$bSelectLimit = EW_SELECT_LIMIT;
-	if ($bSelectLimit) {
-		if ($grafica_dia_dia_hectareas_list->TotalRecs <= 0)
-			$grafica_dia_dia_hectareas_list->TotalRecs = $grafica_dia_dia_hectareas->SelectRecordCount();
-	} else {
-		if (!$grafica_dia_dia_hectareas_list->Recordset && ($grafica_dia_dia_hectareas_list->Recordset = $grafica_dia_dia_hectareas_list->LoadRecordset()))
-			$grafica_dia_dia_hectareas_list->TotalRecs = $grafica_dia_dia_hectareas_list->Recordset->RecordCount();
-	}
-	$grafica_dia_dia_hectareas_list->StartRec = 1;
-	if ($grafica_dia_dia_hectareas_list->DisplayRecs <= 0 || ($grafica_dia_dia_hectareas->Export <> "" && $grafica_dia_dia_hectareas->ExportAll)) // Display all records
-		$grafica_dia_dia_hectareas_list->DisplayRecs = $grafica_dia_dia_hectareas_list->TotalRecs;
-	if (!($grafica_dia_dia_hectareas->Export <> "" && $grafica_dia_dia_hectareas->ExportAll))
-		$grafica_dia_dia_hectareas_list->SetUpStartRec(); // Set up start record position
-	if ($bSelectLimit)
-		$grafica_dia_dia_hectareas_list->Recordset = $grafica_dia_dia_hectareas_list->LoadRecordset($grafica_dia_dia_hectareas_list->StartRec-1, $grafica_dia_dia_hectareas_list->DisplayRecs);
-
-	// Set no record found message
-	if ($grafica_dia_dia_hectareas->CurrentAction == "" && $grafica_dia_dia_hectareas_list->TotalRecs == 0) {
-		if (!$Security->CanList())
-			$grafica_dia_dia_hectareas_list->setWarningMessage($Language->Phrase("NoPermission"));
-		if ($grafica_dia_dia_hectareas_list->SearchWhere == "0=101")
-			$grafica_dia_dia_hectareas_list->setWarningMessage($Language->Phrase("EnterSearchCriteria"));
-		else
-			$grafica_dia_dia_hectareas_list->setWarningMessage($Language->Phrase("NoRecord"));
-	}
-$grafica_dia_dia_hectareas_list->RenderOtherOptions();
-?>
-<div>
-
-
-
 <script src="./Highcharts/js/highcharts.js"></script>
 <script src="./Highcharts/js/modules/exporting.js"></script>
 <script src="./Highcharts/js/modules/heatmap.js"></script>
-
-
 <div>
-
-
 <h2>Cantidad de hectáreas erradicadas por día </h2>
-	<p>Este reporte muestra la erradicación diaria por Punto, según filtros de año y fase </p></p><p> <font color="#F78181">Datos operativos del grupo de erradicación, cifras no oficiales, pendiente de validación y verificación por parte del ente neutral</font><br>
+	<p>Este reporte muestra la erradicación diaria por Punto, según filtros de año y fase </p><p> <font color="#F78181">Datos operativos del grupo de erradicación, cifras no oficiales, pendiente de validación y verificación por parte del ente neutral</font></p><br>
 	<hr>
 	<h3>Generador de gráfica</h3>
 	
 	<p>La gráfica permite visualizar de forma rápida el comportamiento de la erradicación diaria</p>
 	<i><strong>Nota:</strong> Seleccione una opción en todos los campos</i><br><br>
-<table>
+<table>	
 	<tr>
 		<td>Año:</td>
 		<td width="5%"></td>
@@ -1711,18 +1728,37 @@ $grafica_dia_dia_hectareas_list->RenderOtherOptions();
 				
 			</select></td>
 	</tr>
-	
 </table>
 <br>
-
 <button class="btn btn-primary ewButton" name="btnsubmit" id="reporte" type="submit"> Generar gráfica </button>
 
 <br>
 <br>
 <hr>
-<br>
+</div>
+<div id="container" style="max-height:3000px; min-width: 1000px ;"></div>
+<div id="linea"></div>
+<script>
+document.getElementById("reporte").onclick = function() {myFunction()};
 
+function myFunction() {
 
+	var ano = document.getElementById("ano").value;
+	var fase=document.getElementById("fase").value;
+	var punto=document.getElementById("punto").value;
+	
+	if(ano != "" && fase !="" && punto !="" ){
+		document.getElementById("linea").innerHTML = "<hr><br>";
+	}
+	else{
+		pass;
+	}    
+}
+function filtro() {
+
+	console.log("a") ;
+}
+</script>
 <script type="text/javascript">
 
 		$(document).ready(function(){
@@ -1772,7 +1808,7 @@ $grafica_dia_dia_hectareas_list->RenderOtherOptions();
 				var dataString = 'ano='+ ano+'&fase='+ fase;
 				$.ajax({
 					type: "GET",
-					url: "punto.php",
+					url: "punto_sin_todos.php",
 					data: dataString,
 					cache: false,
 					success: function(html)
@@ -1839,7 +1875,7 @@ $("#reporte").click(function(){
 						data: dataString,
 						success: function(dato){
 						vector2=dato[0];//en la posicion 0 se encuentra las fechas
-						console.log(vector2);
+
 						}
 					});
 			$.ajax({//ajax que trae un vector con los Puntos de erradicación segun query
@@ -1851,7 +1887,7 @@ $("#reporte").click(function(){
 						data: dataString,
 						success: function(dato){
 						vector3=dato[1];//en la posicion 1 se encuentra los puntos
-console.log(vector3);
+
 						}
 					});	
 			$.ajax({//ajax que tarde una variable con arreglos de matriz que crean la grafica [i,j,ha]
@@ -1862,10 +1898,12 @@ console.log(vector3);
 				dataType: "json",
 				data: dataString,
 				success: function(dato){
-				vector=dato;					
-	
+				vector=dato;	
+				
+
 					$('#container').highcharts({//funcion qu crea la grafica
 						
+				
 						chart: {
 							type: 'heatmap'
 						},
@@ -1910,12 +1948,14 @@ console.log(vector3);
 							symbolHeight: 280,
 							reversed: true
 						},
+						
+
 
 						tooltip: {
 							formatter: function () {
+								
 								return '<b>' + this.series.xAxis.categories[this.point.x] + '</b> <br><b>' +
-									this.point.value + '</b> ha erradicadas<br><b>Punto de Erradicación:' + this.series.yAxis.categories[this.point.y] + '</b>';
-									this.point.value + '</b> ha erradicadas<br><b>Punto de Erradicación:' + this.series.yAxis.categories[this.point.y] + '</b>';
+									 this.point.value + '</b> ha erradicadas<br><b>Punto de Erradicación:' + this.series.yAxis.categories[this.point.y] + '</b>';
 							}
 						},
 
@@ -1924,6 +1964,8 @@ console.log(vector3);
 							data: vector,
 							dataLabels: {
 								enabled: true,
+								rotation: 90,
+
 								color: '#000000'
 							},
 							
@@ -1943,59 +1985,74 @@ console.log(vector3);
 		}
 });	
 	</script>
-</div>
-<div id="container" style="max-height:700px; min-width: 310px ;"></div>
-<div id="linea"></div>
-
-<script>
-document.getElementById("reporte").onclick = function() {myFunction()};
-
-function myFunction() {
-
-	var ano = document.getElementById("ano").value;
-	var fase=document.getElementById("fase").value;
-	var punto=document.getElementById("punto").value;
-	
-	if(ano != "" && fase !="" && punto !="" ){
-		document.getElementById("linea").innerHTML = "<hr><br>";
-	}
-	else{
-		pass;
-	}    
-}
-</script>
-</div>
-
-
+<div class="ewToolbar">
 <h3>Resumen de datos</h3>
 <p>La siguiente tabla contiene el reporte de erradicación diario en las fases de erradicación, según Punto de erradicación</p>
 <hr>
-
-<div class="ewToolbar">
 <table>
 	<tr>
-		<td><?php if ($grafica_dia_dia_hectareas_list->TotalRecs > 0 && $grafica_dia_dia_hectareas_list->ExportOptions->Visible()) { ?>
-			<?php $grafica_dia_dia_hectareas_list->ExportOptions->Render("body") ?></td>
-		<td>Si desea exportar la tabla en formato excel haga click en el siguiente icono</td>
-	</tr>
-</table>
+		<td>
+			<?php if ($grafica_dia_dia_hectareas_list->TotalRecs > 0 && $grafica_dia_dia_hectareas_list->ExportOptions->Visible()) { ?>
+			<?php $grafica_dia_dia_hectareas_list->ExportOptions->Render("body") ?>
+			<?php } ?>
+
+		</td>
+		<td>
+			Si desea exportar la tabla en formato excel haga click en el siguiente icono 
+		</td>	
+	</tr>	
+</table> 
+<hr>
 </div>
-<hr>
+<?php if ($grafica_dia_dia_hectareas_list->Export == "") { ?>
+
+<div>
 <br>
 <table>
 	<tr>
-		<td><?php $grafica_dia_dia_hectareas_list->SearchOptions->Render("body") ?></td>
-		<td>Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente</td>
+		<td>
+			<?php if ($grafica_dia_dia_hectareas_list->SearchOptions->Visible()) { ?>
+			<?php $grafica_dia_dia_hectareas_list->SearchOptions->Render("body") ?>
+			<?php } ?>
+		</td>
+		<td>
+			Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente
+		</td>	
 	</tr>
 </table>
 <br>
+</div>
+
 <hr>
-<br>
-<?php } ?>
+<?php } ?>	
+<?php
+	$bSelectLimit = EW_SELECT_LIMIT;
+	if ($bSelectLimit) {
+		if ($grafica_dia_dia_hectareas_list->TotalRecs <= 0)
+			$grafica_dia_dia_hectareas_list->TotalRecs = $grafica_dia_dia_hectareas->SelectRecordCount();
+	} else {
+		if (!$grafica_dia_dia_hectareas_list->Recordset && ($grafica_dia_dia_hectareas_list->Recordset = $grafica_dia_dia_hectareas_list->LoadRecordset()))
+			$grafica_dia_dia_hectareas_list->TotalRecs = $grafica_dia_dia_hectareas_list->Recordset->RecordCount();
+	}
+	$grafica_dia_dia_hectareas_list->StartRec = 1;
+	if ($grafica_dia_dia_hectareas_list->DisplayRecs <= 0 || ($grafica_dia_dia_hectareas->Export <> "" && $grafica_dia_dia_hectareas->ExportAll)) // Display all records
+		$grafica_dia_dia_hectareas_list->DisplayRecs = $grafica_dia_dia_hectareas_list->TotalRecs;
+	if (!($grafica_dia_dia_hectareas->Export <> "" && $grafica_dia_dia_hectareas->ExportAll))
+		$grafica_dia_dia_hectareas_list->SetUpStartRec(); // Set up start record position
+	if ($bSelectLimit)
+		$grafica_dia_dia_hectareas_list->Recordset = $grafica_dia_dia_hectareas_list->LoadRecordset($grafica_dia_dia_hectareas_list->StartRec-1, $grafica_dia_dia_hectareas_list->DisplayRecs);
 
-<?php if ($grafica_dia_dia_hectareas_list->SearchOptions->Visible()) { ?>
-
-<?php } ?>
+	// Set no record found message
+	if ($grafica_dia_dia_hectareas->CurrentAction == "" && $grafica_dia_dia_hectareas_list->TotalRecs == 0) {
+		if (!$Security->CanList())
+			$grafica_dia_dia_hectareas_list->setWarningMessage($Language->Phrase("NoPermission"));
+		if ($grafica_dia_dia_hectareas_list->SearchWhere == "0=101")
+			$grafica_dia_dia_hectareas_list->setWarningMessage($Language->Phrase("EnterSearchCriteria"));
+		else
+			$grafica_dia_dia_hectareas_list->setWarningMessage($Language->Phrase("NoRecord"));
+	}
+$grafica_dia_dia_hectareas_list->RenderOtherOptions();
+?>
 <?php if ($Security->CanSearch()) { ?>
 <?php if ($grafica_dia_dia_hectareas->Export == "" && $grafica_dia_dia_hectareas->CurrentAction == "") { ?>
 <form name="fgrafica_dia_dia_hectareaslistsrch" id="fgrafica_dia_dia_hectareaslistsrch" class="form-inline ewForm" action="<?php echo ew_CurrentPage() ?>">
@@ -2015,34 +2072,56 @@ $grafica_dia_dia_hectareas->RowType = EW_ROWTYPE_SEARCH;
 $grafica_dia_dia_hectareas->ResetAttrs();
 $grafica_dia_dia_hectareas_list->RenderRow();
 ?>
-<div id="xsr_1" class="ewRow">
-<?php if ($grafica_dia_dia_hectareas->Punto->Visible) { // Punto ?>
-	<div id="xsc_Punto" class="ewCell form-group">
-		<label for="x_Punto" class="ewSearchCaption ewLabel"><?php echo $grafica_dia_dia_hectareas->Punto->FldCaption() ?></label>
+<br>
+<table>
+	<tr>
+		<td>
+			<label for="x_Punto" class="ewSearchCaption ewLabel"><?php echo $grafica_dia_dia_hectareas->Punto->FldCaption() ?></label>
 		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Punto" id="z_Punto" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="35" placeholder="<?php echo ew_HtmlEncode($grafica_dia_dia_hectareas->Punto->PlaceHolder) ?>" value="<?php echo $grafica_dia_dia_hectareas->Punto->EditValue ?>"<?php echo $grafica_dia_dia_hectareas->Punto->EditAttributes() ?>>
-</span>
-	</div>
-<?php } ?>
-
-</div>
-<div id="xsr_2" class="ewRow">
-<?php if ($grafica_dia_dia_hectareas->Fecha->Visible) { // Fecha ?>
-	<div id="xsc_Fecha" class="ewCell form-group">
-		<label for="x_Fecha" class="ewSearchCaption ewLabel"><?php echo $grafica_dia_dia_hectareas->Fecha->FldCaption() ?></label>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 350px;" data-field="x_Punto" id="x_Punto" name="x_Punto"<?php echo $grafica_dia_dia_hectareas->Punto->EditAttributes() ?>>
+				<?php
+				if (is_array($grafica_dia_dia_hectareas->Punto->EditValue)) {
+					$arwrk = $grafica_dia_dia_hectareas->Punto->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($grafica_dia_dia_hectareas->Punto->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fgrafica_dia_dia_hectareaslistsrch.Lists["x_Punto"].Options = <?php echo (is_array($grafica_dia_dia_hectareas->Punto->EditValue)) ? ew_ArrayToJson($grafica_dia_dia_hectareas->Punto->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="x_Fecha" class="ewSearchCaption ewLabel"><?php echo $grafica_dia_dia_hectareas->Fecha->FldCaption() ?></label>
 		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Fecha" id="z_Fecha" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Fecha" name="x_Fecha" id="x_Fecha" size="30" maxlength="10" placeholder="<?php echo ew_HtmlEncode($grafica_dia_dia_hectareas->Fecha->PlaceHolder) ?>" value="<?php echo $grafica_dia_dia_hectareas->Fecha->EditValue ?>"<?php echo $grafica_dia_dia_hectareas->Fecha->EditAttributes() ?>>
-</span>
-	</div>
-<?php } ?>
-</div>
-<div id="xsr_3" class="ewRow">
-	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-</div>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<input style="min-width: 350px;" type="text" data-field="x_Fecha" name="x_Fecha" id="x_Fecha" size="30" maxlength="10" placeholder="<?php echo ew_HtmlEncode($grafica_dia_dia_hectareas->Fecha->PlaceHolder) ?>" value="<?php echo $grafica_dia_dia_hectareas->Fecha->EditValue ?>"<?php echo $grafica_dia_dia_hectareas->Fecha->EditAttributes() ?>>
+			</span>
+		</td>
+	</tr>
 
-<hr>
+</table>
+<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+
 	</div>
 </div>
 </form>

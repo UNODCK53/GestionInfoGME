@@ -11,8 +11,8 @@ function valores ($ano,$fase,$profesional) {
 	mysql_select_db($base_datos,$db);
 		
 		if($ano==99){
-			$result =mysql_query("SELECT (case WHEN Nom_Per_Evacu='Otro' then `Nom_Otro_Per_Evacu` else `Nom_Per_Evacu` end),Cargo_Per_EVA,Motivo_Eva, count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as cuenta FROM gestioninfogme.enlace_novedad WHERE`Num_Evacua`>0 GROUP by concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)");
-			$sum =mysql_query("SELECT count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as suma FROM gestioninfogme.enlace_novedad WHERE`Num_Evacua`>0 ");
+			$result =mysql_query("SELECT (case WHEN Nom_Per_Evacu='Otro' then `Nom_Otro_Per_Evacu` else `Nom_Per_Evacu` end),Cargo_Per_EVA,Motivo_Eva, count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as cuenta FROM gestioninfogme.view_e_y_n WHERE`Num_Evacua`>0 GROUP by concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)");
+			$sum =mysql_query("SELECT count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as suma FROM gestioninfogme.view_e_y_n WHERE`Num_Evacua`>0 ");
 			$cuenta= mysql_result($sum, 0);
 			$rows = array();
 			while($r = mysql_fetch_array($result)) {
@@ -23,8 +23,8 @@ function valores ($ano,$fase,$profesional) {
 
 		}elseif($fase==99 && $ano != 99 && $profesional==99){
 			
-			$result =mysql_query("SELECT (case WHEN Nom_Per_Evacu='Otro' then `Nom_Otro_Per_Evacu` else `Nom_Per_Evacu` end),Cargo_Per_EVA,Motivo_Eva, count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as cuenta FROM gestioninfogme.enlace_novedad WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,7,4)=".$ano." GROUP by concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)");
-			$sum =mysql_query("SELECT count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as suma FROM gestioninfogme.enlace_novedad WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,7,4)=".$ano);
+			$result =mysql_query("SELECT (case WHEN Nom_Per_Evacu='Otro' then `Nom_Otro_Per_Evacu` else `Nom_Per_Evacu` end),Cargo_Per_EVA,Motivo_Eva, count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as cuenta FROM gestioninfogme.view_e_y_n WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,1,4)=".$ano." GROUP by concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)");
+			$sum =mysql_query("SELECT count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as suma FROM gestioninfogme.view_e_y_n WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,1,4)=".$ano);
 			$cuenta= mysql_result($sum, 0);
 
 			$rows = array();
@@ -38,9 +38,9 @@ function valores ($ano,$fase,$profesional) {
 		}
 		elseif($fase==99 && $ano != 99 && $profesional!=99){
 			
-			$result =mysql_query("SELECT (case WHEN Nom_Per_Evacu='Otro' then `Nom_Otro_Per_Evacu` else `Nom_Per_Evacu` end),Cargo_Per_EVA,Motivo_Eva, count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as cuenta FROM gestioninfogme.enlace_novedad WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,7,4)=".$ano." and (case when `NOM_GE`='Otros' then `Otro_PGE`else `NOM_GE` end)='".$profesional."' GROUP by concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)");
+			$result =mysql_query("SELECT (case WHEN Nom_Per_Evacu='Otro' then `Nom_Otro_Per_Evacu` else `Nom_Per_Evacu` end),Cargo_Per_EVA,Motivo_Eva, count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as cuenta FROM gestioninfogme.view_e_y_n WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,1,4)=".$ano." and (case when `NOM_GE`='Otros' then `Otro_PGE`else `NOM_GE` end)='".$profesional."' GROUP by concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)");
 			$rows = array();
-			$sum =mysql_query("SELECT count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as suma FROM gestioninfogme.enlace_novedad WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,7,4)=".$ano." and (case when `NOM_GE`='Otros' then `Otro_PGE`else `NOM_GE` end)='".$profesional."'");
+			$sum =mysql_query("SELECT count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as suma FROM gestioninfogme.view_e_y_n WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,1,4)=".$ano." and (case when `NOM_GE`='Otros' then `Otro_PGE`else `NOM_GE` end)='".$profesional."'");
 			$cuenta= mysql_result($sum, 0);
 			while($r = mysql_fetch_array($result)) {
 				$row[0] = $r['Motivo_Eva'];
@@ -51,9 +51,9 @@ function valores ($ano,$fase,$profesional) {
 			
 		}elseif($fase!=99 && $ano != 99 && $profesional!=99){
 			
-			$result =mysql_query("SELECT (case WHEN Nom_Per_Evacu='Otro' then `Nom_Otro_Per_Evacu` else `Nom_Per_Evacu` end),Cargo_Per_EVA,Motivo_Eva, count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as cuenta FROM gestioninfogme.enlace_novedad WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,7,4)=".$ano." and SUBSTR((CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_Nom_PE ELSE NOM_PE END ),3,2)='".$fase."' and (case when `NOM_GE`='Otros' then `Otro_PGE`else `NOM_GE` end)='".$profesional."' GROUP by concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)");
+			$result =mysql_query("SELECT (case WHEN Nom_Per_Evacu='Otro' then `Nom_Otro_Per_Evacu` else `Nom_Per_Evacu` end),Cargo_Per_EVA,Motivo_Eva, count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as cuenta FROM gestioninfogme.view_e_y_n WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,1,4)=".$ano." and SUBSTR((CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_Nom_PE ELSE NOM_PE END ),3,2)='".$fase."' and (case when `NOM_GE`='Otros' then `Otro_PGE`else `NOM_GE` end)='".$profesional."' GROUP by concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)");
 			$rows = array();
-			$sum =mysql_query("SELECT count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as suma FROM gestioninfogme.enlace_novedad WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,7,4)=".$ano." and SUBSTR((CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_Nom_PE ELSE NOM_PE END ),3,2)='".$fase."' and (case when `NOM_GE`='Otros' then `Otro_PGE`else `NOM_GE` end)='".$profesional."'");
+			$sum =mysql_query("SELECT count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as suma FROM gestioninfogme.view_e_y_n WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,1,4)=".$ano." and SUBSTR((CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_Nom_PE ELSE NOM_PE END ),3,2)='".$fase."' and (case when `NOM_GE`='Otros' then `Otro_PGE`else `NOM_GE` end)='".$profesional."'");
 			$cuenta= mysql_result($sum, 0);
 			while($r = mysql_fetch_array($result)) {
 				$row[0] = $r['Motivo_Eva'];
@@ -63,9 +63,9 @@ function valores ($ano,$fase,$profesional) {
 			
 
 		}else{
-			$result =mysql_query("SELECT (case WHEN Nom_Per_Evacu='Otro' then `Nom_Otro_Per_Evacu` else `Nom_Per_Evacu` end),Cargo_Per_EVA,Motivo_Eva, count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as cuenta FROM gestioninfogme.enlace_novedad WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,7,4)=".$ano." and SUBSTR((CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_Nom_PE ELSE NOM_PE END ),3,2)='".$fase."' GROUP by concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)");
+			$result =mysql_query("SELECT (case WHEN Nom_Per_Evacu='Otro' then `Nom_Otro_Per_Evacu` else `Nom_Per_Evacu` end),Cargo_Per_EVA,Motivo_Eva, count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as cuenta FROM gestioninfogme.view_e_y_n WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,1,4)=".$ano." and SUBSTR((CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_Nom_PE ELSE NOM_PE END ),3,2)='".$fase."' GROUP by concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)");
 			$rows = array();
-			$sum =mysql_query("SELECT count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as suma FROM gestioninfogme.enlace_novedad WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,7,4)=".$ano." and SUBSTR((CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_Nom_PE ELSE NOM_PE END ),3,2)='".$fase."'");
+			$sum =mysql_query("SELECT count(concat(Nom_Per_Evacu,Cargo_Per_EVA,Motivo_Eva)) as suma FROM gestioninfogme.view_e_y_n WHERE`Num_Evacua`>0 and  SUBSTR(`FECHA_NOVEDAD`,1,4)=".$ano." and SUBSTR((CASE NOM_PE WHEN NOM_PE !='Otro' THEN Otro_Nom_PE ELSE NOM_PE END ),3,2)='".$fase."'");
 			$cuenta= mysql_result($sum, 0);
 			while($r = mysql_fetch_array($result)) {
 				$row[0] = $r['Motivo_Eva'];

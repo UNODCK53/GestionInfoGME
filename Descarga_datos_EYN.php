@@ -9,28 +9,28 @@
 		from
 
 (select
-	llave as ID_Formulario,F_Sincron,USUARIO,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,dominio.PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata, Muncipio,Departamento,F_llegada,Fecha,'No' as Modificado, (case when Num_Evacua=0 then llave else concat(llave,NUM_Novedad) end ) as llave_2
+	llave as ID_Formulario,F_Sincron,USUARIO,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,dominio.PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu,CC_Pre_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata, Muncipio,Departamento,F_llegada,Fecha,'No' as Modificado, (case when Num_Evacua=0 then llave else concat(llave,NUM_Novedad) end ) as llave_2
 	from
 		(select
-			llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata, Muncipio,Departamento,dominio.F_llegada,Fecha
+			llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu,CC_Pre_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata, Muncipio,Departamento,dominio.F_llegada,Fecha
 			from
 				(select
-					llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata, Muncipio,Departamento,F_llegada,F_llegada_a as Fecha
+					llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu,CC_Pre_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata, Muncipio,Departamento,F_llegada,F_llegada_a as Fecha
 					from
 						(select
-							llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	dominio.NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata,NOM_MPIO,F_llegada,F_llegada_a
+							llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu,CC_Pre_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	dominio.NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata,NOM_MPIO,F_llegada,F_llegada_a
 							from
 								(Select
-									llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,dominio.NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata,NOM_MPIO,F_llegada,F_llegada_a
+									llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu,CC_Pre_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,dominio.NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata,NOM_MPIO,F_llegada,F_llegada_a
 									from
 										(select
-											llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, dominio.Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata,NOM_MPIO,F_llegada,F_llegada_a
+											llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu,CC_Pre_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, dominio.Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata,NOM_MPIO,F_llegada,F_llegada_a
 											from
 												(select
-													llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, dominio.Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata,NOM_MPIO,F_llegada,F_llegada_a
+													llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu,CC_Pre_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, dominio.Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata,NOM_MPIO,F_llegada,F_llegada_a
 													from
 														(select
-														llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,dominio.Nom_Per_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata,NOM_MPIO,F_llegada,F_llegada_a
+														llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,dominio.Nom_Per_Evacu,CC_Pre_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata,NOM_MPIO,F_llegada,F_llegada_a
 														from
 															(select
 																llave,USUARIO,F_Sincron,Cargo_gme,NOM_GE,Otro_PGE,Otro_CC_PGE,TIPO_INFORME,FECHA_NOVEDAD,DIA,MES,Num_Evacua,PTO_INCOMU,OBS_punt_inco,OBS_ENLACE,NUM_Novedad,Nom_Per_Evacu, Nom_Otro_Per_Evacu,CC_Otro_Per_Evacu, Cargo_Per_EVA, Motivo_Eva,OBS_EVA,NOM_PE,Otro_Nom_PE,	NOM_CAPATAZ,Otro_Nom_Capata,Otro_CC_Capata,NOM_MPIO,F_llegada,F_llegada_a
@@ -60,7 +60,7 @@
 																									)as EYN2 on EYN2.llave2=EYN.llave
 																								)as EYN3
 																							left join	
-																								(SELECT `_TOP_LEVEL_AURI` as llave3,TIPO_INFORME,DATE_FORMAT(FECHA_NOVEDAD,'%d/%m/%Y') as FECHA_NOVEDAD,DATE_FORMAT(FECHA_NOVEDAD,'%d') as DIA,DATE_FORMAT(FECHA_NOVEDAD,'%m') as MES,EXTRACCION as Num_Evacua,PTO_INCOMU,PUNTOS as OBS_punt_inco,OBS_ENLACE
+																								(SELECT `_TOP_LEVEL_AURI` as llave3,TIPO_INFORME,DATE_FORMAT(FECHA_NOVEDAD,'%Y/%m/%d') as FECHA_NOVEDAD,DATE_FORMAT(FECHA_NOVEDAD,'%d') as DIA,DATE_FORMAT(FECHA_NOVEDAD,'%m') as MES,EXTRACCION as Num_Evacua,PTO_INCOMU,PUNTOS as OBS_punt_inco,OBS_ENLACE
 																									FROM
 																										informe_de_enlace_y_novedad_v2_f2_2014_core4
 																								)as EYN4 on EYN3.llave=EYN4.llave3
@@ -84,8 +84,8 @@
 																	) as EYN9 on EYN8.llave=EYN9.llave4
 															)as EYN10
 														left join
-															(select label as Nom_Per_Evacu,name from `dominio` where `list name`='todos'
-															)as dominio on EYN10.Nom_Per_Evacu=dominio.name 
+															(select label as Nom_Per_Evacu,name as CC_Pre_Evacu from `dominio` where `list name`='todos'
+															)as dominio on EYN10.Nom_Per_Evacu=dominio.CC_Pre_Evacu 
 														)as EYN11
 													left join
 														(select label as Cargo_Per_EVA,name from `dominio` where `list name`='cargo'

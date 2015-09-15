@@ -885,7 +885,36 @@ class cview1_acc_edit extends cview1_acc {
 			$this->Cargo_gme->ViewCustomAttributes = "";
 
 			// NOM_PE
-			$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+			if (strval($this->NOM_PE->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_PE`" . ew_SearchString("=", $this->NOM_PE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_PE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+				}
+			} else {
+				$this->NOM_PE->ViewValue = NULL;
+			}
 			$this->NOM_PE->ViewCustomAttributes = "";
 
 			// Otro_PE
@@ -917,7 +946,36 @@ class cview1_acc_edit extends cview1_acc {
 			$this->Otro_CC_Enlace->ViewCustomAttributes = "";
 
 			// NOM_PGE
-			$this->NOM_PGE->ViewValue = $this->NOM_PGE->CurrentValue;
+			if (strval($this->NOM_PGE->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_PGE`" . ew_SearchString("=", $this->NOM_PGE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PGE`, `NOM_PGE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PGE`, `NOM_PGE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PGE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PGE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_PGE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_PGE->ViewValue = $this->NOM_PGE->CurrentValue;
+				}
+			} else {
+				$this->NOM_PGE->ViewValue = NULL;
+			}
 			$this->NOM_PGE->ViewCustomAttributes = "";
 
 			// Otro_Nom_PGE
@@ -1041,7 +1099,36 @@ class cview1_acc_edit extends cview1_acc {
 			$this->Cargo_Afectado->ViewCustomAttributes = "";
 
 			// Tipo_incidente
-			$this->Tipo_incidente->ViewValue = $this->Tipo_incidente->CurrentValue;
+			if (strval($this->Tipo_incidente->CurrentValue) <> "") {
+				$sFilterWrk = "`Tipo_incidente`" . ew_SearchString("=", $this->Tipo_incidente->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Tipo_incidente`, `Tipo_incidente` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Tipo_incidente`, `Tipo_incidente` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Tipo_incidente, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Tipo_incidente` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Tipo_incidente->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Tipo_incidente->ViewValue = $this->Tipo_incidente->CurrentValue;
+				}
+			} else {
+				$this->Tipo_incidente->ViewValue = NULL;
+			}
 			$this->Tipo_incidente->ViewCustomAttributes = "";
 
 			// Parte_Cuerpo
@@ -1053,7 +1140,36 @@ class cview1_acc_edit extends cview1_acc {
 			$this->ESTADO_AFEC->ViewCustomAttributes = "";
 
 			// EVACUADO
-			$this->EVACUADO->ViewValue = $this->EVACUADO->CurrentValue;
+			if (strval($this->EVACUADO->CurrentValue) <> "") {
+				$sFilterWrk = "`EVACUADO`" . ew_SearchString("=", $this->EVACUADO->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT `EVACUADO`, `EVACUADO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT `EVACUADO`, `EVACUADO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->EVACUADO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `EVACUADO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->EVACUADO->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->EVACUADO->ViewValue = $this->EVACUADO->CurrentValue;
+				}
+			} else {
+				$this->EVACUADO->ViewValue = NULL;
+			}
 			$this->EVACUADO->ViewCustomAttributes = "";
 
 			// DESC_ACC
@@ -1337,8 +1453,30 @@ class cview1_acc_edit extends cview1_acc {
 			// NOM_PE
 			$this->NOM_PE->EditAttrs["class"] = "form-control";
 			$this->NOM_PE->EditCustomAttributes = "";
-			$this->NOM_PE->EditValue = ew_HtmlEncode($this->NOM_PE->CurrentValue);
-			$this->NOM_PE->PlaceHolder = ew_RemoveHtml($this->NOM_PE->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->NOM_PE->EditValue = $arwrk;
 
 			// Otro_PE
 			$this->Otro_PE->EditAttrs["class"] = "form-control";
@@ -1385,8 +1523,30 @@ class cview1_acc_edit extends cview1_acc {
 			// NOM_PGE
 			$this->NOM_PGE->EditAttrs["class"] = "form-control";
 			$this->NOM_PGE->EditCustomAttributes = "";
-			$this->NOM_PGE->EditValue = ew_HtmlEncode($this->NOM_PGE->CurrentValue);
-			$this->NOM_PGE->PlaceHolder = ew_RemoveHtml($this->NOM_PGE->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PGE`, `NOM_PGE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PGE`, `NOM_PGE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PGE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PGE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->NOM_PGE->EditValue = $arwrk;
 
 			// Otro_Nom_PGE
 			$this->Otro_Nom_PGE->EditAttrs["class"] = "form-control";
@@ -1576,8 +1736,30 @@ class cview1_acc_edit extends cview1_acc {
 			// Tipo_incidente
 			$this->Tipo_incidente->EditAttrs["class"] = "form-control";
 			$this->Tipo_incidente->EditCustomAttributes = "";
-			$this->Tipo_incidente->EditValue = ew_HtmlEncode($this->Tipo_incidente->CurrentValue);
-			$this->Tipo_incidente->PlaceHolder = ew_RemoveHtml($this->Tipo_incidente->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `Tipo_incidente`, `Tipo_incidente` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `Tipo_incidente`, `Tipo_incidente` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Tipo_incidente, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `Tipo_incidente` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Tipo_incidente->EditValue = $arwrk;
 
 			// Parte_Cuerpo
 			$this->Parte_Cuerpo->EditAttrs["class"] = "form-control";
@@ -1594,8 +1776,30 @@ class cview1_acc_edit extends cview1_acc {
 			// EVACUADO
 			$this->EVACUADO->EditAttrs["class"] = "form-control";
 			$this->EVACUADO->EditCustomAttributes = "";
-			$this->EVACUADO->EditValue = ew_HtmlEncode($this->EVACUADO->CurrentValue);
-			$this->EVACUADO->PlaceHolder = ew_RemoveHtml($this->EVACUADO->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT `EVACUADO`, `EVACUADO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT `EVACUADO`, `EVACUADO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->EVACUADO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `EVACUADO` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->EVACUADO->EditValue = $arwrk;
 
 			// DESC_ACC
 			$this->DESC_ACC->EditAttrs["class"] = "form-control";
@@ -2234,8 +2438,12 @@ fview1_accedit.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fview1_accedit.Lists["x_NOM_PE"] = {"LinkField":"x_NOM_PE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_accedit.Lists["x_NOM_PGE"] = {"LinkField":"x_NOM_PGE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PGE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_accedit.Lists["x_Tipo_incidente"] = {"LinkField":"x_Tipo_incidente","Ajax":null,"AutoFill":false,"DisplayFields":["x_Tipo_incidente","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_accedit.Lists["x_EVACUADO"] = {"LinkField":"x_EVACUADO","Ajax":null,"AutoFill":false,"DisplayFields":["x_EVACUADO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 </script>
 <script type="text/javascript">
 
@@ -2302,7 +2510,27 @@ $view1_acc_edit->ShowMessage();
 		<label id="elh_view1_acc_NOM_PE" for="x_NOM_PE" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->NOM_PE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->NOM_PE->CellAttributes() ?>>
 <span id="el_view1_acc_NOM_PE">
-<textarea data-field="x_NOM_PE" name="x_NOM_PE" id="x_NOM_PE" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view1_acc->NOM_PE->PlaceHolder) ?>"<?php echo $view1_acc->NOM_PE->EditAttributes() ?>><?php echo $view1_acc->NOM_PE->EditValue ?></textarea>
+<select data-field="x_NOM_PE" id="x_NOM_PE" name="x_NOM_PE"<?php echo $view1_acc->NOM_PE->EditAttributes() ?>>
+<?php
+if (is_array($view1_acc->NOM_PE->EditValue)) {
+	$arwrk = $view1_acc->NOM_PE->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view1_acc->NOM_PE->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview1_accedit.Lists["x_NOM_PE"].Options = <?php echo (is_array($view1_acc->NOM_PE->EditValue)) ? ew_ArrayToJson($view1_acc->NOM_PE->EditValue, 1) : "[]" ?>;
+</script>
 </span>
 <?php echo $view1_acc->NOM_PE->CustomMsg ?></div></div>
 	</div>
@@ -2382,7 +2610,27 @@ $view1_acc_edit->ShowMessage();
 		<label id="elh_view1_acc_NOM_PGE" for="x_NOM_PGE" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->NOM_PGE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->NOM_PGE->CellAttributes() ?>>
 <span id="el_view1_acc_NOM_PGE">
-<textarea data-field="x_NOM_PGE" name="x_NOM_PGE" id="x_NOM_PGE" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view1_acc->NOM_PGE->PlaceHolder) ?>"<?php echo $view1_acc->NOM_PGE->EditAttributes() ?>><?php echo $view1_acc->NOM_PGE->EditValue ?></textarea>
+<select data-field="x_NOM_PGE" id="x_NOM_PGE" name="x_NOM_PGE"<?php echo $view1_acc->NOM_PGE->EditAttributes() ?>>
+<?php
+if (is_array($view1_acc->NOM_PGE->EditValue)) {
+	$arwrk = $view1_acc->NOM_PGE->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view1_acc->NOM_PGE->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM_PGE->EditValue)) ? ew_ArrayToJson($view1_acc->NOM_PGE->EditValue, 1) : "[]" ?>;
+</script>
 </span>
 <?php echo $view1_acc->NOM_PGE->CustomMsg ?></div></div>
 	</div>
@@ -2692,7 +2940,27 @@ $view1_acc_edit->ShowMessage();
 		<label id="elh_view1_acc_Tipo_incidente" for="x_Tipo_incidente" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Tipo_incidente->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Tipo_incidente->CellAttributes() ?>>
 <span id="el_view1_acc_Tipo_incidente">
-<input type="text" data-field="x_Tipo_incidente" name="x_Tipo_incidente" id="x_Tipo_incidente" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->Tipo_incidente->PlaceHolder) ?>" value="<?php echo $view1_acc->Tipo_incidente->EditValue ?>"<?php echo $view1_acc->Tipo_incidente->EditAttributes() ?>>
+<select data-field="x_Tipo_incidente" id="x_Tipo_incidente" name="x_Tipo_incidente"<?php echo $view1_acc->Tipo_incidente->EditAttributes() ?>>
+<?php
+if (is_array($view1_acc->Tipo_incidente->EditValue)) {
+	$arwrk = $view1_acc->Tipo_incidente->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view1_acc->Tipo_incidente->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview1_accedit.Lists["x_Tipo_incidente"].Options = <?php echo (is_array($view1_acc->Tipo_incidente->EditValue)) ? ew_ArrayToJson($view1_acc->Tipo_incidente->EditValue, 1) : "[]" ?>;
+</script>
 </span>
 <?php echo $view1_acc->Tipo_incidente->CustomMsg ?></div></div>
 	</div>
@@ -2722,7 +2990,27 @@ $view1_acc_edit->ShowMessage();
 		<label id="elh_view1_acc_EVACUADO" for="x_EVACUADO" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->EVACUADO->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->EVACUADO->CellAttributes() ?>>
 <span id="el_view1_acc_EVACUADO">
-<textarea data-field="x_EVACUADO" name="x_EVACUADO" id="x_EVACUADO" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view1_acc->EVACUADO->PlaceHolder) ?>"<?php echo $view1_acc->EVACUADO->EditAttributes() ?>><?php echo $view1_acc->EVACUADO->EditValue ?></textarea>
+<select data-field="x_EVACUADO" id="x_EVACUADO" name="x_EVACUADO"<?php echo $view1_acc->EVACUADO->EditAttributes() ?>>
+<?php
+if (is_array($view1_acc->EVACUADO->EditValue)) {
+	$arwrk = $view1_acc->EVACUADO->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view1_acc->EVACUADO->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview1_accedit.Lists["x_EVACUADO"].Options = <?php echo (is_array($view1_acc->EVACUADO->EditValue)) ? ew_ArrayToJson($view1_acc->EVACUADO->EditValue, 1) : "[]" ?>;
+</script>
 </span>
 <?php echo $view1_acc->EVACUADO->CustomMsg ?></div></div>
 	</div>

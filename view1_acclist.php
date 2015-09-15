@@ -3321,6 +3321,9 @@ fview1_acclistsrch.ValidateRequired = false; // No JavaScript validation
 // Write your client script here, no need to add script tags.
 </script>
 <?php } ?>
+<div>Módulo en construcción...</div>
+<script>
+/*
 <?php if ($view1_acc->Export == "") { ?>
 <div class="ewToolbar">
 <?php if ($view1_acc->Export == "") { ?>
@@ -3457,6 +3460,7 @@ $view1_acc_list->ShowMessage();
 <?php if ($view1_acc_list->TotalRecs > 0 || $view1_acc->CurrentAction <> "") { ?>
 <div class="ewGrid">
 <?php if ($view1_acc->Export == "") { ?>
+
 <div class="ewGridUpperPanel">
 <?php if ($view1_acc->CurrentAction <> "gridadd" && $view1_acc->CurrentAction <> "gridedit") { ?>
 <form name="ewPagerForm" class="form-inline ewForm ewPagerForm" action="<?php echo ew_CurrentPage() ?>">
@@ -3519,6 +3523,7 @@ $view1_acc_list->ShowMessage();
 <input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $view1_acc_list->Token ?>">
 <?php } ?>
 <input type="hidden" name="t" value="view1_acc">
+
 <div id="gmp_view1_acc" class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
 <?php if ($view1_acc_list->TotalRecs > 0) { ?>
 <table id="tbl_view1_acclist" class="table ewTable">
@@ -4411,6 +4416,7 @@ if ($view1_acc_list->Recordset)
 <?php } ?>
 </form>
 <?php } ?>
+*/</script>
 <div class="ewListOtherOptions">
 <?php
 	foreach ($view1_acc_list->OtherOptions as &$option)

@@ -688,6 +688,7 @@ class cfuerza_list extends cfuerza {
 		$this->BuildSearchSql($sWhere, $this->Fase, $Default, FALSE); // Fase
 		$this->BuildSearchSql($sWhere, $this->_23_del_punto, $Default, FALSE); // #_del_punto
 		$this->BuildSearchSql($sWhere, $this->Punto, $Default, FALSE); // Punto
+		$this->BuildSearchSql($sWhere, $this->Profesional_especializado, $Default, FALSE); // Profesional_especializado
 
 		// Set up search parm
 		if (!$Default && $sWhere <> "") {
@@ -700,6 +701,7 @@ class cfuerza_list extends cfuerza {
 			$this->Fase->AdvancedSearch->Save(); // Fase
 			$this->_23_del_punto->AdvancedSearch->Save(); // #_del_punto
 			$this->Punto->AdvancedSearch->Save(); // Punto
+			$this->Profesional_especializado->AdvancedSearch->Save(); // Profesional_especializado
 		}
 		return $sWhere;
 	}
@@ -761,6 +763,7 @@ class cfuerza_list extends cfuerza {
 		$this->BuildBasicSearchSQL($sWhere, $this->Fase, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->_23_del_punto, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->Punto, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->Profesional_especializado, $arKeywords, $type);
 		return $sWhere;
 	}
 
@@ -887,6 +890,8 @@ class cfuerza_list extends cfuerza {
 			return TRUE;
 		if ($this->Punto->AdvancedSearch->IssetSession())
 			return TRUE;
+		if ($this->Profesional_especializado->AdvancedSearch->IssetSession())
+			return TRUE;
 		return FALSE;
 	}
 
@@ -922,6 +927,7 @@ class cfuerza_list extends cfuerza {
 		$this->Fase->AdvancedSearch->UnsetSession();
 		$this->_23_del_punto->AdvancedSearch->UnsetSession();
 		$this->Punto->AdvancedSearch->UnsetSession();
+		$this->Profesional_especializado->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
@@ -938,6 +944,7 @@ class cfuerza_list extends cfuerza {
 		$this->Fase->AdvancedSearch->Load();
 		$this->_23_del_punto->AdvancedSearch->Load();
 		$this->Punto->AdvancedSearch->Load();
+		$this->Profesional_especializado->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -956,6 +963,7 @@ class cfuerza_list extends cfuerza {
 			$this->UpdateSort($this->Fase, $bCtrl); // Fase
 			$this->UpdateSort($this->_23_del_punto, $bCtrl); // #_del_punto
 			$this->UpdateSort($this->Punto, $bCtrl); // Punto
+			$this->UpdateSort($this->Profesional_especializado, $bCtrl); // Profesional_especializado
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -994,6 +1002,7 @@ class cfuerza_list extends cfuerza {
 				$this->Fase->setSort("");
 				$this->_23_del_punto->setSort("");
 				$this->Punto->setSort("");
+				$this->Profesional_especializado->setSort("");
 			}
 
 			// Reset start position
@@ -1297,6 +1306,11 @@ class cfuerza_list extends cfuerza {
 		$this->Punto->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Punto"]);
 		if ($this->Punto->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->Punto->AdvancedSearch->SearchOperator = @$_GET["z_Punto"];
+
+		// Profesional_especializado
+		$this->Profesional_especializado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Profesional_especializado"]);
+		if ($this->Profesional_especializado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Profesional_especializado->AdvancedSearch->SearchOperator = @$_GET["z_Profesional_especializado"];
 	}
 
 	// Load recordset
@@ -1351,6 +1365,7 @@ class cfuerza_list extends cfuerza {
 		$this->Fase->setDbValue($rs->fields('Fase'));
 		$this->_23_del_punto->setDbValue($rs->fields('#_del_punto'));
 		$this->Punto->setDbValue($rs->fields('Punto'));
+		$this->Profesional_especializado->setDbValue($rs->fields('Profesional_especializado'));
 	}
 
 	// Load DbValue from recordset
@@ -1363,6 +1378,7 @@ class cfuerza_list extends cfuerza {
 		$this->Fase->DbValue = $row['Fase'];
 		$this->_23_del_punto->DbValue = $row['#_del_punto'];
 		$this->Punto->DbValue = $row['Punto'];
+		$this->Profesional_especializado->DbValue = $row['Profesional_especializado'];
 	}
 
 	// Load old record
@@ -1410,6 +1426,7 @@ class cfuerza_list extends cfuerza {
 		// Fase
 		// #_del_punto
 		// Punto
+		// Profesional_especializado
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -1485,6 +1502,38 @@ class cfuerza_list extends cfuerza {
 			$this->Punto->ViewValue = $this->Punto->CurrentValue;
 			$this->Punto->ViewCustomAttributes = "";
 
+			// Profesional_especializado
+			if (strval($this->Profesional_especializado->CurrentValue) <> "") {
+				switch ($this->Profesional_especializado->CurrentValue) {
+					case $this->Profesional_especializado->FldTagValue(1):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(1) <> "" ? $this->Profesional_especializado->FldTagCaption(1) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(2):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(2) <> "" ? $this->Profesional_especializado->FldTagCaption(2) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(3):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(3) <> "" ? $this->Profesional_especializado->FldTagCaption(3) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(4):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(4) <> "" ? $this->Profesional_especializado->FldTagCaption(4) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(5):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(5) <> "" ? $this->Profesional_especializado->FldTagCaption(5) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(6):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(6) <> "" ? $this->Profesional_especializado->FldTagCaption(6) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(7):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(7) <> "" ? $this->Profesional_especializado->FldTagCaption(7) : $this->Profesional_especializado->CurrentValue;
+						break;
+					default:
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->CurrentValue;
+				}
+			} else {
+				$this->Profesional_especializado->ViewValue = NULL;
+			}
+			$this->Profesional_especializado->ViewCustomAttributes = "";
+
 			// Fuerza
 			$this->Fuerza->LinkCustomAttributes = "";
 			$this->Fuerza->HrefValue = "";
@@ -1514,6 +1563,11 @@ class cfuerza_list extends cfuerza {
 			$this->Punto->LinkCustomAttributes = "";
 			$this->Punto->HrefValue = "";
 			$this->Punto->TooltipValue = "";
+
+			// Profesional_especializado
+			$this->Profesional_especializado->LinkCustomAttributes = "";
+			$this->Profesional_especializado->HrefValue = "";
+			$this->Profesional_especializado->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
 			// Fuerza
@@ -1563,6 +1617,20 @@ class cfuerza_list extends cfuerza {
 			$this->Punto->EditCustomAttributes = "";
 			$this->Punto->EditValue = ew_HtmlEncode($this->Punto->AdvancedSearch->SearchValue);
 			$this->Punto->PlaceHolder = ew_RemoveHtml($this->Punto->FldCaption());
+
+			// Profesional_especializado
+			$this->Profesional_especializado->EditAttrs["class"] = "form-control";
+			$this->Profesional_especializado->EditCustomAttributes = "";
+			$arwrk = array();
+			$arwrk[] = array($this->Profesional_especializado->FldTagValue(1), $this->Profesional_especializado->FldTagCaption(1) <> "" ? $this->Profesional_especializado->FldTagCaption(1) : $this->Profesional_especializado->FldTagValue(1));
+			$arwrk[] = array($this->Profesional_especializado->FldTagValue(2), $this->Profesional_especializado->FldTagCaption(2) <> "" ? $this->Profesional_especializado->FldTagCaption(2) : $this->Profesional_especializado->FldTagValue(2));
+			$arwrk[] = array($this->Profesional_especializado->FldTagValue(3), $this->Profesional_especializado->FldTagCaption(3) <> "" ? $this->Profesional_especializado->FldTagCaption(3) : $this->Profesional_especializado->FldTagValue(3));
+			$arwrk[] = array($this->Profesional_especializado->FldTagValue(4), $this->Profesional_especializado->FldTagCaption(4) <> "" ? $this->Profesional_especializado->FldTagCaption(4) : $this->Profesional_especializado->FldTagValue(4));
+			$arwrk[] = array($this->Profesional_especializado->FldTagValue(5), $this->Profesional_especializado->FldTagCaption(5) <> "" ? $this->Profesional_especializado->FldTagCaption(5) : $this->Profesional_especializado->FldTagValue(5));
+			$arwrk[] = array($this->Profesional_especializado->FldTagValue(6), $this->Profesional_especializado->FldTagCaption(6) <> "" ? $this->Profesional_especializado->FldTagCaption(6) : $this->Profesional_especializado->FldTagValue(6));
+			$arwrk[] = array($this->Profesional_especializado->FldTagValue(7), $this->Profesional_especializado->FldTagCaption(7) <> "" ? $this->Profesional_especializado->FldTagCaption(7) : $this->Profesional_especializado->FldTagValue(7));
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+			$this->Profesional_especializado->EditValue = $arwrk;
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -1609,6 +1677,7 @@ class cfuerza_list extends cfuerza {
 		$this->Fase->AdvancedSearch->Load();
 		$this->_23_del_punto->AdvancedSearch->Load();
 		$this->Punto->AdvancedSearch->Load();
+		$this->Profesional_especializado->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -2009,11 +2078,14 @@ ffuerzalistsrch.ValidateRequired = false; // No JavaScript validation
 
 <?php if ($fuerza_list->TotalRecs > 0 && $fuerza_list->ExportOptions->Visible()) { ?>
 
+
 <?php } ?>
 <?php if ($fuerza_list->SearchOptions->Visible()) { ?>
 
+
 <?php } ?>
 <?php if ($fuerza->Export == "") { ?>
+
 
 <?php } ?>
 <div class="clearfix"></div>
@@ -2066,6 +2138,7 @@ $fuerza->RowType = EW_ROWTYPE_SEARCH;
 $fuerza->ResetAttrs();
 $fuerza_list->RenderRow();
 ?>
+
 
 <table>
 	<tr>
@@ -2167,22 +2240,62 @@ $fuerza_list->RenderRow();
 			<input type="text" data-field="x_Punto" name="x_Punto" id="x_Punto" size="30" maxlength="6" placeholder="<?php echo ew_HtmlEncode($fuerza->Punto->PlaceHolder) ?>" value="<?php echo $fuerza->Punto->EditValue ?>"<?php echo $fuerza->Punto->EditAttributes() ?>>
 			</span></td>
 	</tr>
+	<tr>
+		<td><label for="x_Profesional_especializado" class="ewSearchCaption ewLabel"><?php echo $fuerza->Profesional_especializado->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Profesional_especializado" id="z_Profesional_especializado" value="LIKE"></span></td>
+		<td width="5%"></td>
+		<td><span class="ewSearchField">
+			<select data-field="x_Profesional_especializado" id="x_Profesional_especializado" name="x_Profesional_especializado"<?php echo $fuerza->Profesional_especializado->EditAttributes() ?>>
+<?php
+if (is_array($fuerza->Profesional_especializado->EditValue)) {
+	$arwrk = $fuerza->Profesional_especializado->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($fuerza->Profesional_especializado->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+			</span></td>
+	</tr>
 </table>
-
 <?php if ($fuerza->Fuerza->Visible) { // Fuerza ?>
-<?php } ?>
-<?php if ($fuerza->Estado->Visible) { // Estado ?>
-<?php } ?>
-<?php if ($fuerza->AF1o->Visible) { // Año ?>
-<?php } ?>
-<?php if ($fuerza->Fase->Visible) { // Fase ?>
-<?php } ?>
-<?php if ($fuerza->_23_del_punto->Visible) { // #_del_punto ?>
-<?php } ?>
-<?php if ($fuerza->Punto->Visible) { // Punto ?>
+
 <?php } ?>
 
-<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+<?php if ($fuerza->Estado->Visible) { // Estado ?>
+	
+<?php } ?>
+
+<?php if ($fuerza->AF1o->Visible) { // Año ?>
+
+<?php } ?>
+
+<?php if ($fuerza->Fase->Visible) { // Fase ?>
+	
+<?php } ?>
+
+<?php if ($fuerza->_23_del_punto->Visible) { // #_del_punto ?>
+
+<?php } ?>
+
+<?php if ($fuerza->Punto->Visible) { // Punto ?>
+	
+<?php } ?>
+
+<?php if ($fuerza->Profesional_especializado->Visible) { // Profesional_especializado ?>
+
+<?php } ?>
+
+	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
+
 <br><br>
 <hr>
 
@@ -2331,6 +2444,15 @@ $fuerza_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
+<?php if ($fuerza->Profesional_especializado->Visible) { // Profesional_especializado ?>
+	<?php if ($fuerza->SortUrl($fuerza->Profesional_especializado) == "") { ?>
+		<th data-name="Profesional_especializado"><div id="elh_fuerza_Profesional_especializado" class="fuerza_Profesional_especializado"><div class="ewTableHeaderCaption"><?php echo $fuerza->Profesional_especializado->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Profesional_especializado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $fuerza->SortUrl($fuerza->Profesional_especializado) ?>',2);"><div id="elh_fuerza_Profesional_especializado" class="fuerza_Profesional_especializado">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $fuerza->Profesional_especializado->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($fuerza->Profesional_especializado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($fuerza->Profesional_especializado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
 <?php
 
 // Render list options (header, right)
@@ -2430,6 +2552,12 @@ $fuerza_list->ListOptions->Render("body", "left", $fuerza_list->RowCnt);
 		<td data-name="Punto"<?php echo $fuerza->Punto->CellAttributes() ?>>
 <span<?php echo $fuerza->Punto->ViewAttributes() ?>>
 <?php echo $fuerza->Punto->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($fuerza->Profesional_especializado->Visible) { // Profesional_especializado ?>
+		<td data-name="Profesional_especializado"<?php echo $fuerza->Profesional_especializado->CellAttributes() ?>>
+<span<?php echo $fuerza->Profesional_especializado->ViewAttributes() ?>>
+<?php echo $fuerza->Profesional_especializado->ListViewValue() ?></span>
 </td>
 	<?php } ?>
 <?php

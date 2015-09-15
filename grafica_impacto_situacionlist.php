@@ -1365,11 +1365,10 @@ $grafica_impacto_situacion_list->ShowMessage();
 <script src="./Highcharts/js/modules/treemap.js"></script>
 <table>
 	<h2>Situaciones especiales en zona</h2>	
-	<p>Este reporte muestra el total de situaciones reportadas en zona agrupadas según categorías de Administrativo GME, Administrativo Fuerza Pública, Seguridad y Novedades, según filtros de año y fase </p
-	>
+	<p>Este reporte muestra el total de situaciones especiales presentadas en zona, agrupadas en las categorías Administrativas GME, Administrativas de Fuerza Pública, Seguridad y Novedades.  El reporte puede filtrarse según el año y la fase. </p><p> <font color="#F78181">Datos operativos del grupo de erradicación, cifras no oficiales, pendiente de validación y verificación por parte del ente neutral</font></p>
 	<hr>
 	<h3>Generador de gráfica</h3>
-	<p>El reporte se divide en dos gráficas. La primera es para las situaiones reportadas en los días donde hubo erradicación de cultivos ilícitos y la segunda para los días en que no hubo erradicación</p><br>
+	<p>El reporte se divide en dos gráficas. La primera es para las situaciones reportadas en los días donde hubo erradicación de cultivos ilícitos y la segunda para los días en que no hubo erradicación</p><br>
 
 	<tr>
 		<td>Año:</td>
@@ -1621,6 +1620,10 @@ $("#reporte").click(function(){
 			verticalAlign: 'top',
 			x: 40,
 			y: 0
+		},	
+		exporting: {
+			sourceWidth: 1300,
+			sourceHeight: 1000
 		},
         series: [{
             name: 'Grupo de situación',
@@ -1631,6 +1634,9 @@ $("#reporte").click(function(){
                 formatter: function () {
                     return this.y > 0 ? this.point.name : null;
                 },
+				style: {
+					textShadow: ''
+				},
                 color: 'white',
 				
                 distance: -30
@@ -1644,7 +1650,10 @@ $("#reporte").click(function(){
                 formatter: function () {
                     // display only if larger than 1
                     return this.y > 0 ? '<b>' + this.point.name + ':</b> ' + this.y : null;
-                }
+                },
+			style: {
+					textShadow: ''
+				}
             }
         }]
     });

@@ -422,6 +422,7 @@ class cfuerza_delete extends cfuerza {
 		$this->Fase->setDbValue($rs->fields('Fase'));
 		$this->_23_del_punto->setDbValue($rs->fields('#_del_punto'));
 		$this->Punto->setDbValue($rs->fields('Punto'));
+		$this->Profesional_especializado->setDbValue($rs->fields('Profesional_especializado'));
 	}
 
 	// Load DbValue from recordset
@@ -434,6 +435,7 @@ class cfuerza_delete extends cfuerza {
 		$this->Fase->DbValue = $row['Fase'];
 		$this->_23_del_punto->DbValue = $row['#_del_punto'];
 		$this->Punto->DbValue = $row['Punto'];
+		$this->Profesional_especializado->DbValue = $row['Profesional_especializado'];
 	}
 
 	// Render row values based on field settings
@@ -453,6 +455,7 @@ class cfuerza_delete extends cfuerza {
 		// Fase
 		// #_del_punto
 		// Punto
+		// Profesional_especializado
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
@@ -528,6 +531,38 @@ class cfuerza_delete extends cfuerza {
 			$this->Punto->ViewValue = $this->Punto->CurrentValue;
 			$this->Punto->ViewCustomAttributes = "";
 
+			// Profesional_especializado
+			if (strval($this->Profesional_especializado->CurrentValue) <> "") {
+				switch ($this->Profesional_especializado->CurrentValue) {
+					case $this->Profesional_especializado->FldTagValue(1):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(1) <> "" ? $this->Profesional_especializado->FldTagCaption(1) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(2):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(2) <> "" ? $this->Profesional_especializado->FldTagCaption(2) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(3):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(3) <> "" ? $this->Profesional_especializado->FldTagCaption(3) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(4):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(4) <> "" ? $this->Profesional_especializado->FldTagCaption(4) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(5):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(5) <> "" ? $this->Profesional_especializado->FldTagCaption(5) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(6):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(6) <> "" ? $this->Profesional_especializado->FldTagCaption(6) : $this->Profesional_especializado->CurrentValue;
+						break;
+					case $this->Profesional_especializado->FldTagValue(7):
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->FldTagCaption(7) <> "" ? $this->Profesional_especializado->FldTagCaption(7) : $this->Profesional_especializado->CurrentValue;
+						break;
+					default:
+						$this->Profesional_especializado->ViewValue = $this->Profesional_especializado->CurrentValue;
+				}
+			} else {
+				$this->Profesional_especializado->ViewValue = NULL;
+			}
+			$this->Profesional_especializado->ViewCustomAttributes = "";
+
 			// Fuerza
 			$this->Fuerza->LinkCustomAttributes = "";
 			$this->Fuerza->HrefValue = "";
@@ -557,6 +592,11 @@ class cfuerza_delete extends cfuerza {
 			$this->Punto->LinkCustomAttributes = "";
 			$this->Punto->HrefValue = "";
 			$this->Punto->TooltipValue = "";
+
+			// Profesional_especializado
+			$this->Profesional_especializado->LinkCustomAttributes = "";
+			$this->Profesional_especializado->HrefValue = "";
+			$this->Profesional_especializado->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -790,7 +830,6 @@ if ($fuerza_deleteTotalRecs <= 0) { // No record found, exit
 <?php
 $fuerza_delete->ShowMessage();
 ?>
-Si esta seguro de borrar el registro haga click en "Borrar regsitro"
 <form name="ffuerzadelete" id="ffuerzadelete" class="form-inline ewForm ewDeleteForm" action="<?php echo ew_CurrentPage() ?>" method="post">
 <?php if ($fuerza_delete->CheckToken) { ?>
 <input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $fuerza_delete->Token ?>">
@@ -824,6 +863,9 @@ Si esta seguro de borrar el registro haga click en "Borrar regsitro"
 <?php } ?>
 <?php if ($fuerza->Punto->Visible) { // Punto ?>
 		<th><span id="elh_fuerza_Punto" class="fuerza_Punto"><?php echo $fuerza->Punto->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($fuerza->Profesional_especializado->Visible) { // Profesional_especializado ?>
+		<th><span id="elh_fuerza_Profesional_especializado" class="fuerza_Profesional_especializado"><?php echo $fuerza->Profesional_especializado->FldCaption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
@@ -891,6 +933,14 @@ while (!$fuerza_delete->Recordset->EOF) {
 <span id="el<?php echo $fuerza_delete->RowCnt ?>_fuerza_Punto" class="fuerza_Punto">
 <span<?php echo $fuerza->Punto->ViewAttributes() ?>>
 <?php echo $fuerza->Punto->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($fuerza->Profesional_especializado->Visible) { // Profesional_especializado ?>
+		<td<?php echo $fuerza->Profesional_especializado->CellAttributes() ?>>
+<span id="el<?php echo $fuerza_delete->RowCnt ?>_fuerza_Profesional_especializado" class="fuerza_Profesional_especializado">
+<span<?php echo $fuerza->Profesional_especializado->ViewAttributes() ?>>
+<?php echo $fuerza->Profesional_especializado->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

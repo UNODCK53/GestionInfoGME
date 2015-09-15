@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" standalone="yes"?>
-<ew-language date="2015/7/30" version="11.0.3" id="en" name="spanish" desc="Ingles" author="e.World Technology Ltd.">
+<ew-language date="2015/8/26" version="11.0.3" id="en" name="English" desc="English" author="e.World Technology Ltd.">
 	<locale>
 		<phrase id="locale" value=""/><!-- *** system locale for this language -->
 		<phrase id="use_system_locale" value="1"/><!-- *** change to "0" to disable system locale and use the following settings *** -->
@@ -413,8 +413,16 @@
 		<phrase id="and" value="and"/>
 		<phrase id="or" value="or"/>
 	</global>
-<project><phrase id="bodytitle" value="GestionInfoGME"/>
+	<project><phrase id="bodytitle" value="GestionInfoGME"/>
 <phrase id="footertext" value="&amp;copy;2015 e.World Technology Ltd. All rights reserved."/>
+<menu id="278"><phrase id="menutext" value="grafica dias contratados 3"/>
+</menu>
+<menu id="279"><phrase id="menutext" value="movimientos 1"/>
+</menu>
+<menu id="280"><phrase id="menutext" value=" filter"/>
+</menu>
+<menu id="281"><phrase id="menutext" value="movimientos 2"/>
+</menu>
 <menu id="256"><phrase id="menutext" value="despeno 1"/>
 </menu>
 <menu id="257"><phrase id="menutext" value="pma bookmark"/>
@@ -581,20 +589,6 @@
 </menu>
 <menu id="34"><phrase id="menutext" value="dominio"/>
 </menu>
-<menu id="47"><phrase id="menutext" value="informe apoyo zonal diario v prueba core"/>
-</menu>
-<menu id="48"><phrase id="menutext" value="informe apoyo zonal diario v prueba grupo 5 admin fp"/>
-</menu>
-<menu id="49"><phrase id="menutext" value="informe apoyo zonal diario v prueba grupo 5 admin gme"/>
-</menu>
-<menu id="50"><phrase id="menutext" value="informe apoyo zonal diario v prueba grupo 5 admin nov"/>
-</menu>
-<menu id="51"><phrase id="menutext" value="informe apoyo zonal diario v prueba grupo 5 admin seg"/>
-</menu>
-<menu id="52"><phrase id="menutext" value="informe apoyo zonal diario v prueba tipo cultivo"/>
-</menu>
-<menu id="53"><phrase id="menutext" value="informe apoyo zonal diario v prueba tipo situacion"/>
-</menu>
 <menu id="126"><phrase id="menutext" value="Informe Diario"/>
 </menu>
 <menu id="230"><phrase id="menutext" value="Informe Diario"/>
@@ -625,7 +619,7 @@
 </menu>
 <menu id="145"><phrase id="menutext" value="Descarga de datos"/>
 </menu>
-<menu id="228"><phrase id="menutext" value="Modulo de Gráficas"/>
+<menu id="228"><phrase id="menutext" value="Modulo de gráficas y tablas"/>
 </menu>
 <menu id="231"><phrase id="menutext" value="Accidentes de trabajo"/>
 </menu>
@@ -1349,336 +1343,6 @@
 <field id="departamento"><phrase id="fldcaption" value="departamento"/>
 </field>
 </table>
-<table id="informe_apoyo_zonal_diario_v_prueba_core"><phrase id="tblcaption" value="informe apoyo zonal diario v prueba core"/>
-<field id="_uri"><phrase id="fldcaption" value=" URI"/>
-</field>
-<field id="_creator_uri_user"><phrase id="fldcaption" value=" CREATOR URI USER"/>
-</field>
-<field id="_creation_date"><phrase id="fldcaption" value=" CREATION DATE"/>
-</field>
-<field id="_last_update_uri_user"><phrase id="fldcaption" value=" LAST UPDATE URI USER"/>
-</field>
-<field id="_last_update_date"><phrase id="fldcaption" value=" LAST UPDATE DATE"/>
-</field>
-<field id="_model_version"><phrase id="fldcaption" value=" MODEL VERSION"/>
-</field>
-<field id="_ui_version"><phrase id="fldcaption" value=" UI VERSION"/>
-</field>
-<field id="_is_complete"><phrase id="fldcaption" value=" IS COMPLETE"/>
-</field>
-<field id="_submission_date"><phrase id="fldcaption" value=" SUBMISSION DATE"/>
-</field>
-<field id="_marked_as_complete_date"><phrase id="fldcaption" value=" MARKED AS COMPLETE DATE"/>
-</field>
-<field id="grupo_validador_bueno"><phrase id="fldcaption" value="GRUPO VALIDADOR BUENO"/>
-</field>
-<field id="p1_c1_n2"><phrase id="fldcaption" value="P1 C1 N2"/>
-</field>
-<field id="p1_c1_n1"><phrase id="fldcaption" value="P1 C1 N1"/>
-</field>
-<field id="p1_c1_n10"><phrase id="fldcaption" value="P1 C1 N10"/>
-</field>
-<field id="horas"><phrase id="fldcaption" value="HORAS"/>
-</field>
-<field id="no_erradica_s"><phrase id="fldcaption" value="NO ERRADICA S"/>
-</field>
-<field id="p1_c1_n6"><phrase id="fldcaption" value="P1 C1 N6"/>
-</field>
-<field id="p1_c1_n5"><phrase id="fldcaption" value="P1 C1 N5"/>
-</field>
-<field id="p1_c1_n4"><phrase id="fldcaption" value="P1 C1 N4"/>
-</field>
-<field id="p1_c1_n3"><phrase id="fldcaption" value="P1 C1 N3"/>
-</field>
-<field id="nom_pe_new"><phrase id="fldcaption" value="NOM PE NEW"/>
-</field>
-<field id="minutos2"><phrase id="fldcaption" value="MINUTOS2"/>
-</field>
-<field id="tema_new"><phrase id="fldcaption" value="TEMA NEW"/>
-</field>
-<field id="tipo_informe"><phrase id="fldcaption" value="TIPO INFORME"/>
-</field>
-<field id="tipo"><phrase id="fldcaption" value="TIPO"/>
-</field>
-<field id="no_erradica_q"><phrase id="fldcaption" value="NO ERRADICA Q"/>
-</field>
-<field id="comple"><phrase id="fldcaption" value="COMPLE"/>
-</field>
-<field id="inicio"><phrase id="fldcaption" value="INICIO"/>
-</field>
-<field id="meta_instance_name"><phrase id="fldcaption" value="META INSTANCE NAME"/>
-</field>
-<field id="nom_vda"><phrase id="fldcaption" value="NOM VDA"/>
-</field>
-<field id="grupo6_min_lat"><phrase id="fldcaption" value="GRUPO6 MIN LAT"/>
-</field>
-<field id="grupo10_gra_lat_sector"><phrase id="fldcaption" value="GRUPO10 GRA LAT SECTOR"/>
-</field>
-<field id="ha_amapola"><phrase id="fldcaption" value="HA AMAPOLA"/>
-</field>
-<field id="subscriberid"><phrase id="fldcaption" value="SUBSCRIBERID"/>
-</field>
-<field id="sum"><phrase id="fldcaption" value="SUM"/>
-</field>
-<field id="observacion"><phrase id="fldcaption" value="OBSERVACION"/>
-</field>
-<field id="grupo_validacion"><phrase id="fldcaption" value="GRUPO VALIDACION"/>
-</field>
-<field id="grupo10_seg_lat_sector"><phrase id="fldcaption" value="GRUPO10 SEG LAT SECTOR"/>
-</field>
-<field id="ha_marihuana"><phrase id="fldcaption" value="HA MARIHUANA"/>
-</field>
-<field id="minutos"><phrase id="fldcaption" value="MINUTOS"/>
-</field>
-<field id="deviceid"><phrase id="fldcaption" value="DEVICEID"/>
-</field>
-<field id="grupo10_min_lat_sector"><phrase id="fldcaption" value="GRUPO10 MIN LAT SECTOR"/>
-</field>
-<field id="grupo4_ci_marihuana"><phrase id="fldcaption" value="GRUPO4 CI MARIHUANA"/>
-</field>
-<field id="hora_final"><phrase id="fldcaption" value="HORA FINAL"/>
-</field>
-<field id="end"><phrase id="fldcaption" value="END"/>
-</field>
-<field id="metadato_note"><phrase id="fldcaption" value="METADATO NOTE"/>
-</field>
-<field id="grupo4_generated_table_list_label_37"><phrase id="fldcaption" value="GRUPO4 GENERATED TABLE LIST LABEL 37"/>
-</field>
-<field id="tipo2"><phrase id="fldcaption" value="TIPO2"/>
-</field>
-<field id="metadato_note1"><phrase id="fldcaption" value="METADATO NOTE1"/>
-</field>
-<field id="metadato_note2"><phrase id="fldcaption" value="METADATO NOTE2"/>
-</field>
-<field id="situacion"><phrase id="fldcaption" value="SITUACION"/>
-</field>
-<field id="tipo1"><phrase id="fldcaption" value="TIPO1"/>
-</field>
-<field id="metadato_note3"><phrase id="fldcaption" value="METADATO NOTE3"/>
-</field>
-<field id="sum2"><phrase id="fldcaption" value="SUM2"/>
-</field>
-<field id="tipo6"><phrase id="fldcaption" value="TIPO6"/>
-</field>
-<field id="metadato_note4"><phrase id="fldcaption" value="METADATO NOTE4"/>
-</field>
-<field id="no_policia"><phrase id="fldcaption" value="NO POLICIA"/>
-</field>
-<field id="tipo7"><phrase id="fldcaption" value="TIPO7"/>
-</field>
-<field id="metadato_note5"><phrase id="fldcaption" value="METADATO NOTE5"/>
-</field>
-<field id="grupo2_nom_pge_new"><phrase id="fldcaption" value="GRUPO2 NOM PGE NEW"/>
-</field>
-<field id="metadato_note6"><phrase id="fldcaption" value="METADATO NOTE6"/>
-</field>
-<field id="tipo5"><phrase id="fldcaption" value="TIPO5"/>
-</field>
-<field id="metadato_note7"><phrase id="fldcaption" value="METADATO NOTE7"/>
-</field>
-<field id="phonenumber"><phrase id="fldcaption" value="PHONENUMBER"/>
-</field>
-<field id="metadato_note8"><phrase id="fldcaption" value="METADATO NOTE8"/>
-</field>
-<field id="nom_pge"><phrase id="fldcaption" value="NOM PGE"/>
-</field>
-<field id="grupo2_cc_pge_new"><phrase id="fldcaption" value="GRUPO2 CC PGE NEW"/>
-</field>
-<field id="metadato_note9"><phrase id="fldcaption" value="METADATO NOTE9"/>
-</field>
-<field id="grupo11_seg_long_sector"><phrase id="fldcaption" value="GRUPO11 SEG LONG SECTOR"/>
-</field>
-<field id="no_personas"><phrase id="fldcaption" value="NO PERSONAS"/>
-</field>
-<field id="hora_inicio"><phrase id="fldcaption" value="HORA INICIO"/>
-</field>
-<field id="meta_instance_id"><phrase id="fldcaption" value="META INSTANCE ID"/>
-</field>
-<field id="nom_mpio"><phrase id="fldcaption" value="NOM MPIO"/>
-</field>
-<field id="simserial"><phrase id="fldcaption" value="SIMSERIAL"/>
-</field>
-<field id="latitud_sector"><phrase id="fldcaption" value="LATITUD SECTOR"/>
-</field>
-<field id="grupo6_seg_lat"><phrase id="fldcaption" value="GRUPO6 SEG LAT"/>
-</field>
-<field id="grupo7_gra_long"><phrase id="fldcaption" value="GRUPO7 GRA LONG"/>
-</field>
-<field id="ha_coca"><phrase id="fldcaption" value="HA COCA"/>
-</field>
-<field id="permiso5"><phrase id="fldcaption" value="PERMISO5"/>
-</field>
-<field id="permiso6"><phrase id="fldcaption" value="PERMISO6"/>
-</field>
-<field id="grupo6_gra_lat"><phrase id="fldcaption" value="GRUPO6 GRA LAT"/>
-</field>
-<field id="nom_dpto"><phrase id="fldcaption" value="NOM DPTO"/>
-</field>
-<field id="no_enfermero"><phrase id="fldcaption" value="NO ENFERMERO"/>
-</field>
-<field id="tiempo"><phrase id="fldcaption" value="TIEMPO"/>
-</field>
-<field id="tema"><phrase id="fldcaption" value="TEMA"/>
-</field>
-<field id="grupo11_gra_long_sector"><phrase id="fldcaption" value="GRUPO11 GRA LONG SECTOR"/>
-</field>
-<field id="permiso1"><phrase id="fldcaption" value="PERMISO1"/>
-</field>
-<field id="today"><phrase id="fldcaption" value="TODAY"/>
-</field>
-<field id="permiso2"><phrase id="fldcaption" value="PERMISO2"/>
-</field>
-<field id="grupo4_ci_amapola"><phrase id="fldcaption" value="GRUPO4 CI AMAPOLA"/>
-</field>
-<field id="permiso3"><phrase id="fldcaption" value="PERMISO3"/>
-</field>
-<field id="permiso4"><phrase id="fldcaption" value="PERMISO4"/>
-</field>
-<field id="grupo7_seg_long"><phrase id="fldcaption" value="GRUPO7 SEG LONG"/>
-</field>
-<field id="imei"><phrase id="fldcaption" value="IMEI"/>
-</field>
-<field id="usuario"><phrase id="fldcaption" value="USUARIO"/>
-</field>
-<field id="grupo11_min_long_sector"><phrase id="fldcaption" value="GRUPO11 MIN LONG SECTOR"/>
-</field>
-<field id="grupo4_ci_coca"><phrase id="fldcaption" value="GRUPO4 CI COCA"/>
-</field>
-<field id="no_fp"><phrase id="fldcaption" value="NO FP"/>
-</field>
-<field id="grupo7_min_long"><phrase id="fldcaption" value="GRUPO7 MIN LONG"/>
-</field>
-<field id="start"><phrase id="fldcaption" value="START"/>
-</field>
-<field id="grupo_validador_malo"><phrase id="fldcaption" value="GRUPO VALIDADOR MALO"/>
-</field>
-<field id="fecha_report"><phrase id="fldcaption" value="FECHA REPORT"/>
-</field>
-<field id="nom_pe"><phrase id="fldcaption" value="NOM PE"/>
-</field>
-<field id="latitud"><phrase id="fldcaption" value="LATITUD"/>
-</field>
-</table>
-<table id="informe_apoyo_zonal_diario_v_prueba_grupo5_admin_fp"><phrase id="tblcaption" value="informe apoyo zonal diario v prueba grupo 5 admin fp"/>
-<field id="_uri"><phrase id="fldcaption" value=" URI"/>
-</field>
-<field id="_creator_uri_user"><phrase id="fldcaption" value=" CREATOR URI USER"/>
-</field>
-<field id="_creation_date"><phrase id="fldcaption" value=" CREATION DATE"/>
-</field>
-<field id="_last_update_uri_user"><phrase id="fldcaption" value=" LAST UPDATE URI USER"/>
-</field>
-<field id="_last_update_date"><phrase id="fldcaption" value=" LAST UPDATE DATE"/>
-</field>
-<field id="_parent_auri"><phrase id="fldcaption" value=" PARENT AURI"/>
-</field>
-<field id="_ordinal_number"><phrase id="fldcaption" value=" ORDINAL NUMBER"/>
-</field>
-<field id="_top_level_auri"><phrase id="fldcaption" value=" TOP LEVEL AURI"/>
-</field>
-<field id="value"><phrase id="fldcaption" value="VALUE"/>
-</field>
-</table>
-<table id="informe_apoyo_zonal_diario_v_prueba_grupo5_admin_gme"><phrase id="tblcaption" value="informe apoyo zonal diario v prueba grupo 5 admin gme"/>
-<field id="_uri"><phrase id="fldcaption" value=" URI"/>
-</field>
-<field id="_creator_uri_user"><phrase id="fldcaption" value=" CREATOR URI USER"/>
-</field>
-<field id="_creation_date"><phrase id="fldcaption" value=" CREATION DATE"/>
-</field>
-<field id="_last_update_uri_user"><phrase id="fldcaption" value=" LAST UPDATE URI USER"/>
-</field>
-<field id="_last_update_date"><phrase id="fldcaption" value=" LAST UPDATE DATE"/>
-</field>
-<field id="_parent_auri"><phrase id="fldcaption" value=" PARENT AURI"/>
-</field>
-<field id="_ordinal_number"><phrase id="fldcaption" value=" ORDINAL NUMBER"/>
-</field>
-<field id="_top_level_auri"><phrase id="fldcaption" value=" TOP LEVEL AURI"/>
-</field>
-<field id="value"><phrase id="fldcaption" value="VALUE"/>
-</field>
-</table>
-<table id="informe_apoyo_zonal_diario_v_prueba_grupo5_admin_nov"><phrase id="tblcaption" value="informe apoyo zonal diario v prueba grupo 5 admin nov"/>
-<field id="_uri"><phrase id="fldcaption" value=" URI"/>
-</field>
-<field id="_creator_uri_user"><phrase id="fldcaption" value=" CREATOR URI USER"/>
-</field>
-<field id="_creation_date"><phrase id="fldcaption" value=" CREATION DATE"/>
-</field>
-<field id="_last_update_uri_user"><phrase id="fldcaption" value=" LAST UPDATE URI USER"/>
-</field>
-<field id="_last_update_date"><phrase id="fldcaption" value=" LAST UPDATE DATE"/>
-</field>
-<field id="_parent_auri"><phrase id="fldcaption" value=" PARENT AURI"/>
-</field>
-<field id="_ordinal_number"><phrase id="fldcaption" value=" ORDINAL NUMBER"/>
-</field>
-<field id="_top_level_auri"><phrase id="fldcaption" value=" TOP LEVEL AURI"/>
-</field>
-<field id="value"><phrase id="fldcaption" value="VALUE"/>
-</field>
-</table>
-<table id="informe_apoyo_zonal_diario_v_prueba_grupo5_admin_seg"><phrase id="tblcaption" value="informe apoyo zonal diario v prueba grupo 5 admin seg"/>
-<field id="_uri"><phrase id="fldcaption" value=" URI"/>
-</field>
-<field id="_creator_uri_user"><phrase id="fldcaption" value=" CREATOR URI USER"/>
-</field>
-<field id="_creation_date"><phrase id="fldcaption" value=" CREATION DATE"/>
-</field>
-<field id="_last_update_uri_user"><phrase id="fldcaption" value=" LAST UPDATE URI USER"/>
-</field>
-<field id="_last_update_date"><phrase id="fldcaption" value=" LAST UPDATE DATE"/>
-</field>
-<field id="_parent_auri"><phrase id="fldcaption" value=" PARENT AURI"/>
-</field>
-<field id="_ordinal_number"><phrase id="fldcaption" value=" ORDINAL NUMBER"/>
-</field>
-<field id="_top_level_auri"><phrase id="fldcaption" value=" TOP LEVEL AURI"/>
-</field>
-<field id="value"><phrase id="fldcaption" value="VALUE"/>
-</field>
-</table>
-<table id="informe_apoyo_zonal_diario_v_prueba_tipo_cultivo"><phrase id="tblcaption" value="informe apoyo zonal diario v prueba tipo cultivo"/>
-<field id="_uri"><phrase id="fldcaption" value=" URI"/>
-</field>
-<field id="_creator_uri_user"><phrase id="fldcaption" value=" CREATOR URI USER"/>
-</field>
-<field id="_creation_date"><phrase id="fldcaption" value=" CREATION DATE"/>
-</field>
-<field id="_last_update_uri_user"><phrase id="fldcaption" value=" LAST UPDATE URI USER"/>
-</field>
-<field id="_last_update_date"><phrase id="fldcaption" value=" LAST UPDATE DATE"/>
-</field>
-<field id="_parent_auri"><phrase id="fldcaption" value=" PARENT AURI"/>
-</field>
-<field id="_ordinal_number"><phrase id="fldcaption" value=" ORDINAL NUMBER"/>
-</field>
-<field id="_top_level_auri"><phrase id="fldcaption" value=" TOP LEVEL AURI"/>
-</field>
-<field id="value"><phrase id="fldcaption" value="VALUE"/>
-</field>
-</table>
-<table id="informe_apoyo_zonal_diario_v_prueba_tipo_situacion"><phrase id="tblcaption" value="informe apoyo zonal diario v prueba tipo situacion"/>
-<field id="_uri"><phrase id="fldcaption" value=" URI"/>
-</field>
-<field id="_creator_uri_user"><phrase id="fldcaption" value=" CREATOR URI USER"/>
-</field>
-<field id="_creation_date"><phrase id="fldcaption" value=" CREATION DATE"/>
-</field>
-<field id="_last_update_uri_user"><phrase id="fldcaption" value=" LAST UPDATE URI USER"/>
-</field>
-<field id="_last_update_date"><phrase id="fldcaption" value=" LAST UPDATE DATE"/>
-</field>
-<field id="_parent_auri"><phrase id="fldcaption" value=" PARENT AURI"/>
-</field>
-<field id="_ordinal_number"><phrase id="fldcaption" value=" ORDINAL NUMBER"/>
-</field>
-<field id="_top_level_auri"><phrase id="fldcaption" value=" TOP LEVEL AURI"/>
-</field>
-<field id="value"><phrase id="fldcaption" value="VALUE"/>
-</field>
-</table>
 <table id="info_diario"><phrase id="tblcaption" value="Informe Diario Descragas"/>
 <field id="llave"><phrase id="fldcaption" value="llave"/>
 </field>
@@ -1706,7 +1370,7 @@
 </field>
 <field id="departamento"><phrase id="fldcaption" value="Departamento"/>
 </field>
-<field id="muncipio"><phrase id="fldcaption" value="Muncipio"/>
+<field id="muncipio"><phrase id="fldcaption" value="Municipio"/>
 </field>
 <field id="nom_vda"><phrase id="fldcaption" value="NOM VDA"/>
 </field>
@@ -1812,6 +1476,8 @@
 </field>
 <field id="_3_map_no_controlada"><phrase id="fldcaption" value="3 MAP No controlada"/>
 </field>
+<field id="_3_muse"><phrase id="fldcaption" value="3 MUSE"/>
+</field>
 <field id="_3_operaciones_de_seguridad"><phrase id="fldcaption" value="3 Operaciones de seguridad"/>
 </field>
 <field id="latitud_segurid"><phrase id="fldcaption" value="LATITUD segurid"/>
@@ -1860,15 +1526,13 @@
 </field>
 <field id="observacion"><phrase id="fldcaption" value="OBSERVACION"/>
 </field>
+<field id="fuerza"><phrase id="fldcaption" value="FUERZA"/>
+</field>
 <field id="ad1o"><phrase id="fldcaption" value="AÑ O"/>
 </field>
 <field id="fase"><phrase id="fldcaption" value="FASE"/>
 </field>
 <field id="f_sincron"><phrase id="fldcaption" value="F Sincron"/>
-</field>
-<field id="fuerza"><phrase id="fldcaption" value="FUERZA"/>
-</field>
-<field id="_3_muse"><phrase id="fldcaption" value="3 MUSE"/>
 </field>
 <field id="modificado"><phrase id="fldcaption" value="Modificado"/>
 </field>
@@ -1926,7 +1590,7 @@
 </field>
 <field id="departamento"><phrase id="fldcaption" value="Departamento"/>
 </field>
-<field id="muncipio"><phrase id="fldcaption" value="Muncipio"/>
+<field id="muncipio"><phrase id="fldcaption" value="Municipio"/>
 </field>
 <field id="nom_vda"><phrase id="fldcaption" value="NOM VDA"/>
 </field>
@@ -2920,7 +2584,7 @@
 </field>
 <field id="nom_pe"><phrase id="fldcaption" value="NOM PE"/>
 </field>
-<field id="muncipio"><phrase id="fldcaption" value="Muncipio"/>
+<field id="muncipio"><phrase id="fldcaption" value="Municipio"/>
 </field>
 <field id="departamento"><phrase id="fldcaption" value="Departamento"/>
 </field>
@@ -3006,9 +2670,11 @@
 </field>
 <field id="desc_acc"><phrase id="fldcaption" value="DESC ACC"/>
 </field>
-<field id="tipo_incidente"><phrase id="fldcaption" value="Tipo incidente"/>
-</field>
 <field id="modificado"><phrase id="fldcaption" value="Modificado"/>
+</field>
+<field id="llave_2"><phrase id="fldcaption" value="llave 2"/>
+</field>
+<field id="tipo_incidente"><phrase id="fldcaption" value="Tipo incidente"/>
 </field>
 </table>
 <table id="enlace_novedad"><phrase id="tblcaption" value="Informe de Enlace y Novedad  Descarga"/>
@@ -3062,7 +2728,7 @@
 </field>
 <field id="otro_cc_capata"><phrase id="fldcaption" value="Otro CC Capata"/>
 </field>
-<field id="muncipio"><phrase id="fldcaption" value="Muncipio"/>
+<field id="muncipio"><phrase id="fldcaption" value="Municipio"/>
 </field>
 <field id="departamento"><phrase id="fldcaption" value="Departamento"/>
 </field>
@@ -3075,6 +2741,10 @@
 <field id="num_novedad"><phrase id="fldcaption" value="NUM Novedad"/>
 </field>
 <field id="modificado"><phrase id="fldcaption" value="Modificado"/>
+</field>
+<field id="llave_2"><phrase id="fldcaption" value="llave 2"/>
+</field>
+<field id="cc_pre_evacu"><phrase id="fldcaption" value="CC Pre Evacu"/>
 </field>
 </table>
 <table id="informe_de_enlace_y_novedad_v2_f2_2014_c2_r1"><phrase id="tblcaption" value="informe de enlace y novedad v 2 f 2 2014 c 2 r 1"/>
@@ -3686,7 +3356,7 @@
 </field>
 <field id="departamento"><phrase id="fldcaption" value="Departamento"/>
 </field>
-<field id="muncipio"><phrase id="fldcaption" value="Muncipio"/>
+<field id="muncipio"><phrase id="fldcaption" value="Municipio"/>
 </field>
 <field id="nom_vda"><phrase id="fldcaption" value="NOM VDA"/>
 </field>
@@ -3755,6 +3425,10 @@
 <field id="fase"><phrase id="fldcaption" value="FASE"/>
 </field>
 <field id="modificado"><phrase id="fldcaption" value="Modificado"/>
+<phrase id="fldtagvalue1" value="Si"/>
+<phrase id="fldtagcaption1" value="Si"/>
+<phrase id="fldtagvalue2" value="No"/>
+<phrase id="fldtagcaption2" value="No"/>
 </field>
 </table>
 <table id="view_e_y_n"><phrase id="tblcaption" value="Informe de Enlace y Novedad"/>
@@ -3783,6 +3457,10 @@
 <field id="num_evacua"><phrase id="fldcaption" value="Num Evacua"/>
 </field>
 <field id="pto_incomu"><phrase id="fldcaption" value="PTO INCOMU"/>
+<phrase id="fldtagvalue1" value="Si"/>
+<phrase id="fldtagcaption1" value="Si"/>
+<phrase id="fldtagvalue2" value="No"/>
+<phrase id="fldtagcaption2" value="No"/>
 </field>
 <field id="obs_punt_inco"><phrase id="fldcaption" value="OBS punt inco"/>
 </field>
@@ -3791,6 +3469,8 @@
 <field id="num_novedad"><phrase id="fldcaption" value="NUM Novedad"/>
 </field>
 <field id="nom_per_evacu"><phrase id="fldcaption" value="Nom Per Evacu"/>
+</field>
+<field id="cc_pre_evacu"><phrase id="fldcaption" value="CC Pre Evacu"/>
 </field>
 <field id="nom_otro_per_evacu"><phrase id="fldcaption" value="Nom Otro Per Evacu"/>
 </field>
@@ -3812,15 +3492,25 @@
 </field>
 <field id="otro_cc_capata"><phrase id="fldcaption" value="Otro CC Capata"/>
 </field>
-<field id="muncipio"><phrase id="fldcaption" value="Muncipio"/>
+<field id="muncipio"><phrase id="fldcaption" value="Municipio"/>
 </field>
 <field id="departamento"><phrase id="fldcaption" value="Departamento"/>
 </field>
 <field id="f_llegada"><phrase id="fldcaption" value="F llegada"/>
+<phrase id="fldtagvalue1" value="Si"/>
+<phrase id="fldtagcaption1" value="Si"/>
+<phrase id="fldtagvalue2" value="No"/>
+<phrase id="fldtagcaption2" value="No"/>
 </field>
 <field id="fecha"><phrase id="fldcaption" value="Fecha"/>
 </field>
 <field id="modificado"><phrase id="fldcaption" value="Modificado"/>
+<phrase id="fldtagvalue1" value="Si"/>
+<phrase id="fldtagcaption1" value="Si"/>
+<phrase id="fldtagvalue2" value="No"/>
+<phrase id="fldtagcaption2" value="No"/>
+</field>
+<field id="llave_2"><phrase id="fldcaption" value="llave 2"/>
 </field>
 </table>
 <table id="view_inv"><phrase id="tblcaption" value="Informe de Inventario"/>
@@ -3957,6 +3647,10 @@
 <field id="_3_tubo_galvanizado"><phrase id="fldcaption" value="3 Tubo galvanizado"/>
 </field>
 <field id="modificado"><phrase id="fldcaption" value="Modificado"/>
+<phrase id="fldtagvalue1" value="Si"/>
+<phrase id="fldtagcaption1" value="Si"/>
+<phrase id="fldtagvalue2" value="No"/>
+<phrase id="fldtagcaption2" value="No"/>
 </field>
 </table>
 <table id="view_id"><phrase id="tblcaption" value="Informe Diario"/>
@@ -3988,13 +3682,15 @@
 </field>
 <field id="departamento"><phrase id="fldcaption" value="Departamento"/>
 </field>
-<field id="muncipio"><phrase id="fldcaption" value="Muncipio"/>
+<field id="muncipio"><phrase id="fldcaption" value="Municipio"/>
 </field>
 <field id="tema"><phrase id="fldcaption" value="TEMA"/>
 </field>
 <field id="otro_tema"><phrase id="fldcaption" value="Otro Tema"/>
 </field>
 <field id="observacion"><phrase id="fldcaption" value="OBSERVACION"/>
+</field>
+<field id="fuerza"><phrase id="fldcaption" value="FUERZA"/>
 </field>
 <field id="nom_vda"><phrase id="fldcaption" value="NOM VDA"/>
 </field>
@@ -4100,6 +3796,8 @@
 </field>
 <field id="_3_map_no_controlada"><phrase id="fldcaption" value="3 MAP No controlada"/>
 </field>
+<field id="_3_muse"><phrase id="fldcaption" value="3 MUSE"/>
+</field>
 <field id="_3_operaciones_de_seguridad"><phrase id="fldcaption" value="3 Operaciones de seguridad"/>
 </field>
 <field id="latitud_segurid"><phrase id="fldcaption" value="LATITUD segurid"/>
@@ -4146,35 +3844,19 @@
 </field>
 <field id="fase"><phrase id="fldcaption" value="FASE"/>
 </field>
-<field id="fuerza"><phrase id="fldcaption" value="FUERZA"/>
-</field>
-<field id="_3_muse"><phrase id="fldcaption" value="3 MUSE"/>
-</field>
 <field id="modificado"><phrase id="fldcaption" value="Modificado"/>
+<phrase id="fldtagvalue1" value="Si"/>
+<phrase id="fldtagcaption1" value="Si"/>
+<phrase id="fldtagvalue2" value="No"/>
+<phrase id="fldtagcaption2" value="No"/>
 </field>
 </table>
-<table id="grafica_accidentes_trabajo"><phrase id="tblcaption" value="Gráfica de accidentes de trabajo"/>
-<field id="profesional_especializado"><phrase id="fldcaption" value="Profesional especializado"/>
-</field>
-<field id="punto"><phrase id="fldcaption" value="Punto"/>
-</field>
-<field id="cargo_afectado"><phrase id="fldcaption" value="Cargo Afectado"/>
-</field>
-<field id="tipo_incidente"><phrase id="fldcaption" value="Tipo incidente"/>
-</field>
-<field id="evacuado"><phrase id="fldcaption" value="Evacuado"/>
-</field>
-<field id="no_evacuado"><phrase id="fldcaption" value="No evacuado"/>
-</field>
-<field id="total_evacuados"><phrase id="fldcaption" value="Total Evacuados"/>
-</field>
-</table>
-<table id="grafica_apoyos_zonales"><phrase id="tblcaption" value="Gráfica de apoyos zonales"/>
+<table id="grafica_apoyos_zonales"><phrase id="tblcaption" value="Tabla de apoyos zonales"/>
 <field id="profesional_especializado"><phrase id="fldcaption" value="Profesional Especializado"/>
 </field>
 <field id="punto"><phrase id="fldcaption" value="Punto"/>
 </field>
-<field id="apoyo_zonal"><phrase id="fldcaption" value="Profesional GME"/>
+<field id="apoyo_zonal"><phrase id="fldcaption" value="Apoyo zonal"/>
 </field>
 <field id="cargo"><phrase id="fldcaption" value="Cargo"/>
 </field>
@@ -4184,7 +3866,7 @@
 </field>
 <field id="dias_contratados"><phrase id="fldcaption" value="Dias contratados"/>
 </field>
-<field id="dias_erradicados"><phrase id="fldcaption" value="Dias con erradicíon"/>
+<field id="dias_erradicados"><phrase id="fldcaption" value="Dias con erradicion"/>
 </field>
 <field id="promedio_ha"><phrase id="fldcaption" value="Promedio ha"/>
 </field>
@@ -4205,38 +3887,32 @@
 <field id="total_erradicado"><phrase id="fldcaption" value="Total erradicado"/>
 </field>
 </table>
-<table id="grafica_dias_contratados"><phrase id="tblcaption" value="Gráfica de días contratados"/>
+<table id="grafica_dias_contratados"><phrase id="tblcaption" value="Tabla de días contratados"/>
 <field id="punto"><phrase id="fldcaption" value="Punto"/>
 </field>
 <field id="profesional"><phrase id="fldcaption" value="Profesional"/>
 </field>
 <field id="firma_contrato_gme"><phrase id="fldcaption" value="Fecha inicio de contrato GME"/>
 </field>
-<field id="llegada_gme_a_su_lugar_de_origen"><phrase id="fldcaption" value=" Fecha fin de contrato GME"/>
+<field id="llegada_gme_a_su_lugar_de_origen"><phrase id="fldcaption" value="Fecha fin de contrato GME"/>
 </field>
 <field id="dias"><phrase id="fldcaption" value="dias"/>
 </field>
-<field id="dias_reportados"><phrase id="fldcaption" value="Dias reportados"/>
+<field id="dias_reportados"><phrase id="fldcaption" value="# de reportes"/>
 </field>
 </table>
 <table id="grafica_disponibilidad_gme"><phrase id="tblcaption" value="Gráfica disponibilidad gme"/>
 <field id="a"><phrase id="fldcaption" value="a"/>
 </field>
 </table>
-<table id="grafica_erradicacion_fuerza_departamento"><phrase id="tblcaption" value="Gráfica de erradicación por fuerza pública"/>
-<field id="fuerza"><phrase id="fldcaption" value="fuerza"/>
-</field>
+<table id="grafica_erradicacion_fuerza_departamento"><phrase id="tblcaption" value="Tabla de erradicación por fuerza pública"/>
 <field id="departamento"><phrase id="fldcaption" value="Departamento"/>
 </field>
-<field id="muncipio"><phrase id="fldcaption" value="Muncipio"/>
-</field>
-<field id="punto"><phrase id="fldcaption" value="Punto"/>
+<field id="muncipio"><phrase id="fldcaption" value="Municipio"/>
 </field>
 <field id="af1o"><phrase id="fldcaption" value="año"/>
 </field>
 <field id="fase"><phrase id="fldcaption" value="fase"/>
-</field>
-<field id="profesional_especializado"><phrase id="fldcaption" value="Profesional especializado"/>
 </field>
 <field id="ha_coca"><phrase id="fldcaption" value="Ha Coca"/>
 </field>
@@ -4245,6 +3921,12 @@
 <field id="ha_marihuana"><phrase id="fldcaption" value="Ha Marihuana"/>
 </field>
 <field id="total_erradicado"><phrase id="fldcaption" value="Total erradicado"/>
+</field>
+<field id="fuerza"><phrase id="fldcaption" value="fuerza"/>
+</field>
+<field id="punto"><phrase id="fldcaption" value="Punto"/>
+</field>
+<field id="profesional_especializado"><phrase id="fldcaption" value="Profesional especializado"/>
 </field>
 </table>
 <table id="grafica_gme_activos"><phrase id="tblcaption" value="Gráfica GME activos"/>
@@ -4258,7 +3940,7 @@
 <table id="grafica_intervencion_geografica"><phrase id="tblcaption" value="Gráfica de intervención geográfica"/>
 <field id="departamento"><phrase id="fldcaption" value="Departamento"/>
 </field>
-<field id="muncipio"><phrase id="fldcaption" value="Muncipio"/>
+<field id="muncipio"><phrase id="fldcaption" value="Municipio"/>
 </field>
 <field id="ha_coca"><phrase id="fldcaption" value="Ha Coca"/>
 </field>
@@ -4268,8 +3950,12 @@
 </field>
 <field id="total_erradicado"><phrase id="fldcaption" value="Total erradicado"/>
 </field>
+<field id="af1o"><phrase id="fldcaption" value="año"/>
+</field>
+<field id="fase"><phrase id="fldcaption" value="fase"/>
+</field>
 </table>
-<table id="grafica_movimientos"><phrase id="tblcaption" value="Gráfica de movimientos"/>
+<table id="grafica_movimientos"><phrase id="tblcaption" value="Tabla de movimientos"/>
 <field id="punto"><phrase id="fldcaption" value="Punto"/>
 </field>
 <field id="fecha_ultimo_movimiento"><phrase id="fldcaption" value="Fecha ultimo movimiento"/>
@@ -4278,15 +3964,27 @@
 </field>
 </table>
 <table id="grafica_retiro_personal"><phrase id="tblcaption" value="Gráfica de retiro del  personal"/>
-<field id="cargo_per_eva"><phrase id="fldcaption" value="Cargo Per EVA"/>
+<field id="punto"><phrase id="fldcaption" value="Punto"/>
+</field>
+<field id="departamento"><phrase id="fldcaption" value="Departamento"/>
+</field>
+<field id="municipio"><phrase id="fldcaption" value="Municipio"/>
+</field>
+<field id="cc_evacuado"><phrase id="fldcaption" value="CC Evacuado"/>
+</field>
+<field id="evacuado"><phrase id="fldcaption" value="Evacuado"/>
+</field>
+<field id="cargo_per_eva"><phrase id="fldcaption" value="Cargo de persona evacuada"/>
 </field>
 <field id="motivo_eva"><phrase id="fldcaption" value="Motivo Eva"/>
 </field>
+<field id="fecha_llegada_del_evacuado"><phrase id="fldcaption" value="Fecha llegada del evacuado"/>
+</field>
 <field id="profesional_especializado"><phrase id="fldcaption" value="Profesional especializado"/>
 </field>
-<field id="punto"><phrase id="fldcaption" value="Punto"/>
+<field id="obs_eva"><phrase id="fldcaption" value="OBS EVA"/>
 </field>
-<field id="evacuado"><phrase id="fldcaption" value="Evacuado"/>
+<field id="fecha_de_novedad"><phrase id="fldcaption" value="Fecha de Novedad"/>
 </field>
 <field id="af1o"><phrase id="fldcaption" value="Año"/>
 </field>
@@ -4299,6 +3997,10 @@
 <field id="total_erradicado"><phrase id="fldcaption" value="Total erradicado"/>
 </field>
 <field id="fecha"><phrase id="fldcaption" value="fecha"/>
+</field>
+<field id="af1o"><phrase id="fldcaption" value="año"/>
+</field>
+<field id="fase"><phrase id="fldcaption" value="fase"/>
 </field>
 </table>
 <table id="formulario_accidentes_trabajo_v2_f2_2014_c2_r1"><phrase id="tblcaption" value="formulario accidentes trabajo v 2 f 2 2014 c 2 r 1"/>
@@ -4333,6 +4035,10 @@
 <field id="cuerpo_afec"><phrase id="fldcaption" value="CUERPO AFEC"/>
 </field>
 <field id="desc_acc"><phrase id="fldcaption" value="DESC ACC"/>
+</field>
+<field id="incidente_afec"><phrase id="fldcaption" value="INCIDENTE AFEC"/>
+</field>
+<field id="riesgo_afec"><phrase id="fldcaption" value="RIESGO AFEC"/>
 </field>
 </table>
 <table id="formulario_accidentes_trabajo_v2_f2_2014_core"><phrase id="tblcaption" value="formulario accidentes trabajo v 2 f 2 2014 core"/>
@@ -4970,7 +4676,7 @@
 </field>
 </table>
 <table id="fuerza"><phrase id="tblcaption" value="Fuerza pública"/>
-<field id="fuerza"><phrase id="fldcaption" value="Fuerza"/>
+<field id="fuerza"><phrase id="fldcaption" value="Fuerza Pública"/>
 <phrase id="fldtagvalue1" value="Armada Nacional"/>
 <phrase id="fldtagcaption1" value="Armada Nacional"/>
 <phrase id="fldtagvalue2" value="Ejercito Nacional"/>
@@ -5000,13 +4706,29 @@
 </field>
 <field id="punto"><phrase id="fldcaption" value="Punto"/>
 </field>
+<field id="profesional_especializado"><phrase id="fldcaption" value="Profesional especializado"/>
+<phrase id="fldtagvalue1" value="Carlos Andrés Muñoz Marulanda"/>
+<phrase id="fldtagcaption1" value="Carlos Andrés Muñoz Marulanda"/>
+<phrase id="fldtagvalue2" value="Eduardo Santos Vergara Martínez"/>
+<phrase id="fldtagcaption2" value="Eduardo Santos Vergara Martínez"/>
+<phrase id="fldtagvalue3" value="Hugo Alberto Valencia Vivas"/>
+<phrase id="fldtagcaption3" value="Hugo Alberto Valencia Vivas"/>
+<phrase id="fldtagvalue4" value="Julio Leyner Castaño"/>
+<phrase id="fldtagcaption4" value="Julio Leyner Castaño"/>
+<phrase id="fldtagvalue5" value="Luis Carlos Gil Russi"/>
+<phrase id="fldtagcaption5" value="Luis Carlos Gil Russi"/>
+<phrase id="fldtagvalue6" value="Pedro Nel Rendón"/>
+<phrase id="fldtagcaption6" value="Pedro Nel Rendón"/>
+<phrase id="fldtagvalue7" value="Silcerio Armando Torres Rodríguez"/>
+<phrase id="fldtagcaption7" value="Silcerio Armando Torres Rodríguez"/>
+</field>
 </table>
 <table id="fuerza_1"><phrase id="tblcaption" value="fuerza 1"/>
 <field id="nom_pe"><phrase id="fldcaption" value="NOM PE"/>
 </field>
 <field id="departamento"><phrase id="fldcaption" value="Departamento"/>
 </field>
-<field id="muncipio"><phrase id="fldcaption" value="Muncipio"/>
+<field id="muncipio"><phrase id="fldcaption" value="Municipio"/>
 </field>
 <field id="nom_pge"><phrase id="fldcaption" value="NOM PGE"/>
 </field>
@@ -5047,6 +4769,8 @@
 <field id="ha_marihuana"><phrase id="fldcaption" value="Ha Marihuana"/>
 </field>
 <field id="total_erradicacion"><phrase id="fldcaption" value="Total erradicacion"/>
+</field>
+<field id="dia_sin_novedad_especial"><phrase id="fldcaption" value="Dia sin novedad especial"/>
 </field>
 </table>
 <table id="pma__bookmark"><phrase id="tblcaption" value="pma bookmark"/>
@@ -5375,7 +5099,7 @@
 <field id="_1_apoyo_zonal_sin_punto_asignado"><phrase id="fldcaption" value="1 Apoyo zonal sin punto asignado"/>
 </field>
 </table>
-<table id="grafica_capacidad_efectiva"><phrase id="tblcaption" value="Gráfica de capacidad efectiva"/>
+<table id="grafica_capacidad_efectiva"><phrase id="tblcaption" value="Tabla de capacidad efectiva"/>
 <field id="punto"><phrase id="fldcaption" value="Punto"/>
 </field>
 <field id="total_general"><phrase id="fldcaption" value="Total general"/>
@@ -5458,6 +5182,8 @@
 </field>
 <field id="_4_zona_sin_cultivos"><phrase id="fldcaption" value="4 Zona sin cultivos"/>
 </field>
+<field id="dia_sin_novedad_especial"><phrase id="fldcaption" value="Dia sin novedad especial"/>
+</field>
 </table>
 <table id="view1_acc"><phrase id="tblcaption" value="Reporte de accidentes"/>
 <field id="llave"><phrase id="fldcaption" value="llave"/>
@@ -5492,7 +5218,7 @@
 </field>
 <field id="departamento"><phrase id="fldcaption" value="Departamento"/>
 </field>
-<field id="muncipio"><phrase id="fldcaption" value="Muncipio"/>
+<field id="muncipio"><phrase id="fldcaption" value="Municipio"/>
 </field>
 <field id="nom_vda"><phrase id="fldcaption" value="NOM VDA"/>
 </field>
@@ -5557,6 +5283,84 @@
 <field id="desc_acc"><phrase id="fldcaption" value="DESC ACC"/>
 </field>
 <field id="modificado"><phrase id="fldcaption" value="Modificado"/>
+</field>
+<field id="llave_2"><phrase id="fldcaption" value="llave 2"/>
+</field>
+</table>
+<table id="grafica_accidentes_trabajo"><phrase id="tblcaption" value="Gráfica de accidentes de trabajo"/>
+<field id="profesional_especializado"><phrase id="fldcaption" value="Profesional especializado"/>
+</field>
+<field id="punto"><phrase id="fldcaption" value="Punto"/>
+</field>
+<field id="cargo_afectado"><phrase id="fldcaption" value="Cargo Afectado"/>
+</field>
+<field id="tipo_incidente"><phrase id="fldcaption" value="Tipo incidente"/>
+</field>
+<field id="evacuado"><phrase id="fldcaption" value="Evacuado"/>
+</field>
+<field id="no_evacuado"><phrase id="fldcaption" value="No evacuado"/>
+</field>
+<field id="total_evacuados"><phrase id="fldcaption" value="Total Evacuados"/>
+</field>
+</table>
+<table id="grafica_dias_contratados_3"><phrase id="tblcaption" value="grafica dias contratados 3"/>
+<field id="punto"><phrase id="fldcaption" value="Punto"/>
+</field>
+<field id="profesional"><phrase id="fldcaption" value="Profesional"/>
+</field>
+<field id="firma_contrato_gme"><phrase id="fldcaption" value="Firma Contrato Gme"/>
+</field>
+<field id="llegada_gme_a_su_lugar_de_origen"><phrase id="fldcaption" value="Llegada GME a su lugar de Origen"/>
+</field>
+<field id="dias"><phrase id="fldcaption" value="dias"/>
+</field>
+</table>
+<table id="movimientos_1"><phrase id="tblcaption" value="movimientos 1"/>
+<field id="punto"><phrase id="fldcaption" value="Punto"/>
+</field>
+<field id="fecha_ultimo_movimiento"><phrase id="fldcaption" value="Fecha ultimo movimiento"/>
+</field>
+<field id="dias_desde_ultimo_movimiento"><phrase id="fldcaption" value="Dias desde ultimo movimiento"/>
+</field>
+</table>
+<table id="_filter"><phrase id="tblcaption" value=" filter"/>
+<field id="_uri"><phrase id="fldcaption" value=" URI"/>
+</field>
+<field id="_creator_uri_user"><phrase id="fldcaption" value=" CREATOR URI USER"/>
+</field>
+<field id="_creation_date"><phrase id="fldcaption" value=" CREATION DATE"/>
+</field>
+<field id="_last_update_uri_user"><phrase id="fldcaption" value=" LAST UPDATE URI USER"/>
+</field>
+<field id="_last_update_date"><phrase id="fldcaption" value=" LAST UPDATE DATE"/>
+</field>
+<field id="uri_filter_group"><phrase id="fldcaption" value="URI FILTER GROUP"/>
+</field>
+<field id="visibility"><phrase id="fldcaption" value="VISIBILITY"/>
+</field>
+<field id="roworcol"><phrase id="fldcaption" value="ROWORCOL"/>
+</field>
+<field id="col_title"><phrase id="fldcaption" value="COL TITLE"/>
+</field>
+<field id="col_encoding"><phrase id="fldcaption" value="COL ENCODING"/>
+</field>
+<field id="operation"><phrase id="fldcaption" value="OPERATION"/>
+</field>
+<field id="input_clause"><phrase id="fldcaption" value="INPUT CLAUSE"/>
+</field>
+<field id="ordinal"><phrase id="fldcaption" value="ORDINAL"/>
+</field>
+<field id="gps_ord"><phrase id="fldcaption" value="GPS ORD"/>
+</field>
+</table>
+<table id="movimientos_2"><phrase id="tblcaption" value="movimientos 2"/>
+<field id="punto"><phrase id="fldcaption" value="Punto"/>
+</field>
+<field id="departamento"><phrase id="fldcaption" value="Departamento"/>
+</field>
+<field id="municipio"><phrase id="fldcaption" value="Municipio"/>
+</field>
+<field id="movimientos"><phrase id="fldcaption" value="Movimientos"/>
 </field>
 </table>
 </project>
