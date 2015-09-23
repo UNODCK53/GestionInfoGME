@@ -384,7 +384,11 @@ class cview1_acc_edit extends cview1_acc {
 		}
 
 		// Render the record
-		$this->RowType = EW_ROWTYPE_EDIT; // Render as Edit
+		if ($this->CurrentAction == "F") { // Confirm page
+			$this->RowType = EW_ROWTYPE_VIEW; // Render as View
+		} else {
+			$this->RowType = EW_ROWTYPE_EDIT; // Render as Edit
+		}
 		$this->ResetAttrs();
 		$this->RenderRow();
 	}
@@ -442,7 +446,7 @@ class cview1_acc_edit extends cview1_acc {
 		}
 		if (!$this->F_Sincron->FldIsDetailKey) {
 			$this->F_Sincron->setFormValue($objForm->GetValue("x_F_Sincron"));
-			$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 7);
+			$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 5);
 		}
 		if (!$this->USUARIO->FldIsDetailKey) {
 			$this->USUARIO->setFormValue($objForm->GetValue("x_USUARIO"));
@@ -570,6 +574,9 @@ class cview1_acc_edit extends cview1_acc {
 		if (!$this->Tipo_incidente->FldIsDetailKey) {
 			$this->Tipo_incidente->setFormValue($objForm->GetValue("x_Tipo_incidente"));
 		}
+		if (!$this->Riesgo->FldIsDetailKey) {
+			$this->Riesgo->setFormValue($objForm->GetValue("x_Riesgo"));
+		}
 		if (!$this->Parte_Cuerpo->FldIsDetailKey) {
 			$this->Parte_Cuerpo->setFormValue($objForm->GetValue("x_Parte_Cuerpo"));
 		}
@@ -585,18 +592,18 @@ class cview1_acc_edit extends cview1_acc {
 		if (!$this->Modificado->FldIsDetailKey) {
 			$this->Modificado->setFormValue($objForm->GetValue("x_Modificado"));
 		}
-		if (!$this->llave_2->FldIsDetailKey)
+		if (!$this->llave_2->FldIsDetailKey) {
 			$this->llave_2->setFormValue($objForm->GetValue("x_llave_2"));
+		}
 	}
 
 	// Restore form values
 	function RestoreFormValues() {
 		global $objForm;
 		$this->LoadRow();
-		$this->llave_2->CurrentValue = $this->llave_2->FormValue;
 		$this->llave->CurrentValue = $this->llave->FormValue;
 		$this->F_Sincron->CurrentValue = $this->F_Sincron->FormValue;
-		$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 7);
+		$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 5);
 		$this->USUARIO->CurrentValue = $this->USUARIO->FormValue;
 		$this->Cargo_gme->CurrentValue = $this->Cargo_gme->FormValue;
 		$this->NOM_PE->CurrentValue = $this->NOM_PE->FormValue;
@@ -639,11 +646,13 @@ class cview1_acc_edit extends cview1_acc {
 		$this->CC_Afectado->CurrentValue = $this->CC_Afectado->FormValue;
 		$this->Cargo_Afectado->CurrentValue = $this->Cargo_Afectado->FormValue;
 		$this->Tipo_incidente->CurrentValue = $this->Tipo_incidente->FormValue;
+		$this->Riesgo->CurrentValue = $this->Riesgo->FormValue;
 		$this->Parte_Cuerpo->CurrentValue = $this->Parte_Cuerpo->FormValue;
 		$this->ESTADO_AFEC->CurrentValue = $this->ESTADO_AFEC->FormValue;
 		$this->EVACUADO->CurrentValue = $this->EVACUADO->FormValue;
 		$this->DESC_ACC->CurrentValue = $this->DESC_ACC->FormValue;
 		$this->Modificado->CurrentValue = $this->Modificado->FormValue;
+		$this->llave_2->CurrentValue = $this->llave_2->FormValue;
 	}
 
 	// Load row based on key values
@@ -719,6 +728,7 @@ class cview1_acc_edit extends cview1_acc {
 		$this->CC_Afectado->setDbValue($rs->fields('CC_Afectado'));
 		$this->Cargo_Afectado->setDbValue($rs->fields('Cargo_Afectado'));
 		$this->Tipo_incidente->setDbValue($rs->fields('Tipo_incidente'));
+		$this->Riesgo->setDbValue($rs->fields('Riesgo'));
 		$this->Parte_Cuerpo->setDbValue($rs->fields('Parte_Cuerpo'));
 		$this->ESTADO_AFEC->setDbValue($rs->fields('ESTADO_AFEC'));
 		$this->EVACUADO->setDbValue($rs->fields('EVACUADO'));
@@ -775,6 +785,7 @@ class cview1_acc_edit extends cview1_acc {
 		$this->CC_Afectado->DbValue = $row['CC_Afectado'];
 		$this->Cargo_Afectado->DbValue = $row['Cargo_Afectado'];
 		$this->Tipo_incidente->DbValue = $row['Tipo_incidente'];
+		$this->Riesgo->DbValue = $row['Riesgo'];
 		$this->Parte_Cuerpo->DbValue = $row['Parte_Cuerpo'];
 		$this->ESTADO_AFEC->DbValue = $row['ESTADO_AFEC'];
 		$this->EVACUADO->DbValue = $row['EVACUADO'];
@@ -858,6 +869,7 @@ class cview1_acc_edit extends cview1_acc {
 		// CC_Afectado
 		// Cargo_Afectado
 		// Tipo_incidente
+		// Riesgo
 		// Parte_Cuerpo
 		// ESTADO_AFEC
 		// EVACUADO
@@ -873,11 +885,40 @@ class cview1_acc_edit extends cview1_acc {
 
 			// F_Sincron
 			$this->F_Sincron->ViewValue = $this->F_Sincron->CurrentValue;
-			$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 7);
+			$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 5);
 			$this->F_Sincron->ViewCustomAttributes = "";
 
 			// USUARIO
-			$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+			if (strval($this->USUARIO->CurrentValue) <> "") {
+				$sFilterWrk = "`USUARIO`" . ew_SearchString("=", $this->USUARIO->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->USUARIO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `USUARIO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->USUARIO->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+				}
+			} else {
+				$this->USUARIO->ViewValue = NULL;
+			}
 			$this->USUARIO->ViewCustomAttributes = "";
 
 			// Cargo_gme
@@ -922,7 +963,36 @@ class cview1_acc_edit extends cview1_acc {
 			$this->Otro_PE->ViewCustomAttributes = "";
 
 			// NOM_APOYO
-			$this->NOM_APOYO->ViewValue = $this->NOM_APOYO->CurrentValue;
+			if (strval($this->NOM_APOYO->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_APOYO`" . ew_SearchString("=", $this->NOM_APOYO->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_APOYO`, `NOM_APOYO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_APOYO`, `NOM_APOYO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_APOYO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_APOYO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_APOYO->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_APOYO->ViewValue = $this->NOM_APOYO->CurrentValue;
+				}
+			} else {
+				$this->NOM_APOYO->ViewValue = NULL;
+			}
 			$this->NOM_APOYO->ViewCustomAttributes = "";
 
 			// Otro_Nom_Apoyo
@@ -934,7 +1004,36 @@ class cview1_acc_edit extends cview1_acc {
 			$this->Otro_CC_Apoyo->ViewCustomAttributes = "";
 
 			// NOM_ENLACE
-			$this->NOM_ENLACE->ViewValue = $this->NOM_ENLACE->CurrentValue;
+			if (strval($this->NOM_ENLACE->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_ENLACE`" . ew_SearchString("=", $this->NOM_ENLACE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_ENLACE`, `NOM_ENLACE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_ENLACE`, `NOM_ENLACE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_ENLACE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_ENLACE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_ENLACE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_ENLACE->ViewValue = $this->NOM_ENLACE->CurrentValue;
+				}
+			} else {
+				$this->NOM_ENLACE->ViewValue = NULL;
+			}
 			$this->NOM_ENLACE->ViewCustomAttributes = "";
 
 			// Otro_Nom_Enlace
@@ -1100,16 +1199,20 @@ class cview1_acc_edit extends cview1_acc {
 
 			// Tipo_incidente
 			if (strval($this->Tipo_incidente->CurrentValue) <> "") {
-				$sFilterWrk = "`Tipo_incidente`" . ew_SearchString("=", $this->Tipo_incidente->CurrentValue, EW_DATATYPE_STRING);
+				$sFilterWrk = "`label`" . ew_SearchString("=", $this->Tipo_incidente->CurrentValue, EW_DATATYPE_STRING);
 			switch (@$gsLanguage) {
 				case "en":
-					$sSqlWrk = "SELECT DISTINCT `Tipo_incidente`, `Tipo_incidente` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
 					$sWhereWrk = "";
 					break;
 				default:
-					$sSqlWrk = "SELECT DISTINCT `Tipo_incidente`, `Tipo_incidente` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
 					$sWhereWrk = "";
 					break;
+			}
+			$lookuptblfilter = "`list name`='Incidente'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
 			}
 			if ($sFilterWrk <> "") {
 				ew_AddFilter($sWhereWrk, $sFilterWrk);
@@ -1118,7 +1221,7 @@ class cview1_acc_edit extends cview1_acc {
 			// Call Lookup selecting
 			$this->Lookup_Selecting($this->Tipo_incidente, $sWhereWrk);
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `Tipo_incidente` ASC";
+			$sSqlWrk .= " ORDER BY `label` ASC";
 				$rswrk = $conn->Execute($sSqlWrk);
 				if ($rswrk && !$rswrk->EOF) { // Lookup values found
 					$this->Tipo_incidente->ViewValue = $rswrk->fields('DispFld');
@@ -1131,6 +1234,43 @@ class cview1_acc_edit extends cview1_acc {
 			}
 			$this->Tipo_incidente->ViewCustomAttributes = "";
 
+			// Riesgo
+			if (strval($this->Riesgo->CurrentValue) <> "") {
+				$sFilterWrk = "`label`" . ew_SearchString("=", $this->Riesgo->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='Riesgo'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Riesgo, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Riesgo->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Riesgo->ViewValue = $this->Riesgo->CurrentValue;
+				}
+			} else {
+				$this->Riesgo->ViewValue = NULL;
+			}
+			$this->Riesgo->ViewCustomAttributes = "";
+
 			// Parte_Cuerpo
 			$this->Parte_Cuerpo->ViewValue = $this->Parte_Cuerpo->CurrentValue;
 			$this->Parte_Cuerpo->ViewCustomAttributes = "";
@@ -1141,31 +1281,15 @@ class cview1_acc_edit extends cview1_acc {
 
 			// EVACUADO
 			if (strval($this->EVACUADO->CurrentValue) <> "") {
-				$sFilterWrk = "`EVACUADO`" . ew_SearchString("=", $this->EVACUADO->CurrentValue, EW_DATATYPE_STRING);
-			switch (@$gsLanguage) {
-				case "en":
-					$sSqlWrk = "SELECT `EVACUADO`, `EVACUADO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
-					$sWhereWrk = "";
-					break;
-				default:
-					$sSqlWrk = "SELECT `EVACUADO`, `EVACUADO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
-					$sWhereWrk = "";
-					break;
-			}
-			if ($sFilterWrk <> "") {
-				ew_AddFilter($sWhereWrk, $sFilterWrk);
-			}
-
-			// Call Lookup selecting
-			$this->Lookup_Selecting($this->EVACUADO, $sWhereWrk);
-			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `EVACUADO` ASC";
-				$rswrk = $conn->Execute($sSqlWrk);
-				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$this->EVACUADO->ViewValue = $rswrk->fields('DispFld');
-					$rswrk->Close();
-				} else {
-					$this->EVACUADO->ViewValue = $this->EVACUADO->CurrentValue;
+				switch ($this->EVACUADO->CurrentValue) {
+					case $this->EVACUADO->FldTagValue(1):
+						$this->EVACUADO->ViewValue = $this->EVACUADO->FldTagCaption(1) <> "" ? $this->EVACUADO->FldTagCaption(1) : $this->EVACUADO->CurrentValue;
+						break;
+					case $this->EVACUADO->FldTagValue(2):
+						$this->EVACUADO->ViewValue = $this->EVACUADO->FldTagCaption(2) <> "" ? $this->EVACUADO->FldTagCaption(2) : $this->EVACUADO->CurrentValue;
+						break;
+					default:
+						$this->EVACUADO->ViewValue = $this->EVACUADO->CurrentValue;
 				}
 			} else {
 				$this->EVACUADO->ViewValue = NULL;
@@ -1177,8 +1301,25 @@ class cview1_acc_edit extends cview1_acc {
 			$this->DESC_ACC->ViewCustomAttributes = "";
 
 			// Modificado
-			$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+			if (strval($this->Modificado->CurrentValue) <> "") {
+				switch ($this->Modificado->CurrentValue) {
+					case $this->Modificado->FldTagValue(1):
+						$this->Modificado->ViewValue = $this->Modificado->FldTagCaption(1) <> "" ? $this->Modificado->FldTagCaption(1) : $this->Modificado->CurrentValue;
+						break;
+					case $this->Modificado->FldTagValue(2):
+						$this->Modificado->ViewValue = $this->Modificado->FldTagCaption(2) <> "" ? $this->Modificado->FldTagCaption(2) : $this->Modificado->CurrentValue;
+						break;
+					default:
+						$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+				}
+			} else {
+				$this->Modificado->ViewValue = NULL;
+			}
 			$this->Modificado->ViewCustomAttributes = "";
+
+			// llave_2
+			$this->llave_2->ViewValue = $this->llave_2->CurrentValue;
+			$this->llave_2->ViewCustomAttributes = "";
 
 			// llave
 			$this->llave->LinkCustomAttributes = "";
@@ -1400,6 +1541,11 @@ class cview1_acc_edit extends cview1_acc {
 			$this->Tipo_incidente->HrefValue = "";
 			$this->Tipo_incidente->TooltipValue = "";
 
+			// Riesgo
+			$this->Riesgo->LinkCustomAttributes = "";
+			$this->Riesgo->HrefValue = "";
+			$this->Riesgo->TooltipValue = "";
+
 			// Parte_Cuerpo
 			$this->Parte_Cuerpo->LinkCustomAttributes = "";
 			$this->Parte_Cuerpo->HrefValue = "";
@@ -1424,25 +1570,53 @@ class cview1_acc_edit extends cview1_acc {
 			$this->Modificado->LinkCustomAttributes = "";
 			$this->Modificado->HrefValue = "";
 			$this->Modificado->TooltipValue = "";
+
+			// llave_2
+			$this->llave_2->LinkCustomAttributes = "";
+			$this->llave_2->HrefValue = "";
+			$this->llave_2->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
 
 			// llave
 			$this->llave->EditAttrs["class"] = "form-control";
 			$this->llave->EditCustomAttributes = "";
-			$this->llave->EditValue = ew_HtmlEncode($this->llave->CurrentValue);
-			$this->llave->PlaceHolder = ew_RemoveHtml($this->llave->FldCaption());
+			$this->llave->EditValue = $this->llave->CurrentValue;
+			$this->llave->ViewCustomAttributes = "";
 
 			// F_Sincron
 			$this->F_Sincron->EditAttrs["class"] = "form-control";
 			$this->F_Sincron->EditCustomAttributes = "";
-			$this->F_Sincron->EditValue = ew_HtmlEncode(ew_FormatDateTime($this->F_Sincron->CurrentValue, 7));
-			$this->F_Sincron->PlaceHolder = ew_RemoveHtml($this->F_Sincron->FldCaption());
+			$this->F_Sincron->EditValue = $this->F_Sincron->CurrentValue;
+			$this->F_Sincron->EditValue = ew_FormatDateTime($this->F_Sincron->EditValue, 5);
+			$this->F_Sincron->ViewCustomAttributes = "";
 
 			// USUARIO
 			$this->USUARIO->EditAttrs["class"] = "form-control";
 			$this->USUARIO->EditCustomAttributes = "";
-			$this->USUARIO->EditValue = ew_HtmlEncode($this->USUARIO->CurrentValue);
-			$this->USUARIO->PlaceHolder = ew_RemoveHtml($this->USUARIO->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->USUARIO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `USUARIO` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->USUARIO->EditValue = $arwrk;
 
 			// Cargo_gme
 			$this->Cargo_gme->EditAttrs["class"] = "form-control";
@@ -1487,8 +1661,30 @@ class cview1_acc_edit extends cview1_acc {
 			// NOM_APOYO
 			$this->NOM_APOYO->EditAttrs["class"] = "form-control";
 			$this->NOM_APOYO->EditCustomAttributes = "";
-			$this->NOM_APOYO->EditValue = ew_HtmlEncode($this->NOM_APOYO->CurrentValue);
-			$this->NOM_APOYO->PlaceHolder = ew_RemoveHtml($this->NOM_APOYO->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_APOYO`, `NOM_APOYO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_APOYO`, `NOM_APOYO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_APOYO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_APOYO` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->NOM_APOYO->EditValue = $arwrk;
 
 			// Otro_Nom_Apoyo
 			$this->Otro_Nom_Apoyo->EditAttrs["class"] = "form-control";
@@ -1505,8 +1701,30 @@ class cview1_acc_edit extends cview1_acc {
 			// NOM_ENLACE
 			$this->NOM_ENLACE->EditAttrs["class"] = "form-control";
 			$this->NOM_ENLACE->EditCustomAttributes = "";
-			$this->NOM_ENLACE->EditValue = ew_HtmlEncode($this->NOM_ENLACE->CurrentValue);
-			$this->NOM_ENLACE->PlaceHolder = ew_RemoveHtml($this->NOM_ENLACE->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_ENLACE`, `NOM_ENLACE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_ENLACE`, `NOM_ENLACE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_ENLACE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_ENLACE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->NOM_ENLACE->EditValue = $arwrk;
 
 			// Otro_Nom_Enlace
 			$this->Otro_Nom_Enlace->EditAttrs["class"] = "form-control";
@@ -1739,13 +1957,17 @@ class cview1_acc_edit extends cview1_acc {
 			$sFilterWrk = "";
 			switch (@$gsLanguage) {
 				case "en":
-					$sSqlWrk = "SELECT DISTINCT `Tipo_incidente`, `Tipo_incidente` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
 					$sWhereWrk = "";
 					break;
 				default:
-					$sSqlWrk = "SELECT DISTINCT `Tipo_incidente`, `Tipo_incidente` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
 					$sWhereWrk = "";
 					break;
+			}
+			$lookuptblfilter = "`list name`='Incidente'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
 			}
 			if ($sFilterWrk <> "") {
 				ew_AddFilter($sWhereWrk, $sFilterWrk);
@@ -1754,12 +1976,44 @@ class cview1_acc_edit extends cview1_acc {
 			// Call Lookup selecting
 			$this->Lookup_Selecting($this->Tipo_incidente, $sWhereWrk);
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `Tipo_incidente` ASC";
+			$sSqlWrk .= " ORDER BY `label` ASC";
 			$rswrk = $conn->Execute($sSqlWrk);
 			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
 			if ($rswrk) $rswrk->Close();
 			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
 			$this->Tipo_incidente->EditValue = $arwrk;
+
+			// Riesgo
+			$this->Riesgo->EditAttrs["class"] = "form-control";
+			$this->Riesgo->EditCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='Riesgo'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Riesgo, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Riesgo->EditValue = $arwrk;
 
 			// Parte_Cuerpo
 			$this->Parte_Cuerpo->EditAttrs["class"] = "form-control";
@@ -1776,29 +2030,10 @@ class cview1_acc_edit extends cview1_acc {
 			// EVACUADO
 			$this->EVACUADO->EditAttrs["class"] = "form-control";
 			$this->EVACUADO->EditCustomAttributes = "";
-			$sFilterWrk = "";
-			switch (@$gsLanguage) {
-				case "en":
-					$sSqlWrk = "SELECT `EVACUADO`, `EVACUADO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
-					$sWhereWrk = "";
-					break;
-				default:
-					$sSqlWrk = "SELECT `EVACUADO`, `EVACUADO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
-					$sWhereWrk = "";
-					break;
-			}
-			if ($sFilterWrk <> "") {
-				ew_AddFilter($sWhereWrk, $sFilterWrk);
-			}
-
-			// Call Lookup selecting
-			$this->Lookup_Selecting($this->EVACUADO, $sWhereWrk);
-			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `EVACUADO` ASC";
-			$rswrk = $conn->Execute($sSqlWrk);
-			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
-			if ($rswrk) $rswrk->Close();
-			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$arwrk = array();
+			$arwrk[] = array($this->EVACUADO->FldTagValue(1), $this->EVACUADO->FldTagCaption(1) <> "" ? $this->EVACUADO->FldTagCaption(1) : $this->EVACUADO->FldTagValue(1));
+			$arwrk[] = array($this->EVACUADO->FldTagValue(2), $this->EVACUADO->FldTagCaption(2) <> "" ? $this->EVACUADO->FldTagCaption(2) : $this->EVACUADO->FldTagValue(2));
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
 			$this->EVACUADO->EditValue = $arwrk;
 
 			// DESC_ACC
@@ -1810,8 +2045,17 @@ class cview1_acc_edit extends cview1_acc {
 			// Modificado
 			$this->Modificado->EditAttrs["class"] = "form-control";
 			$this->Modificado->EditCustomAttributes = "";
-			$this->Modificado->EditValue = ew_HtmlEncode($this->Modificado->CurrentValue);
-			$this->Modificado->PlaceHolder = ew_RemoveHtml($this->Modificado->FldCaption());
+			$arwrk = array();
+			$arwrk[] = array($this->Modificado->FldTagValue(1), $this->Modificado->FldTagCaption(1) <> "" ? $this->Modificado->FldTagCaption(1) : $this->Modificado->FldTagValue(1));
+			$arwrk[] = array($this->Modificado->FldTagValue(2), $this->Modificado->FldTagCaption(2) <> "" ? $this->Modificado->FldTagCaption(2) : $this->Modificado->FldTagValue(2));
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+			$this->Modificado->EditValue = $arwrk;
+
+			// llave_2
+			$this->llave_2->EditAttrs["class"] = "form-control";
+			$this->llave_2->EditCustomAttributes = "";
+			$this->llave_2->EditValue = $this->llave_2->CurrentValue;
+			$this->llave_2->ViewCustomAttributes = "";
 
 			// Edit refer script
 			// llave
@@ -1947,6 +2191,9 @@ class cview1_acc_edit extends cview1_acc {
 			// Tipo_incidente
 			$this->Tipo_incidente->HrefValue = "";
 
+			// Riesgo
+			$this->Riesgo->HrefValue = "";
+
 			// Parte_Cuerpo
 			$this->Parte_Cuerpo->HrefValue = "";
 
@@ -1961,6 +2208,9 @@ class cview1_acc_edit extends cview1_acc {
 
 			// Modificado
 			$this->Modificado->HrefValue = "";
+
+			// llave_2
+			$this->llave_2->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -1983,12 +2233,6 @@ class cview1_acc_edit extends cview1_acc {
 		// Check if validation required
 		if (!EW_SERVER_VALIDATE)
 			return ($gsFormError == "");
-		if (!$this->llave->FldIsDetailKey && !is_null($this->llave->FormValue) && $this->llave->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->llave->FldCaption(), $this->llave->ReqErrMsg));
-		}
-		if (!ew_CheckEuroDate($this->F_Sincron->FormValue)) {
-			ew_AddMessage($gsFormError, $this->F_Sincron->FldErrMsg());
-		}
 		if (!ew_CheckInteger($this->GRA_LAT->FormValue)) {
 			ew_AddMessage($gsFormError, $this->GRA_LAT->FldErrMsg());
 		}
@@ -2057,12 +2301,6 @@ class cview1_acc_edit extends cview1_acc {
 			$rsold = &$rs->fields;
 			$this->LoadDbValues($rsold);
 			$rsnew = array();
-
-			// llave
-			$this->llave->SetDbValueDef($rsnew, $this->llave->CurrentValue, "", $this->llave->ReadOnly);
-
-			// F_Sincron
-			$this->F_Sincron->SetDbValueDef($rsnew, ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 7), NULL, $this->F_Sincron->ReadOnly);
 
 			// USUARIO
 			$this->USUARIO->SetDbValueDef($rsnew, $this->USUARIO->CurrentValue, NULL, $this->USUARIO->ReadOnly);
@@ -2189,6 +2427,9 @@ class cview1_acc_edit extends cview1_acc {
 
 			// Tipo_incidente
 			$this->Tipo_incidente->SetDbValueDef($rsnew, $this->Tipo_incidente->CurrentValue, NULL, $this->Tipo_incidente->ReadOnly);
+
+			// Riesgo
+			$this->Riesgo->SetDbValueDef($rsnew, $this->Riesgo->CurrentValue, NULL, $this->Riesgo->ReadOnly);
 
 			// Parte_Cuerpo
 			$this->Parte_Cuerpo->SetDbValueDef($rsnew, $this->Parte_Cuerpo->CurrentValue, NULL, $this->Parte_Cuerpo->ReadOnly);
@@ -2360,12 +2601,6 @@ fview1_accedit.Validate = function() {
 	for (var i = startcnt; i <= rowcnt; i++) {
 		var infix = ($k[0]) ? String(i) : "";
 		$fobj.data("rowindex", infix);
-			elm = this.GetElements("x" + infix + "_llave");
-			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $view1_acc->llave->FldCaption(), $view1_acc->llave->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_F_Sincron");
-			if (elm && !ew_CheckEuroDate(elm.value))
-				return this.OnError(elm, "<?php echo ew_JsEncode2($view1_acc->F_Sincron->FldErrMsg()) ?>");
 			elm = this.GetElements("x" + infix + "_GRA_LAT");
 			if (elm && !ew_CheckInteger(elm.value))
 				return this.OnError(elm, "<?php echo ew_JsEncode2($view1_acc->GRA_LAT->FldErrMsg()) ?>");
@@ -2438,10 +2673,13 @@ fview1_accedit.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
+fview1_accedit.Lists["x_USUARIO"] = {"LinkField":"x_USUARIO","Ajax":null,"AutoFill":false,"DisplayFields":["x_USUARIO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 fview1_accedit.Lists["x_NOM_PE"] = {"LinkField":"x_NOM_PE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_accedit.Lists["x_NOM_APOYO"] = {"LinkField":"x_NOM_APOYO","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_APOYO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_accedit.Lists["x_NOM_ENLACE"] = {"LinkField":"x_NOM_ENLACE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_ENLACE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 fview1_accedit.Lists["x_NOM_PGE"] = {"LinkField":"x_NOM_PGE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PGE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
-fview1_accedit.Lists["x_Tipo_incidente"] = {"LinkField":"x_Tipo_incidente","Ajax":null,"AutoFill":false,"DisplayFields":["x_Tipo_incidente","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
-fview1_accedit.Lists["x_EVACUADO"] = {"LinkField":"x_EVACUADO","Ajax":null,"AutoFill":false,"DisplayFields":["x_EVACUADO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_accedit.Lists["x_Tipo_incidente"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_accedit.Lists["x_Riesgo"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
 // Form object for search
 </script>
@@ -2464,14 +2702,27 @@ $view1_acc_edit->ShowMessage();
 <?php } ?>
 <input type="hidden" name="t" value="view1_acc">
 <input type="hidden" name="a_edit" id="a_edit" value="U">
+<?php if ($view1_acc->CurrentAction == "F") { // Confirm page ?>
+<input type="hidden" name="a_confirm" id="a_confirm" value="F">
+<?php } ?>
 <div>
 <?php if ($view1_acc->llave->Visible) { // llave ?>
 	<div id="r_llave" class="form-group">
-		<label id="elh_view1_acc_llave" for="x_llave" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->llave->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<label id="elh_view1_acc_llave" for="x_llave" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->llave->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->llave->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_llave">
-<input type="text" data-field="x_llave" name="x_llave" id="x_llave" size="30" maxlength="80" placeholder="<?php echo ew_HtmlEncode($view1_acc->llave->PlaceHolder) ?>" value="<?php echo $view1_acc->llave->EditValue ?>"<?php echo $view1_acc->llave->EditAttributes() ?>>
+<span<?php echo $view1_acc->llave->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->llave->EditValue ?></p></span>
 </span>
+<input type="hidden" data-field="x_llave" name="x_llave" id="x_llave" value="<?php echo ew_HtmlEncode($view1_acc->llave->CurrentValue) ?>">
+<?php } else { ?>
+<span id="el_view1_acc_llave">
+<span<?php echo $view1_acc->llave->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->llave->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_llave" name="x_llave" id="x_llave" value="<?php echo ew_HtmlEncode($view1_acc->llave->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->llave->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2479,9 +2730,19 @@ $view1_acc_edit->ShowMessage();
 	<div id="r_F_Sincron" class="form-group">
 		<label id="elh_view1_acc_F_Sincron" for="x_F_Sincron" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->F_Sincron->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->F_Sincron->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_F_Sincron">
-<input type="text" data-field="x_F_Sincron" name="x_F_Sincron" id="x_F_Sincron" placeholder="<?php echo ew_HtmlEncode($view1_acc->F_Sincron->PlaceHolder) ?>" value="<?php echo $view1_acc->F_Sincron->EditValue ?>"<?php echo $view1_acc->F_Sincron->EditAttributes() ?>>
+<span<?php echo $view1_acc->F_Sincron->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->F_Sincron->EditValue ?></p></span>
 </span>
+<input type="hidden" data-field="x_F_Sincron" name="x_F_Sincron" id="x_F_Sincron" value="<?php echo ew_HtmlEncode($view1_acc->F_Sincron->CurrentValue) ?>">
+<?php } else { ?>
+<span id="el_view1_acc_F_Sincron">
+<span<?php echo $view1_acc->F_Sincron->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->F_Sincron->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_F_Sincron" name="x_F_Sincron" id="x_F_Sincron" value="<?php echo ew_HtmlEncode($view1_acc->F_Sincron->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->F_Sincron->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2489,9 +2750,37 @@ $view1_acc_edit->ShowMessage();
 	<div id="r_USUARIO" class="form-group">
 		<label id="elh_view1_acc_USUARIO" for="x_USUARIO" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->USUARIO->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->USUARIO->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_USUARIO">
-<textarea data-field="x_USUARIO" name="x_USUARIO" id="x_USUARIO" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view1_acc->USUARIO->PlaceHolder) ?>"<?php echo $view1_acc->USUARIO->EditAttributes() ?>><?php echo $view1_acc->USUARIO->EditValue ?></textarea>
+<select data-field="x_USUARIO" id="x_USUARIO" name="x_USUARIO"<?php echo $view1_acc->USUARIO->EditAttributes() ?>>
+<?php
+if (is_array($view1_acc->USUARIO->EditValue)) {
+	$arwrk = $view1_acc->USUARIO->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view1_acc->USUARIO->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview1_accedit.Lists["x_USUARIO"].Options = <?php echo (is_array($view1_acc->USUARIO->EditValue)) ? ew_ArrayToJson($view1_acc->USUARIO->EditValue, 1) : "[]" ?>;
+</script>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_USUARIO">
+<span<?php echo $view1_acc->USUARIO->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->USUARIO->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_USUARIO" name="x_USUARIO" id="x_USUARIO" value="<?php echo ew_HtmlEncode($view1_acc->USUARIO->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->USUARIO->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2499,9 +2788,17 @@ $view1_acc_edit->ShowMessage();
 	<div id="r_Cargo_gme" class="form-group">
 		<label id="elh_view1_acc_Cargo_gme" for="x_Cargo_gme" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Cargo_gme->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Cargo_gme->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Cargo_gme">
 <input type="text" data-field="x_Cargo_gme" name="x_Cargo_gme" id="x_Cargo_gme" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($view1_acc->Cargo_gme->PlaceHolder) ?>" value="<?php echo $view1_acc->Cargo_gme->EditValue ?>"<?php echo $view1_acc->Cargo_gme->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Cargo_gme">
+<span<?php echo $view1_acc->Cargo_gme->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Cargo_gme->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Cargo_gme" name="x_Cargo_gme" id="x_Cargo_gme" value="<?php echo ew_HtmlEncode($view1_acc->Cargo_gme->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Cargo_gme->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2509,6 +2806,7 @@ $view1_acc_edit->ShowMessage();
 	<div id="r_NOM_PE" class="form-group">
 		<label id="elh_view1_acc_NOM_PE" for="x_NOM_PE" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->NOM_PE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->NOM_PE->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_NOM_PE">
 <select data-field="x_NOM_PE" id="x_NOM_PE" name="x_NOM_PE"<?php echo $view1_acc->NOM_PE->EditAttributes() ?>>
 <?php
@@ -2532,6 +2830,13 @@ if (is_array($view1_acc->NOM_PE->EditValue)) {
 fview1_accedit.Lists["x_NOM_PE"].Options = <?php echo (is_array($view1_acc->NOM_PE->EditValue)) ? ew_ArrayToJson($view1_acc->NOM_PE->EditValue, 1) : "[]" ?>;
 </script>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_NOM_PE">
+<span<?php echo $view1_acc->NOM_PE->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->NOM_PE->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_NOM_PE" name="x_NOM_PE" id="x_NOM_PE" value="<?php echo ew_HtmlEncode($view1_acc->NOM_PE->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->NOM_PE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2539,9 +2844,17 @@ fview1_accedit.Lists["x_NOM_PE"].Options = <?php echo (is_array($view1_acc->NOM_
 	<div id="r_Otro_PE" class="form-group">
 		<label id="elh_view1_acc_Otro_PE" for="x_Otro_PE" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Otro_PE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Otro_PE->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Otro_PE">
 <input type="text" data-field="x_Otro_PE" name="x_Otro_PE" id="x_Otro_PE" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->Otro_PE->PlaceHolder) ?>" value="<?php echo $view1_acc->Otro_PE->EditValue ?>"<?php echo $view1_acc->Otro_PE->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Otro_PE">
+<span<?php echo $view1_acc->Otro_PE->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Otro_PE->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Otro_PE" name="x_Otro_PE" id="x_Otro_PE" value="<?php echo ew_HtmlEncode($view1_acc->Otro_PE->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Otro_PE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2549,9 +2862,37 @@ fview1_accedit.Lists["x_NOM_PE"].Options = <?php echo (is_array($view1_acc->NOM_
 	<div id="r_NOM_APOYO" class="form-group">
 		<label id="elh_view1_acc_NOM_APOYO" for="x_NOM_APOYO" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->NOM_APOYO->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->NOM_APOYO->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_NOM_APOYO">
-<textarea data-field="x_NOM_APOYO" name="x_NOM_APOYO" id="x_NOM_APOYO" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view1_acc->NOM_APOYO->PlaceHolder) ?>"<?php echo $view1_acc->NOM_APOYO->EditAttributes() ?>><?php echo $view1_acc->NOM_APOYO->EditValue ?></textarea>
+<select data-field="x_NOM_APOYO" id="x_NOM_APOYO" name="x_NOM_APOYO"<?php echo $view1_acc->NOM_APOYO->EditAttributes() ?>>
+<?php
+if (is_array($view1_acc->NOM_APOYO->EditValue)) {
+	$arwrk = $view1_acc->NOM_APOYO->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view1_acc->NOM_APOYO->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview1_accedit.Lists["x_NOM_APOYO"].Options = <?php echo (is_array($view1_acc->NOM_APOYO->EditValue)) ? ew_ArrayToJson($view1_acc->NOM_APOYO->EditValue, 1) : "[]" ?>;
+</script>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_NOM_APOYO">
+<span<?php echo $view1_acc->NOM_APOYO->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->NOM_APOYO->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_NOM_APOYO" name="x_NOM_APOYO" id="x_NOM_APOYO" value="<?php echo ew_HtmlEncode($view1_acc->NOM_APOYO->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->NOM_APOYO->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2559,9 +2900,17 @@ fview1_accedit.Lists["x_NOM_PE"].Options = <?php echo (is_array($view1_acc->NOM_
 	<div id="r_Otro_Nom_Apoyo" class="form-group">
 		<label id="elh_view1_acc_Otro_Nom_Apoyo" for="x_Otro_Nom_Apoyo" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Otro_Nom_Apoyo->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Otro_Nom_Apoyo->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Otro_Nom_Apoyo">
 <input type="text" data-field="x_Otro_Nom_Apoyo" name="x_Otro_Nom_Apoyo" id="x_Otro_Nom_Apoyo" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->Otro_Nom_Apoyo->PlaceHolder) ?>" value="<?php echo $view1_acc->Otro_Nom_Apoyo->EditValue ?>"<?php echo $view1_acc->Otro_Nom_Apoyo->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Otro_Nom_Apoyo">
+<span<?php echo $view1_acc->Otro_Nom_Apoyo->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Otro_Nom_Apoyo->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Otro_Nom_Apoyo" name="x_Otro_Nom_Apoyo" id="x_Otro_Nom_Apoyo" value="<?php echo ew_HtmlEncode($view1_acc->Otro_Nom_Apoyo->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Otro_Nom_Apoyo->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2569,9 +2918,17 @@ fview1_accedit.Lists["x_NOM_PE"].Options = <?php echo (is_array($view1_acc->NOM_
 	<div id="r_Otro_CC_Apoyo" class="form-group">
 		<label id="elh_view1_acc_Otro_CC_Apoyo" for="x_Otro_CC_Apoyo" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Otro_CC_Apoyo->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Otro_CC_Apoyo->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Otro_CC_Apoyo">
 <input type="text" data-field="x_Otro_CC_Apoyo" name="x_Otro_CC_Apoyo" id="x_Otro_CC_Apoyo" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->Otro_CC_Apoyo->PlaceHolder) ?>" value="<?php echo $view1_acc->Otro_CC_Apoyo->EditValue ?>"<?php echo $view1_acc->Otro_CC_Apoyo->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Otro_CC_Apoyo">
+<span<?php echo $view1_acc->Otro_CC_Apoyo->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Otro_CC_Apoyo->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Otro_CC_Apoyo" name="x_Otro_CC_Apoyo" id="x_Otro_CC_Apoyo" value="<?php echo ew_HtmlEncode($view1_acc->Otro_CC_Apoyo->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Otro_CC_Apoyo->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2579,9 +2936,37 @@ fview1_accedit.Lists["x_NOM_PE"].Options = <?php echo (is_array($view1_acc->NOM_
 	<div id="r_NOM_ENLACE" class="form-group">
 		<label id="elh_view1_acc_NOM_ENLACE" for="x_NOM_ENLACE" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->NOM_ENLACE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->NOM_ENLACE->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_NOM_ENLACE">
-<textarea data-field="x_NOM_ENLACE" name="x_NOM_ENLACE" id="x_NOM_ENLACE" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view1_acc->NOM_ENLACE->PlaceHolder) ?>"<?php echo $view1_acc->NOM_ENLACE->EditAttributes() ?>><?php echo $view1_acc->NOM_ENLACE->EditValue ?></textarea>
+<select data-field="x_NOM_ENLACE" id="x_NOM_ENLACE" name="x_NOM_ENLACE"<?php echo $view1_acc->NOM_ENLACE->EditAttributes() ?>>
+<?php
+if (is_array($view1_acc->NOM_ENLACE->EditValue)) {
+	$arwrk = $view1_acc->NOM_ENLACE->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view1_acc->NOM_ENLACE->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview1_accedit.Lists["x_NOM_ENLACE"].Options = <?php echo (is_array($view1_acc->NOM_ENLACE->EditValue)) ? ew_ArrayToJson($view1_acc->NOM_ENLACE->EditValue, 1) : "[]" ?>;
+</script>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_NOM_ENLACE">
+<span<?php echo $view1_acc->NOM_ENLACE->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->NOM_ENLACE->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_NOM_ENLACE" name="x_NOM_ENLACE" id="x_NOM_ENLACE" value="<?php echo ew_HtmlEncode($view1_acc->NOM_ENLACE->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->NOM_ENLACE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2589,9 +2974,17 @@ fview1_accedit.Lists["x_NOM_PE"].Options = <?php echo (is_array($view1_acc->NOM_
 	<div id="r_Otro_Nom_Enlace" class="form-group">
 		<label id="elh_view1_acc_Otro_Nom_Enlace" for="x_Otro_Nom_Enlace" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Otro_Nom_Enlace->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Otro_Nom_Enlace->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Otro_Nom_Enlace">
 <input type="text" data-field="x_Otro_Nom_Enlace" name="x_Otro_Nom_Enlace" id="x_Otro_Nom_Enlace" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->Otro_Nom_Enlace->PlaceHolder) ?>" value="<?php echo $view1_acc->Otro_Nom_Enlace->EditValue ?>"<?php echo $view1_acc->Otro_Nom_Enlace->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Otro_Nom_Enlace">
+<span<?php echo $view1_acc->Otro_Nom_Enlace->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Otro_Nom_Enlace->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Otro_Nom_Enlace" name="x_Otro_Nom_Enlace" id="x_Otro_Nom_Enlace" value="<?php echo ew_HtmlEncode($view1_acc->Otro_Nom_Enlace->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Otro_Nom_Enlace->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2599,9 +2992,17 @@ fview1_accedit.Lists["x_NOM_PE"].Options = <?php echo (is_array($view1_acc->NOM_
 	<div id="r_Otro_CC_Enlace" class="form-group">
 		<label id="elh_view1_acc_Otro_CC_Enlace" for="x_Otro_CC_Enlace" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Otro_CC_Enlace->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Otro_CC_Enlace->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Otro_CC_Enlace">
 <input type="text" data-field="x_Otro_CC_Enlace" name="x_Otro_CC_Enlace" id="x_Otro_CC_Enlace" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->Otro_CC_Enlace->PlaceHolder) ?>" value="<?php echo $view1_acc->Otro_CC_Enlace->EditValue ?>"<?php echo $view1_acc->Otro_CC_Enlace->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Otro_CC_Enlace">
+<span<?php echo $view1_acc->Otro_CC_Enlace->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Otro_CC_Enlace->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Otro_CC_Enlace" name="x_Otro_CC_Enlace" id="x_Otro_CC_Enlace" value="<?php echo ew_HtmlEncode($view1_acc->Otro_CC_Enlace->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Otro_CC_Enlace->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2609,6 +3010,7 @@ fview1_accedit.Lists["x_NOM_PE"].Options = <?php echo (is_array($view1_acc->NOM_
 	<div id="r_NOM_PGE" class="form-group">
 		<label id="elh_view1_acc_NOM_PGE" for="x_NOM_PGE" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->NOM_PGE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->NOM_PGE->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_NOM_PGE">
 <select data-field="x_NOM_PGE" id="x_NOM_PGE" name="x_NOM_PGE"<?php echo $view1_acc->NOM_PGE->EditAttributes() ?>>
 <?php
@@ -2632,6 +3034,13 @@ if (is_array($view1_acc->NOM_PGE->EditValue)) {
 fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM_PGE->EditValue)) ? ew_ArrayToJson($view1_acc->NOM_PGE->EditValue, 1) : "[]" ?>;
 </script>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_NOM_PGE">
+<span<?php echo $view1_acc->NOM_PGE->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->NOM_PGE->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_NOM_PGE" name="x_NOM_PGE" id="x_NOM_PGE" value="<?php echo ew_HtmlEncode($view1_acc->NOM_PGE->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->NOM_PGE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2639,9 +3048,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_Otro_Nom_PGE" class="form-group">
 		<label id="elh_view1_acc_Otro_Nom_PGE" for="x_Otro_Nom_PGE" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Otro_Nom_PGE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Otro_Nom_PGE->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Otro_Nom_PGE">
 <input type="text" data-field="x_Otro_Nom_PGE" name="x_Otro_Nom_PGE" id="x_Otro_Nom_PGE" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->Otro_Nom_PGE->PlaceHolder) ?>" value="<?php echo $view1_acc->Otro_Nom_PGE->EditValue ?>"<?php echo $view1_acc->Otro_Nom_PGE->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Otro_Nom_PGE">
+<span<?php echo $view1_acc->Otro_Nom_PGE->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Otro_Nom_PGE->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Otro_Nom_PGE" name="x_Otro_Nom_PGE" id="x_Otro_Nom_PGE" value="<?php echo ew_HtmlEncode($view1_acc->Otro_Nom_PGE->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Otro_Nom_PGE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2649,9 +3066,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_Otro_CC_PGE" class="form-group">
 		<label id="elh_view1_acc_Otro_CC_PGE" for="x_Otro_CC_PGE" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Otro_CC_PGE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Otro_CC_PGE->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Otro_CC_PGE">
 <input type="text" data-field="x_Otro_CC_PGE" name="x_Otro_CC_PGE" id="x_Otro_CC_PGE" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->Otro_CC_PGE->PlaceHolder) ?>" value="<?php echo $view1_acc->Otro_CC_PGE->EditValue ?>"<?php echo $view1_acc->Otro_CC_PGE->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Otro_CC_PGE">
+<span<?php echo $view1_acc->Otro_CC_PGE->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Otro_CC_PGE->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Otro_CC_PGE" name="x_Otro_CC_PGE" id="x_Otro_CC_PGE" value="<?php echo ew_HtmlEncode($view1_acc->Otro_CC_PGE->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Otro_CC_PGE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2659,9 +3084,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_Departamento" class="form-group">
 		<label id="elh_view1_acc_Departamento" for="x_Departamento" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Departamento->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Departamento->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Departamento">
 <input type="text" data-field="x_Departamento" name="x_Departamento" id="x_Departamento" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($view1_acc->Departamento->PlaceHolder) ?>" value="<?php echo $view1_acc->Departamento->EditValue ?>"<?php echo $view1_acc->Departamento->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Departamento">
+<span<?php echo $view1_acc->Departamento->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Departamento->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Departamento" name="x_Departamento" id="x_Departamento" value="<?php echo ew_HtmlEncode($view1_acc->Departamento->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Departamento->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2669,9 +3102,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_Muncipio" class="form-group">
 		<label id="elh_view1_acc_Muncipio" for="x_Muncipio" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Muncipio->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Muncipio->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Muncipio">
-<textarea data-field="x_Muncipio" name="x_Muncipio" id="x_Muncipio" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view1_acc->Muncipio->PlaceHolder) ?>"<?php echo $view1_acc->Muncipio->EditAttributes() ?>><?php echo $view1_acc->Muncipio->EditValue ?></textarea>
+<input type="text" data-field="x_Muncipio" name="x_Muncipio" id="x_Muncipio" placeholder="<?php echo ew_HtmlEncode($view1_acc->Muncipio->PlaceHolder) ?>" value="<?php echo $view1_acc->Muncipio->EditValue ?>"<?php echo $view1_acc->Muncipio->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Muncipio">
+<span<?php echo $view1_acc->Muncipio->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Muncipio->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Muncipio" name="x_Muncipio" id="x_Muncipio" value="<?php echo ew_HtmlEncode($view1_acc->Muncipio->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Muncipio->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2679,9 +3120,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_NOM_VDA" class="form-group">
 		<label id="elh_view1_acc_NOM_VDA" for="x_NOM_VDA" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->NOM_VDA->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->NOM_VDA->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_NOM_VDA">
 <input type="text" data-field="x_NOM_VDA" name="x_NOM_VDA" id="x_NOM_VDA" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->NOM_VDA->PlaceHolder) ?>" value="<?php echo $view1_acc->NOM_VDA->EditValue ?>"<?php echo $view1_acc->NOM_VDA->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_NOM_VDA">
+<span<?php echo $view1_acc->NOM_VDA->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->NOM_VDA->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_NOM_VDA" name="x_NOM_VDA" id="x_NOM_VDA" value="<?php echo ew_HtmlEncode($view1_acc->NOM_VDA->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->NOM_VDA->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2689,9 +3138,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_LATITUD" class="form-group">
 		<label id="elh_view1_acc_LATITUD" for="x_LATITUD" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->LATITUD->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->LATITUD->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_LATITUD">
 <textarea data-field="x_LATITUD" name="x_LATITUD" id="x_LATITUD" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view1_acc->LATITUD->PlaceHolder) ?>"<?php echo $view1_acc->LATITUD->EditAttributes() ?>><?php echo $view1_acc->LATITUD->EditValue ?></textarea>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_LATITUD">
+<span<?php echo $view1_acc->LATITUD->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->LATITUD->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_LATITUD" name="x_LATITUD" id="x_LATITUD" value="<?php echo ew_HtmlEncode($view1_acc->LATITUD->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->LATITUD->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2699,9 +3156,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_GRA_LAT" class="form-group">
 		<label id="elh_view1_acc_GRA_LAT" for="x_GRA_LAT" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->GRA_LAT->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->GRA_LAT->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_GRA_LAT">
 <input type="text" data-field="x_GRA_LAT" name="x_GRA_LAT" id="x_GRA_LAT" size="30" placeholder="<?php echo ew_HtmlEncode($view1_acc->GRA_LAT->PlaceHolder) ?>" value="<?php echo $view1_acc->GRA_LAT->EditValue ?>"<?php echo $view1_acc->GRA_LAT->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_GRA_LAT">
+<span<?php echo $view1_acc->GRA_LAT->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->GRA_LAT->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_GRA_LAT" name="x_GRA_LAT" id="x_GRA_LAT" value="<?php echo ew_HtmlEncode($view1_acc->GRA_LAT->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->GRA_LAT->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2709,9 +3174,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_MIN_LAT" class="form-group">
 		<label id="elh_view1_acc_MIN_LAT" for="x_MIN_LAT" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->MIN_LAT->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->MIN_LAT->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_MIN_LAT">
 <input type="text" data-field="x_MIN_LAT" name="x_MIN_LAT" id="x_MIN_LAT" size="30" placeholder="<?php echo ew_HtmlEncode($view1_acc->MIN_LAT->PlaceHolder) ?>" value="<?php echo $view1_acc->MIN_LAT->EditValue ?>"<?php echo $view1_acc->MIN_LAT->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_MIN_LAT">
+<span<?php echo $view1_acc->MIN_LAT->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->MIN_LAT->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_MIN_LAT" name="x_MIN_LAT" id="x_MIN_LAT" value="<?php echo ew_HtmlEncode($view1_acc->MIN_LAT->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->MIN_LAT->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2719,9 +3192,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_SEG_LAT" class="form-group">
 		<label id="elh_view1_acc_SEG_LAT" for="x_SEG_LAT" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->SEG_LAT->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->SEG_LAT->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_SEG_LAT">
 <input type="text" data-field="x_SEG_LAT" name="x_SEG_LAT" id="x_SEG_LAT" size="30" placeholder="<?php echo ew_HtmlEncode($view1_acc->SEG_LAT->PlaceHolder) ?>" value="<?php echo $view1_acc->SEG_LAT->EditValue ?>"<?php echo $view1_acc->SEG_LAT->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_SEG_LAT">
+<span<?php echo $view1_acc->SEG_LAT->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->SEG_LAT->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_SEG_LAT" name="x_SEG_LAT" id="x_SEG_LAT" value="<?php echo ew_HtmlEncode($view1_acc->SEG_LAT->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->SEG_LAT->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2729,9 +3210,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_GRA_LONG" class="form-group">
 		<label id="elh_view1_acc_GRA_LONG" for="x_GRA_LONG" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->GRA_LONG->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->GRA_LONG->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_GRA_LONG">
 <input type="text" data-field="x_GRA_LONG" name="x_GRA_LONG" id="x_GRA_LONG" size="30" placeholder="<?php echo ew_HtmlEncode($view1_acc->GRA_LONG->PlaceHolder) ?>" value="<?php echo $view1_acc->GRA_LONG->EditValue ?>"<?php echo $view1_acc->GRA_LONG->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_GRA_LONG">
+<span<?php echo $view1_acc->GRA_LONG->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->GRA_LONG->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_GRA_LONG" name="x_GRA_LONG" id="x_GRA_LONG" value="<?php echo ew_HtmlEncode($view1_acc->GRA_LONG->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->GRA_LONG->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2739,9 +3228,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_MIN_LONG" class="form-group">
 		<label id="elh_view1_acc_MIN_LONG" for="x_MIN_LONG" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->MIN_LONG->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->MIN_LONG->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_MIN_LONG">
 <input type="text" data-field="x_MIN_LONG" name="x_MIN_LONG" id="x_MIN_LONG" size="30" placeholder="<?php echo ew_HtmlEncode($view1_acc->MIN_LONG->PlaceHolder) ?>" value="<?php echo $view1_acc->MIN_LONG->EditValue ?>"<?php echo $view1_acc->MIN_LONG->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_MIN_LONG">
+<span<?php echo $view1_acc->MIN_LONG->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->MIN_LONG->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_MIN_LONG" name="x_MIN_LONG" id="x_MIN_LONG" value="<?php echo ew_HtmlEncode($view1_acc->MIN_LONG->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->MIN_LONG->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2749,9 +3246,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_SEG_LONG" class="form-group">
 		<label id="elh_view1_acc_SEG_LONG" for="x_SEG_LONG" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->SEG_LONG->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->SEG_LONG->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_SEG_LONG">
 <input type="text" data-field="x_SEG_LONG" name="x_SEG_LONG" id="x_SEG_LONG" size="30" placeholder="<?php echo ew_HtmlEncode($view1_acc->SEG_LONG->PlaceHolder) ?>" value="<?php echo $view1_acc->SEG_LONG->EditValue ?>"<?php echo $view1_acc->SEG_LONG->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_SEG_LONG">
+<span<?php echo $view1_acc->SEG_LONG->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->SEG_LONG->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_SEG_LONG" name="x_SEG_LONG" id="x_SEG_LONG" value="<?php echo ew_HtmlEncode($view1_acc->SEG_LONG->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->SEG_LONG->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2759,9 +3264,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_FECHA_ACC" class="form-group">
 		<label id="elh_view1_acc_FECHA_ACC" for="x_FECHA_ACC" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->FECHA_ACC->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->FECHA_ACC->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_FECHA_ACC">
 <input type="text" data-field="x_FECHA_ACC" name="x_FECHA_ACC" id="x_FECHA_ACC" size="30" maxlength="10" placeholder="<?php echo ew_HtmlEncode($view1_acc->FECHA_ACC->PlaceHolder) ?>" value="<?php echo $view1_acc->FECHA_ACC->EditValue ?>"<?php echo $view1_acc->FECHA_ACC->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_FECHA_ACC">
+<span<?php echo $view1_acc->FECHA_ACC->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->FECHA_ACC->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_FECHA_ACC" name="x_FECHA_ACC" id="x_FECHA_ACC" value="<?php echo ew_HtmlEncode($view1_acc->FECHA_ACC->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->FECHA_ACC->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2769,9 +3282,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_HORA_ACC" class="form-group">
 		<label id="elh_view1_acc_HORA_ACC" for="x_HORA_ACC" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->HORA_ACC->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->HORA_ACC->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_HORA_ACC">
 <input type="text" data-field="x_HORA_ACC" name="x_HORA_ACC" id="x_HORA_ACC" size="30" maxlength="8" placeholder="<?php echo ew_HtmlEncode($view1_acc->HORA_ACC->PlaceHolder) ?>" value="<?php echo $view1_acc->HORA_ACC->EditValue ?>"<?php echo $view1_acc->HORA_ACC->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_HORA_ACC">
+<span<?php echo $view1_acc->HORA_ACC->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->HORA_ACC->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_HORA_ACC" name="x_HORA_ACC" id="x_HORA_ACC" value="<?php echo ew_HtmlEncode($view1_acc->HORA_ACC->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->HORA_ACC->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2779,9 +3300,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_Hora_ingreso" class="form-group">
 		<label id="elh_view1_acc_Hora_ingreso" for="x_Hora_ingreso" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Hora_ingreso->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Hora_ingreso->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Hora_ingreso">
 <input type="text" data-field="x_Hora_ingreso" name="x_Hora_ingreso" id="x_Hora_ingreso" size="30" maxlength="8" placeholder="<?php echo ew_HtmlEncode($view1_acc->Hora_ingreso->PlaceHolder) ?>" value="<?php echo $view1_acc->Hora_ingreso->EditValue ?>"<?php echo $view1_acc->Hora_ingreso->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Hora_ingreso">
+<span<?php echo $view1_acc->Hora_ingreso->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Hora_ingreso->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Hora_ingreso" name="x_Hora_ingreso" id="x_Hora_ingreso" value="<?php echo ew_HtmlEncode($view1_acc->Hora_ingreso->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Hora_ingreso->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2789,9 +3318,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_FP_Armada" class="form-group">
 		<label id="elh_view1_acc_FP_Armada" for="x_FP_Armada" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->FP_Armada->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->FP_Armada->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_FP_Armada">
 <input type="text" data-field="x_FP_Armada" name="x_FP_Armada" id="x_FP_Armada" size="30" placeholder="<?php echo ew_HtmlEncode($view1_acc->FP_Armada->PlaceHolder) ?>" value="<?php echo $view1_acc->FP_Armada->EditValue ?>"<?php echo $view1_acc->FP_Armada->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_FP_Armada">
+<span<?php echo $view1_acc->FP_Armada->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->FP_Armada->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_FP_Armada" name="x_FP_Armada" id="x_FP_Armada" value="<?php echo ew_HtmlEncode($view1_acc->FP_Armada->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->FP_Armada->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2799,9 +3336,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_FP_Ejercito" class="form-group">
 		<label id="elh_view1_acc_FP_Ejercito" for="x_FP_Ejercito" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->FP_Ejercito->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->FP_Ejercito->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_FP_Ejercito">
 <input type="text" data-field="x_FP_Ejercito" name="x_FP_Ejercito" id="x_FP_Ejercito" size="30" placeholder="<?php echo ew_HtmlEncode($view1_acc->FP_Ejercito->PlaceHolder) ?>" value="<?php echo $view1_acc->FP_Ejercito->EditValue ?>"<?php echo $view1_acc->FP_Ejercito->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_FP_Ejercito">
+<span<?php echo $view1_acc->FP_Ejercito->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->FP_Ejercito->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_FP_Ejercito" name="x_FP_Ejercito" id="x_FP_Ejercito" value="<?php echo ew_HtmlEncode($view1_acc->FP_Ejercito->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->FP_Ejercito->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2809,9 +3354,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_FP_Policia" class="form-group">
 		<label id="elh_view1_acc_FP_Policia" for="x_FP_Policia" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->FP_Policia->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->FP_Policia->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_FP_Policia">
 <input type="text" data-field="x_FP_Policia" name="x_FP_Policia" id="x_FP_Policia" size="30" placeholder="<?php echo ew_HtmlEncode($view1_acc->FP_Policia->PlaceHolder) ?>" value="<?php echo $view1_acc->FP_Policia->EditValue ?>"<?php echo $view1_acc->FP_Policia->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_FP_Policia">
+<span<?php echo $view1_acc->FP_Policia->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->FP_Policia->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_FP_Policia" name="x_FP_Policia" id="x_FP_Policia" value="<?php echo ew_HtmlEncode($view1_acc->FP_Policia->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->FP_Policia->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2819,9 +3372,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_NOM_COMANDANTE" class="form-group">
 		<label id="elh_view1_acc_NOM_COMANDANTE" for="x_NOM_COMANDANTE" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->NOM_COMANDANTE->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->NOM_COMANDANTE->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_NOM_COMANDANTE">
 <input type="text" data-field="x_NOM_COMANDANTE" name="x_NOM_COMANDANTE" id="x_NOM_COMANDANTE" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->NOM_COMANDANTE->PlaceHolder) ?>" value="<?php echo $view1_acc->NOM_COMANDANTE->EditValue ?>"<?php echo $view1_acc->NOM_COMANDANTE->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_NOM_COMANDANTE">
+<span<?php echo $view1_acc->NOM_COMANDANTE->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->NOM_COMANDANTE->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_NOM_COMANDANTE" name="x_NOM_COMANDANTE" id="x_NOM_COMANDANTE" value="<?php echo ew_HtmlEncode($view1_acc->NOM_COMANDANTE->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->NOM_COMANDANTE->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2829,9 +3390,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_TESTI1" class="form-group">
 		<label id="elh_view1_acc_TESTI1" for="x_TESTI1" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->TESTI1->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->TESTI1->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_TESTI1">
 <input type="text" data-field="x_TESTI1" name="x_TESTI1" id="x_TESTI1" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->TESTI1->PlaceHolder) ?>" value="<?php echo $view1_acc->TESTI1->EditValue ?>"<?php echo $view1_acc->TESTI1->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_TESTI1">
+<span<?php echo $view1_acc->TESTI1->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->TESTI1->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_TESTI1" name="x_TESTI1" id="x_TESTI1" value="<?php echo ew_HtmlEncode($view1_acc->TESTI1->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->TESTI1->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2839,9 +3408,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_CC_TESTI1" class="form-group">
 		<label id="elh_view1_acc_CC_TESTI1" for="x_CC_TESTI1" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->CC_TESTI1->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->CC_TESTI1->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_CC_TESTI1">
 <input type="text" data-field="x_CC_TESTI1" name="x_CC_TESTI1" id="x_CC_TESTI1" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->CC_TESTI1->PlaceHolder) ?>" value="<?php echo $view1_acc->CC_TESTI1->EditValue ?>"<?php echo $view1_acc->CC_TESTI1->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_CC_TESTI1">
+<span<?php echo $view1_acc->CC_TESTI1->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->CC_TESTI1->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_CC_TESTI1" name="x_CC_TESTI1" id="x_CC_TESTI1" value="<?php echo ew_HtmlEncode($view1_acc->CC_TESTI1->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->CC_TESTI1->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2849,9 +3426,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_CARGO_TESTI1" class="form-group">
 		<label id="elh_view1_acc_CARGO_TESTI1" for="x_CARGO_TESTI1" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->CARGO_TESTI1->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->CARGO_TESTI1->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_CARGO_TESTI1">
 <textarea data-field="x_CARGO_TESTI1" name="x_CARGO_TESTI1" id="x_CARGO_TESTI1" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view1_acc->CARGO_TESTI1->PlaceHolder) ?>"<?php echo $view1_acc->CARGO_TESTI1->EditAttributes() ?>><?php echo $view1_acc->CARGO_TESTI1->EditValue ?></textarea>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_CARGO_TESTI1">
+<span<?php echo $view1_acc->CARGO_TESTI1->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->CARGO_TESTI1->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_CARGO_TESTI1" name="x_CARGO_TESTI1" id="x_CARGO_TESTI1" value="<?php echo ew_HtmlEncode($view1_acc->CARGO_TESTI1->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->CARGO_TESTI1->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2859,9 +3444,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_TESTI2" class="form-group">
 		<label id="elh_view1_acc_TESTI2" for="x_TESTI2" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->TESTI2->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->TESTI2->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_TESTI2">
 <input type="text" data-field="x_TESTI2" name="x_TESTI2" id="x_TESTI2" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->TESTI2->PlaceHolder) ?>" value="<?php echo $view1_acc->TESTI2->EditValue ?>"<?php echo $view1_acc->TESTI2->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_TESTI2">
+<span<?php echo $view1_acc->TESTI2->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->TESTI2->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_TESTI2" name="x_TESTI2" id="x_TESTI2" value="<?php echo ew_HtmlEncode($view1_acc->TESTI2->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->TESTI2->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2869,9 +3462,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_CC_TESTI2" class="form-group">
 		<label id="elh_view1_acc_CC_TESTI2" for="x_CC_TESTI2" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->CC_TESTI2->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->CC_TESTI2->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_CC_TESTI2">
 <input type="text" data-field="x_CC_TESTI2" name="x_CC_TESTI2" id="x_CC_TESTI2" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->CC_TESTI2->PlaceHolder) ?>" value="<?php echo $view1_acc->CC_TESTI2->EditValue ?>"<?php echo $view1_acc->CC_TESTI2->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_CC_TESTI2">
+<span<?php echo $view1_acc->CC_TESTI2->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->CC_TESTI2->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_CC_TESTI2" name="x_CC_TESTI2" id="x_CC_TESTI2" value="<?php echo ew_HtmlEncode($view1_acc->CC_TESTI2->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->CC_TESTI2->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2879,9 +3480,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_CARGO_TESTI2" class="form-group">
 		<label id="elh_view1_acc_CARGO_TESTI2" for="x_CARGO_TESTI2" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->CARGO_TESTI2->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->CARGO_TESTI2->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_CARGO_TESTI2">
 <textarea data-field="x_CARGO_TESTI2" name="x_CARGO_TESTI2" id="x_CARGO_TESTI2" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view1_acc->CARGO_TESTI2->PlaceHolder) ?>"<?php echo $view1_acc->CARGO_TESTI2->EditAttributes() ?>><?php echo $view1_acc->CARGO_TESTI2->EditValue ?></textarea>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_CARGO_TESTI2">
+<span<?php echo $view1_acc->CARGO_TESTI2->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->CARGO_TESTI2->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_CARGO_TESTI2" name="x_CARGO_TESTI2" id="x_CARGO_TESTI2" value="<?php echo ew_HtmlEncode($view1_acc->CARGO_TESTI2->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->CARGO_TESTI2->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2889,9 +3498,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_Afectados" class="form-group">
 		<label id="elh_view1_acc_Afectados" for="x_Afectados" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Afectados->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Afectados->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Afectados">
 <input type="text" data-field="x_Afectados" name="x_Afectados" id="x_Afectados" size="30" placeholder="<?php echo ew_HtmlEncode($view1_acc->Afectados->PlaceHolder) ?>" value="<?php echo $view1_acc->Afectados->EditValue ?>"<?php echo $view1_acc->Afectados->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Afectados">
+<span<?php echo $view1_acc->Afectados->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Afectados->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Afectados" name="x_Afectados" id="x_Afectados" value="<?php echo ew_HtmlEncode($view1_acc->Afectados->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Afectados->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2899,9 +3516,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_NUM_Afectado" class="form-group">
 		<label id="elh_view1_acc_NUM_Afectado" for="x_NUM_Afectado" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->NUM_Afectado->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->NUM_Afectado->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_NUM_Afectado">
 <input type="text" data-field="x_NUM_Afectado" name="x_NUM_Afectado" id="x_NUM_Afectado" size="30" placeholder="<?php echo ew_HtmlEncode($view1_acc->NUM_Afectado->PlaceHolder) ?>" value="<?php echo $view1_acc->NUM_Afectado->EditValue ?>"<?php echo $view1_acc->NUM_Afectado->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_NUM_Afectado">
+<span<?php echo $view1_acc->NUM_Afectado->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->NUM_Afectado->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_NUM_Afectado" name="x_NUM_Afectado" id="x_NUM_Afectado" value="<?php echo ew_HtmlEncode($view1_acc->NUM_Afectado->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->NUM_Afectado->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2909,9 +3534,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_Nom_Afectado" class="form-group">
 		<label id="elh_view1_acc_Nom_Afectado" for="x_Nom_Afectado" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Nom_Afectado->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Nom_Afectado->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Nom_Afectado">
 <textarea data-field="x_Nom_Afectado" name="x_Nom_Afectado" id="x_Nom_Afectado" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view1_acc->Nom_Afectado->PlaceHolder) ?>"<?php echo $view1_acc->Nom_Afectado->EditAttributes() ?>><?php echo $view1_acc->Nom_Afectado->EditValue ?></textarea>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Nom_Afectado">
+<span<?php echo $view1_acc->Nom_Afectado->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Nom_Afectado->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Nom_Afectado" name="x_Nom_Afectado" id="x_Nom_Afectado" value="<?php echo ew_HtmlEncode($view1_acc->Nom_Afectado->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Nom_Afectado->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2919,9 +3552,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_CC_Afectado" class="form-group">
 		<label id="elh_view1_acc_CC_Afectado" for="x_CC_Afectado" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->CC_Afectado->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->CC_Afectado->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_CC_Afectado">
 <input type="text" data-field="x_CC_Afectado" name="x_CC_Afectado" id="x_CC_Afectado" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->CC_Afectado->PlaceHolder) ?>" value="<?php echo $view1_acc->CC_Afectado->EditValue ?>"<?php echo $view1_acc->CC_Afectado->EditAttributes() ?>>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_CC_Afectado">
+<span<?php echo $view1_acc->CC_Afectado->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->CC_Afectado->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_CC_Afectado" name="x_CC_Afectado" id="x_CC_Afectado" value="<?php echo ew_HtmlEncode($view1_acc->CC_Afectado->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->CC_Afectado->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2929,9 +3570,17 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_Cargo_Afectado" class="form-group">
 		<label id="elh_view1_acc_Cargo_Afectado" for="x_Cargo_Afectado" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Cargo_Afectado->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Cargo_Afectado->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Cargo_Afectado">
 <textarea data-field="x_Cargo_Afectado" name="x_Cargo_Afectado" id="x_Cargo_Afectado" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view1_acc->Cargo_Afectado->PlaceHolder) ?>"<?php echo $view1_acc->Cargo_Afectado->EditAttributes() ?>><?php echo $view1_acc->Cargo_Afectado->EditValue ?></textarea>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Cargo_Afectado">
+<span<?php echo $view1_acc->Cargo_Afectado->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Cargo_Afectado->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Cargo_Afectado" name="x_Cargo_Afectado" id="x_Cargo_Afectado" value="<?php echo ew_HtmlEncode($view1_acc->Cargo_Afectado->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Cargo_Afectado->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2939,6 +3588,7 @@ fview1_accedit.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM
 	<div id="r_Tipo_incidente" class="form-group">
 		<label id="elh_view1_acc_Tipo_incidente" for="x_Tipo_incidente" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Tipo_incidente->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Tipo_incidente->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Tipo_incidente">
 <select data-field="x_Tipo_incidente" id="x_Tipo_incidente" name="x_Tipo_incidente"<?php echo $view1_acc->Tipo_incidente->EditAttributes() ?>>
 <?php
@@ -2962,16 +3612,69 @@ if (is_array($view1_acc->Tipo_incidente->EditValue)) {
 fview1_accedit.Lists["x_Tipo_incidente"].Options = <?php echo (is_array($view1_acc->Tipo_incidente->EditValue)) ? ew_ArrayToJson($view1_acc->Tipo_incidente->EditValue, 1) : "[]" ?>;
 </script>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Tipo_incidente">
+<span<?php echo $view1_acc->Tipo_incidente->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Tipo_incidente->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Tipo_incidente" name="x_Tipo_incidente" id="x_Tipo_incidente" value="<?php echo ew_HtmlEncode($view1_acc->Tipo_incidente->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Tipo_incidente->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($view1_acc->Riesgo->Visible) { // Riesgo ?>
+	<div id="r_Riesgo" class="form-group">
+		<label id="elh_view1_acc_Riesgo" for="x_Riesgo" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Riesgo->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $view1_acc->Riesgo->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
+<span id="el_view1_acc_Riesgo">
+<select data-field="x_Riesgo" id="x_Riesgo" name="x_Riesgo"<?php echo $view1_acc->Riesgo->EditAttributes() ?>>
+<?php
+if (is_array($view1_acc->Riesgo->EditValue)) {
+	$arwrk = $view1_acc->Riesgo->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view1_acc->Riesgo->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
+<script type="text/javascript">
+fview1_accedit.Lists["x_Riesgo"].Options = <?php echo (is_array($view1_acc->Riesgo->EditValue)) ? ew_ArrayToJson($view1_acc->Riesgo->EditValue, 1) : "[]" ?>;
+</script>
+</span>
+<?php } else { ?>
+<span id="el_view1_acc_Riesgo">
+<span<?php echo $view1_acc->Riesgo->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Riesgo->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Riesgo" name="x_Riesgo" id="x_Riesgo" value="<?php echo ew_HtmlEncode($view1_acc->Riesgo->FormValue) ?>">
+<?php } ?>
+<?php echo $view1_acc->Riesgo->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 <?php if ($view1_acc->Parte_Cuerpo->Visible) { // Parte_Cuerpo ?>
 	<div id="r_Parte_Cuerpo" class="form-group">
 		<label id="elh_view1_acc_Parte_Cuerpo" for="x_Parte_Cuerpo" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Parte_Cuerpo->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Parte_Cuerpo->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Parte_Cuerpo">
 <textarea data-field="x_Parte_Cuerpo" name="x_Parte_Cuerpo" id="x_Parte_Cuerpo" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view1_acc->Parte_Cuerpo->PlaceHolder) ?>"<?php echo $view1_acc->Parte_Cuerpo->EditAttributes() ?>><?php echo $view1_acc->Parte_Cuerpo->EditValue ?></textarea>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Parte_Cuerpo">
+<span<?php echo $view1_acc->Parte_Cuerpo->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Parte_Cuerpo->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Parte_Cuerpo" name="x_Parte_Cuerpo" id="x_Parte_Cuerpo" value="<?php echo ew_HtmlEncode($view1_acc->Parte_Cuerpo->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Parte_Cuerpo->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2979,9 +3682,17 @@ fview1_accedit.Lists["x_Tipo_incidente"].Options = <?php echo (is_array($view1_a
 	<div id="r_ESTADO_AFEC" class="form-group">
 		<label id="elh_view1_acc_ESTADO_AFEC" for="x_ESTADO_AFEC" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->ESTADO_AFEC->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->ESTADO_AFEC->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_ESTADO_AFEC">
 <textarea data-field="x_ESTADO_AFEC" name="x_ESTADO_AFEC" id="x_ESTADO_AFEC" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view1_acc->ESTADO_AFEC->PlaceHolder) ?>"<?php echo $view1_acc->ESTADO_AFEC->EditAttributes() ?>><?php echo $view1_acc->ESTADO_AFEC->EditValue ?></textarea>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_ESTADO_AFEC">
+<span<?php echo $view1_acc->ESTADO_AFEC->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->ESTADO_AFEC->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_ESTADO_AFEC" name="x_ESTADO_AFEC" id="x_ESTADO_AFEC" value="<?php echo ew_HtmlEncode($view1_acc->ESTADO_AFEC->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->ESTADO_AFEC->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -2989,6 +3700,7 @@ fview1_accedit.Lists["x_Tipo_incidente"].Options = <?php echo (is_array($view1_a
 	<div id="r_EVACUADO" class="form-group">
 		<label id="elh_view1_acc_EVACUADO" for="x_EVACUADO" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->EVACUADO->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->EVACUADO->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_EVACUADO">
 <select data-field="x_EVACUADO" id="x_EVACUADO" name="x_EVACUADO"<?php echo $view1_acc->EVACUADO->EditAttributes() ?>>
 <?php
@@ -3008,10 +3720,14 @@ if (is_array($view1_acc->EVACUADO->EditValue)) {
 }
 ?>
 </select>
-<script type="text/javascript">
-fview1_accedit.Lists["x_EVACUADO"].Options = <?php echo (is_array($view1_acc->EVACUADO->EditValue)) ? ew_ArrayToJson($view1_acc->EVACUADO->EditValue, 1) : "[]" ?>;
-</script>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_EVACUADO">
+<span<?php echo $view1_acc->EVACUADO->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->EVACUADO->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_EVACUADO" name="x_EVACUADO" id="x_EVACUADO" value="<?php echo ew_HtmlEncode($view1_acc->EVACUADO->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->EVACUADO->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3019,9 +3735,17 @@ fview1_accedit.Lists["x_EVACUADO"].Options = <?php echo (is_array($view1_acc->EV
 	<div id="r_DESC_ACC" class="form-group">
 		<label id="elh_view1_acc_DESC_ACC" for="x_DESC_ACC" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->DESC_ACC->FldCaption() ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->DESC_ACC->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_DESC_ACC">
 <textarea data-field="x_DESC_ACC" name="x_DESC_ACC" id="x_DESC_ACC" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view1_acc->DESC_ACC->PlaceHolder) ?>"<?php echo $view1_acc->DESC_ACC->EditAttributes() ?>><?php echo $view1_acc->DESC_ACC->EditValue ?></textarea>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_DESC_ACC">
+<span<?php echo $view1_acc->DESC_ACC->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->DESC_ACC->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_DESC_ACC" name="x_DESC_ACC" id="x_DESC_ACC" value="<?php echo ew_HtmlEncode($view1_acc->DESC_ACC->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->DESC_ACC->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
@@ -3029,17 +3753,66 @@ fview1_accedit.Lists["x_EVACUADO"].Options = <?php echo (is_array($view1_acc->EV
 	<div id="r_Modificado" class="form-group">
 		<label id="elh_view1_acc_Modificado" for="x_Modificado" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->Modificado->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
 		<div class="col-sm-10"><div<?php echo $view1_acc->Modificado->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
 <span id="el_view1_acc_Modificado">
-<input type="text" data-field="x_Modificado" name="x_Modificado" id="x_Modificado" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($view1_acc->Modificado->PlaceHolder) ?>" value="<?php echo $view1_acc->Modificado->EditValue ?>"<?php echo $view1_acc->Modificado->EditAttributes() ?>>
+<select data-field="x_Modificado" id="x_Modificado" name="x_Modificado"<?php echo $view1_acc->Modificado->EditAttributes() ?>>
+<?php
+if (is_array($view1_acc->Modificado->EditValue)) {
+	$arwrk = $view1_acc->Modificado->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view1_acc->Modificado->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
 </span>
+<?php } else { ?>
+<span id="el_view1_acc_Modificado">
+<span<?php echo $view1_acc->Modificado->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->Modificado->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_Modificado" name="x_Modificado" id="x_Modificado" value="<?php echo ew_HtmlEncode($view1_acc->Modificado->FormValue) ?>">
+<?php } ?>
 <?php echo $view1_acc->Modificado->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
-</div>
+<?php if ($view1_acc->llave_2->Visible) { // llave_2 ?>
+	<div id="r_llave_2" class="form-group">
+		<label id="elh_view1_acc_llave_2" for="x_llave_2" class="col-sm-2 control-label ewLabel"><?php echo $view1_acc->llave_2->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $view1_acc->llave_2->CellAttributes() ?>>
+<?php if ($view1_acc->CurrentAction <> "F") { ?>
+<span id="el_view1_acc_llave_2">
+<span<?php echo $view1_acc->llave_2->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->llave_2->EditValue ?></p></span>
+</span>
 <input type="hidden" data-field="x_llave_2" name="x_llave_2" id="x_llave_2" value="<?php echo ew_HtmlEncode($view1_acc->llave_2->CurrentValue) ?>">
+<?php } else { ?>
+<span id="el_view1_acc_llave_2">
+<span<?php echo $view1_acc->llave_2->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view1_acc->llave_2->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_llave_2" name="x_llave_2" id="x_llave_2" value="<?php echo ew_HtmlEncode($view1_acc->llave_2->FormValue) ?>">
+<?php } ?>
+<?php echo $view1_acc->llave_2->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+</div>
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-10">
-<button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit"><?php echo $Language->Phrase("SaveBtn") ?></button>
+<?php if ($view1_acc->CurrentAction <> "F") { // Confirm page ?>
+<button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit" onclick="this.form.a_edit.value='F';"><?php echo $Language->Phrase("SaveBtn") ?></button>
+<?php } else { ?>
+<button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit"><?php echo $Language->Phrase("ConfirmBtn") ?></button>
+<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="submit" onclick="this.form.a_edit.value='X';"><?php echo $Language->Phrase("CancelBtn") ?></button>
+<?php } ?>
 	</div>
 </div>
 </form>

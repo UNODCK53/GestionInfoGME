@@ -24,6 +24,7 @@ class cview_e_y_n extends cTable {
 	var $OBS_ENLACE;
 	var $NUM_Novedad;
 	var $Nom_Per_Evacu;
+	var $CC_Pre_Evacu;
 	var $Nom_Otro_Per_Evacu;
 	var $CC_Otro_Per_Evacu;
 	var $Cargo_Per_EVA;
@@ -72,8 +73,8 @@ class cview_e_y_n extends cTable {
 		$this->fields['ID_Formulario'] = &$this->ID_Formulario;
 
 		// F_Sincron
-		$this->F_Sincron = new cField('view_e_y_n', 'view_e_y_n', 'x_F_Sincron', 'F_Sincron', '`F_Sincron`', 'DATE_FORMAT(`F_Sincron`, \'%d/%m/%Y\')', 135, 7, FALSE, '`F_Sincron`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->F_Sincron->FldDefaultErrMsg = str_replace("%s", "/", $Language->Phrase("IncorrectDateDMY"));
+		$this->F_Sincron = new cField('view_e_y_n', 'view_e_y_n', 'x_F_Sincron', 'F_Sincron', '`F_Sincron`', 'DATE_FORMAT(`F_Sincron`, \'%Y/%m/%d\')', 135, 5, FALSE, '`F_Sincron`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->F_Sincron->FldDefaultErrMsg = str_replace("%s", "/", $Language->Phrase("IncorrectDateYMD"));
 		$this->fields['F_Sincron'] = &$this->F_Sincron;
 
 		// USUARIO
@@ -138,6 +139,10 @@ class cview_e_y_n extends cTable {
 		$this->Nom_Per_Evacu = new cField('view_e_y_n', 'view_e_y_n', 'x_Nom_Per_Evacu', 'Nom_Per_Evacu', '`Nom_Per_Evacu`', '`Nom_Per_Evacu`', 201, -1, FALSE, '`Nom_Per_Evacu`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['Nom_Per_Evacu'] = &$this->Nom_Per_Evacu;
 
+		// CC_Pre_Evacu
+		$this->CC_Pre_Evacu = new cField('view_e_y_n', 'view_e_y_n', 'x_CC_Pre_Evacu', 'CC_Pre_Evacu', '`CC_Pre_Evacu`', '`CC_Pre_Evacu`', 200, -1, FALSE, '`CC_Pre_Evacu`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->fields['CC_Pre_Evacu'] = &$this->CC_Pre_Evacu;
+
 		// Nom_Otro_Per_Evacu
 		$this->Nom_Otro_Per_Evacu = new cField('view_e_y_n', 'view_e_y_n', 'x_Nom_Otro_Per_Evacu', 'Nom_Otro_Per_Evacu', '`Nom_Otro_Per_Evacu`', '`Nom_Otro_Per_Evacu`', 200, -1, FALSE, '`Nom_Otro_Per_Evacu`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['Nom_Otro_Per_Evacu'] = &$this->Nom_Otro_Per_Evacu;
@@ -187,7 +192,7 @@ class cview_e_y_n extends cTable {
 		$this->fields['F_llegada'] = &$this->F_llegada;
 
 		// Fecha
-		$this->Fecha = new cField('view_e_y_n', 'view_e_y_n', 'x_Fecha', 'Fecha', '`Fecha`', '`Fecha`', 200, -1, FALSE, '`Fecha`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->Fecha = new cField('view_e_y_n', 'view_e_y_n', 'x_Fecha', 'Fecha', '`Fecha`', '`Fecha`', 200, 5, FALSE, '`Fecha`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
 		$this->fields['Fecha'] = &$this->Fecha;
 
 		// Modificado
@@ -699,6 +704,7 @@ class cview_e_y_n extends cTable {
 		$this->OBS_ENLACE->setDbValue($rs->fields('OBS_ENLACE'));
 		$this->NUM_Novedad->setDbValue($rs->fields('NUM_Novedad'));
 		$this->Nom_Per_Evacu->setDbValue($rs->fields('Nom_Per_Evacu'));
+		$this->CC_Pre_Evacu->setDbValue($rs->fields('CC_Pre_Evacu'));
 		$this->Nom_Otro_Per_Evacu->setDbValue($rs->fields('Nom_Otro_Per_Evacu'));
 		$this->CC_Otro_Per_Evacu->setDbValue($rs->fields('CC_Otro_Per_Evacu'));
 		$this->Cargo_Per_EVA->setDbValue($rs->fields('Cargo_Per_EVA'));
@@ -742,6 +748,7 @@ class cview_e_y_n extends cTable {
 		// OBS_ENLACE
 		// NUM_Novedad
 		// Nom_Per_Evacu
+		// CC_Pre_Evacu
 		// Nom_Otro_Per_Evacu
 		// CC_Otro_Per_Evacu
 		// Cargo_Per_EVA
@@ -768,7 +775,7 @@ class cview_e_y_n extends cTable {
 
 		// F_Sincron
 		$this->F_Sincron->ViewValue = $this->F_Sincron->CurrentValue;
-		$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 7);
+		$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 5);
 		$this->F_Sincron->ViewCustomAttributes = "";
 
 		// USUARIO
@@ -936,6 +943,10 @@ class cview_e_y_n extends cTable {
 		$this->Nom_Per_Evacu->ViewValue = $this->Nom_Per_Evacu->CurrentValue;
 		$this->Nom_Per_Evacu->ViewCustomAttributes = "";
 
+		// CC_Pre_Evacu
+		$this->CC_Pre_Evacu->ViewValue = $this->CC_Pre_Evacu->CurrentValue;
+		$this->CC_Pre_Evacu->ViewCustomAttributes = "";
+
 		// Nom_Otro_Per_Evacu
 		$this->Nom_Otro_Per_Evacu->ViewValue = $this->Nom_Otro_Per_Evacu->CurrentValue;
 		$this->Nom_Otro_Per_Evacu->ViewCustomAttributes = "";
@@ -982,40 +993,7 @@ class cview_e_y_n extends cTable {
 		$this->Cargo_Per_EVA->ViewCustomAttributes = "";
 
 		// Motivo_Eva
-		if (strval($this->Motivo_Eva->CurrentValue) <> "") {
-			$sFilterWrk = "`label`" . ew_SearchString("=", $this->Motivo_Eva->CurrentValue, EW_DATATYPE_STRING);
-		switch (@$gsLanguage) {
-			case "en":
-				$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
-				$sWhereWrk = "";
-				break;
-			default:
-				$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
-				$sWhereWrk = "";
-				break;
-		}
-		$lookuptblfilter = "`list name`='motivo'";
-		if (strval($lookuptblfilter) <> "") {
-			ew_AddFilter($sWhereWrk, $lookuptblfilter);
-		}
-		if ($sFilterWrk <> "") {
-			ew_AddFilter($sWhereWrk, $sFilterWrk);
-		}
-
-		// Call Lookup selecting
-		$this->Lookup_Selecting($this->Motivo_Eva, $sWhereWrk);
-		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-		$sSqlWrk .= " ORDER BY `label` ASC";
-			$rswrk = $conn->Execute($sSqlWrk);
-			if ($rswrk && !$rswrk->EOF) { // Lookup values found
-				$this->Motivo_Eva->ViewValue = $rswrk->fields('DispFld');
-				$rswrk->Close();
-			} else {
-				$this->Motivo_Eva->ViewValue = $this->Motivo_Eva->CurrentValue;
-			}
-		} else {
-			$this->Motivo_Eva->ViewValue = NULL;
-		}
+		$this->Motivo_Eva->ViewValue = $this->Motivo_Eva->CurrentValue;
 		$this->Motivo_Eva->ViewCustomAttributes = "";
 
 		// OBS_EVA
@@ -1076,24 +1054,12 @@ class cview_e_y_n extends cTable {
 		$this->Muncipio->ViewCustomAttributes = "";
 
 		// F_llegada
-		if (strval($this->F_llegada->CurrentValue) <> "") {
-			switch ($this->F_llegada->CurrentValue) {
-				case $this->F_llegada->FldTagValue(1):
-					$this->F_llegada->ViewValue = $this->F_llegada->FldTagCaption(1) <> "" ? $this->F_llegada->FldTagCaption(1) : $this->F_llegada->CurrentValue;
-					break;
-				case $this->F_llegada->FldTagValue(2):
-					$this->F_llegada->ViewValue = $this->F_llegada->FldTagCaption(2) <> "" ? $this->F_llegada->FldTagCaption(2) : $this->F_llegada->CurrentValue;
-					break;
-				default:
-					$this->F_llegada->ViewValue = $this->F_llegada->CurrentValue;
-			}
-		} else {
-			$this->F_llegada->ViewValue = NULL;
-		}
+		$this->F_llegada->ViewValue = $this->F_llegada->CurrentValue;
 		$this->F_llegada->ViewCustomAttributes = "";
 
 		// Fecha
 		$this->Fecha->ViewValue = $this->Fecha->CurrentValue;
+		$this->Fecha->ViewValue = ew_FormatDateTime($this->Fecha->ViewValue, 5);
 		$this->Fecha->ViewCustomAttributes = "";
 
 		// Modificado
@@ -1206,6 +1172,11 @@ class cview_e_y_n extends cTable {
 		$this->Nom_Per_Evacu->HrefValue = "";
 		$this->Nom_Per_Evacu->TooltipValue = "";
 
+		// CC_Pre_Evacu
+		$this->CC_Pre_Evacu->LinkCustomAttributes = "";
+		$this->CC_Pre_Evacu->HrefValue = "";
+		$this->CC_Pre_Evacu->TooltipValue = "";
+
 		// Nom_Otro_Per_Evacu
 		$this->Nom_Otro_Per_Evacu->LinkCustomAttributes = "";
 		$this->Nom_Otro_Per_Evacu->HrefValue = "";
@@ -1307,7 +1278,7 @@ class cview_e_y_n extends cTable {
 		$this->F_Sincron->EditAttrs["class"] = "form-control";
 		$this->F_Sincron->EditCustomAttributes = "";
 		$this->F_Sincron->EditValue = $this->F_Sincron->CurrentValue;
-		$this->F_Sincron->EditValue = ew_FormatDateTime($this->F_Sincron->EditValue, 7);
+		$this->F_Sincron->EditValue = ew_FormatDateTime($this->F_Sincron->EditValue, 5);
 		$this->F_Sincron->ViewCustomAttributes = "";
 
 		// USUARIO
@@ -1428,6 +1399,12 @@ class cview_e_y_n extends cTable {
 		$this->Nom_Per_Evacu->EditValue = ew_HtmlEncode($this->Nom_Per_Evacu->CurrentValue);
 		$this->Nom_Per_Evacu->PlaceHolder = ew_RemoveHtml($this->Nom_Per_Evacu->FldCaption());
 
+		// CC_Pre_Evacu
+		$this->CC_Pre_Evacu->EditAttrs["class"] = "form-control";
+		$this->CC_Pre_Evacu->EditCustomAttributes = "";
+		$this->CC_Pre_Evacu->EditValue = ew_HtmlEncode($this->CC_Pre_Evacu->CurrentValue);
+		$this->CC_Pre_Evacu->PlaceHolder = ew_RemoveHtml($this->CC_Pre_Evacu->FldCaption());
+
 		// Nom_Otro_Per_Evacu
 		$this->Nom_Otro_Per_Evacu->EditAttrs["class"] = "form-control";
 		$this->Nom_Otro_Per_Evacu->EditCustomAttributes = "";
@@ -1447,6 +1424,8 @@ class cview_e_y_n extends cTable {
 		// Motivo_Eva
 		$this->Motivo_Eva->EditAttrs["class"] = "form-control";
 		$this->Motivo_Eva->EditCustomAttributes = "";
+		$this->Motivo_Eva->EditValue = ew_HtmlEncode($this->Motivo_Eva->CurrentValue);
+		$this->Motivo_Eva->PlaceHolder = ew_RemoveHtml($this->Motivo_Eva->FldCaption());
 
 		// OBS_EVA
 		$this->OBS_EVA->EditAttrs["class"] = "form-control";
@@ -1491,11 +1470,8 @@ class cview_e_y_n extends cTable {
 		// F_llegada
 		$this->F_llegada->EditAttrs["class"] = "form-control";
 		$this->F_llegada->EditCustomAttributes = "";
-		$arwrk = array();
-		$arwrk[] = array($this->F_llegada->FldTagValue(1), $this->F_llegada->FldTagCaption(1) <> "" ? $this->F_llegada->FldTagCaption(1) : $this->F_llegada->FldTagValue(1));
-		$arwrk[] = array($this->F_llegada->FldTagValue(2), $this->F_llegada->FldTagCaption(2) <> "" ? $this->F_llegada->FldTagCaption(2) : $this->F_llegada->FldTagValue(2));
-		array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
-		$this->F_llegada->EditValue = $arwrk;
+		$this->F_llegada->EditValue = ew_HtmlEncode($this->F_llegada->CurrentValue);
+		$this->F_llegada->PlaceHolder = ew_RemoveHtml($this->F_llegada->FldCaption());
 
 		// Fecha
 		$this->Fecha->EditAttrs["class"] = "form-control";
@@ -1568,6 +1544,7 @@ class cview_e_y_n extends cTable {
 					if ($this->OBS_ENLACE->Exportable) $Doc->ExportCaption($this->OBS_ENLACE);
 					if ($this->NUM_Novedad->Exportable) $Doc->ExportCaption($this->NUM_Novedad);
 					if ($this->Nom_Per_Evacu->Exportable) $Doc->ExportCaption($this->Nom_Per_Evacu);
+					if ($this->CC_Pre_Evacu->Exportable) $Doc->ExportCaption($this->CC_Pre_Evacu);
 					if ($this->Nom_Otro_Per_Evacu->Exportable) $Doc->ExportCaption($this->Nom_Otro_Per_Evacu);
 					if ($this->CC_Otro_Per_Evacu->Exportable) $Doc->ExportCaption($this->CC_Otro_Per_Evacu);
 					if ($this->Cargo_Per_EVA->Exportable) $Doc->ExportCaption($this->Cargo_Per_EVA);
@@ -1601,6 +1578,7 @@ class cview_e_y_n extends cTable {
 					if ($this->OBS_ENLACE->Exportable) $Doc->ExportCaption($this->OBS_ENLACE);
 					if ($this->NUM_Novedad->Exportable) $Doc->ExportCaption($this->NUM_Novedad);
 					if ($this->Nom_Per_Evacu->Exportable) $Doc->ExportCaption($this->Nom_Per_Evacu);
+					if ($this->CC_Pre_Evacu->Exportable) $Doc->ExportCaption($this->CC_Pre_Evacu);
 					if ($this->Nom_Otro_Per_Evacu->Exportable) $Doc->ExportCaption($this->Nom_Otro_Per_Evacu);
 					if ($this->CC_Otro_Per_Evacu->Exportable) $Doc->ExportCaption($this->CC_Otro_Per_Evacu);
 					if ($this->Cargo_Per_EVA->Exportable) $Doc->ExportCaption($this->Cargo_Per_EVA);
@@ -1664,6 +1642,7 @@ class cview_e_y_n extends cTable {
 						if ($this->OBS_ENLACE->Exportable) $Doc->ExportField($this->OBS_ENLACE);
 						if ($this->NUM_Novedad->Exportable) $Doc->ExportField($this->NUM_Novedad);
 						if ($this->Nom_Per_Evacu->Exportable) $Doc->ExportField($this->Nom_Per_Evacu);
+						if ($this->CC_Pre_Evacu->Exportable) $Doc->ExportField($this->CC_Pre_Evacu);
 						if ($this->Nom_Otro_Per_Evacu->Exportable) $Doc->ExportField($this->Nom_Otro_Per_Evacu);
 						if ($this->CC_Otro_Per_Evacu->Exportable) $Doc->ExportField($this->CC_Otro_Per_Evacu);
 						if ($this->Cargo_Per_EVA->Exportable) $Doc->ExportField($this->Cargo_Per_EVA);
@@ -1697,6 +1676,7 @@ class cview_e_y_n extends cTable {
 						if ($this->OBS_ENLACE->Exportable) $Doc->ExportField($this->OBS_ENLACE);
 						if ($this->NUM_Novedad->Exportable) $Doc->ExportField($this->NUM_Novedad);
 						if ($this->Nom_Per_Evacu->Exportable) $Doc->ExportField($this->Nom_Per_Evacu);
+						if ($this->CC_Pre_Evacu->Exportable) $Doc->ExportField($this->CC_Pre_Evacu);
 						if ($this->Nom_Otro_Per_Evacu->Exportable) $Doc->ExportField($this->Nom_Otro_Per_Evacu);
 						if ($this->CC_Otro_Per_Evacu->Exportable) $Doc->ExportField($this->CC_Otro_Per_Evacu);
 						if ($this->Cargo_Per_EVA->Exportable) $Doc->ExportField($this->Cargo_Per_EVA);

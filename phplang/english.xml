@@ -1600,7 +1600,7 @@
 </field>
 <field id="no_subof"><phrase id="fldcaption" value="NO SUBOF"/>
 </field>
-<field id="no_sol"><phrase id="fldcaption" value="NO SOL"/>
+<field id="no_sol"><phrase id="fldcaption" value="NO SOL y AUX"/>
 </field>
 <field id="no_patru"><phrase id="fldcaption" value="NO PATRU"/>
 </field>
@@ -1938,7 +1938,7 @@
 </field>
 <field id="grupo2_cc_enfer_new"><phrase id="fldcaption" value="GRUPO2 CC ENFER NEW"/>
 </field>
-<field id="no_sol"><phrase id="fldcaption" value="NO SOL"/>
+<field id="no_sol"><phrase id="fldcaption" value="NO SOL y AUX"/>
 </field>
 <field id="usuario"><phrase id="fldcaption" value="USUARIO"/>
 </field>
@@ -3366,7 +3366,7 @@
 </field>
 <field id="no_subof"><phrase id="fldcaption" value="NO SUBOF"/>
 </field>
-<field id="no_sol"><phrase id="fldcaption" value="NO SOL"/>
+<field id="no_sol"><phrase id="fldcaption" value="NO SOL y AUX"/>
 </field>
 <field id="no_patru"><phrase id="fldcaption" value="NO PATRU"/>
 </field>
@@ -3721,6 +3721,10 @@
 <field id="fin_jorna"><phrase id="fldcaption" value="Fin Jorna"/>
 </field>
 <field id="situ_especial"><phrase id="fldcaption" value="Situ Especial"/>
+<phrase id="fldtagvalue1" value="Si"/>
+<phrase id="fldtagcaption1" value="Si"/>
+<phrase id="fldtagvalue2" value="No"/>
+<phrase id="fldtagcaption2" value="No"/>
 </field>
 <field id="adm_gme"><phrase id="fldcaption" value="Adm GME"/>
 </field>
@@ -5188,15 +5192,15 @@
 <table id="view1_acc"><phrase id="tblcaption" value="Reporte de accidentes"/>
 <field id="llave"><phrase id="fldcaption" value="llave"/>
 </field>
-<field id="f_sincron"><phrase id="fldcaption" value="F Sincron"/>
+<field id="f_sincron"><phrase id="fldcaption" value="F Sincronizacion"/>
 </field>
 <field id="usuario"><phrase id="fldcaption" value="USUARIO"/>
 </field>
 <field id="cargo_gme"><phrase id="fldcaption" value="Cargo gme"/>
 </field>
-<field id="nom_pe"><phrase id="fldcaption" value="NOM PE"/>
+<field id="nom_pe"><phrase id="fldcaption" value="Punto de erradicacion"/>
 </field>
-<field id="otro_pe"><phrase id="fldcaption" value="Otro PE"/>
+<field id="otro_pe"><phrase id="fldcaption" value="Otro Punto"/>
 </field>
 <field id="nom_apoyo"><phrase id="fldcaption" value="NOM APOYO"/>
 </field>
@@ -5210,7 +5214,7 @@
 </field>
 <field id="otro_cc_enlace"><phrase id="fldcaption" value="Otro CC Enlace"/>
 </field>
-<field id="nom_pge"><phrase id="fldcaption" value="NOM PGE"/>
+<field id="nom_pge"><phrase id="fldcaption" value="Personal especializado"/>
 </field>
 <field id="otro_nom_pge"><phrase id="fldcaption" value="Otro Nom PGE"/>
 </field>
@@ -5274,15 +5278,25 @@
 </field>
 <field id="tipo_incidente"><phrase id="fldcaption" value="Tipo incidente"/>
 </field>
+<field id="riesgo"><phrase id="fldcaption" value="Riesgo"/>
+</field>
 <field id="parte_cuerpo"><phrase id="fldcaption" value="Parte Cuerpo"/>
 </field>
 <field id="estado_afec"><phrase id="fldcaption" value="ESTADO AFEC"/>
 </field>
 <field id="evacuado"><phrase id="fldcaption" value="EVACUADO"/>
+<phrase id="fldtagvalue1" value="Si"/>
+<phrase id="fldtagcaption1" value="Si"/>
+<phrase id="fldtagvalue2" value="No"/>
+<phrase id="fldtagcaption2" value="No"/>
 </field>
 <field id="desc_acc"><phrase id="fldcaption" value="DESC ACC"/>
 </field>
 <field id="modificado"><phrase id="fldcaption" value="Modificado"/>
+<phrase id="fldtagvalue1" value="Si"/>
+<phrase id="fldtagcaption1" value="Si"/>
+<phrase id="fldtagvalue2" value="No"/>
+<phrase id="fldtagcaption2" value="No"/>yy
 </field>
 <field id="llave_2"><phrase id="fldcaption" value="llave 2"/>
 </field>

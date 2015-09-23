@@ -1631,6 +1631,11 @@ $accidentes_list->ShowMessage();
 ?>
 <?php if ($accidentes_list->TotalRecs > 0 || $accidentes->CurrentAction <> "") { ?>
 Módulo en construcción...
+
+
+
+
+
 <?php } ?>
 <?php if ($accidentes_list->TotalRecs == 0 && $accidentes->CurrentAction == "") { // Show other options ?>
 <div class="ewListOtherOptions">

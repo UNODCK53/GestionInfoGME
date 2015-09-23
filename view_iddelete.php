@@ -948,7 +948,7 @@ class cview_id_delete extends cview_id {
 
 			// F_Sincron
 			$this->F_Sincron->ViewValue = $this->F_Sincron->CurrentValue;
-			$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 7);
+			$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 5);
 			$this->F_Sincron->ViewCustomAttributes = "";
 
 			// USUARIO
@@ -1226,7 +1226,20 @@ class cview_id_delete extends cview_id {
 			$this->Fin_Jorna->ViewCustomAttributes = "";
 
 			// Situ_Especial
-			$this->Situ_Especial->ViewValue = $this->Situ_Especial->CurrentValue;
+			if (strval($this->Situ_Especial->CurrentValue) <> "") {
+				switch ($this->Situ_Especial->CurrentValue) {
+					case $this->Situ_Especial->FldTagValue(1):
+						$this->Situ_Especial->ViewValue = $this->Situ_Especial->FldTagCaption(1) <> "" ? $this->Situ_Especial->FldTagCaption(1) : $this->Situ_Especial->CurrentValue;
+						break;
+					case $this->Situ_Especial->FldTagValue(2):
+						$this->Situ_Especial->ViewValue = $this->Situ_Especial->FldTagCaption(2) <> "" ? $this->Situ_Especial->FldTagCaption(2) : $this->Situ_Especial->CurrentValue;
+						break;
+					default:
+						$this->Situ_Especial->ViewValue = $this->Situ_Especial->CurrentValue;
+				}
+			} else {
+				$this->Situ_Especial->ViewValue = NULL;
+			}
 			$this->Situ_Especial->ViewCustomAttributes = "";
 
 			// Adm_GME

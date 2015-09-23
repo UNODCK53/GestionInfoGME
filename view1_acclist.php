@@ -726,11 +726,13 @@ class cview1_acc_list extends cview1_acc {
 		$this->BuildSearchSql($sWhere, $this->CC_Afectado, $Default, FALSE); // CC_Afectado
 		$this->BuildSearchSql($sWhere, $this->Cargo_Afectado, $Default, FALSE); // Cargo_Afectado
 		$this->BuildSearchSql($sWhere, $this->Tipo_incidente, $Default, FALSE); // Tipo_incidente
+		$this->BuildSearchSql($sWhere, $this->Riesgo, $Default, FALSE); // Riesgo
 		$this->BuildSearchSql($sWhere, $this->Parte_Cuerpo, $Default, FALSE); // Parte_Cuerpo
 		$this->BuildSearchSql($sWhere, $this->ESTADO_AFEC, $Default, FALSE); // ESTADO_AFEC
 		$this->BuildSearchSql($sWhere, $this->EVACUADO, $Default, FALSE); // EVACUADO
 		$this->BuildSearchSql($sWhere, $this->DESC_ACC, $Default, FALSE); // DESC_ACC
 		$this->BuildSearchSql($sWhere, $this->Modificado, $Default, FALSE); // Modificado
+		$this->BuildSearchSql($sWhere, $this->llave_2, $Default, FALSE); // llave_2
 
 		// Set up search parm
 		if (!$Default && $sWhere <> "") {
@@ -781,11 +783,13 @@ class cview1_acc_list extends cview1_acc {
 			$this->CC_Afectado->AdvancedSearch->Save(); // CC_Afectado
 			$this->Cargo_Afectado->AdvancedSearch->Save(); // Cargo_Afectado
 			$this->Tipo_incidente->AdvancedSearch->Save(); // Tipo_incidente
+			$this->Riesgo->AdvancedSearch->Save(); // Riesgo
 			$this->Parte_Cuerpo->AdvancedSearch->Save(); // Parte_Cuerpo
 			$this->ESTADO_AFEC->AdvancedSearch->Save(); // ESTADO_AFEC
 			$this->EVACUADO->AdvancedSearch->Save(); // EVACUADO
 			$this->DESC_ACC->AdvancedSearch->Save(); // DESC_ACC
 			$this->Modificado->AdvancedSearch->Save(); // Modificado
+			$this->llave_2->AdvancedSearch->Save(); // llave_2
 		}
 		return $sWhere;
 	}
@@ -863,6 +867,24 @@ class cview1_acc_list extends cview1_acc {
 		$this->BuildBasicSearchSQL($sWhere, $this->FECHA_ACC, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->HORA_ACC, $arKeywords, $type);
 		$this->BuildBasicSearchSQL($sWhere, $this->Hora_ingreso, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->NOM_COMANDANTE, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->TESTI1, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->CC_TESTI1, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->CARGO_TESTI1, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->TESTI2, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->CC_TESTI2, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->CARGO_TESTI2, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->Nom_Afectado, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->CC_Afectado, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->Cargo_Afectado, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->Tipo_incidente, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->Riesgo, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->Parte_Cuerpo, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->ESTADO_AFEC, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->EVACUADO, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->DESC_ACC, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->Modificado, $arKeywords, $type);
+		$this->BuildBasicSearchSQL($sWhere, $this->llave_2, $arKeywords, $type);
 		return $sWhere;
 	}
 
@@ -1065,6 +1087,8 @@ class cview1_acc_list extends cview1_acc {
 			return TRUE;
 		if ($this->Tipo_incidente->AdvancedSearch->IssetSession())
 			return TRUE;
+		if ($this->Riesgo->AdvancedSearch->IssetSession())
+			return TRUE;
 		if ($this->Parte_Cuerpo->AdvancedSearch->IssetSession())
 			return TRUE;
 		if ($this->ESTADO_AFEC->AdvancedSearch->IssetSession())
@@ -1074,6 +1098,8 @@ class cview1_acc_list extends cview1_acc {
 		if ($this->DESC_ACC->AdvancedSearch->IssetSession())
 			return TRUE;
 		if ($this->Modificado->AdvancedSearch->IssetSession())
+			return TRUE;
+		if ($this->llave_2->AdvancedSearch->IssetSession())
 			return TRUE;
 		return FALSE;
 	}
@@ -1148,11 +1174,13 @@ class cview1_acc_list extends cview1_acc {
 		$this->CC_Afectado->AdvancedSearch->UnsetSession();
 		$this->Cargo_Afectado->AdvancedSearch->UnsetSession();
 		$this->Tipo_incidente->AdvancedSearch->UnsetSession();
+		$this->Riesgo->AdvancedSearch->UnsetSession();
 		$this->Parte_Cuerpo->AdvancedSearch->UnsetSession();
 		$this->ESTADO_AFEC->AdvancedSearch->UnsetSession();
 		$this->EVACUADO->AdvancedSearch->UnsetSession();
 		$this->DESC_ACC->AdvancedSearch->UnsetSession();
 		$this->Modificado->AdvancedSearch->UnsetSession();
+		$this->llave_2->AdvancedSearch->UnsetSession();
 	}
 
 	// Restore all search parameters
@@ -1207,11 +1235,13 @@ class cview1_acc_list extends cview1_acc {
 		$this->CC_Afectado->AdvancedSearch->Load();
 		$this->Cargo_Afectado->AdvancedSearch->Load();
 		$this->Tipo_incidente->AdvancedSearch->Load();
+		$this->Riesgo->AdvancedSearch->Load();
 		$this->Parte_Cuerpo->AdvancedSearch->Load();
 		$this->ESTADO_AFEC->AdvancedSearch->Load();
 		$this->EVACUADO->AdvancedSearch->Load();
 		$this->DESC_ACC->AdvancedSearch->Load();
 		$this->Modificado->AdvancedSearch->Load();
+		$this->llave_2->AdvancedSearch->Load();
 	}
 
 	// Set up sort parameters
@@ -1268,11 +1298,13 @@ class cview1_acc_list extends cview1_acc {
 			$this->UpdateSort($this->CC_Afectado, $bCtrl); // CC_Afectado
 			$this->UpdateSort($this->Cargo_Afectado, $bCtrl); // Cargo_Afectado
 			$this->UpdateSort($this->Tipo_incidente, $bCtrl); // Tipo_incidente
+			$this->UpdateSort($this->Riesgo, $bCtrl); // Riesgo
 			$this->UpdateSort($this->Parte_Cuerpo, $bCtrl); // Parte_Cuerpo
 			$this->UpdateSort($this->ESTADO_AFEC, $bCtrl); // ESTADO_AFEC
 			$this->UpdateSort($this->EVACUADO, $bCtrl); // EVACUADO
 			$this->UpdateSort($this->DESC_ACC, $bCtrl); // DESC_ACC
 			$this->UpdateSort($this->Modificado, $bCtrl); // Modificado
+			$this->UpdateSort($this->llave_2, $bCtrl); // llave_2
 			$this->setStartRecordNumber(1); // Reset start position
 		}
 	}
@@ -1349,11 +1381,13 @@ class cview1_acc_list extends cview1_acc {
 				$this->CC_Afectado->setSort("");
 				$this->Cargo_Afectado->setSort("");
 				$this->Tipo_incidente->setSort("");
+				$this->Riesgo->setSort("");
 				$this->Parte_Cuerpo->setSort("");
 				$this->ESTADO_AFEC->setSort("");
 				$this->EVACUADO->setSort("");
 				$this->DESC_ACC->setSort("");
 				$this->Modificado->setSort("");
+				$this->llave_2->setSort("");
 			}
 
 			// Reset start position
@@ -1842,6 +1876,11 @@ class cview1_acc_list extends cview1_acc {
 		if ($this->Tipo_incidente->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->Tipo_incidente->AdvancedSearch->SearchOperator = @$_GET["z_Tipo_incidente"];
 
+		// Riesgo
+		$this->Riesgo->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Riesgo"]);
+		if ($this->Riesgo->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->Riesgo->AdvancedSearch->SearchOperator = @$_GET["z_Riesgo"];
+
 		// Parte_Cuerpo
 		$this->Parte_Cuerpo->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Parte_Cuerpo"]);
 		if ($this->Parte_Cuerpo->AdvancedSearch->SearchValue <> "") $this->Command = "search";
@@ -1866,6 +1905,11 @@ class cview1_acc_list extends cview1_acc {
 		$this->Modificado->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_Modificado"]);
 		if ($this->Modificado->AdvancedSearch->SearchValue <> "") $this->Command = "search";
 		$this->Modificado->AdvancedSearch->SearchOperator = @$_GET["z_Modificado"];
+
+		// llave_2
+		$this->llave_2->AdvancedSearch->SearchValue = ew_StripSlashes(@$_GET["x_llave_2"]);
+		if ($this->llave_2->AdvancedSearch->SearchValue <> "") $this->Command = "search";
+		$this->llave_2->AdvancedSearch->SearchOperator = @$_GET["z_llave_2"];
 	}
 
 	// Load recordset
@@ -1958,6 +2002,7 @@ class cview1_acc_list extends cview1_acc {
 		$this->CC_Afectado->setDbValue($rs->fields('CC_Afectado'));
 		$this->Cargo_Afectado->setDbValue($rs->fields('Cargo_Afectado'));
 		$this->Tipo_incidente->setDbValue($rs->fields('Tipo_incidente'));
+		$this->Riesgo->setDbValue($rs->fields('Riesgo'));
 		$this->Parte_Cuerpo->setDbValue($rs->fields('Parte_Cuerpo'));
 		$this->ESTADO_AFEC->setDbValue($rs->fields('ESTADO_AFEC'));
 		$this->EVACUADO->setDbValue($rs->fields('EVACUADO'));
@@ -2014,6 +2059,7 @@ class cview1_acc_list extends cview1_acc {
 		$this->CC_Afectado->DbValue = $row['CC_Afectado'];
 		$this->Cargo_Afectado->DbValue = $row['Cargo_Afectado'];
 		$this->Tipo_incidente->DbValue = $row['Tipo_incidente'];
+		$this->Riesgo->DbValue = $row['Riesgo'];
 		$this->Parte_Cuerpo->DbValue = $row['Parte_Cuerpo'];
 		$this->ESTADO_AFEC->DbValue = $row['ESTADO_AFEC'];
 		$this->EVACUADO->DbValue = $row['EVACUADO'];
@@ -2125,6 +2171,7 @@ class cview1_acc_list extends cview1_acc {
 		// CC_Afectado
 		// Cargo_Afectado
 		// Tipo_incidente
+		// Riesgo
 		// Parte_Cuerpo
 		// ESTADO_AFEC
 		// EVACUADO
@@ -2132,7 +2179,6 @@ class cview1_acc_list extends cview1_acc {
 		// Modificado
 		// llave_2
 
-		$this->llave_2->CellCssStyle = "white-space: nowrap;";
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
 			// llave
@@ -2141,11 +2187,40 @@ class cview1_acc_list extends cview1_acc {
 
 			// F_Sincron
 			$this->F_Sincron->ViewValue = $this->F_Sincron->CurrentValue;
-			$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 7);
+			$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 5);
 			$this->F_Sincron->ViewCustomAttributes = "";
 
 			// USUARIO
-			$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+			if (strval($this->USUARIO->CurrentValue) <> "") {
+				$sFilterWrk = "`USUARIO`" . ew_SearchString("=", $this->USUARIO->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->USUARIO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `USUARIO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->USUARIO->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->USUARIO->ViewValue = $this->USUARIO->CurrentValue;
+				}
+			} else {
+				$this->USUARIO->ViewValue = NULL;
+			}
 			$this->USUARIO->ViewCustomAttributes = "";
 
 			// Cargo_gme
@@ -2153,7 +2228,36 @@ class cview1_acc_list extends cview1_acc {
 			$this->Cargo_gme->ViewCustomAttributes = "";
 
 			// NOM_PE
-			$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+			if (strval($this->NOM_PE->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_PE`" . ew_SearchString("=", $this->NOM_PE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_PE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_PE->ViewValue = $this->NOM_PE->CurrentValue;
+				}
+			} else {
+				$this->NOM_PE->ViewValue = NULL;
+			}
 			$this->NOM_PE->ViewCustomAttributes = "";
 
 			// Otro_PE
@@ -2161,7 +2265,36 @@ class cview1_acc_list extends cview1_acc {
 			$this->Otro_PE->ViewCustomAttributes = "";
 
 			// NOM_APOYO
-			$this->NOM_APOYO->ViewValue = $this->NOM_APOYO->CurrentValue;
+			if (strval($this->NOM_APOYO->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_APOYO`" . ew_SearchString("=", $this->NOM_APOYO->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_APOYO`, `NOM_APOYO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_APOYO`, `NOM_APOYO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_APOYO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_APOYO` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_APOYO->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_APOYO->ViewValue = $this->NOM_APOYO->CurrentValue;
+				}
+			} else {
+				$this->NOM_APOYO->ViewValue = NULL;
+			}
 			$this->NOM_APOYO->ViewCustomAttributes = "";
 
 			// Otro_Nom_Apoyo
@@ -2173,7 +2306,36 @@ class cview1_acc_list extends cview1_acc {
 			$this->Otro_CC_Apoyo->ViewCustomAttributes = "";
 
 			// NOM_ENLACE
-			$this->NOM_ENLACE->ViewValue = $this->NOM_ENLACE->CurrentValue;
+			if (strval($this->NOM_ENLACE->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_ENLACE`" . ew_SearchString("=", $this->NOM_ENLACE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_ENLACE`, `NOM_ENLACE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_ENLACE`, `NOM_ENLACE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_ENLACE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_ENLACE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_ENLACE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_ENLACE->ViewValue = $this->NOM_ENLACE->CurrentValue;
+				}
+			} else {
+				$this->NOM_ENLACE->ViewValue = NULL;
+			}
 			$this->NOM_ENLACE->ViewCustomAttributes = "";
 
 			// Otro_Nom_Enlace
@@ -2185,7 +2347,36 @@ class cview1_acc_list extends cview1_acc {
 			$this->Otro_CC_Enlace->ViewCustomAttributes = "";
 
 			// NOM_PGE
-			$this->NOM_PGE->ViewValue = $this->NOM_PGE->CurrentValue;
+			if (strval($this->NOM_PGE->CurrentValue) <> "") {
+				$sFilterWrk = "`NOM_PGE`" . ew_SearchString("=", $this->NOM_PGE->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PGE`, `NOM_PGE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PGE`, `NOM_PGE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PGE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PGE` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->NOM_PGE->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->NOM_PGE->ViewValue = $this->NOM_PGE->CurrentValue;
+				}
+			} else {
+				$this->NOM_PGE->ViewValue = NULL;
+			}
 			$this->NOM_PGE->ViewCustomAttributes = "";
 
 			// Otro_Nom_PGE
@@ -2309,8 +2500,78 @@ class cview1_acc_list extends cview1_acc {
 			$this->Cargo_Afectado->ViewCustomAttributes = "";
 
 			// Tipo_incidente
-			$this->Tipo_incidente->ViewValue = $this->Tipo_incidente->CurrentValue;
+			if (strval($this->Tipo_incidente->CurrentValue) <> "") {
+				$sFilterWrk = "`label`" . ew_SearchString("=", $this->Tipo_incidente->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='Incidente'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Tipo_incidente, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Tipo_incidente->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Tipo_incidente->ViewValue = $this->Tipo_incidente->CurrentValue;
+				}
+			} else {
+				$this->Tipo_incidente->ViewValue = NULL;
+			}
 			$this->Tipo_incidente->ViewCustomAttributes = "";
+
+			// Riesgo
+			if (strval($this->Riesgo->CurrentValue) <> "") {
+				$sFilterWrk = "`label`" . ew_SearchString("=", $this->Riesgo->CurrentValue, EW_DATATYPE_STRING);
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='Riesgo'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Riesgo, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+				$rswrk = $conn->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$this->Riesgo->ViewValue = $rswrk->fields('DispFld');
+					$rswrk->Close();
+				} else {
+					$this->Riesgo->ViewValue = $this->Riesgo->CurrentValue;
+				}
+			} else {
+				$this->Riesgo->ViewValue = NULL;
+			}
+			$this->Riesgo->ViewCustomAttributes = "";
 
 			// Parte_Cuerpo
 			$this->Parte_Cuerpo->ViewValue = $this->Parte_Cuerpo->CurrentValue;
@@ -2321,7 +2582,20 @@ class cview1_acc_list extends cview1_acc {
 			$this->ESTADO_AFEC->ViewCustomAttributes = "";
 
 			// EVACUADO
-			$this->EVACUADO->ViewValue = $this->EVACUADO->CurrentValue;
+			if (strval($this->EVACUADO->CurrentValue) <> "") {
+				switch ($this->EVACUADO->CurrentValue) {
+					case $this->EVACUADO->FldTagValue(1):
+						$this->EVACUADO->ViewValue = $this->EVACUADO->FldTagCaption(1) <> "" ? $this->EVACUADO->FldTagCaption(1) : $this->EVACUADO->CurrentValue;
+						break;
+					case $this->EVACUADO->FldTagValue(2):
+						$this->EVACUADO->ViewValue = $this->EVACUADO->FldTagCaption(2) <> "" ? $this->EVACUADO->FldTagCaption(2) : $this->EVACUADO->CurrentValue;
+						break;
+					default:
+						$this->EVACUADO->ViewValue = $this->EVACUADO->CurrentValue;
+				}
+			} else {
+				$this->EVACUADO->ViewValue = NULL;
+			}
 			$this->EVACUADO->ViewCustomAttributes = "";
 
 			// DESC_ACC
@@ -2329,8 +2603,25 @@ class cview1_acc_list extends cview1_acc {
 			$this->DESC_ACC->ViewCustomAttributes = "";
 
 			// Modificado
-			$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+			if (strval($this->Modificado->CurrentValue) <> "") {
+				switch ($this->Modificado->CurrentValue) {
+					case $this->Modificado->FldTagValue(1):
+						$this->Modificado->ViewValue = $this->Modificado->FldTagCaption(1) <> "" ? $this->Modificado->FldTagCaption(1) : $this->Modificado->CurrentValue;
+						break;
+					case $this->Modificado->FldTagValue(2):
+						$this->Modificado->ViewValue = $this->Modificado->FldTagCaption(2) <> "" ? $this->Modificado->FldTagCaption(2) : $this->Modificado->CurrentValue;
+						break;
+					default:
+						$this->Modificado->ViewValue = $this->Modificado->CurrentValue;
+				}
+			} else {
+				$this->Modificado->ViewValue = NULL;
+			}
 			$this->Modificado->ViewCustomAttributes = "";
+
+			// llave_2
+			$this->llave_2->ViewValue = $this->llave_2->CurrentValue;
+			$this->llave_2->ViewCustomAttributes = "";
 
 			// llave
 			$this->llave->LinkCustomAttributes = "";
@@ -2552,6 +2843,11 @@ class cview1_acc_list extends cview1_acc {
 			$this->Tipo_incidente->HrefValue = "";
 			$this->Tipo_incidente->TooltipValue = "";
 
+			// Riesgo
+			$this->Riesgo->LinkCustomAttributes = "";
+			$this->Riesgo->HrefValue = "";
+			$this->Riesgo->TooltipValue = "";
+
 			// Parte_Cuerpo
 			$this->Parte_Cuerpo->LinkCustomAttributes = "";
 			$this->Parte_Cuerpo->HrefValue = "";
@@ -2576,6 +2872,11 @@ class cview1_acc_list extends cview1_acc {
 			$this->Modificado->LinkCustomAttributes = "";
 			$this->Modificado->HrefValue = "";
 			$this->Modificado->TooltipValue = "";
+
+			// llave_2
+			$this->llave_2->LinkCustomAttributes = "";
+			$this->llave_2->HrefValue = "";
+			$this->llave_2->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_SEARCH) { // Search row
 
 			// llave
@@ -2587,14 +2888,36 @@ class cview1_acc_list extends cview1_acc {
 			// F_Sincron
 			$this->F_Sincron->EditAttrs["class"] = "form-control";
 			$this->F_Sincron->EditCustomAttributes = "";
-			$this->F_Sincron->EditValue = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->F_Sincron->AdvancedSearch->SearchValue, 7), 7));
+			$this->F_Sincron->EditValue = ew_HtmlEncode(ew_FormatDateTime(ew_UnFormatDateTime($this->F_Sincron->AdvancedSearch->SearchValue, 5), 5));
 			$this->F_Sincron->PlaceHolder = ew_RemoveHtml($this->F_Sincron->FldCaption());
 
 			// USUARIO
 			$this->USUARIO->EditAttrs["class"] = "form-control";
 			$this->USUARIO->EditCustomAttributes = "";
-			$this->USUARIO->EditValue = ew_HtmlEncode($this->USUARIO->AdvancedSearch->SearchValue);
-			$this->USUARIO->PlaceHolder = ew_RemoveHtml($this->USUARIO->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `USUARIO`, `USUARIO` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->USUARIO, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `USUARIO` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->USUARIO->EditValue = $arwrk;
 
 			// Cargo_gme
 			$this->Cargo_gme->EditAttrs["class"] = "form-control";
@@ -2605,8 +2928,30 @@ class cview1_acc_list extends cview1_acc {
 			// NOM_PE
 			$this->NOM_PE->EditAttrs["class"] = "form-control";
 			$this->NOM_PE->EditCustomAttributes = "";
-			$this->NOM_PE->EditValue = ew_HtmlEncode($this->NOM_PE->AdvancedSearch->SearchValue);
-			$this->NOM_PE->PlaceHolder = ew_RemoveHtml($this->NOM_PE->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PE`, `NOM_PE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->NOM_PE->EditValue = $arwrk;
 
 			// Otro_PE
 			$this->Otro_PE->EditAttrs["class"] = "form-control";
@@ -2617,8 +2962,6 @@ class cview1_acc_list extends cview1_acc {
 			// NOM_APOYO
 			$this->NOM_APOYO->EditAttrs["class"] = "form-control";
 			$this->NOM_APOYO->EditCustomAttributes = "";
-			$this->NOM_APOYO->EditValue = ew_HtmlEncode($this->NOM_APOYO->AdvancedSearch->SearchValue);
-			$this->NOM_APOYO->PlaceHolder = ew_RemoveHtml($this->NOM_APOYO->FldCaption());
 
 			// Otro_Nom_Apoyo
 			$this->Otro_Nom_Apoyo->EditAttrs["class"] = "form-control";
@@ -2635,8 +2978,30 @@ class cview1_acc_list extends cview1_acc {
 			// NOM_ENLACE
 			$this->NOM_ENLACE->EditAttrs["class"] = "form-control";
 			$this->NOM_ENLACE->EditCustomAttributes = "";
-			$this->NOM_ENLACE->EditValue = ew_HtmlEncode($this->NOM_ENLACE->AdvancedSearch->SearchValue);
-			$this->NOM_ENLACE->PlaceHolder = ew_RemoveHtml($this->NOM_ENLACE->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_ENLACE`, `NOM_ENLACE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_ENLACE`, `NOM_ENLACE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_ENLACE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_ENLACE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->NOM_ENLACE->EditValue = $arwrk;
 
 			// Otro_Nom_Enlace
 			$this->Otro_Nom_Enlace->EditAttrs["class"] = "form-control";
@@ -2653,8 +3018,30 @@ class cview1_acc_list extends cview1_acc {
 			// NOM_PGE
 			$this->NOM_PGE->EditAttrs["class"] = "form-control";
 			$this->NOM_PGE->EditCustomAttributes = "";
-			$this->NOM_PGE->EditValue = ew_HtmlEncode($this->NOM_PGE->AdvancedSearch->SearchValue);
-			$this->NOM_PGE->PlaceHolder = ew_RemoveHtml($this->NOM_PGE->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `NOM_PGE`, `NOM_PGE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `NOM_PGE`, `NOM_PGE` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `view1_acc`";
+					$sWhereWrk = "";
+					break;
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->NOM_PGE, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `NOM_PGE` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->NOM_PGE->EditValue = $arwrk;
 
 			// Otro_Nom_PGE
 			$this->Otro_Nom_PGE->EditAttrs["class"] = "form-control";
@@ -2839,8 +3226,66 @@ class cview1_acc_list extends cview1_acc {
 			// Tipo_incidente
 			$this->Tipo_incidente->EditAttrs["class"] = "form-control";
 			$this->Tipo_incidente->EditCustomAttributes = "";
-			$this->Tipo_incidente->EditValue = ew_HtmlEncode($this->Tipo_incidente->AdvancedSearch->SearchValue);
-			$this->Tipo_incidente->PlaceHolder = ew_RemoveHtml($this->Tipo_incidente->FldCaption());
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='Incidente'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Tipo_incidente, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Tipo_incidente->EditValue = $arwrk;
+
+			// Riesgo
+			$this->Riesgo->EditAttrs["class"] = "form-control";
+			$this->Riesgo->EditCustomAttributes = "";
+			$sFilterWrk = "";
+			switch (@$gsLanguage) {
+				case "en":
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+				default:
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sWhereWrk = "";
+					break;
+			}
+			$lookuptblfilter = "`list name`='Riesgo'";
+			if (strval($lookuptblfilter) <> "") {
+				ew_AddFilter($sWhereWrk, $lookuptblfilter);
+			}
+			if ($sFilterWrk <> "") {
+				ew_AddFilter($sWhereWrk, $sFilterWrk);
+			}
+
+			// Call Lookup selecting
+			$this->Lookup_Selecting($this->Riesgo, $sWhereWrk);
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$sSqlWrk .= " ORDER BY `label` ASC";
+			$rswrk = $conn->Execute($sSqlWrk);
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
+			$this->Riesgo->EditValue = $arwrk;
 
 			// Parte_Cuerpo
 			$this->Parte_Cuerpo->EditAttrs["class"] = "form-control";
@@ -2857,8 +3302,11 @@ class cview1_acc_list extends cview1_acc {
 			// EVACUADO
 			$this->EVACUADO->EditAttrs["class"] = "form-control";
 			$this->EVACUADO->EditCustomAttributes = "";
-			$this->EVACUADO->EditValue = ew_HtmlEncode($this->EVACUADO->AdvancedSearch->SearchValue);
-			$this->EVACUADO->PlaceHolder = ew_RemoveHtml($this->EVACUADO->FldCaption());
+			$arwrk = array();
+			$arwrk[] = array($this->EVACUADO->FldTagValue(1), $this->EVACUADO->FldTagCaption(1) <> "" ? $this->EVACUADO->FldTagCaption(1) : $this->EVACUADO->FldTagValue(1));
+			$arwrk[] = array($this->EVACUADO->FldTagValue(2), $this->EVACUADO->FldTagCaption(2) <> "" ? $this->EVACUADO->FldTagCaption(2) : $this->EVACUADO->FldTagValue(2));
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+			$this->EVACUADO->EditValue = $arwrk;
 
 			// DESC_ACC
 			$this->DESC_ACC->EditAttrs["class"] = "form-control";
@@ -2869,8 +3317,17 @@ class cview1_acc_list extends cview1_acc {
 			// Modificado
 			$this->Modificado->EditAttrs["class"] = "form-control";
 			$this->Modificado->EditCustomAttributes = "";
-			$this->Modificado->EditValue = ew_HtmlEncode($this->Modificado->AdvancedSearch->SearchValue);
-			$this->Modificado->PlaceHolder = ew_RemoveHtml($this->Modificado->FldCaption());
+			$arwrk = array();
+			$arwrk[] = array($this->Modificado->FldTagValue(1), $this->Modificado->FldTagCaption(1) <> "" ? $this->Modificado->FldTagCaption(1) : $this->Modificado->FldTagValue(1));
+			$arwrk[] = array($this->Modificado->FldTagValue(2), $this->Modificado->FldTagCaption(2) <> "" ? $this->Modificado->FldTagCaption(2) : $this->Modificado->FldTagValue(2));
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+			$this->Modificado->EditValue = $arwrk;
+
+			// llave_2
+			$this->llave_2->EditAttrs["class"] = "form-control";
+			$this->llave_2->EditCustomAttributes = "";
+			$this->llave_2->EditValue = ew_HtmlEncode($this->llave_2->AdvancedSearch->SearchValue);
+			$this->llave_2->PlaceHolder = ew_RemoveHtml($this->llave_2->FldCaption());
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -2952,11 +3409,13 @@ class cview1_acc_list extends cview1_acc {
 		$this->CC_Afectado->AdvancedSearch->Load();
 		$this->Cargo_Afectado->AdvancedSearch->Load();
 		$this->Tipo_incidente->AdvancedSearch->Load();
+		$this->Riesgo->AdvancedSearch->Load();
 		$this->Parte_Cuerpo->AdvancedSearch->Load();
 		$this->ESTADO_AFEC->AdvancedSearch->Load();
 		$this->EVACUADO->AdvancedSearch->Load();
 		$this->DESC_ACC->AdvancedSearch->Load();
 		$this->Modificado->AdvancedSearch->Load();
+		$this->llave_2->AdvancedSearch->Load();
 	}
 
 	// Set up export options
@@ -3278,8 +3737,15 @@ fview1_acclist.ValidateRequired = false;
 <?php } ?>
 
 // Dynamic selection lists
-// Form object for search
+fview1_acclist.Lists["x_USUARIO"] = {"LinkField":"x_USUARIO","Ajax":null,"AutoFill":false,"DisplayFields":["x_USUARIO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_acclist.Lists["x_NOM_PE"] = {"LinkField":"x_NOM_PE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_acclist.Lists["x_NOM_APOYO"] = {"LinkField":"x_NOM_APOYO","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_APOYO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_acclist.Lists["x_NOM_ENLACE"] = {"LinkField":"x_NOM_ENLACE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_ENLACE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_acclist.Lists["x_NOM_PGE"] = {"LinkField":"x_NOM_PGE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PGE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_acclist.Lists["x_Tipo_incidente"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_acclist.Lists["x_Riesgo"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
+// Form object for search
 var fview1_acclistsrch = new ew_Form("fview1_acclistsrch");
 
 // Validate function for search
@@ -3315,31 +3781,92 @@ fview1_acclistsrch.ValidateRequired = false; // No JavaScript validation
 <?php } ?>
 
 // Dynamic selection lists
+fview1_acclistsrch.Lists["x_USUARIO"] = {"LinkField":"x_USUARIO","Ajax":null,"AutoFill":false,"DisplayFields":["x_USUARIO","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_acclistsrch.Lists["x_NOM_PE"] = {"LinkField":"x_NOM_PE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_acclistsrch.Lists["x_NOM_ENLACE"] = {"LinkField":"x_NOM_ENLACE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_ENLACE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_acclistsrch.Lists["x_NOM_PGE"] = {"LinkField":"x_NOM_PGE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PGE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_acclistsrch.Lists["x_Tipo_incidente"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
+fview1_acclistsrch.Lists["x_Riesgo"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 </script>
 <script type="text/javascript">
 
 // Write your client script here, no need to add script tags.
 </script>
 <?php } ?>
-<div>Módulo en construcción...</div>
-<script>
-/*
 <?php if ($view1_acc->Export == "") { ?>
 <div class="ewToolbar">
 <?php if ($view1_acc->Export == "") { ?>
 <?php $Breadcrumb->Render(); ?>
 <?php } ?>
-<?php if ($view1_acc_list->TotalRecs > 0 && $view1_acc_list->ExportOptions->Visible()) { ?>
-<?php $view1_acc_list->ExportOptions->Render("body") ?>
-<?php } ?>
-<?php if ($view1_acc_list->SearchOptions->Visible()) { ?>
-<?php $view1_acc_list->SearchOptions->Render("body") ?>
-<?php } ?>
 <?php if ($view1_acc->Export == "") { ?>
 <?php echo $Language->SelectionForm(); ?>
 <?php } ?>
+
 <div class="clearfix"></div>
 </div>
+<?php } ?>
+<script type="text/javascript">
+		
+		
+		$(document).ready(function(){
+
+			$.ajax({
+					type: "GET",
+					url: "mail_accidentes.php",
+					cache: false,
+					dataType: "json",
+					success: function(html)
+					{
+						
+
+					}			
+				});
+		});
+
+	</script>
+<div class="ewToolbar">
+<H2> Reporte de accidentes (Módulo en prueba)</h2>
+<p>La siguiente tabla contiene los reportes de accidentes realizados de prueba en la erradicación 2015 a la fecha</p>
+
+<hr>
+<table>
+	<tr>
+		<td>
+			<?php if ($view1_acc_list->TotalRecs > 0 && $view1_acc_list->ExportOptions->Visible()) { ?>
+
+			<?php $view1_acc_list->ExportOptions->Render("body") ?>
+			<?php } ?>
+
+		</td>
+		<td>
+			Si desea exportar la tabla en formato excel haga click en el siguiente icono 
+		</td>	
+	</tr>	
+</table> 
+
+<hr>
+
+</div>
+<?php if ($view1_acc->Export == "") { ?>
+
+<div>
+<br>
+<table>
+	<tr>
+		<td>
+			<?php if ($view1_acc_list->SearchOptions->Visible()) { ?>
+			<?php $view1_acc_list->SearchOptions->Render("body") ?>
+			<?php } ?>
+		</td>
+		<td>
+			Si desea realizar filtros en la tabla haga click en el siguiente icono e ingrese el dato en la columna correspondiente
+		</td>	
+	</tr>
+</table>
+<br>
+</div>
+
+<hr>
 <?php } ?>
 <?php
 	$bSelectLimit = EW_SELECT_LIMIT;
@@ -3388,66 +3915,246 @@ $view1_acc->RowType = EW_ROWTYPE_SEARCH;
 $view1_acc->ResetAttrs();
 $view1_acc_list->RenderRow();
 ?>
-<div id="xsr_1" class="ewRow">
-<?php if ($view1_acc->NOM_PE->Visible) { // NOM_PE ?>
-	<div id="xsc_NOM_PE" class="ewCell form-group">
-		<label for="x_NOM_PE" class="ewSearchCaption ewLabel"><?php echo $view1_acc->NOM_PE->FldCaption() ?></label>
+<br>
+<table>
+	<tr>
+		<td>
+			<label for="x_USUARIO" class="ewSearchCaption ewLabel"><?php echo $view1_acc->USUARIO->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_USUARIO" id="z_USUARIO" value="LIKE"></span>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 355px;" data-field="x_USUARIO" id="x_USUARIO" name="x_USUARIO"<?php echo $view1_acc->USUARIO->EditAttributes() ?>>
+				<?php
+				if (is_array($view1_acc->USUARIO->EditValue)) {
+					$arwrk = $view1_acc->USUARIO->EditValue;
+					$rowswrk = count($arwrk);
+					$emptywrk = TRUE;
+					for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+						$selwrk = (strval($view1_acc->USUARIO->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+						if ($selwrk <> "") $emptywrk = FALSE;
+				?>
+				<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+				<?php echo $arwrk[$rowcntwrk][1] ?>
+				</option>
+				<?php
+					}
+				}
+				?>
+				</select>
+				<script type="text/javascript">
+				fview1_acclistsrch.Lists["x_USUARIO"].Options = <?php echo (is_array($view1_acc->USUARIO->EditValue)) ? ew_ArrayToJson($view1_acc->USUARIO->EditValue, 1) : "[]" ?>;
+				</script>
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="x_NOM_PE" class="ewSearchCaption ewLabel"><?php echo $view1_acc->NOM_PE->FldCaption() ?></label>
 		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_PE" id="z_NOM_PE" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_NOM_PE" name="x_NOM_PE" id="x_NOM_PE" size="35" placeholder="<?php echo ew_HtmlEncode($view1_acc->NOM_PE->PlaceHolder) ?>" value="<?php echo $view1_acc->NOM_PE->EditValue ?>"<?php echo $view1_acc->NOM_PE->EditAttributes() ?>>
-</span>
-	</div>
-<?php } ?>
-</div>
-<div id="xsr_2" class="ewRow">
-<?php if ($view1_acc->NOM_PGE->Visible) { // NOM_PGE ?>
-	<div id="xsc_NOM_PGE" class="ewCell form-group">
-		<label for="x_NOM_PGE" class="ewSearchCaption ewLabel"><?php echo $view1_acc->NOM_PGE->FldCaption() ?></label>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 355px;" data-field="x_NOM_PE" id="x_NOM_PE" name="x_NOM_PE"<?php echo $view1_acc->NOM_PE->EditAttributes() ?>>
+			<?php
+			if (is_array($view1_acc->NOM_PE->EditValue)) {
+				$arwrk = $view1_acc->NOM_PE->EditValue;
+				$rowswrk = count($arwrk);
+				$emptywrk = TRUE;
+				for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+					$selwrk = (strval($view1_acc->NOM_PE->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+					if ($selwrk <> "") $emptywrk = FALSE;
+			?>
+			<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+			<?php echo $arwrk[$rowcntwrk][1] ?>
+			</option>
+			<?php
+				}
+			}
+			?>
+			</select>
+			<script type="text/javascript">
+			fview1_acclistsrch.Lists["x_NOM_PE"].Options = <?php echo (is_array($view1_acc->NOM_PE->EditValue)) ? ew_ArrayToJson($view1_acc->NOM_PE->EditValue, 1) : "[]" ?>;
+			</script>
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="x_NOM_ENLACE" class="ewSearchCaption ewLabel"><?php echo $view1_acc->NOM_ENLACE->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_ENLACE" id="z_NOM_ENLACE" value="LIKE"></span>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 355px;" data-field="x_NOM_ENLACE" id="x_NOM_ENLACE" name="x_NOM_ENLACE"<?php echo $view1_acc->NOM_ENLACE->EditAttributes() ?>>
+			<?php
+			if (is_array($view1_acc->NOM_ENLACE->EditValue)) {
+				$arwrk = $view1_acc->NOM_ENLACE->EditValue;
+				$rowswrk = count($arwrk);
+				$emptywrk = TRUE;
+				for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+					$selwrk = (strval($view1_acc->NOM_ENLACE->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+					if ($selwrk <> "") $emptywrk = FALSE;
+			?>
+			<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+			<?php echo $arwrk[$rowcntwrk][1] ?>
+			</option>
+			<?php
+				}
+			}
+			?>
+			</select>
+			<script type="text/javascript">
+			fview1_acclistsrch.Lists["x_NOM_ENLACE"].Options = <?php echo (is_array($view1_acc->NOM_ENLACE->EditValue)) ? ew_ArrayToJson($view1_acc->NOM_ENLACE->EditValue, 1) : "[]" ?>;
+			</script>
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="x_NOM_PGE" class="ewSearchCaption ewLabel"><?php echo $view1_acc->NOM_PGE->FldCaption() ?></label>
 		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_NOM_PGE" id="z_NOM_PGE" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_NOM_PGE" name="x_NOM_PGE" id="x_NOM_PGE" size="35" placeholder="<?php echo ew_HtmlEncode($view1_acc->NOM_PGE->PlaceHolder) ?>" value="<?php echo $view1_acc->NOM_PGE->EditValue ?>"<?php echo $view1_acc->NOM_PGE->EditAttributes() ?>>
-</span>
-	</div>
-<?php } ?>
-</div>
-<div id="xsr_3" class="ewRow">
-<?php if ($view1_acc->Tipo_incidente->Visible) { // Tipo_incidente ?>
-	<div id="xsc_Tipo_incidente" class="ewCell form-group">
-		<label for="x_Tipo_incidente" class="ewSearchCaption ewLabel"><?php echo $view1_acc->Tipo_incidente->FldCaption() ?></label>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 355px;" data-field="x_NOM_PGE" id="x_NOM_PGE" name="x_NOM_PGE"<?php echo $view1_acc->NOM_PGE->EditAttributes() ?>>
+			<?php
+			if (is_array($view1_acc->NOM_PGE->EditValue)) {
+				$arwrk = $view1_acc->NOM_PGE->EditValue;
+				$rowswrk = count($arwrk);
+				$emptywrk = TRUE;
+				for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+					$selwrk = (strval($view1_acc->NOM_PGE->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+					if ($selwrk <> "") $emptywrk = FALSE;
+			?>
+			<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+			<?php echo $arwrk[$rowcntwrk][1] ?>
+			</option>
+			<?php
+				}
+			}
+			?>
+			</select>
+			<script type="text/javascript">
+			fview1_acclistsrch.Lists["x_NOM_PGE"].Options = <?php echo (is_array($view1_acc->NOM_PGE->EditValue)) ? ew_ArrayToJson($view1_acc->NOM_PGE->EditValue, 1) : "[]" ?>;
+			</script>
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="x_CC_Afectado" class="ewSearchCaption ewLabel"><?php echo $view1_acc->CC_Afectado->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_CC_Afectado" id="z_CC_Afectado" value="LIKE"></span>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<input style="min-width: 355px;" type="text" data-field="x_CC_Afectado" name="x_CC_Afectado" id="x_CC_Afectado" size="30" maxlength="255" placeholder="Ingrese la cédula del afectado" value="<?php echo $view1_acc->CC_Afectado->EditValue ?>"<?php echo $view1_acc->CC_Afectado->EditAttributes() ?>>
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="x_Tipo_incidente" class="ewSearchCaption ewLabel"><?php echo $view1_acc->Tipo_incidente->FldCaption() ?></label>
 		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Tipo_incidente" id="z_Tipo_incidente" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_Tipo_incidente" name="x_Tipo_incidente" id="x_Tipo_incidente" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view1_acc->Tipo_incidente->PlaceHolder) ?>" value="<?php echo $view1_acc->Tipo_incidente->EditValue ?>"<?php echo $view1_acc->Tipo_incidente->EditAttributes() ?>>
-</span>
-	</div>
-<?php } ?>
-</div>
-<div id="xsr_4" class="ewRow">
-<?php if ($view1_acc->EVACUADO->Visible) { // EVACUADO ?>
-	<div id="xsc_EVACUADO" class="ewCell form-group">
-		<label for="x_EVACUADO" class="ewSearchCaption ewLabel"><?php echo $view1_acc->EVACUADO->FldCaption() ?></label>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 355px;" data-field="x_Tipo_incidente" id="x_Tipo_incidente" name="x_Tipo_incidente"<?php echo $view1_acc->Tipo_incidente->EditAttributes() ?>>
+			<?php
+			if (is_array($view1_acc->Tipo_incidente->EditValue)) {
+				$arwrk = $view1_acc->Tipo_incidente->EditValue;
+				$rowswrk = count($arwrk);
+				$emptywrk = TRUE;
+				for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+					$selwrk = (strval($view1_acc->Tipo_incidente->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+					if ($selwrk <> "") $emptywrk = FALSE;
+			?>
+			<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+			<?php echo $arwrk[$rowcntwrk][1] ?>
+			</option>
+			<?php
+				}
+			}
+			?>
+			</select>
+			<script type="text/javascript">
+			fview1_acclistsrch.Lists["x_Tipo_incidente"].Options = <?php echo (is_array($view1_acc->Tipo_incidente->EditValue)) ? ew_ArrayToJson($view1_acc->Tipo_incidente->EditValue, 1) : "[]" ?>;
+			</script>
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="x_Riesgo" class="ewSearchCaption ewLabel"><?php echo $view1_acc->Riesgo->FldCaption() ?></label>
+		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_Riesgo" id="z_Riesgo" value="LIKE"></span>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 355px;" data-field="x_Riesgo" id="x_Riesgo" name="x_Riesgo"<?php echo $view1_acc->Riesgo->EditAttributes() ?>>
+			<?php
+			if (is_array($view1_acc->Riesgo->EditValue)) {
+				$arwrk = $view1_acc->Riesgo->EditValue;
+				$rowswrk = count($arwrk);
+				$emptywrk = TRUE;
+				for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+					$selwrk = (strval($view1_acc->Riesgo->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+					if ($selwrk <> "") $emptywrk = FALSE;
+			?>
+			<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+			<?php echo $arwrk[$rowcntwrk][1] ?>
+			</option>
+			<?php
+				}
+			}
+			?>
+			</select>
+			<script type="text/javascript">
+			fview1_acclistsrch.Lists["x_Riesgo"].Options = <?php echo (is_array($view1_acc->Riesgo->EditValue)) ? ew_ArrayToJson($view1_acc->Riesgo->EditValue, 1) : "[]" ?>;
+			</script>
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<label for="x_EVACUADO" class="ewSearchCaption ewLabel"><?php echo $view1_acc->EVACUADO->FldCaption() ?></label>
 		<span class="ewSearchOperator"><?php echo $Language->Phrase("LIKE") ?><input type="hidden" name="z_EVACUADO" id="z_EVACUADO" value="LIKE"></span>
-		<span class="ewSearchField">
-<input type="text" data-field="x_EVACUADO" name="x_EVACUADO" id="x_EVACUADO" size="35" placeholder="<?php echo ew_HtmlEncode($view1_acc->EVACUADO->PlaceHolder) ?>" value="<?php echo $view1_acc->EVACUADO->EditValue ?>"<?php echo $view1_acc->EVACUADO->EditAttributes() ?>>
-</span>
-	</div>
-<?php } ?>
-</div>
-<div id="xsr_5" class="ewRow">
-	<div class="ewQuickSearch input-group">
-	<input type="text" name="<?php echo EW_TABLE_BASIC_SEARCH ?>" id="<?php echo EW_TABLE_BASIC_SEARCH ?>" class="form-control" value="<?php echo ew_HtmlEncode($view1_acc_list->BasicSearch->getKeyword()) ?>" placeholder="<?php echo ew_HtmlEncode($Language->Phrase("Search")) ?>">
-	<input type="hidden" name="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" id="<?php echo EW_TABLE_BASIC_SEARCH_TYPE ?>" value="<?php echo ew_HtmlEncode($view1_acc_list->BasicSearch->getType()) ?>">
-	<div class="input-group-btn">
-		<button type="button" data-toggle="dropdown" class="btn btn-default"><span id="searchtype"><?php echo $view1_acc_list->BasicSearch->getTypeNameShort() ?></span><span class="caret"></span></button>
-		<ul class="dropdown-menu pull-right" role="menu">
-			<li<?php if ($view1_acc_list->BasicSearch->getType() == "") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this)"><?php echo $Language->Phrase("QuickSearchAuto") ?></a></li>
-			<li<?php if ($view1_acc_list->BasicSearch->getType() == "=") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'=')"><?php echo $Language->Phrase("QuickSearchExact") ?></a></li>
-			<li<?php if ($view1_acc_list->BasicSearch->getType() == "AND") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'AND')"><?php echo $Language->Phrase("QuickSearchAll") ?></a></li>
-			<li<?php if ($view1_acc_list->BasicSearch->getType() == "OR") echo " class=\"active\""; ?>><a href="javascript:void(0);" onclick="ew_SetSearchType(this,'OR')"><?php echo $Language->Phrase("QuickSearchAny") ?></a></li>
-		</ul>
+		</td>
+		<td width="5%"></td>
+		<td>
+			<span class="ewSearchField">
+			<select style="min-width: 355px;" data-field="x_EVACUADO" id="x_EVACUADO" name="x_EVACUADO"<?php echo $view1_acc->EVACUADO->EditAttributes() ?>>
+			<?php
+			if (is_array($view1_acc->EVACUADO->EditValue)) {
+				$arwrk = $view1_acc->EVACUADO->EditValue;
+				$rowswrk = count($arwrk);
+				$emptywrk = TRUE;
+				for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+					$selwrk = (strval($view1_acc->EVACUADO->AdvancedSearch->SearchValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+					if ($selwrk <> "") $emptywrk = FALSE;
+			?>
+			<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+			<?php echo $arwrk[$rowcntwrk][1] ?>
+			</option>
+			<?php
+				}
+			}
+			?>
+			</select>
+			</span>
+		</td>
+	</tr>
+	
+</table>
+
 	<button class="btn btn-primary ewButton" name="btnsubmit" id="btnsubmit" type="submit"><?php echo $Language->Phrase("QuickSearchBtn") ?></button>
-	</div>
-	</div>
-</div>
+
 	</div>
 </div>
 </form>
@@ -3460,7 +4167,6 @@ $view1_acc_list->ShowMessage();
 <?php if ($view1_acc_list->TotalRecs > 0 || $view1_acc->CurrentAction <> "") { ?>
 <div class="ewGrid">
 <?php if ($view1_acc->Export == "") { ?>
-
 <div class="ewGridUpperPanel">
 <?php if ($view1_acc->CurrentAction <> "gridadd" && $view1_acc->CurrentAction <> "gridedit") { ?>
 <form name="ewPagerForm" class="form-inline ewForm ewPagerForm" action="<?php echo ew_CurrentPage() ?>">
@@ -3523,7 +4229,6 @@ $view1_acc_list->ShowMessage();
 <input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $view1_acc_list->Token ?>">
 <?php } ?>
 <input type="hidden" name="t" value="view1_acc">
-
 <div id="gmp_view1_acc" class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
 <?php if ($view1_acc_list->TotalRecs > 0) { ?>
 <table id="tbl_view1_acclist" class="table ewTable">
@@ -3558,13 +4263,31 @@ $view1_acc_list->ListOptions->Render("header", "left");
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->F_Sincron->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->F_Sincron->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->F_Sincron->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
+<?php } ?>	
+<?php if ($view1_acc->FECHA_ACC->Visible) { // FECHA_ACC ?>
+	<?php if ($view1_acc->SortUrl($view1_acc->FECHA_ACC) == "") { ?>
+		<th data-name="FECHA_ACC"><div id="elh_view1_acc_FECHA_ACC" class="view1_acc_FECHA_ACC"><div class="ewTableHeaderCaption"><?php echo $view1_acc->FECHA_ACC->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="FECHA_ACC"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->FECHA_ACC) ?>',2);"><div id="elh_view1_acc_FECHA_ACC" class="view1_acc_FECHA_ACC">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->FECHA_ACC->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->FECHA_ACC->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->FECHA_ACC->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
 <?php } ?>		
+<?php if ($view1_acc->HORA_ACC->Visible) { // HORA_ACC ?>
+	<?php if ($view1_acc->SortUrl($view1_acc->HORA_ACC) == "") { ?>
+		<th data-name="HORA_ACC"><div id="elh_view1_acc_HORA_ACC" class="view1_acc_HORA_ACC"><div class="ewTableHeaderCaption"><?php echo $view1_acc->HORA_ACC->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="HORA_ACC"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->HORA_ACC) ?>',2);"><div id="elh_view1_acc_HORA_ACC" class="view1_acc_HORA_ACC">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->HORA_ACC->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->HORA_ACC->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->HORA_ACC->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>	
 <?php if ($view1_acc->USUARIO->Visible) { // USUARIO ?>
 	<?php if ($view1_acc->SortUrl($view1_acc->USUARIO) == "") { ?>
 		<th data-name="USUARIO"><div id="elh_view1_acc_USUARIO" class="view1_acc_USUARIO"><div class="ewTableHeaderCaption"><?php echo $view1_acc->USUARIO->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="USUARIO"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->USUARIO) ?>',2);"><div id="elh_view1_acc_USUARIO" class="view1_acc_USUARIO">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->USUARIO->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->USUARIO->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->USUARIO->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->USUARIO->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->USUARIO->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->USUARIO->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3582,7 +4305,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="NOM_PE"><div id="elh_view1_acc_NOM_PE" class="view1_acc_NOM_PE"><div class="ewTableHeaderCaption"><?php echo $view1_acc->NOM_PE->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="NOM_PE"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->NOM_PE) ?>',2);"><div id="elh_view1_acc_NOM_PE" class="view1_acc_NOM_PE">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->NOM_PE->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->NOM_PE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->NOM_PE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->NOM_PE->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->NOM_PE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->NOM_PE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3600,7 +4323,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="NOM_APOYO"><div id="elh_view1_acc_NOM_APOYO" class="view1_acc_NOM_APOYO"><div class="ewTableHeaderCaption"><?php echo $view1_acc->NOM_APOYO->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="NOM_APOYO"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->NOM_APOYO) ?>',2);"><div id="elh_view1_acc_NOM_APOYO" class="view1_acc_NOM_APOYO">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->NOM_APOYO->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->NOM_APOYO->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->NOM_APOYO->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->NOM_APOYO->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->NOM_APOYO->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->NOM_APOYO->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3627,7 +4350,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="NOM_ENLACE"><div id="elh_view1_acc_NOM_ENLACE" class="view1_acc_NOM_ENLACE"><div class="ewTableHeaderCaption"><?php echo $view1_acc->NOM_ENLACE->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="NOM_ENLACE"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->NOM_ENLACE) ?>',2);"><div id="elh_view1_acc_NOM_ENLACE" class="view1_acc_NOM_ENLACE">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->NOM_ENLACE->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->NOM_ENLACE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->NOM_ENLACE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->NOM_ENLACE->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->NOM_ENLACE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->NOM_ENLACE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3654,7 +4377,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="NOM_PGE"><div id="elh_view1_acc_NOM_PGE" class="view1_acc_NOM_PGE"><div class="ewTableHeaderCaption"><?php echo $view1_acc->NOM_PGE->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="NOM_PGE"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->NOM_PGE) ?>',2);"><div id="elh_view1_acc_NOM_PGE" class="view1_acc_NOM_PGE">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->NOM_PGE->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->NOM_PGE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->NOM_PGE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->NOM_PGE->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->NOM_PGE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->NOM_PGE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3766,24 +4489,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
-<?php if ($view1_acc->FECHA_ACC->Visible) { // FECHA_ACC ?>
-	<?php if ($view1_acc->SortUrl($view1_acc->FECHA_ACC) == "") { ?>
-		<th data-name="FECHA_ACC"><div id="elh_view1_acc_FECHA_ACC" class="view1_acc_FECHA_ACC"><div class="ewTableHeaderCaption"><?php echo $view1_acc->FECHA_ACC->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="FECHA_ACC"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->FECHA_ACC) ?>',2);"><div id="elh_view1_acc_FECHA_ACC" class="view1_acc_FECHA_ACC">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->FECHA_ACC->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->FECHA_ACC->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->FECHA_ACC->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
-<?php if ($view1_acc->HORA_ACC->Visible) { // HORA_ACC ?>
-	<?php if ($view1_acc->SortUrl($view1_acc->HORA_ACC) == "") { ?>
-		<th data-name="HORA_ACC"><div id="elh_view1_acc_HORA_ACC" class="view1_acc_HORA_ACC"><div class="ewTableHeaderCaption"><?php echo $view1_acc->HORA_ACC->FldCaption() ?></div></div></th>
-	<?php } else { ?>
-		<th data-name="HORA_ACC"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->HORA_ACC) ?>',2);"><div id="elh_view1_acc_HORA_ACC" class="view1_acc_HORA_ACC">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->HORA_ACC->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->HORA_ACC->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->HORA_ACC->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
-        </div></div></th>
-	<?php } ?>
-<?php } ?>		
+		
 <?php if ($view1_acc->Hora_ingreso->Visible) { // Hora_ingreso ?>
 	<?php if ($view1_acc->SortUrl($view1_acc->Hora_ingreso) == "") { ?>
 		<th data-name="Hora_ingreso"><div id="elh_view1_acc_Hora_ingreso" class="view1_acc_Hora_ingreso"><div class="ewTableHeaderCaption"><?php echo $view1_acc->Hora_ingreso->FldCaption() ?></div></div></th>
@@ -3825,7 +4531,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="NOM_COMANDANTE"><div id="elh_view1_acc_NOM_COMANDANTE" class="view1_acc_NOM_COMANDANTE"><div class="ewTableHeaderCaption"><?php echo $view1_acc->NOM_COMANDANTE->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="NOM_COMANDANTE"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->NOM_COMANDANTE) ?>',2);"><div id="elh_view1_acc_NOM_COMANDANTE" class="view1_acc_NOM_COMANDANTE">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->NOM_COMANDANTE->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->NOM_COMANDANTE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->NOM_COMANDANTE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->NOM_COMANDANTE->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->NOM_COMANDANTE->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->NOM_COMANDANTE->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3834,7 +4540,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="TESTI1"><div id="elh_view1_acc_TESTI1" class="view1_acc_TESTI1"><div class="ewTableHeaderCaption"><?php echo $view1_acc->TESTI1->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="TESTI1"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->TESTI1) ?>',2);"><div id="elh_view1_acc_TESTI1" class="view1_acc_TESTI1">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->TESTI1->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->TESTI1->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->TESTI1->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->TESTI1->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->TESTI1->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->TESTI1->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3843,7 +4549,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="CC_TESTI1"><div id="elh_view1_acc_CC_TESTI1" class="view1_acc_CC_TESTI1"><div class="ewTableHeaderCaption"><?php echo $view1_acc->CC_TESTI1->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="CC_TESTI1"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->CC_TESTI1) ?>',2);"><div id="elh_view1_acc_CC_TESTI1" class="view1_acc_CC_TESTI1">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->CC_TESTI1->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->CC_TESTI1->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->CC_TESTI1->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->CC_TESTI1->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->CC_TESTI1->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->CC_TESTI1->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3852,7 +4558,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="CARGO_TESTI1"><div id="elh_view1_acc_CARGO_TESTI1" class="view1_acc_CARGO_TESTI1"><div class="ewTableHeaderCaption"><?php echo $view1_acc->CARGO_TESTI1->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="CARGO_TESTI1"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->CARGO_TESTI1) ?>',2);"><div id="elh_view1_acc_CARGO_TESTI1" class="view1_acc_CARGO_TESTI1">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->CARGO_TESTI1->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->CARGO_TESTI1->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->CARGO_TESTI1->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->CARGO_TESTI1->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->CARGO_TESTI1->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->CARGO_TESTI1->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3861,7 +4567,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="TESTI2"><div id="elh_view1_acc_TESTI2" class="view1_acc_TESTI2"><div class="ewTableHeaderCaption"><?php echo $view1_acc->TESTI2->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="TESTI2"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->TESTI2) ?>',2);"><div id="elh_view1_acc_TESTI2" class="view1_acc_TESTI2">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->TESTI2->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->TESTI2->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->TESTI2->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->TESTI2->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->TESTI2->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->TESTI2->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3870,7 +4576,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="CC_TESTI2"><div id="elh_view1_acc_CC_TESTI2" class="view1_acc_CC_TESTI2"><div class="ewTableHeaderCaption"><?php echo $view1_acc->CC_TESTI2->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="CC_TESTI2"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->CC_TESTI2) ?>',2);"><div id="elh_view1_acc_CC_TESTI2" class="view1_acc_CC_TESTI2">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->CC_TESTI2->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->CC_TESTI2->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->CC_TESTI2->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->CC_TESTI2->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->CC_TESTI2->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->CC_TESTI2->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3879,7 +4585,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="CARGO_TESTI2"><div id="elh_view1_acc_CARGO_TESTI2" class="view1_acc_CARGO_TESTI2"><div class="ewTableHeaderCaption"><?php echo $view1_acc->CARGO_TESTI2->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="CARGO_TESTI2"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->CARGO_TESTI2) ?>',2);"><div id="elh_view1_acc_CARGO_TESTI2" class="view1_acc_CARGO_TESTI2">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->CARGO_TESTI2->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->CARGO_TESTI2->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->CARGO_TESTI2->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->CARGO_TESTI2->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->CARGO_TESTI2->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->CARGO_TESTI2->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3906,7 +4612,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="Nom_Afectado"><div id="elh_view1_acc_Nom_Afectado" class="view1_acc_Nom_Afectado"><div class="ewTableHeaderCaption"><?php echo $view1_acc->Nom_Afectado->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="Nom_Afectado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->Nom_Afectado) ?>',2);"><div id="elh_view1_acc_Nom_Afectado" class="view1_acc_Nom_Afectado">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->Nom_Afectado->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->Nom_Afectado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->Nom_Afectado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->Nom_Afectado->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->Nom_Afectado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->Nom_Afectado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3915,7 +4621,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="CC_Afectado"><div id="elh_view1_acc_CC_Afectado" class="view1_acc_CC_Afectado"><div class="ewTableHeaderCaption"><?php echo $view1_acc->CC_Afectado->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="CC_Afectado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->CC_Afectado) ?>',2);"><div id="elh_view1_acc_CC_Afectado" class="view1_acc_CC_Afectado">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->CC_Afectado->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->CC_Afectado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->CC_Afectado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->CC_Afectado->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->CC_Afectado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->CC_Afectado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3924,7 +4630,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="Cargo_Afectado"><div id="elh_view1_acc_Cargo_Afectado" class="view1_acc_Cargo_Afectado"><div class="ewTableHeaderCaption"><?php echo $view1_acc->Cargo_Afectado->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="Cargo_Afectado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->Cargo_Afectado) ?>',2);"><div id="elh_view1_acc_Cargo_Afectado" class="view1_acc_Cargo_Afectado">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->Cargo_Afectado->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->Cargo_Afectado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->Cargo_Afectado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->Cargo_Afectado->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->Cargo_Afectado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->Cargo_Afectado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3937,12 +4643,21 @@ $view1_acc_list->ListOptions->Render("header", "left");
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
+<?php if ($view1_acc->Riesgo->Visible) { // Riesgo ?>
+	<?php if ($view1_acc->SortUrl($view1_acc->Riesgo) == "") { ?>
+		<th data-name="Riesgo"><div id="elh_view1_acc_Riesgo" class="view1_acc_Riesgo"><div class="ewTableHeaderCaption"><?php echo $view1_acc->Riesgo->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="Riesgo"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->Riesgo) ?>',2);"><div id="elh_view1_acc_Riesgo" class="view1_acc_Riesgo">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->Riesgo->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->Riesgo->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->Riesgo->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
 <?php if ($view1_acc->Parte_Cuerpo->Visible) { // Parte_Cuerpo ?>
 	<?php if ($view1_acc->SortUrl($view1_acc->Parte_Cuerpo) == "") { ?>
 		<th data-name="Parte_Cuerpo"><div id="elh_view1_acc_Parte_Cuerpo" class="view1_acc_Parte_Cuerpo"><div class="ewTableHeaderCaption"><?php echo $view1_acc->Parte_Cuerpo->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="Parte_Cuerpo"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->Parte_Cuerpo) ?>',2);"><div id="elh_view1_acc_Parte_Cuerpo" class="view1_acc_Parte_Cuerpo">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->Parte_Cuerpo->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->Parte_Cuerpo->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->Parte_Cuerpo->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->Parte_Cuerpo->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->Parte_Cuerpo->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->Parte_Cuerpo->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3951,7 +4666,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="ESTADO_AFEC"><div id="elh_view1_acc_ESTADO_AFEC" class="view1_acc_ESTADO_AFEC"><div class="ewTableHeaderCaption"><?php echo $view1_acc->ESTADO_AFEC->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="ESTADO_AFEC"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->ESTADO_AFEC) ?>',2);"><div id="elh_view1_acc_ESTADO_AFEC" class="view1_acc_ESTADO_AFEC">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->ESTADO_AFEC->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->ESTADO_AFEC->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->ESTADO_AFEC->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->ESTADO_AFEC->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->ESTADO_AFEC->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->ESTADO_AFEC->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3969,7 +4684,7 @@ $view1_acc_list->ListOptions->Render("header", "left");
 		<th data-name="DESC_ACC"><div id="elh_view1_acc_DESC_ACC" class="view1_acc_DESC_ACC"><div class="ewTableHeaderCaption"><?php echo $view1_acc->DESC_ACC->FldCaption() ?></div></div></th>
 	<?php } else { ?>
 		<th data-name="DESC_ACC"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->DESC_ACC) ?>',2);"><div id="elh_view1_acc_DESC_ACC" class="view1_acc_DESC_ACC">
-			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->DESC_ACC->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->DESC_ACC->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->DESC_ACC->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->DESC_ACC->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->DESC_ACC->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->DESC_ACC->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -3979,6 +4694,15 @@ $view1_acc_list->ListOptions->Render("header", "left");
 	<?php } else { ?>
 		<th data-name="Modificado"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->Modificado) ?>',2);"><div id="elh_view1_acc_Modificado" class="view1_acc_Modificado">
 			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->Modificado->FldCaption() ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->Modificado->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->Modificado->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
+        </div></div></th>
+	<?php } ?>
+<?php } ?>		
+<?php if ($view1_acc->llave_2->Visible) { // llave_2 ?>
+	<?php if ($view1_acc->SortUrl($view1_acc->llave_2) == "") { ?>
+		<th data-name="llave_2"><div id="elh_view1_acc_llave_2" class="view1_acc_llave_2"><div class="ewTableHeaderCaption"><?php echo $view1_acc->llave_2->FldCaption() ?></div></div></th>
+	<?php } else { ?>
+		<th data-name="llave_2"><div class="ewPointer" onclick="ew_Sort(event,'<?php echo $view1_acc->SortUrl($view1_acc->llave_2) ?>',2);"><div id="elh_view1_acc_llave_2" class="view1_acc_llave_2">
+			<div class="ewTableHeaderBtn"><span class="ewTableHeaderCaption"><?php echo $view1_acc->llave_2->FldCaption() ?><?php echo $Language->Phrase("SrchLegend") ?></span><span class="ewTableHeaderSort"><?php if ($view1_acc->llave_2->getSort() == "ASC") { ?><span class="caret ewSortUp"></span><?php } elseif ($view1_acc->llave_2->getSort() == "DESC") { ?><span class="caret"></span><?php } ?></span></div>
         </div></div></th>
 	<?php } ?>
 <?php } ?>		
@@ -4057,6 +4781,18 @@ $view1_acc_list->ListOptions->Render("body", "left", $view1_acc_list->RowCnt);
 		<td data-name="F_Sincron"<?php echo $view1_acc->F_Sincron->CellAttributes() ?>>
 <span<?php echo $view1_acc->F_Sincron->ViewAttributes() ?>>
 <?php echo $view1_acc->F_Sincron->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($view1_acc->FECHA_ACC->Visible) { // FECHA_ACC ?>
+		<td data-name="FECHA_ACC"<?php echo $view1_acc->FECHA_ACC->CellAttributes() ?>>
+<span<?php echo $view1_acc->FECHA_ACC->ViewAttributes() ?>>
+<?php echo $view1_acc->FECHA_ACC->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($view1_acc->HORA_ACC->Visible) { // HORA_ACC ?>
+		<td data-name="HORA_ACC"<?php echo $view1_acc->HORA_ACC->CellAttributes() ?>>
+<span<?php echo $view1_acc->HORA_ACC->ViewAttributes() ?>>
+<?php echo $view1_acc->HORA_ACC->ListViewValue() ?></span>
 </td>
 	<?php } ?>
 	<?php if ($view1_acc->USUARIO->Visible) { // USUARIO ?>
@@ -4197,18 +4933,7 @@ $view1_acc_list->ListOptions->Render("body", "left", $view1_acc_list->RowCnt);
 <?php echo $view1_acc->SEG_LONG->ListViewValue() ?></span>
 </td>
 	<?php } ?>
-	<?php if ($view1_acc->FECHA_ACC->Visible) { // FECHA_ACC ?>
-		<td data-name="FECHA_ACC"<?php echo $view1_acc->FECHA_ACC->CellAttributes() ?>>
-<span<?php echo $view1_acc->FECHA_ACC->ViewAttributes() ?>>
-<?php echo $view1_acc->FECHA_ACC->ListViewValue() ?></span>
-</td>
-	<?php } ?>
-	<?php if ($view1_acc->HORA_ACC->Visible) { // HORA_ACC ?>
-		<td data-name="HORA_ACC"<?php echo $view1_acc->HORA_ACC->CellAttributes() ?>>
-<span<?php echo $view1_acc->HORA_ACC->ViewAttributes() ?>>
-<?php echo $view1_acc->HORA_ACC->ListViewValue() ?></span>
-</td>
-	<?php } ?>
+	
 	<?php if ($view1_acc->Hora_ingreso->Visible) { // Hora_ingreso ?>
 		<td data-name="Hora_ingreso"<?php echo $view1_acc->Hora_ingreso->CellAttributes() ?>>
 <span<?php echo $view1_acc->Hora_ingreso->ViewAttributes() ?>>
@@ -4311,6 +5036,12 @@ $view1_acc_list->ListOptions->Render("body", "left", $view1_acc_list->RowCnt);
 <?php echo $view1_acc->Tipo_incidente->ListViewValue() ?></span>
 </td>
 	<?php } ?>
+	<?php if ($view1_acc->Riesgo->Visible) { // Riesgo ?>
+		<td data-name="Riesgo"<?php echo $view1_acc->Riesgo->CellAttributes() ?>>
+<span<?php echo $view1_acc->Riesgo->ViewAttributes() ?>>
+<?php echo $view1_acc->Riesgo->ListViewValue() ?></span>
+</td>
+	<?php } ?>
 	<?php if ($view1_acc->Parte_Cuerpo->Visible) { // Parte_Cuerpo ?>
 		<td data-name="Parte_Cuerpo"<?php echo $view1_acc->Parte_Cuerpo->CellAttributes() ?>>
 <span<?php echo $view1_acc->Parte_Cuerpo->ViewAttributes() ?>>
@@ -4339,6 +5070,12 @@ $view1_acc_list->ListOptions->Render("body", "left", $view1_acc_list->RowCnt);
 		<td data-name="Modificado"<?php echo $view1_acc->Modificado->CellAttributes() ?>>
 <span<?php echo $view1_acc->Modificado->ViewAttributes() ?>>
 <?php echo $view1_acc->Modificado->ListViewValue() ?></span>
+</td>
+	<?php } ?>
+	<?php if ($view1_acc->llave_2->Visible) { // llave_2 ?>
+		<td data-name="llave_2"<?php echo $view1_acc->llave_2->CellAttributes() ?>>
+<span<?php echo $view1_acc->llave_2->ViewAttributes() ?>>
+<?php echo $view1_acc->llave_2->ListViewValue() ?></span>
 </td>
 	<?php } ?>
 <?php
@@ -4416,7 +5153,6 @@ if ($view1_acc_list->Recordset)
 <?php } ?>
 </form>
 <?php } ?>
-*/</script>
 <div class="ewListOtherOptions">
 <?php
 	foreach ($view1_acc_list->OtherOptions as &$option)

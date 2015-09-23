@@ -433,6 +433,7 @@ class cview_e_y_n_delete extends cview_e_y_n {
 		$this->OBS_ENLACE->setDbValue($rs->fields('OBS_ENLACE'));
 		$this->NUM_Novedad->setDbValue($rs->fields('NUM_Novedad'));
 		$this->Nom_Per_Evacu->setDbValue($rs->fields('Nom_Per_Evacu'));
+		$this->CC_Pre_Evacu->setDbValue($rs->fields('CC_Pre_Evacu'));
 		$this->Nom_Otro_Per_Evacu->setDbValue($rs->fields('Nom_Otro_Per_Evacu'));
 		$this->CC_Otro_Per_Evacu->setDbValue($rs->fields('CC_Otro_Per_Evacu'));
 		$this->Cargo_Per_EVA->setDbValue($rs->fields('Cargo_Per_EVA'));
@@ -472,6 +473,7 @@ class cview_e_y_n_delete extends cview_e_y_n {
 		$this->OBS_ENLACE->DbValue = $row['OBS_ENLACE'];
 		$this->NUM_Novedad->DbValue = $row['NUM_Novedad'];
 		$this->Nom_Per_Evacu->DbValue = $row['Nom_Per_Evacu'];
+		$this->CC_Pre_Evacu->DbValue = $row['CC_Pre_Evacu'];
 		$this->Nom_Otro_Per_Evacu->DbValue = $row['Nom_Otro_Per_Evacu'];
 		$this->CC_Otro_Per_Evacu->DbValue = $row['CC_Otro_Per_Evacu'];
 		$this->Cargo_Per_EVA->DbValue = $row['Cargo_Per_EVA'];
@@ -518,6 +520,7 @@ class cview_e_y_n_delete extends cview_e_y_n {
 		// OBS_ENLACE
 		// NUM_Novedad
 		// Nom_Per_Evacu
+		// CC_Pre_Evacu
 		// Nom_Otro_Per_Evacu
 		// CC_Otro_Per_Evacu
 		// Cargo_Per_EVA
@@ -545,7 +548,7 @@ class cview_e_y_n_delete extends cview_e_y_n {
 
 			// F_Sincron
 			$this->F_Sincron->ViewValue = $this->F_Sincron->CurrentValue;
-			$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 7);
+			$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 5);
 			$this->F_Sincron->ViewCustomAttributes = "";
 
 			// USUARIO
@@ -713,6 +716,10 @@ class cview_e_y_n_delete extends cview_e_y_n {
 			$this->Nom_Per_Evacu->ViewValue = $this->Nom_Per_Evacu->CurrentValue;
 			$this->Nom_Per_Evacu->ViewCustomAttributes = "";
 
+			// CC_Pre_Evacu
+			$this->CC_Pre_Evacu->ViewValue = $this->CC_Pre_Evacu->CurrentValue;
+			$this->CC_Pre_Evacu->ViewCustomAttributes = "";
+
 			// Nom_Otro_Per_Evacu
 			$this->Nom_Otro_Per_Evacu->ViewValue = $this->Nom_Otro_Per_Evacu->CurrentValue;
 			$this->Nom_Otro_Per_Evacu->ViewCustomAttributes = "";
@@ -759,40 +766,7 @@ class cview_e_y_n_delete extends cview_e_y_n {
 			$this->Cargo_Per_EVA->ViewCustomAttributes = "";
 
 			// Motivo_Eva
-			if (strval($this->Motivo_Eva->CurrentValue) <> "") {
-				$sFilterWrk = "`label`" . ew_SearchString("=", $this->Motivo_Eva->CurrentValue, EW_DATATYPE_STRING);
-			switch (@$gsLanguage) {
-				case "en":
-					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
-					$sWhereWrk = "";
-					break;
-				default:
-					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
-					$sWhereWrk = "";
-					break;
-			}
-			$lookuptblfilter = "`list name`='motivo'";
-			if (strval($lookuptblfilter) <> "") {
-				ew_AddFilter($sWhereWrk, $lookuptblfilter);
-			}
-			if ($sFilterWrk <> "") {
-				ew_AddFilter($sWhereWrk, $sFilterWrk);
-			}
-
-			// Call Lookup selecting
-			$this->Lookup_Selecting($this->Motivo_Eva, $sWhereWrk);
-			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `label` ASC";
-				$rswrk = $conn->Execute($sSqlWrk);
-				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$this->Motivo_Eva->ViewValue = $rswrk->fields('DispFld');
-					$rswrk->Close();
-				} else {
-					$this->Motivo_Eva->ViewValue = $this->Motivo_Eva->CurrentValue;
-				}
-			} else {
-				$this->Motivo_Eva->ViewValue = NULL;
-			}
+			$this->Motivo_Eva->ViewValue = $this->Motivo_Eva->CurrentValue;
 			$this->Motivo_Eva->ViewCustomAttributes = "";
 
 			// OBS_EVA
@@ -853,24 +827,12 @@ class cview_e_y_n_delete extends cview_e_y_n {
 			$this->Muncipio->ViewCustomAttributes = "";
 
 			// F_llegada
-			if (strval($this->F_llegada->CurrentValue) <> "") {
-				switch ($this->F_llegada->CurrentValue) {
-					case $this->F_llegada->FldTagValue(1):
-						$this->F_llegada->ViewValue = $this->F_llegada->FldTagCaption(1) <> "" ? $this->F_llegada->FldTagCaption(1) : $this->F_llegada->CurrentValue;
-						break;
-					case $this->F_llegada->FldTagValue(2):
-						$this->F_llegada->ViewValue = $this->F_llegada->FldTagCaption(2) <> "" ? $this->F_llegada->FldTagCaption(2) : $this->F_llegada->CurrentValue;
-						break;
-					default:
-						$this->F_llegada->ViewValue = $this->F_llegada->CurrentValue;
-				}
-			} else {
-				$this->F_llegada->ViewValue = NULL;
-			}
+			$this->F_llegada->ViewValue = $this->F_llegada->CurrentValue;
 			$this->F_llegada->ViewCustomAttributes = "";
 
 			// Fecha
 			$this->Fecha->ViewValue = $this->Fecha->CurrentValue;
+			$this->Fecha->ViewValue = ew_FormatDateTime($this->Fecha->ViewValue, 5);
 			$this->Fecha->ViewCustomAttributes = "";
 
 			// Modificado
@@ -978,6 +940,11 @@ class cview_e_y_n_delete extends cview_e_y_n {
 			$this->Nom_Per_Evacu->LinkCustomAttributes = "";
 			$this->Nom_Per_Evacu->HrefValue = "";
 			$this->Nom_Per_Evacu->TooltipValue = "";
+
+			// CC_Pre_Evacu
+			$this->CC_Pre_Evacu->LinkCustomAttributes = "";
+			$this->CC_Pre_Evacu->HrefValue = "";
+			$this->CC_Pre_Evacu->TooltipValue = "";
 
 			// Nom_Otro_Per_Evacu
 			$this->Nom_Otro_Per_Evacu->LinkCustomAttributes = "";
@@ -1263,7 +1230,6 @@ fview_e_y_ndelete.Lists["x_USUARIO"] = {"LinkField":"x_USUARIO","Ajax":null,"Aut
 fview_e_y_ndelete.Lists["x_NOM_GE"] = {"LinkField":"x_NOM_GE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_GE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 fview_e_y_ndelete.Lists["x_TIPO_INFORME"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 fview_e_y_ndelete.Lists["x_Cargo_Per_EVA"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
-fview_e_y_ndelete.Lists["x_Motivo_Eva"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 fview_e_y_ndelete.Lists["x_NOM_PE"] = {"LinkField":"x_NOM_PE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
 // Form object for search
@@ -1358,6 +1324,9 @@ $view_e_y_n_delete->ShowMessage();
 <?php } ?>
 <?php if ($view_e_y_n->Nom_Per_Evacu->Visible) { // Nom_Per_Evacu ?>
 		<th><span id="elh_view_e_y_n_Nom_Per_Evacu" class="view_e_y_n_Nom_Per_Evacu"><?php echo $view_e_y_n->Nom_Per_Evacu->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($view_e_y_n->CC_Pre_Evacu->Visible) { // CC_Pre_Evacu ?>
+		<th><span id="elh_view_e_y_n_CC_Pre_Evacu" class="view_e_y_n_CC_Pre_Evacu"><?php echo $view_e_y_n->CC_Pre_Evacu->FldCaption() ?></span></th>
 <?php } ?>
 <?php if ($view_e_y_n->Nom_Otro_Per_Evacu->Visible) { // Nom_Otro_Per_Evacu ?>
 		<th><span id="elh_view_e_y_n_Nom_Otro_Per_Evacu" class="view_e_y_n_Nom_Otro_Per_Evacu"><?php echo $view_e_y_n->Nom_Otro_Per_Evacu->FldCaption() ?></span></th>
@@ -1558,6 +1527,14 @@ while (!$view_e_y_n_delete->Recordset->EOF) {
 <span id="el<?php echo $view_e_y_n_delete->RowCnt ?>_view_e_y_n_Nom_Per_Evacu" class="view_e_y_n_Nom_Per_Evacu">
 <span<?php echo $view_e_y_n->Nom_Per_Evacu->ViewAttributes() ?>>
 <?php echo $view_e_y_n->Nom_Per_Evacu->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($view_e_y_n->CC_Pre_Evacu->Visible) { // CC_Pre_Evacu ?>
+		<td<?php echo $view_e_y_n->CC_Pre_Evacu->CellAttributes() ?>>
+<span id="el<?php echo $view_e_y_n_delete->RowCnt ?>_view_e_y_n_CC_Pre_Evacu" class="view_e_y_n_CC_Pre_Evacu">
+<span<?php echo $view_e_y_n->CC_Pre_Evacu->ViewAttributes() ?>>
+<?php echo $view_e_y_n->CC_Pre_Evacu->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

@@ -446,7 +446,7 @@ class cview_id_edit extends cview_id {
 		}
 		if (!$this->F_Sincron->FldIsDetailKey) {
 			$this->F_Sincron->setFormValue($objForm->GetValue("x_F_Sincron"));
-			$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 7);
+			$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 5);
 		}
 		if (!$this->USUARIO->FldIsDetailKey) {
 			$this->USUARIO->setFormValue($objForm->GetValue("x_USUARIO"));
@@ -732,7 +732,7 @@ class cview_id_edit extends cview_id {
 		$this->LoadRow();
 		$this->llave->CurrentValue = $this->llave->FormValue;
 		$this->F_Sincron->CurrentValue = $this->F_Sincron->FormValue;
-		$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 7);
+		$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 5);
 		$this->USUARIO->CurrentValue = $this->USUARIO->FormValue;
 		$this->Cargo_gme->CurrentValue = $this->Cargo_gme->FormValue;
 		$this->NOM_PE->CurrentValue = $this->NOM_PE->FormValue;
@@ -1388,7 +1388,7 @@ class cview_id_edit extends cview_id {
 
 			// F_Sincron
 			$this->F_Sincron->ViewValue = $this->F_Sincron->CurrentValue;
-			$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 7);
+			$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 5);
 			$this->F_Sincron->ViewCustomAttributes = "";
 
 			// USUARIO
@@ -1614,11 +1614,11 @@ class cview_id_edit extends cview_id {
 				$sFilterWrk = "`label`" . ew_SearchString("=", $this->FUERZA->CurrentValue, EW_DATATYPE_STRING);
 			switch (@$gsLanguage) {
 				case "en":
-					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
 					$sWhereWrk = "";
 					break;
 				default:
-					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
 					$sWhereWrk = "";
 					break;
 			}
@@ -1703,7 +1703,20 @@ class cview_id_edit extends cview_id {
 			$this->Fin_Jorna->ViewCustomAttributes = "";
 
 			// Situ_Especial
-			$this->Situ_Especial->ViewValue = $this->Situ_Especial->CurrentValue;
+			if (strval($this->Situ_Especial->CurrentValue) <> "") {
+				switch ($this->Situ_Especial->CurrentValue) {
+					case $this->Situ_Especial->FldTagValue(1):
+						$this->Situ_Especial->ViewValue = $this->Situ_Especial->FldTagCaption(1) <> "" ? $this->Situ_Especial->FldTagCaption(1) : $this->Situ_Especial->CurrentValue;
+						break;
+					case $this->Situ_Especial->FldTagValue(2):
+						$this->Situ_Especial->ViewValue = $this->Situ_Especial->FldTagCaption(2) <> "" ? $this->Situ_Especial->FldTagCaption(2) : $this->Situ_Especial->CurrentValue;
+						break;
+					default:
+						$this->Situ_Especial->ViewValue = $this->Situ_Especial->CurrentValue;
+				}
+			} else {
+				$this->Situ_Especial->ViewValue = NULL;
+			}
 			$this->Situ_Especial->ViewCustomAttributes = "";
 
 			// Adm_GME
@@ -2506,7 +2519,7 @@ class cview_id_edit extends cview_id {
 			$this->F_Sincron->EditAttrs["class"] = "form-control";
 			$this->F_Sincron->EditCustomAttributes = "";
 			$this->F_Sincron->EditValue = $this->F_Sincron->CurrentValue;
-			$this->F_Sincron->EditValue = ew_FormatDateTime($this->F_Sincron->EditValue, 7);
+			$this->F_Sincron->EditValue = ew_FormatDateTime($this->F_Sincron->EditValue, 5);
 			$this->F_Sincron->ViewCustomAttributes = "";
 
 			// USUARIO
@@ -2736,11 +2749,11 @@ class cview_id_edit extends cview_id {
 			$sFilterWrk = "";
 			switch (@$gsLanguage) {
 				case "en":
-					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
 					$sWhereWrk = "";
 					break;
 				default:
-					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
+					$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
 					$sWhereWrk = "";
 					break;
 			}
@@ -2849,8 +2862,11 @@ class cview_id_edit extends cview_id {
 			// Situ_Especial
 			$this->Situ_Especial->EditAttrs["class"] = "form-control";
 			$this->Situ_Especial->EditCustomAttributes = "";
-			$this->Situ_Especial->EditValue = ew_HtmlEncode($this->Situ_Especial->CurrentValue);
-			$this->Situ_Especial->PlaceHolder = ew_RemoveHtml($this->Situ_Especial->FldCaption());
+			$arwrk = array();
+			$arwrk[] = array($this->Situ_Especial->FldTagValue(1), $this->Situ_Especial->FldTagCaption(1) <> "" ? $this->Situ_Especial->FldTagCaption(1) : $this->Situ_Especial->FldTagValue(1));
+			$arwrk[] = array($this->Situ_Especial->FldTagValue(2), $this->Situ_Especial->FldTagCaption(2) <> "" ? $this->Situ_Especial->FldTagCaption(2) : $this->Situ_Especial->FldTagValue(2));
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+			$this->Situ_Especial->EditValue = $arwrk;
 
 			// Adm_GME
 			$this->Adm_GME->EditAttrs["class"] = "form-control";
@@ -5244,7 +5260,24 @@ fview_idedit.Lists["x_FUERZA"].Options = <?php echo (is_array($view_id->FUERZA->
 		<div class="col-sm-10"><div<?php echo $view_id->Situ_Especial->CellAttributes() ?>>
 <?php if ($view_id->CurrentAction <> "F") { ?>
 <span id="el_view_id_Situ_Especial">
-<input type="text" data-field="x_Situ_Especial" name="x_Situ_Especial" id="x_Situ_Especial" size="30" maxlength="255" placeholder="<?php echo ew_HtmlEncode($view_id->Situ_Especial->PlaceHolder) ?>" value="<?php echo $view_id->Situ_Especial->EditValue ?>"<?php echo $view_id->Situ_Especial->EditAttributes() ?>>
+<select data-field="x_Situ_Especial" id="x_Situ_Especial" name="x_Situ_Especial"<?php echo $view_id->Situ_Especial->EditAttributes() ?>>
+<?php
+if (is_array($view_id->Situ_Especial->EditValue)) {
+	$arwrk = $view_id->Situ_Especial->EditValue;
+	$rowswrk = count($arwrk);
+	$emptywrk = TRUE;
+	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
+		$selwrk = (strval($view_id->Situ_Especial->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
+		if ($selwrk <> "") $emptywrk = FALSE;
+?>
+<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
+<?php echo $arwrk[$rowcntwrk][1] ?>
+</option>
+<?php
+	}
+}
+?>
+</select>
 </span>
 <?php } else { ?>
 <span id="el_view_id_Situ_Especial">

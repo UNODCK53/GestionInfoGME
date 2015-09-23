@@ -1306,11 +1306,11 @@ defaultOptions = {
 				'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
 		shortMonths: ['Ene', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 		weekdays: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-		decimalPoint: ',',
+		decimalPoint: '.',
 		numericSymbols: ['k', 'M', 'G', 'T', 'P', 'E'], // SI prefixes used in axis labels
 		resetZoom: 'Reset zoom',
 		resetZoomTitle: 'Reset zoom level 1:1',
-		thousandsSep: '.'
+		thousandsSep: ','
 	},
 	global: {
 		useUTC: true,
@@ -12384,7 +12384,7 @@ Point.prototype = {
 			if (valuePrefix || valueSuffix) {
 				pointFormat = pointFormat.replace(key + '}', valuePrefix + key + '}' + valueSuffix);
 			}
-			pointFormat = pointFormat.replace(key + '}', key + ':,' + valueDecimals + 'f}');
+			pointFormat = pointFormat.replace(key + '}', key + ':,.' + valueDecimals + 'f}');
 		});
 
 		return format(pointFormat, {

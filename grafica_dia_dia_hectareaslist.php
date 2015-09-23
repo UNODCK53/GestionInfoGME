@@ -1875,7 +1875,7 @@ $("#reporte").click(function(){
 						data: dataString,
 						success: function(dato){
 						vector2=dato[0];//en la posicion 0 se encuentra las fechas
-
+						console.log(vector2);
 						}
 					});
 			$.ajax({//ajax que trae un vector con los Puntos de erradicación segun query
@@ -1887,7 +1887,7 @@ $("#reporte").click(function(){
 						data: dataString,
 						success: function(dato){
 						vector3=dato[1];//en la posicion 1 se encuentra los puntos
-
+console.log(vector3);
 						}
 					});	
 			$.ajax({//ajax que tarde una variable con arreglos de matriz que crean la grafica [i,j,ha]
@@ -1898,12 +1898,10 @@ $("#reporte").click(function(){
 				dataType: "json",
 				data: dataString,
 				success: function(dato){
-				vector=dato;	
-				
-
+				vector=dato;					
+	
 					$('#container').highcharts({//funcion qu crea la grafica
 						
-				
 						chart: {
 							type: 'heatmap'
 						},
@@ -1948,14 +1946,12 @@ $("#reporte").click(function(){
 							symbolHeight: 280,
 							reversed: true
 						},
-						
-
 
 						tooltip: {
 							formatter: function () {
-								
 								return '<b>' + this.series.xAxis.categories[this.point.x] + '</b> <br><b>' +
-									 this.point.value + '</b> ha erradicadas<br><b>Punto de Erradicación:' + this.series.yAxis.categories[this.point.y] + '</b>';
+									this.point.value + '</b> ha erradicadas<br><b>Punto de Erradicación:' + this.series.yAxis.categories[this.point.y] + '</b>';
+									this.point.value + '</b> ha erradicadas<br><b>Punto de Erradicación:' + this.series.yAxis.categories[this.point.y] + '</b>';
 							}
 						},
 
@@ -1965,7 +1961,6 @@ $("#reporte").click(function(){
 							dataLabels: {
 								enabled: true,
 								rotation: 90,
-
 								color: '#000000'
 							},
 							

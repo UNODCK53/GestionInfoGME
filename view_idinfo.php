@@ -135,8 +135,8 @@ class cview_id extends cTable {
 		$this->fields['llave'] = &$this->llave;
 
 		// F_Sincron
-		$this->F_Sincron = new cField('view_id', 'view_id', 'x_F_Sincron', 'F_Sincron', '`F_Sincron`', 'DATE_FORMAT(`F_Sincron`, \'%d/%m/%Y\')', 135, 7, FALSE, '`F_Sincron`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
-		$this->F_Sincron->FldDefaultErrMsg = str_replace("%s", "/", $Language->Phrase("IncorrectDateDMY"));
+		$this->F_Sincron = new cField('view_id', 'view_id', 'x_F_Sincron', 'F_Sincron', '`F_Sincron`', 'DATE_FORMAT(`F_Sincron`, \'%Y/%m/%d\')', 135, 5, FALSE, '`F_Sincron`', FALSE, FALSE, FALSE, 'FORMATTED TEXT');
+		$this->F_Sincron->FldDefaultErrMsg = str_replace("%s", "/", $Language->Phrase("IncorrectDateYMD"));
 		$this->fields['F_Sincron'] = &$this->F_Sincron;
 
 		// USUARIO
@@ -1271,7 +1271,7 @@ class cview_id extends cTable {
 
 		// F_Sincron
 		$this->F_Sincron->ViewValue = $this->F_Sincron->CurrentValue;
-		$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 7);
+		$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 5);
 		$this->F_Sincron->ViewCustomAttributes = "";
 
 		// USUARIO
@@ -1497,11 +1497,11 @@ class cview_id extends cTable {
 			$sFilterWrk = "`label`" . ew_SearchString("=", $this->FUERZA->CurrentValue, EW_DATATYPE_STRING);
 		switch (@$gsLanguage) {
 			case "en":
-				$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+				$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
 				$sWhereWrk = "";
 				break;
 			default:
-				$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
+				$sSqlWrk = "SELECT DISTINCT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
 				$sWhereWrk = "";
 				break;
 		}
@@ -1586,7 +1586,20 @@ class cview_id extends cTable {
 		$this->Fin_Jorna->ViewCustomAttributes = "";
 
 		// Situ_Especial
-		$this->Situ_Especial->ViewValue = $this->Situ_Especial->CurrentValue;
+		if (strval($this->Situ_Especial->CurrentValue) <> "") {
+			switch ($this->Situ_Especial->CurrentValue) {
+				case $this->Situ_Especial->FldTagValue(1):
+					$this->Situ_Especial->ViewValue = $this->Situ_Especial->FldTagCaption(1) <> "" ? $this->Situ_Especial->FldTagCaption(1) : $this->Situ_Especial->CurrentValue;
+					break;
+				case $this->Situ_Especial->FldTagValue(2):
+					$this->Situ_Especial->ViewValue = $this->Situ_Especial->FldTagCaption(2) <> "" ? $this->Situ_Especial->FldTagCaption(2) : $this->Situ_Especial->CurrentValue;
+					break;
+				default:
+					$this->Situ_Especial->ViewValue = $this->Situ_Especial->CurrentValue;
+			}
+		} else {
+			$this->Situ_Especial->ViewValue = NULL;
+		}
 		$this->Situ_Especial->ViewCustomAttributes = "";
 
 		// Adm_GME
@@ -2409,7 +2422,7 @@ class cview_id extends cTable {
 		$this->F_Sincron->EditAttrs["class"] = "form-control";
 		$this->F_Sincron->EditCustomAttributes = "";
 		$this->F_Sincron->EditValue = $this->F_Sincron->CurrentValue;
-		$this->F_Sincron->EditValue = ew_FormatDateTime($this->F_Sincron->EditValue, 7);
+		$this->F_Sincron->EditValue = ew_FormatDateTime($this->F_Sincron->EditValue, 5);
 		$this->F_Sincron->ViewCustomAttributes = "";
 
 		// USUARIO
@@ -2626,8 +2639,11 @@ class cview_id extends cTable {
 		// Situ_Especial
 		$this->Situ_Especial->EditAttrs["class"] = "form-control";
 		$this->Situ_Especial->EditCustomAttributes = "";
-		$this->Situ_Especial->EditValue = ew_HtmlEncode($this->Situ_Especial->CurrentValue);
-		$this->Situ_Especial->PlaceHolder = ew_RemoveHtml($this->Situ_Especial->FldCaption());
+		$arwrk = array();
+		$arwrk[] = array($this->Situ_Especial->FldTagValue(1), $this->Situ_Especial->FldTagCaption(1) <> "" ? $this->Situ_Especial->FldTagCaption(1) : $this->Situ_Especial->FldTagValue(1));
+		$arwrk[] = array($this->Situ_Especial->FldTagValue(2), $this->Situ_Especial->FldTagCaption(2) <> "" ? $this->Situ_Especial->FldTagCaption(2) : $this->Situ_Especial->FldTagValue(2));
+		array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+		$this->Situ_Especial->EditValue = $arwrk;
 
 		// Adm_GME
 		$this->Adm_GME->EditAttrs["class"] = "form-control";

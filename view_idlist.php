@@ -2383,8 +2383,22 @@ class cview_id_list extends cview_id {
 			$this->Fin_Jorna->ViewValue = $this->Fin_Jorna->CurrentValue;
 			$this->Fin_Jorna->ViewCustomAttributes = "";
 
+			
 			// Situ_Especial
-			$this->Situ_Especial->ViewValue = $this->Situ_Especial->CurrentValue;
+			if (strval($this->Situ_Especial->CurrentValue) <> "") {
+				switch ($this->Situ_Especial->CurrentValue) {
+					case $this->Situ_Especial->FldTagValue(1):
+						$this->Situ_Especial->ViewValue = $this->Situ_Especial->FldTagCaption(1) <> "" ? $this->Situ_Especial->FldTagCaption(1) : $this->Situ_Especial->CurrentValue;
+						break;
+					case $this->Situ_Especial->FldTagValue(2):
+						$this->Situ_Especial->ViewValue = $this->Situ_Especial->FldTagCaption(2) <> "" ? $this->Situ_Especial->FldTagCaption(2) : $this->Situ_Especial->CurrentValue;
+						break;
+					default:
+						$this->Situ_Especial->ViewValue = $this->Situ_Especial->CurrentValue;
+				}
+			} else {
+				$this->Situ_Especial->ViewValue = NULL;
+			}
 			$this->Situ_Especial->ViewCustomAttributes = "";
 
 			// Adm_GME
@@ -3428,11 +3442,16 @@ class cview_id_list extends cview_id {
 			$this->Fin_Jorna->PlaceHolder = ew_RemoveHtml($this->Fin_Jorna->FldCaption());
 
 			// Situ_Especial
+			
 			$this->Situ_Especial->EditAttrs["class"] = "form-control";
 			$this->Situ_Especial->EditCustomAttributes = "";
-			$this->Situ_Especial->EditValue = ew_HtmlEncode($this->Situ_Especial->AdvancedSearch->SearchValue);
-			$this->Situ_Especial->PlaceHolder = ew_RemoveHtml($this->Situ_Especial->FldCaption());
-
+			$arwrk = array();
+			$arwrk[] = array($this->Situ_Especial->FldTagValue(1), $this->Situ_Especial->FldTagCaption(1) <> "" ? $this->Situ_Especial->FldTagCaption(1) : $this->Situ_Especial->FldTagValue(1));
+			$arwrk[] = array($this->Situ_Especial->FldTagValue(2), $this->Situ_Especial->FldTagCaption(2) <> "" ? $this->Situ_Especial->FldTagCaption(2) : $this->Situ_Especial->FldTagValue(2));
+			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
+			$this->Situ_Especial->EditValue = $arwrk;
+			
+			
 			// Adm_GME
 			$this->Adm_GME->EditAttrs["class"] = "form-control";
 			$this->Adm_GME->EditCustomAttributes = "";

@@ -4,10 +4,7 @@ $ano =$_GET['ano'];
 $fase =$_GET['fase'];
 $punto =$_GET['punto'];
 $profesional =$_GET['profesional'];
-$ano =2015;
-$fase ='03';
-$punto ='150306';
-$profesional =99;
+
 
 valores($ano,$fase,$punto,$profesional);
 function valores ($ano,$fase,$punto,$profesional) {

@@ -2787,6 +2787,27 @@ $info_diario_list->ShowMessage();
 ?>
 <?php if ($info_diario_list->TotalRecs > 0 || $info_diario->CurrentAction <> "") { ?>
 <div>
+<script type="text/javascript">
+		
+		
+		$(document).ready(function(){
+
+			$.ajax({
+					type: "GET",
+					url: "mail_accidentes.php",
+					cache: false,
+					dataType: "json",
+					success: function(html)
+					{
+						
+
+					}			
+				});
+		});
+
+	</script>
+
+
 <table>
 	
 	<h2>Datos de Informe Diario</h2>
@@ -2805,9 +2826,10 @@ $info_diario_list->ShowMessage();
 	
 
 	<script type="text/javascript">
-		var formulario="Informe_Diario";
-		var dataString = 'formulario=' + formulario;
+		
 		$(document).ready(function(){
+			var formulario="Informe_Diario";
+			var dataString = 'formulario=' + formulario;
 			$.ajax({
 					type: "GET",
 					async: false,

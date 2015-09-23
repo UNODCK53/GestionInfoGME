@@ -446,7 +446,7 @@ class cview_e_y_n_edit extends cview_e_y_n {
 		}
 		if (!$this->F_Sincron->FldIsDetailKey) {
 			$this->F_Sincron->setFormValue($objForm->GetValue("x_F_Sincron"));
-			$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 7);
+			$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 5);
 		}
 		if (!$this->USUARIO->FldIsDetailKey) {
 			$this->USUARIO->setFormValue($objForm->GetValue("x_USUARIO"));
@@ -492,6 +492,9 @@ class cview_e_y_n_edit extends cview_e_y_n {
 		}
 		if (!$this->Nom_Per_Evacu->FldIsDetailKey) {
 			$this->Nom_Per_Evacu->setFormValue($objForm->GetValue("x_Nom_Per_Evacu"));
+		}
+		if (!$this->CC_Pre_Evacu->FldIsDetailKey) {
+			$this->CC_Pre_Evacu->setFormValue($objForm->GetValue("x_CC_Pre_Evacu"));
 		}
 		if (!$this->Nom_Otro_Per_Evacu->FldIsDetailKey) {
 			$this->Nom_Otro_Per_Evacu->setFormValue($objForm->GetValue("x_Nom_Otro_Per_Evacu"));
@@ -549,7 +552,7 @@ class cview_e_y_n_edit extends cview_e_y_n {
 		$this->llave_2->CurrentValue = $this->llave_2->FormValue;
 		$this->ID_Formulario->CurrentValue = $this->ID_Formulario->FormValue;
 		$this->F_Sincron->CurrentValue = $this->F_Sincron->FormValue;
-		$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 7);
+		$this->F_Sincron->CurrentValue = ew_UnFormatDateTime($this->F_Sincron->CurrentValue, 5);
 		$this->USUARIO->CurrentValue = $this->USUARIO->FormValue;
 		$this->Cargo_gme->CurrentValue = $this->Cargo_gme->FormValue;
 		$this->NOM_GE->CurrentValue = $this->NOM_GE->FormValue;
@@ -565,6 +568,7 @@ class cview_e_y_n_edit extends cview_e_y_n {
 		$this->OBS_ENLACE->CurrentValue = $this->OBS_ENLACE->FormValue;
 		$this->NUM_Novedad->CurrentValue = $this->NUM_Novedad->FormValue;
 		$this->Nom_Per_Evacu->CurrentValue = $this->Nom_Per_Evacu->FormValue;
+		$this->CC_Pre_Evacu->CurrentValue = $this->CC_Pre_Evacu->FormValue;
 		$this->Nom_Otro_Per_Evacu->CurrentValue = $this->Nom_Otro_Per_Evacu->FormValue;
 		$this->CC_Otro_Per_Evacu->CurrentValue = $this->CC_Otro_Per_Evacu->FormValue;
 		$this->Cargo_Per_EVA->CurrentValue = $this->Cargo_Per_EVA->FormValue;
@@ -628,6 +632,7 @@ class cview_e_y_n_edit extends cview_e_y_n {
 		$this->OBS_ENLACE->setDbValue($rs->fields('OBS_ENLACE'));
 		$this->NUM_Novedad->setDbValue($rs->fields('NUM_Novedad'));
 		$this->Nom_Per_Evacu->setDbValue($rs->fields('Nom_Per_Evacu'));
+		$this->CC_Pre_Evacu->setDbValue($rs->fields('CC_Pre_Evacu'));
 		$this->Nom_Otro_Per_Evacu->setDbValue($rs->fields('Nom_Otro_Per_Evacu'));
 		$this->CC_Otro_Per_Evacu->setDbValue($rs->fields('CC_Otro_Per_Evacu'));
 		$this->Cargo_Per_EVA->setDbValue($rs->fields('Cargo_Per_EVA'));
@@ -667,6 +672,7 @@ class cview_e_y_n_edit extends cview_e_y_n {
 		$this->OBS_ENLACE->DbValue = $row['OBS_ENLACE'];
 		$this->NUM_Novedad->DbValue = $row['NUM_Novedad'];
 		$this->Nom_Per_Evacu->DbValue = $row['Nom_Per_Evacu'];
+		$this->CC_Pre_Evacu->DbValue = $row['CC_Pre_Evacu'];
 		$this->Nom_Otro_Per_Evacu->DbValue = $row['Nom_Otro_Per_Evacu'];
 		$this->CC_Otro_Per_Evacu->DbValue = $row['CC_Otro_Per_Evacu'];
 		$this->Cargo_Per_EVA->DbValue = $row['Cargo_Per_EVA'];
@@ -713,6 +719,7 @@ class cview_e_y_n_edit extends cview_e_y_n {
 		// OBS_ENLACE
 		// NUM_Novedad
 		// Nom_Per_Evacu
+		// CC_Pre_Evacu
 		// Nom_Otro_Per_Evacu
 		// CC_Otro_Per_Evacu
 		// Cargo_Per_EVA
@@ -738,7 +745,7 @@ class cview_e_y_n_edit extends cview_e_y_n {
 
 			// F_Sincron
 			$this->F_Sincron->ViewValue = $this->F_Sincron->CurrentValue;
-			$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 7);
+			$this->F_Sincron->ViewValue = ew_FormatDateTime($this->F_Sincron->ViewValue, 5);
 			$this->F_Sincron->ViewCustomAttributes = "";
 
 			// USUARIO
@@ -906,6 +913,10 @@ class cview_e_y_n_edit extends cview_e_y_n {
 			$this->Nom_Per_Evacu->ViewValue = $this->Nom_Per_Evacu->CurrentValue;
 			$this->Nom_Per_Evacu->ViewCustomAttributes = "";
 
+			// CC_Pre_Evacu
+			$this->CC_Pre_Evacu->ViewValue = $this->CC_Pre_Evacu->CurrentValue;
+			$this->CC_Pre_Evacu->ViewCustomAttributes = "";
+
 			// Nom_Otro_Per_Evacu
 			$this->Nom_Otro_Per_Evacu->ViewValue = $this->Nom_Otro_Per_Evacu->CurrentValue;
 			$this->Nom_Otro_Per_Evacu->ViewCustomAttributes = "";
@@ -952,40 +963,7 @@ class cview_e_y_n_edit extends cview_e_y_n {
 			$this->Cargo_Per_EVA->ViewCustomAttributes = "";
 
 			// Motivo_Eva
-			if (strval($this->Motivo_Eva->CurrentValue) <> "") {
-				$sFilterWrk = "`label`" . ew_SearchString("=", $this->Motivo_Eva->CurrentValue, EW_DATATYPE_STRING);
-			switch (@$gsLanguage) {
-				case "en":
-					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
-					$sWhereWrk = "";
-					break;
-				default:
-					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `dominio`";
-					$sWhereWrk = "";
-					break;
-			}
-			$lookuptblfilter = "`list name`='motivo'";
-			if (strval($lookuptblfilter) <> "") {
-				ew_AddFilter($sWhereWrk, $lookuptblfilter);
-			}
-			if ($sFilterWrk <> "") {
-				ew_AddFilter($sWhereWrk, $sFilterWrk);
-			}
-
-			// Call Lookup selecting
-			$this->Lookup_Selecting($this->Motivo_Eva, $sWhereWrk);
-			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `label` ASC";
-				$rswrk = $conn->Execute($sSqlWrk);
-				if ($rswrk && !$rswrk->EOF) { // Lookup values found
-					$this->Motivo_Eva->ViewValue = $rswrk->fields('DispFld');
-					$rswrk->Close();
-				} else {
-					$this->Motivo_Eva->ViewValue = $this->Motivo_Eva->CurrentValue;
-				}
-			} else {
-				$this->Motivo_Eva->ViewValue = NULL;
-			}
+			$this->Motivo_Eva->ViewValue = $this->Motivo_Eva->CurrentValue;
 			$this->Motivo_Eva->ViewCustomAttributes = "";
 
 			// OBS_EVA
@@ -1046,24 +1024,12 @@ class cview_e_y_n_edit extends cview_e_y_n {
 			$this->Muncipio->ViewCustomAttributes = "";
 
 			// F_llegada
-			if (strval($this->F_llegada->CurrentValue) <> "") {
-				switch ($this->F_llegada->CurrentValue) {
-					case $this->F_llegada->FldTagValue(1):
-						$this->F_llegada->ViewValue = $this->F_llegada->FldTagCaption(1) <> "" ? $this->F_llegada->FldTagCaption(1) : $this->F_llegada->CurrentValue;
-						break;
-					case $this->F_llegada->FldTagValue(2):
-						$this->F_llegada->ViewValue = $this->F_llegada->FldTagCaption(2) <> "" ? $this->F_llegada->FldTagCaption(2) : $this->F_llegada->CurrentValue;
-						break;
-					default:
-						$this->F_llegada->ViewValue = $this->F_llegada->CurrentValue;
-				}
-			} else {
-				$this->F_llegada->ViewValue = NULL;
-			}
+			$this->F_llegada->ViewValue = $this->F_llegada->CurrentValue;
 			$this->F_llegada->ViewCustomAttributes = "";
 
 			// Fecha
 			$this->Fecha->ViewValue = $this->Fecha->CurrentValue;
+			$this->Fecha->ViewValue = ew_FormatDateTime($this->Fecha->ViewValue, 5);
 			$this->Fecha->ViewCustomAttributes = "";
 
 			// Modificado
@@ -1172,6 +1138,11 @@ class cview_e_y_n_edit extends cview_e_y_n {
 			$this->Nom_Per_Evacu->HrefValue = "";
 			$this->Nom_Per_Evacu->TooltipValue = "";
 
+			// CC_Pre_Evacu
+			$this->CC_Pre_Evacu->LinkCustomAttributes = "";
+			$this->CC_Pre_Evacu->HrefValue = "";
+			$this->CC_Pre_Evacu->TooltipValue = "";
+
 			// Nom_Otro_Per_Evacu
 			$this->Nom_Otro_Per_Evacu->LinkCustomAttributes = "";
 			$this->Nom_Otro_Per_Evacu->HrefValue = "";
@@ -1258,7 +1229,7 @@ class cview_e_y_n_edit extends cview_e_y_n {
 			$this->F_Sincron->EditAttrs["class"] = "form-control";
 			$this->F_Sincron->EditCustomAttributes = "";
 			$this->F_Sincron->EditValue = $this->F_Sincron->CurrentValue;
-			$this->F_Sincron->EditValue = ew_FormatDateTime($this->F_Sincron->EditValue, 7);
+			$this->F_Sincron->EditValue = ew_FormatDateTime($this->F_Sincron->EditValue, 5);
 			$this->F_Sincron->ViewCustomAttributes = "";
 
 			// USUARIO
@@ -1431,6 +1402,12 @@ class cview_e_y_n_edit extends cview_e_y_n {
 			$this->Nom_Per_Evacu->EditValue = ew_HtmlEncode($this->Nom_Per_Evacu->CurrentValue);
 			$this->Nom_Per_Evacu->PlaceHolder = ew_RemoveHtml($this->Nom_Per_Evacu->FldCaption());
 
+			// CC_Pre_Evacu
+			$this->CC_Pre_Evacu->EditAttrs["class"] = "form-control";
+			$this->CC_Pre_Evacu->EditCustomAttributes = "";
+			$this->CC_Pre_Evacu->EditValue = ew_HtmlEncode($this->CC_Pre_Evacu->CurrentValue);
+			$this->CC_Pre_Evacu->PlaceHolder = ew_RemoveHtml($this->CC_Pre_Evacu->FldCaption());
+
 			// Nom_Otro_Per_Evacu
 			$this->Nom_Otro_Per_Evacu->EditAttrs["class"] = "form-control";
 			$this->Nom_Otro_Per_Evacu->EditCustomAttributes = "";
@@ -1478,34 +1455,8 @@ class cview_e_y_n_edit extends cview_e_y_n {
 			// Motivo_Eva
 			$this->Motivo_Eva->EditAttrs["class"] = "form-control";
 			$this->Motivo_Eva->EditCustomAttributes = "";
-			$sFilterWrk = "";
-			switch (@$gsLanguage) {
-				case "en":
-					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
-					$sWhereWrk = "";
-					break;
-				default:
-					$sSqlWrk = "SELECT `label`, `label` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, '' AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `dominio`";
-					$sWhereWrk = "";
-					break;
-			}
-			$lookuptblfilter = "`list name`='motivo'";
-			if (strval($lookuptblfilter) <> "") {
-				ew_AddFilter($sWhereWrk, $lookuptblfilter);
-			}
-			if ($sFilterWrk <> "") {
-				ew_AddFilter($sWhereWrk, $sFilterWrk);
-			}
-
-			// Call Lookup selecting
-			$this->Lookup_Selecting($this->Motivo_Eva, $sWhereWrk);
-			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
-			$sSqlWrk .= " ORDER BY `label` ASC";
-			$rswrk = $conn->Execute($sSqlWrk);
-			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
-			if ($rswrk) $rswrk->Close();
-			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect"), "", "", "", "", "", "", ""));
-			$this->Motivo_Eva->EditValue = $arwrk;
+			$this->Motivo_Eva->EditValue = ew_HtmlEncode($this->Motivo_Eva->CurrentValue);
+			$this->Motivo_Eva->PlaceHolder = ew_RemoveHtml($this->Motivo_Eva->FldCaption());
 
 			// OBS_EVA
 			$this->OBS_EVA->EditAttrs["class"] = "form-control";
@@ -1574,11 +1525,8 @@ class cview_e_y_n_edit extends cview_e_y_n {
 			// F_llegada
 			$this->F_llegada->EditAttrs["class"] = "form-control";
 			$this->F_llegada->EditCustomAttributes = "";
-			$arwrk = array();
-			$arwrk[] = array($this->F_llegada->FldTagValue(1), $this->F_llegada->FldTagCaption(1) <> "" ? $this->F_llegada->FldTagCaption(1) : $this->F_llegada->FldTagValue(1));
-			$arwrk[] = array($this->F_llegada->FldTagValue(2), $this->F_llegada->FldTagCaption(2) <> "" ? $this->F_llegada->FldTagCaption(2) : $this->F_llegada->FldTagValue(2));
-			array_unshift($arwrk, array("", $Language->Phrase("PleaseSelect")));
-			$this->F_llegada->EditValue = $arwrk;
+			$this->F_llegada->EditValue = ew_HtmlEncode($this->F_llegada->CurrentValue);
+			$this->F_llegada->PlaceHolder = ew_RemoveHtml($this->F_llegada->FldCaption());
 
 			// Fecha
 			$this->Fecha->EditAttrs["class"] = "form-control";
@@ -1653,6 +1601,9 @@ class cview_e_y_n_edit extends cview_e_y_n {
 
 			// Nom_Per_Evacu
 			$this->Nom_Per_Evacu->HrefValue = "";
+
+			// CC_Pre_Evacu
+			$this->CC_Pre_Evacu->HrefValue = "";
 
 			// Nom_Otro_Per_Evacu
 			$this->Nom_Otro_Per_Evacu->HrefValue = "";
@@ -1800,6 +1751,9 @@ class cview_e_y_n_edit extends cview_e_y_n {
 
 			// Nom_Per_Evacu
 			$this->Nom_Per_Evacu->SetDbValueDef($rsnew, $this->Nom_Per_Evacu->CurrentValue, NULL, $this->Nom_Per_Evacu->ReadOnly);
+
+			// CC_Pre_Evacu
+			$this->CC_Pre_Evacu->SetDbValueDef($rsnew, $this->CC_Pre_Evacu->CurrentValue, NULL, $this->CC_Pre_Evacu->ReadOnly);
 
 			// Nom_Otro_Per_Evacu
 			$this->Nom_Otro_Per_Evacu->SetDbValueDef($rsnew, $this->Nom_Otro_Per_Evacu->CurrentValue, NULL, $this->Nom_Otro_Per_Evacu->ReadOnly);
@@ -2050,7 +2004,6 @@ fview_e_y_nedit.Lists["x_USUARIO"] = {"LinkField":"x_USUARIO","Ajax":null,"AutoF
 fview_e_y_nedit.Lists["x_NOM_GE"] = {"LinkField":"x_NOM_GE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_GE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 fview_e_y_nedit.Lists["x_TIPO_INFORME"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 fview_e_y_nedit.Lists["x_Cargo_Per_EVA"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
-fview_e_y_nedit.Lists["x_Motivo_Eva"] = {"LinkField":"x_label","Ajax":null,"AutoFill":false,"DisplayFields":["x_label","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 fview_e_y_nedit.Lists["x_NOM_PE"] = {"LinkField":"x_NOM_PE","Ajax":null,"AutoFill":false,"DisplayFields":["x_NOM_PE","","",""],"ParentFields":[],"FilterFields":[],"Options":[]};
 
 // Form object for search
@@ -2449,6 +2402,24 @@ if (is_array($view_e_y_n->PTO_INCOMU->EditValue)) {
 <?php echo $view_e_y_n->Nom_Per_Evacu->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
+<?php if ($view_e_y_n->CC_Pre_Evacu->Visible) { // CC_Pre_Evacu ?>
+	<div id="r_CC_Pre_Evacu" class="form-group">
+		<label id="elh_view_e_y_n_CC_Pre_Evacu" for="x_CC_Pre_Evacu" class="col-sm-2 control-label ewLabel"><?php echo $view_e_y_n->CC_Pre_Evacu->FldCaption() ?></label>
+		<div class="col-sm-10"><div<?php echo $view_e_y_n->CC_Pre_Evacu->CellAttributes() ?>>
+<?php if ($view_e_y_n->CurrentAction <> "F") { ?>
+<span id="el_view_e_y_n_CC_Pre_Evacu">
+<input type="text" data-field="x_CC_Pre_Evacu" name="x_CC_Pre_Evacu" id="x_CC_Pre_Evacu" size="30" maxlength="25" placeholder="<?php echo ew_HtmlEncode($view_e_y_n->CC_Pre_Evacu->PlaceHolder) ?>" value="<?php echo $view_e_y_n->CC_Pre_Evacu->EditValue ?>"<?php echo $view_e_y_n->CC_Pre_Evacu->EditAttributes() ?>>
+</span>
+<?php } else { ?>
+<span id="el_view_e_y_n_CC_Pre_Evacu">
+<span<?php echo $view_e_y_n->CC_Pre_Evacu->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $view_e_y_n->CC_Pre_Evacu->ViewValue ?></p></span>
+</span>
+<input type="hidden" data-field="x_CC_Pre_Evacu" name="x_CC_Pre_Evacu" id="x_CC_Pre_Evacu" value="<?php echo ew_HtmlEncode($view_e_y_n->CC_Pre_Evacu->FormValue) ?>">
+<?php } ?>
+<?php echo $view_e_y_n->CC_Pre_Evacu->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
 <?php if ($view_e_y_n->Nom_Otro_Per_Evacu->Visible) { // Nom_Otro_Per_Evacu ?>
 	<div id="r_Nom_Otro_Per_Evacu" class="form-group">
 		<label id="elh_view_e_y_n_Nom_Otro_Per_Evacu" for="x_Nom_Otro_Per_Evacu" class="col-sm-2 control-label ewLabel"><?php echo $view_e_y_n->Nom_Otro_Per_Evacu->FldCaption() ?></label>
@@ -2529,27 +2500,7 @@ fview_e_y_nedit.Lists["x_Cargo_Per_EVA"].Options = <?php echo (is_array($view_e_
 		<div class="col-sm-10"><div<?php echo $view_e_y_n->Motivo_Eva->CellAttributes() ?>>
 <?php if ($view_e_y_n->CurrentAction <> "F") { ?>
 <span id="el_view_e_y_n_Motivo_Eva">
-<select data-field="x_Motivo_Eva" id="x_Motivo_Eva" name="x_Motivo_Eva"<?php echo $view_e_y_n->Motivo_Eva->EditAttributes() ?>>
-<?php
-if (is_array($view_e_y_n->Motivo_Eva->EditValue)) {
-	$arwrk = $view_e_y_n->Motivo_Eva->EditValue;
-	$rowswrk = count($arwrk);
-	$emptywrk = TRUE;
-	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
-		$selwrk = (strval($view_e_y_n->Motivo_Eva->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;
-?>
-<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
-<?php echo $arwrk[$rowcntwrk][1] ?>
-</option>
-<?php
-	}
-}
-?>
-</select>
-<script type="text/javascript">
-fview_e_y_nedit.Lists["x_Motivo_Eva"].Options = <?php echo (is_array($view_e_y_n->Motivo_Eva->EditValue)) ? ew_ArrayToJson($view_e_y_n->Motivo_Eva->EditValue, 1) : "[]" ?>;
-</script>
+<textarea data-field="x_Motivo_Eva" name="x_Motivo_Eva" id="x_Motivo_Eva" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view_e_y_n->Motivo_Eva->PlaceHolder) ?>"<?php echo $view_e_y_n->Motivo_Eva->EditAttributes() ?>><?php echo $view_e_y_n->Motivo_Eva->EditValue ?></textarea>
 </span>
 <?php } else { ?>
 <span id="el_view_e_y_n_Motivo_Eva">
@@ -2713,24 +2664,7 @@ fview_e_y_nedit.Lists["x_NOM_PE"].Options = <?php echo (is_array($view_e_y_n->NO
 		<div class="col-sm-10"><div<?php echo $view_e_y_n->F_llegada->CellAttributes() ?>>
 <?php if ($view_e_y_n->CurrentAction <> "F") { ?>
 <span id="el_view_e_y_n_F_llegada">
-<select data-field="x_F_llegada" id="x_F_llegada" name="x_F_llegada"<?php echo $view_e_y_n->F_llegada->EditAttributes() ?>>
-<?php
-if (is_array($view_e_y_n->F_llegada->EditValue)) {
-	$arwrk = $view_e_y_n->F_llegada->EditValue;
-	$rowswrk = count($arwrk);
-	$emptywrk = TRUE;
-	for ($rowcntwrk = 0; $rowcntwrk < $rowswrk; $rowcntwrk++) {
-		$selwrk = (strval($view_e_y_n->F_llegada->CurrentValue) == strval($arwrk[$rowcntwrk][0])) ? " selected=\"selected\"" : "";
-		if ($selwrk <> "") $emptywrk = FALSE;
-?>
-<option value="<?php echo ew_HtmlEncode($arwrk[$rowcntwrk][0]) ?>"<?php echo $selwrk ?>>
-<?php echo $arwrk[$rowcntwrk][1] ?>
-</option>
-<?php
-	}
-}
-?>
-</select>
+<textarea data-field="x_F_llegada" name="x_F_llegada" id="x_F_llegada" cols="35" rows="4" placeholder="<?php echo ew_HtmlEncode($view_e_y_n->F_llegada->PlaceHolder) ?>"<?php echo $view_e_y_n->F_llegada->EditAttributes() ?>><?php echo $view_e_y_n->F_llegada->EditValue ?></textarea>
 </span>
 <?php } else { ?>
 <span id="el_view_e_y_n_F_llegada">

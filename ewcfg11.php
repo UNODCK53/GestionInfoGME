@@ -424,7 +424,7 @@ $DEFAULT_TIME_ZONE = "Etc/GMT-5";
  * phrases under the <locale> node for ew_FormatCurrency/Number/Percent functions
  * Also read http://www.php.net/localeconv for description of the constants
 */
-$DEFAULT_LOCALE = json_decode('{"decimal_point":",","thousands_sep":".","int_curr_symbol":"$","currency_symbol":"$","mon_decimal_point":",","mon_thousands_sep":".","positive_sign":"","negative_sign":"-","int_frac_digits":2,"frac_digits":2,"p_cs_precedes":1,"p_sep_by_space":0,"n_cs_precedes":1,"n_sep_by_space":0,"p_sign_posn":1,"n_sign_posn":1}', TRUE); 
+$DEFAULT_LOCALE = json_decode('{"decimal_point":".","thousands_sep":"","int_curr_symbol":"$","currency_symbol":"$","mon_decimal_point":".","mon_thousands_sep":"","positive_sign":"","negative_sign":"-","int_frac_digits":2,"frac_digits":2,"p_cs_precedes":1,"p_sep_by_space":0,"n_cs_precedes":1,"n_sep_by_space":0,"p_sign_posn":1,"n_sign_posn":1}', TRUE); 
 $DEFAULT_DECIMAL_POINT = &$DEFAULT_LOCALE["decimal_point"];
 $DEFAULT_THOUSANDS_SEP = &$DEFAULT_LOCALE["thousands_sep"];
 $DEFAULT_CURRENCY_SYMBOL = &$DEFAULT_LOCALE["currency_symbol"];
